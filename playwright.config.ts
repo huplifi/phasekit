@@ -20,6 +20,15 @@ export default defineConfig({
   },
   projects: [
     {
+      name: "desktop-webkit",
+      testMatch: /mobile-layout.spec.ts|shsc-pair.spec.ts/,
+      use: {
+        browserName: "webkit",
+        viewport: { width: 1440, height: 900 },
+        deviceScaleFactor: 1,
+      },
+    },
+    {
       name: "mobile-webkit",
       testMatch: /mobile-layout.spec.ts|shsc-pair.spec.ts/,
       use: {

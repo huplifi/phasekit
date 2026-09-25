@@ -1,3 +1,4 @@
+import { version } from "../../../../package.json";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
 import { Download, Upload, Trash2 } from "lucide-react";
@@ -9,6 +10,7 @@ import type { Locale } from "../../../../packages/i18n/src";
 export function Settings() {
   const { t, data, setData, notify } = useApp();
   const [confirm, setConfirm] = useState(false);
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   return (
     <>
       <h1>{t("settings")}</h1>
@@ -144,6 +146,87 @@ export function Settings() {
         </a>
         <h3>{t("install")}</h3>
         <p className="secondary">{t("installHelp")}</p>
+      </section>
+      <section
+        className="section about-section"
+        aria-labelledby="about-heading"
+      >
+        <h2 id="about-heading">{l("Tietoa PhaseKitistä", "About PhaseKit")}</h2>
+        <p className="secondary">
+          {l(
+            "PhaseKit kokoaa kylmäaineiden lähteistetyt tiedot ja kylmäalan laskurit samaan paikkaan. Se auttaa vertailemaan aineita, laskemaan kylmäkierron arvoja ja arvioimaan vuototarkastusvälejä EU:n ja Suomen sääntöjen perusteella.",
+            "PhaseKit brings source-attributed refrigerant information and refrigeration calculators together. It helps you compare refrigerants, calculate refrigeration-cycle values and assess leak-check intervals under EU and Finnish rules.",
+          )}
+        </p>
+        <dl className="about-details">
+          <div>
+            <dt>{l("Tekijä", "Created by")}</dt>
+            <dd>Samu Hupli</dd>
+          </div>
+          <div>
+            <dt>{l("Sovellusversio", "App version")}</dt>
+            <dd className="mono">{version}</dd>
+          </div>
+          <div>
+            <dt>{l("Verkkosivusto", "Website")}</dt>
+            <dd>
+              <a href="https://phasekit.app" target="_blank" rel="noreferrer">
+                phasekit.app
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>{l("Lähdekoodi", "Source code")}</dt>
+            <dd>
+              <a
+                href="https://github.com/huplifi/phasekit"
+                target="_blank"
+                rel="noreferrer"
+              >
+                GitHub · huplifi/phasekit
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>{l("Lisenssi", "Licence")}</dt>
+            <dd>
+              <a
+                href="https://github.com/huplifi/phasekit/blob/main/LICENSE"
+                target="_blank"
+                rel="noreferrer"
+              >
+                MIT
+              </a>
+            </dd>
+          </div>
+        </dl>
+        <p className="caption secondary">
+          {l(
+            "MIT-lisenssi koskee PhaseKitin omaa koodia ja dokumentaatiota. Lähdeaineistoilla, fonteilla ja muilla ulkopuolisilla osilla on omat käyttöehtonsa.",
+            "The MIT licence covers PhaseKit’s original code and documentation. Source material, fonts and other third-party components retain their own terms.",
+          )}{" "}
+          <a
+            href="https://github.com/huplifi/phasekit/blob/main/THIRD_PARTY_NOTICES.md"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {l(
+              "Muiden osien lisenssit ja lähdetiedot",
+              "Third-party licences and attribution",
+            )}
+          </a>
+        </p>
+        <a
+          className="text-button"
+          href="https://github.com/huplifi/phasekit/issues"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {l(
+            "Anna palautetta tai ilmoita virheestä",
+            "Share feedback or report an issue",
+          )}
+        </a>
       </section>
     </>
   );

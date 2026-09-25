@@ -16,6 +16,35 @@ test('the supplied R134a paper example plots with gauge pressures', async ({page
   await expect(page.locator('.ph-diagram-message')).toHaveCount(0);
   await expect(page.locator('.ph-point-table')).toContainText('2,92');
   await expect(page.locator('.ph-point-table')).toContainText('10,16');
+  const fullRange = page.getByRole("button", {
+    name: "Koko alue",
+    exact: true,
+  });
+  const fitCycle = page.getByRole("button", {
+    name: "Sovita kiertoon",
+    exact: true,
+  });
+  await expect(fullRange).toHaveAttribute("aria-pressed", "true");
+  const fullBoundary = await page.locator(".ph-bubble").getAttribute("d");
+  const fullPoint = Number(
+    await page.locator(".ph-point").first().getAttribute("cx"),
+  );
+  const fullTicks = await page.locator(".ph-tick").allTextContents();
+  await fitCycle.click();
+  await expect(fitCycle).toHaveAttribute("aria-pressed", "true");
+  expect(await page.locator(".ph-tick").allTextContents()).not.toEqual(
+    fullTicks,
+  );
+  expect(await page.locator(".ph-bubble").getAttribute("d")).not.toBe(
+    fullBoundary,
+  );
+  expect(
+    Number(await page.locator(".ph-point").first().getAttribute("cx")),
+  ).not.toBe(fullPoint);
+  await expect(page.locator(".ph-cycle")).toHaveCount(4);
+  await fullRange.click();
+  await expect(page.locator(".ph-bubble")).toHaveAttribute("d", fullBoundary!);
+  await expect(page.locator(".calculator-number")).toHaveText(["10 K", "5 K"]);
   await page.locator('.ph-diagram-section').screenshot({path:test.info().outputPath(`phasekit-paper-example-${info.project.name}.png`)});
 });
 

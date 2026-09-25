@@ -120,6 +120,19 @@
   margin: 0;
 }
 
+.ph-view-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ph-view-controls [aria-pressed="true"] {
+  background: var(--text);
+  color: var(--background);
+  border-color: var(--text);
+}
+
 .ph-chart-scroll,
 .ph-table-scroll {
   max-width: 100%;

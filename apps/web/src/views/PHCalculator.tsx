@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, useState } from "react";
 import {
   getPHDiagram,
   PHPhaseBoundaryError,
@@ -85,10 +85,12 @@ function PHChart({
   diagram,
   result,
   fi,
+  fitCycle,
 }: {
   diagram: PHDiagram;
   result?: PHCycleResult | null;
   fi: boolean;
+  fitCycle: boolean;
 }) {
   const titleId = useId();
   const descriptionId = useId();
@@ -104,21 +106,22 @@ function PHChart({
         h: Number(result.points[label].enthalpyKJkg),
       }))
     : [];
-  // Use a pressure window around the calculated cycle. The uncalculated view
-  // retains the whole available curve; both views keep the boundaries open.
+  // Show the whole available model by default, with an optional cycle focus.
+  // Neither view extrapolates or closes the saturation boundaries.
+  const focusCycle = fitCycle && !!result;
   const lowCycleP = points.length
     ? Math.min(...points.map((point) => point.p))
     : 0;
   const highCycleP = points.length
     ? Math.max(...points.map((point) => point.p))
     : 0;
-  const firstVisible = result
+  const firstVisible = focusCycle
     ? allNodes.findIndex((node) => node.p >= lowCycleP / 2)
     : 0;
-  const firstBeyond = result
+  const firstBeyond = focusCycle
     ? allNodes.findIndex((node) => node.p > highCycleP * 1.5)
     : -1;
-  const nodes = result
+  const nodes = focusCycle
     ? allNodes.slice(
         Math.max(0, firstVisible - 1),
         firstBeyond < 0
@@ -135,7 +138,7 @@ function PHChart({
   const hPad = Math.max((highH - lowH) * 0.09, 5);
   const xMin = lowH - hPad;
   const xMax = highH + hPad;
-  const logP = nodes.map((node) => Math.log(node.p));
+  const logP = [...nodes, ...points].map((node) => Math.log(node.p));
   const logMin = Math.min(...logP);
   const logMax = Math.max(...logP);
   const logPad = Math.max((logMax - logMin) * 0.08, 0.05);
@@ -365,6 +368,7 @@ export function PHDiagramPanel({
   message: string;
   fi: boolean;
 }) {
+  const [fitCycle, setFitCycle] = useState(false);
   const diagram = id ? getPHDiagram(id) : null;
   const l = (a: string, b: string) => (fi ? a : b);
   const formatted = (value: string) =>
@@ -408,8 +412,36 @@ export function PHDiagramPanel({
           <h2 id="ph-diagram-title">
             {l("log(p)–h-kaavio", "log(p)–h diagram")}
           </h2>
+          <div
+            className="ph-view-controls"
+            role="group"
+            aria-label={l("Kaavion näkymä", "Chart view")}
+          >
+            <button
+              type="button"
+              className="secondary-button"
+              aria-pressed={!fitCycle || !result}
+              onClick={() => setFitCycle(false)}
+            >
+              {l("Koko alue", "Full range")}
+            </button>
+            <button
+              type="button"
+              className="secondary-button"
+              aria-pressed={fitCycle && !!result}
+              disabled={!result}
+              onClick={() => setFitCycle(true)}
+            >
+              {l("Sovita kiertoon", "Fit cycle")}
+            </button>
+          </div>
           <figure className="ph-figure">
-            <PHChart diagram={diagram} result={result} fi={fi} />
+            <PHChart
+              diagram={diagram}
+              result={result}
+              fi={fi}
+              fitCycle={fitCycle}
+            />
             <figcaption className="caption secondary">
               {l(
                 "Katkoviivaiset kylläisyysrajat ovat avoimia, koska malliaineisto kattaa vain rajatun painealueen.",
@@ -417,8 +449,8 @@ export function PHDiagramPanel({
               )}{" "}
               {result &&
                 l(
-                  "Näkymä on rajattu lasketun kierron ympärille. Suorat pisteiden välit kuvaavat kierron järjestystä kaavamaisesti, eivät laskettua prosessireittiä.",
-                  "The view is cropped around the calculated cycle. Straight connections show cycle order schematically, not a calculated process path.",
+                  "Suorat pisteiden välit kuvaavat kierron järjestystä kaavamaisesti, eivät laskettua prosessireittiä.",
+                  "Straight connections show cycle order schematically, not a calculated process path.",
                 )}
             </figcaption>
           </figure>

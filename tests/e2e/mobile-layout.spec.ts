@@ -27,12 +27,56 @@ test("compact cycle keeps units aligned and pressures side by side", async ({
     const suction = (await page.locator("#shsc-suction").boundingBox())!;
     const liquid = (await page.locator("#shsc-liquid").boundingBox())!;
     expect(liquid.y - suction.y).toBeLessThan(150);
+  } else {
+    const temperatures = await page.locator(".shsc-temperatures input").all();
+    const rectangles = await Promise.all(
+      temperatures.map((input) => input.boundingBox()),
+    );
+    for (const rectangle of rectangles) {
+      expect(Math.abs(rectangle!.y - rectangles[0]!.y)).toBeLessThan(1);
+      expect(rectangle!.height).toBe(rectangles[0]!.height);
+    }
   }
   await noOverflow(page);
   await page.screenshot({
-    path: test.info().outputPath(`phasekit-compact-cycle-${info.project.name}.png`),
+    path: test
+      .info()
+      .outputPath(`phasekit-compact-cycle-${info.project.name}.png`),
     fullPage: true,
   });
+});
+
+test("native selects match form fields and backup actions share their corners", async ({
+  page,
+}) => {
+  await page.goto("/#/check/r134a");
+  const charge = (await page.locator(".charge-grid input").boundingBox())!;
+  for (const selector of [
+    ".charge-grid select",
+    "#check-equipment",
+    "#check-date",
+  ]) {
+    const control = (await page.locator(selector).boundingBox())!;
+    expect(Math.abs(control.height - charge.height)).toBeLessThan(1);
+  }
+  await page.locator(".charge-grid select").selectOption("g");
+  await expect(page.locator(".charge-grid select")).toHaveValue("g");
+  await page.goto("/#/settings");
+  for (const select of await page.locator(".settings-fields select").all()) {
+    expect((await select.boundingBox())!.height).toBe(50);
+  }
+  const radii = await page
+    .locator(".settings-actions .secondary-button")
+    .evaluateAll((elements) =>
+      elements.map((element) => getComputedStyle(element).borderRadius),
+    );
+  expect(radii).toEqual(["8px", "8px"]);
+  await page.getByRole("combobox", { name: /^Kieli/ }).selectOption("en");
+  await expect(
+    page.getByRole("heading", { name: "Settings", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("combobox", { name: /^Theme/ }).selectOption("light");
+  await noOverflow(page);
 });
 
 test("date input fits the form and remains editable at narrow widths", async ({
@@ -105,7 +149,9 @@ test("PT arrows share the input centre and redundant slider is gone", async ({
   );
   await noOverflow(page);
   await page.screenshot({
-    path: test.info().outputPath(`phasekit-compact-pt-${info.project.name}.png`),
+    path: test
+      .info()
+      .outputPath(`phasekit-compact-pt-${info.project.name}.png`),
     fullPage: true,
   });
 });
@@ -146,7 +192,9 @@ test("CO2e quantity and calculation fit initially with contextual help", async (
   await page.keyboard.press("Escape");
   await noOverflow(page);
   await page.screenshot({
-    path: test.info().outputPath(`phasekit-compact-co2e-${info.project.name}.png`),
+    path: test
+      .info()
+      .outputPath(`phasekit-compact-co2e-${info.project.name}.png`),
     fullPage: true,
   });
 });

@@ -219,6 +219,7 @@ main {
   min-height: 52px;
 }
 .secondary-button {
+  border-radius: 8px;
   border: 1px solid var(--control-border);
   padding: 10px 16px;
   color: var(--text);
@@ -530,6 +531,10 @@ select {
   font-weight: 400;
   font-size: 1rem;
   max-width: 100%;
+}
+/* Desktop Safari ignores min-height on its native select appearance. */
+select {
+  height: 3.125rem;
 }
 .charge-grid {
   display: grid;
@@ -1082,5 +1087,31 @@ input[aria-invalid="true"] {
 }
 .field-group > input[type="date"]::-webkit-date-and-time-value {
   min-width: 0;
+  text-align: left;
+}
+
+.about-section {
+  max-width: 680px;
+}
+.about-details {
+  margin: 24px 0;
+}
+.about-details > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  align-items: baseline;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.about-details dt {
+  color: var(--secondary-text);
+}
+.about-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.about-section > .text-button {
+  justify-content: flex-start;
   text-align: left;
 }
