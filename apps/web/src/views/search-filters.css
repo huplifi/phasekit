@@ -1,0 +1,25 @@
+.search-filter-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.search-filter-pair label,
+.search-filter-pair select,
+#annex-filter,
+#oil-filter {
+  min-width: 0;
+  width: 100%;
+}
+
+.search-filter-pair .help-heading {
+  min-height: 24px;
+  align-items: center;
+}
+
+@media (min-width: 720px) {
+  .filter-panel .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+  }
+}

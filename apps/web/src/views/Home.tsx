@@ -15,11 +15,36 @@ import {
   safetyGroupOrder,
 } from "../../../../packages/i18n/src/refinements";
 import { useApp } from "../context";
+import { InfoHelp } from "../components/InfoHelp";
+import { getPTAvailability } from "../../../../packages/core/src/pt";
+import { getPHAvailability } from "../../../../packages/core/src/ph";
+import { oilTypeText } from "../../../../packages/i18n/src/refinements";
+import {
+  filterOptions,
+  matchesRefrigerantFilters,
+  type AnnexGroup,
+} from "../refrigerant-filters";
+import "./search-filters.css";
 import {
   RefrigerantRow,
   SafetyGroupHelp,
   StarButton,
 } from "../components/Common";
+
+function annexLabel(group: AnnexGroup, l: (fi: string, en: string) => string) {
+  const labels: Record<AnnexGroup, [string, string]> = {
+    I: ["F-kaasuasetuksen liite I", "F-gas Regulation Annex I"],
+    "II-1": [
+      "F-kaasuasetuksen liite II, ryhmä 1",
+      "F-gas Regulation Annex II, section 1",
+    ],
+    "ODS-I": ["Otsoniasetuksen liite I", "Ozone Regulation Annex I"],
+    none: ["Ei näissä liiteluokissa", "Outside these annex classes"],
+    unknown: ["Tuntematon", "Unknown"],
+  };
+  return l(...labels[group]);
+}
+
 export function Home() {
   const { t, data, setData, go } = useApp();
   const [query, setQuery] = useState("");
@@ -30,10 +55,28 @@ export function Home() {
   const [safety, setSafety] = useState("");
   const [kind, setKind] = useState("");
   const [support, setSupport] = useState(false);
+  const [annex, setAnnex] = useState<AnnexGroup | "">("");
+  const [pt, setPt] = useState<"available" | "unavailable" | "">("");
+  const [ph, setPh] = useState<"available" | "unavailable" | "">("");
+  const [oil, setOil] = useState("");
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
+  const filterChoices = useMemo(
+    () => filterOptions(dataset.refrigerants, byId),
+    [],
+  );
   const dragged = useRef<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const searching =
-    all || query.length > 0 || !!family || !!safety || !!kind || support;
+    all ||
+    query.length > 0 ||
+    !!family ||
+    !!safety ||
+    !!kind ||
+    support ||
+    !!annex ||
+    !!pt ||
+    !!ph ||
+    !!oil;
   const results = useMemo(() => {
     const matches = query
       ? searchRefrigerants(query).map((m) => m.refrigerant)
@@ -43,9 +86,18 @@ export function Home() {
         (!family || r.family === family) &&
         (!safety || String(getFact(r, ...factKeys.safety)?.value) === safety) &&
         (!kind || r.kind === kind) &&
-        (!support || r.coverage.regulatory_eu_fi === "verified"),
+        (!support || r.coverage.regulatory_eu_fi === "verified") &&
+        matchesRefrigerantFilters(
+          r,
+          byId,
+          { annex, pt, ph, oil },
+          {
+            pt: getPTAvailability(r.id).supported,
+            ph: getPHAvailability(r.id).supported,
+          },
+        ),
     );
-  }, [query, family, safety, kind, support]);
+  }, [query, family, safety, kind, support, annex, pt, ph, oil]);
   const favourites = data.favourites
     .map((id) => byId.get(id))
     .filter((r) => r !== undefined);
@@ -177,6 +229,94 @@ export function Home() {
                 />
                 {t("checkSupported")}
               </label>
+              <div>
+                <div className="help-heading">
+                  <label htmlFor="annex-filter">
+                    {l("EU-luokitus", "EU classification")}
+                  </label>
+                  <InfoHelp label={l("EU-luokitus", "EU classification")}>
+                    {l(
+                      "Näyttää vain lähteistetyt EU:n F-kaasu- ja otsoniasetusten liiteluokitukset. Seoksessa luokitus johdetaan varmennetusta koostumuksesta ja kaikkien komponenttien varmennetuista luokituksista. Tuntematon tarkoittaa, ettei koko luokitusta voida varmistaa.",
+                      "Shows sourced EU F-gas and ozone-regulation annex classifications. Blend groups are derived only from verified composition and verified classifications for every component. Unknown means the complete classification cannot be established.",
+                    )}
+                  </InfoHelp>
+                </div>
+                <select
+                  id="annex-filter"
+                  value={annex}
+                  onChange={(e) => setAnnex(e.target.value as AnnexGroup | "")}
+                >
+                  <option value="">
+                    {l("Kaikki luokitukset", "All classifications")}
+                  </option>
+                  {filterChoices.annexes.map((group) => (
+                    <option key={group} value={group}>
+                      {annexLabel(group, l)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="search-filter-pair">
+                <label>
+                  <span className="help-heading">P–T</span>
+                  <select
+                    aria-label={l("P–T-taulukko", "P–T table")}
+                    value={pt}
+                    onChange={(e) => setPt(e.target.value as typeof pt)}
+                  >
+                    <option value="">{l("Kaikki", "All")}</option>
+                    <option value="available">
+                      {l("Saatavilla", "Available")}
+                    </option>
+                    <option value="unavailable">
+                      {l("Ei saatavilla", "Unavailable")}
+                    </option>
+                  </select>
+                </label>
+                <label>
+                  <span className="help-heading">log(p)–h</span>
+                  <select
+                    aria-label={l("log(p)–h-kaavio", "log(p)–h diagram")}
+                    value={ph}
+                    onChange={(e) => setPh(e.target.value as typeof ph)}
+                  >
+                    <option value="">{l("Kaikki", "All")}</option>
+                    <option value="available">
+                      {l("Saatavilla", "Available")}
+                    </option>
+                    <option value="unavailable">
+                      {l("Ei saatavilla", "Unavailable")}
+                    </option>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <div className="help-heading">
+                  <label htmlFor="oil-filter">
+                    {l("Öljykoodi", "Oil code")}
+                  </label>
+                  <InfoHelp label={l("Öljykoodi", "Oil code")}>
+                    {l(
+                      "Näyttää lähteistetyt tyypilliset tai mahdolliset öljykoodit. Koodi ei tarkoita kompressorihyväksyntää.",
+                      "Shows sourced typical or possible oil codes. A code does not indicate compressor approval.",
+                    )}
+                  </InfoHelp>
+                </div>
+                <select
+                  id="oil-filter"
+                  value={oil}
+                  onChange={(e) => setOil(e.target.value)}
+                >
+                  <option value="">
+                    {l("Kaikki öljykoodit", "All oil codes")}
+                  </option>
+                  {filterChoices.oils.map((code) => (
+                    <option key={code} value={code}>
+                      {code} · {oilTypeText(data.locale, code)}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <button
                 className="text-button"
                 onClick={() => {
@@ -184,6 +324,10 @@ export function Home() {
                   setSafety("");
                   setKind("");
                   setSupport(false);
+                  setAnnex("");
+                  setPt("");
+                  setPh("");
+                  setOil("");
                 }}
               >
                 {t("clearFilters")}
@@ -202,6 +346,10 @@ export function Home() {
                   setSafety("");
                   setKind("");
                   setSupport(false);
+                  setAnnex("");
+                  setPt("");
+                  setPh("");
+                  setOil("");
                 }}
               >
                 {t("back")}

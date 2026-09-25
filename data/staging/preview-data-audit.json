@@ -1,0 +1,355 @@
+{
+  "reviewedAt": "2026-09-26",
+  "sourceIds": [
+    "dcceew-safety-2024-preview",
+    "epa-snap-transport-preview",
+    "epa-snap-ac-preview",
+    "chemours-xp10-critical-preview"
+  ],
+  "properties": [
+    {
+      "id": "r407d",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-407D row, safety classification column only."
+    },
+    {
+      "id": "r407e",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-407E row, safety classification column only."
+    },
+    {
+      "id": "r407g",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-407G row, safety classification column only."
+    },
+    {
+      "id": "r410b",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-410B row, safety classification column only."
+    },
+    {
+      "id": "r417c",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-417C row, safety classification column only."
+    },
+    {
+      "id": "r422e",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-422E row, safety classification column only."
+    },
+    {
+      "id": "r423a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-423A row, safety classification column only."
+    },
+    {
+      "id": "r424a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-424A row, safety classification column only."
+    },
+    {
+      "id": "r425a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-425A row, safety classification column only."
+    },
+    {
+      "id": "r426a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-426A row, safety classification column only."
+    },
+    {
+      "id": "r428a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-428A row, safety classification column only."
+    },
+    {
+      "id": "r453a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-453A row, safety classification column only."
+    },
+    {
+      "id": "r458a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-458A row, safety classification column only."
+    },
+    {
+      "id": "r515a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-515A row, safety classification column only."
+    },
+    {
+      "id": "r419b",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-419B row, safety classification column only."
+    },
+    {
+      "id": "r439a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-439A row, safety classification column only."
+    },
+    {
+      "id": "r512a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-512A row, safety classification column only."
+    },
+    {
+      "id": "r429a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A3",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-429A row, safety classification column only."
+    },
+    {
+      "id": "r430a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A3",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-430A row, safety classification column only."
+    },
+    {
+      "id": "r431a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A3",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-431A row, safety classification column only."
+    },
+    {
+      "id": "r435a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A3",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-435A row, safety classification column only."
+    },
+    {
+      "id": "r445a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2L",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-445A row, safety classification column only."
+    },
+    {
+      "id": "r446a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2L",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-446A row, safety classification column only."
+    },
+    {
+      "id": "r447a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2L",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-447A row, safety classification column only."
+    },
+    {
+      "id": "r451a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2L",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-451A row, safety classification column only."
+    },
+    {
+      "id": "r451b",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2L",
+          "sourceId": "dcceew-safety-2024-preview"
+        }
+      },
+      "evidence": "HFC blends table, R-451B row, safety classification column only."
+    },
+    {
+      "id": "r406a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A2",
+          "sourceId": "epa-snap-transport-preview"
+        }
+      },
+      "evidence": "Exact R406A row; ASHRAE designation (safety classification) column."
+    },
+    {
+      "id": "r414a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "epa-snap-transport-preview"
+        }
+      },
+      "evidence": "Exact R414A row; ASHRAE designation (safety classification) column."
+    },
+    {
+      "id": "r414b",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "epa-snap-transport-preview"
+        }
+      },
+      "evidence": "Exact R414B row; ASHRAE designation (safety classification) column."
+    },
+    {
+      "id": "r416a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "epa-snap-transport-preview"
+        }
+      },
+      "evidence": "Exact R416A row; ASHRAE designation (safety classification) column."
+    },
+    {
+      "id": "r480a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A1",
+          "sourceId": "epa-snap-transport-preview"
+        }
+      },
+      "evidence": "Exact R480A row; ASHRAE designation (safety classification) column."
+    },
+    {
+      "id": "r441a",
+      "facts": {
+        "ashrae_safety_group": {
+          "value": "A3",
+          "sourceId": "epa-snap-ac-preview"
+        }
+      },
+      "evidence": "Exact R441A row; ASHRAE designation (safety classification) column."
+    },
+    {
+      "id": "r513a",
+      "facts": {
+        "critical_temp_c": {
+          "value": "96.5",
+          "sourceId": "chemours-xp10-critical-preview"
+        },
+        "critical_pressure_bar_abs": {
+          "value": "37.657",
+          "sourceId": "chemours-xp10-critical-preview"
+        }
+      },
+      "evidence": "SI bulletin page 1, physical properties block; pressure explicitly absolute in units legend."
+    }
+  ],
+  "beforeCounts": {
+    "ashrae_safety_group": 167,
+    "critical_temp_c": 63,
+    "critical_pressure_bar_abs": 64
+  },
+  "afterCounts": {
+    "ashrae_safety_group": 199,
+    "critical_temp_c": 64,
+    "critical_pressure_bar_abs": 65
+  }
+}

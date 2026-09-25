@@ -46,6 +46,20 @@ test('the supplied R134a paper example plots with gauge pressures', async ({page
   await expect(page.locator(".ph-bubble")).toHaveAttribute("d", fullBoundary!);
   await expect(page.locator(".calculator-number")).toHaveText(["10 K", "5 K"]);
   await page.locator('.ph-diagram-section').screenshot({path:test.info().outputPath(`phasekit-paper-example-${info.project.name}.png`)});
+  await page.getByText('Tallenna laskelma',{exact:true}).click();
+  await page.getByRole('button',{name:'Tallenna',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Tallennettu',exact:true})).toBeDisabled();
+  await page.goto('/#/saved');
+  const report=page.locator('.report-entry');
+  await report.locator('summary').click();
+  await expect(report).toContainText('1,91 bar(g)');
+  await expect(report).toContainText('Piste 4 · entalpia');
+  await expect(report).toContainText('p–h-aineistoversio');
+  await expect(report).toContainText('Tulistus');
+  await page.reload();
+  await report.locator('summary').click();
+  await expect(report).toContainText('Pisteen 4 oletus');
+
 });
 
 test('negative differences and near-boundary values remain visible when the diagram is blocked', async ({page}) => {

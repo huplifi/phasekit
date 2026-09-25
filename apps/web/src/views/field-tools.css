@@ -1,0 +1,91 @@
+.field-tools {
+  max-width: 760px;
+}
+.field-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 16px;
+  margin: 24px 0;
+  align-items: end;
+}
+.field-tool-grid > *,
+.field-tools label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.field-tools form > label,
+.checklist-record > label {
+  display: block;
+  margin: 20px 0;
+}
+.field-tools h2 {
+  margin-top: 24px;
+}
+.field-tools .help-heading h2 {
+  margin: 0;
+}
+.field-result {
+  margin: 24px 0;
+}
+.field-result h2 {
+  margin: 0 0 12px;
+}
+.field-error {
+  color: var(--status-error-foreground);
+  margin: 16px 0;
+}
+.field-sources {
+  margin: 32px 0;
+  overflow-wrap: anywhere;
+}
+.field-sources summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+}
+.field-tools textarea {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+}
+.field-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+.checklist-create > button {
+  margin-bottom: 0;
+  min-height: 50px;
+}
+.checklist-record .checkbox {
+  align-items: flex-start;
+}
+.checklist-record .checkbox input {
+  flex-shrink: 0;
+}
+.field-confirm {
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 420px) {
+  .field-tool-grid {
+    gap: 16px 12px;
+  }
+  .field-tool-grid label {
+    font-size: 0.875rem;
+  }
+  .checklist-record .field-tool-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -181,7 +181,7 @@ it("maps the five Annex I HFCs omitted from the legal supplement", () => {
 it("preserves reviewed mass composition coverage", () => {
   const r = rows();
   expect(r.refrigerants.filter((x) => x.kind === "blend" && x.composition_status === "verified")).toHaveLength(183);
-  expect(r.refrigerants.filter((x) => x.ashrae_safety_group)).toHaveLength(167);
+  expect(r.refrigerants.filter((x) => x.ashrae_safety_group)).toHaveLength(199);
   const built = buildDataset(validateCanonical(r));
   for (const blend of built.refrigerants.filter((x) => x.kind === "blend" && x.coverage.composition === "verified")) {
     const total = blend.components.reduce((sum, component) => sum.plus(component.massPercent), new Decimal(0));

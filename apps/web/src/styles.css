@@ -606,7 +606,8 @@ select {
 .result-section > .caption {
   margin-top: 16px;
 }
-.calculation-details {
+.calculation-details,
+.share-explanation {
   margin-top: 24px;
 }
 .component-calculation {
@@ -1115,3 +1116,23 @@ input[aria-invalid="true"] {
   justify-content: flex-start;
   text-align: left;
 }
+
+/* Shared editable notes and report text keep the same field geometry. */
+label textarea,
+.share-text {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: 8px;
+  padding: 12px;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  resize: vertical;
+  font: 400 1rem/1.5 var(--font-body), sans-serif;
+}
+.check-schedule .notice p { margin: 8px 0 0; }
+.report-save { margin: 24px 0; }
+.report-save > summary { padding: 12px 0; }
+.report-save .caption { margin-top: 12px; }

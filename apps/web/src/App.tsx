@@ -13,7 +13,7 @@ import { useRegisterSW } from "virtual:pwa-register/react";
 import { AppContext } from "./context";
 import { byId } from "./data";
 import { createDurableWriter, emptyData, loadData, saveData } from "./storage";
-import type { Snapshot, UserData } from "./storage";
+import type { Snapshot, UserData, ToolRecord } from "./storage";
 import { translate } from "../../../packages/i18n/src";
 import type { MessageKey } from "../../../packages/i18n/src";
 import { Home } from "./views/Home";
@@ -25,6 +25,14 @@ import { PTCalculator } from "./views/PTCalculator";
 import { Tools } from "./views/Tools";
 import { Settings } from "./views/Settings";
 import { Saved } from "./views/Saved";
+import { Equipment } from "./views/Equipment";
+import { UnitConverter } from "./views/UnitConverter";
+import {
+  ThermalPowerCalculator,
+  ElectricalCalculator,
+  WorkChecklists,
+  PipeCalculator,
+} from "./views/FieldTools";
 const pathNow = () => window.location.hash.replace(/^#/, "") || "/";
 export function App() {
   const [data, setRenderedData] = useState(emptyData);
@@ -102,6 +110,36 @@ export function App() {
           await enqueue(rollback);
         } catch {
           /* the failure banner remains visible */
+        }
+        throw error;
+      }
+    },
+    [enqueue],
+  );
+  const persistToolRecord = useCallback(
+    async (record: ToolRecord) => {
+      if (!writable.current) throw new Error("Storage not ready");
+      const next = {
+        ...dataRef.current,
+        toolRecords: [record, ...dataRef.current.toolRecords],
+      };
+      dataRef.current = next;
+      setRenderedData(next);
+      try {
+        await enqueue(next);
+      } catch (error) {
+        const rollback = {
+          ...dataRef.current,
+          toolRecords: dataRef.current.toolRecords.filter(
+            (item) => item.id !== record.id,
+          ),
+        };
+        dataRef.current = rollback;
+        setRenderedData(rollback);
+        try {
+          await enqueue(rollback);
+        } catch {
+          /* Keep failure banner visible. */
         }
         throw error;
       }
@@ -265,9 +303,14 @@ export function App() {
     "shsc",
     "co2e",
     "compare",
+    "convert",
+    "thermal-power",
+    "electrical",
+    "pipe",
+    "checklists",
   ].includes(section)
     ? "tools"
-    : section === "saved"
+    : section === "saved" || section === "equipment"
       ? "saved"
       : section === "settings"
         ? "settings"
@@ -278,6 +321,7 @@ export function App() {
         data,
         setData,
         persistSnapshot,
+        persistToolRecord,
         setDraftDirty,
         t,
         go,
@@ -381,6 +425,18 @@ export function App() {
             <Compare />
           ) : section === "tools" ? (
             <Tools />
+          ) : section === "convert" ? (
+            <UnitConverter />
+          ) : section === "thermal-power" ? (
+            <ThermalPowerCalculator />
+          ) : section === "electrical" ? (
+            <ElectricalCalculator />
+          ) : section === "pipe" ? (
+            <PipeCalculator />
+          ) : section === "checklists" ? (
+            <WorkChecklists />
+          ) : section === "equipment" ? (
+            <Equipment />
           ) : section === "saved" ? (
             <Saved />
           ) : section === "settings" ? (

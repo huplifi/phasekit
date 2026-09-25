@@ -5,12 +5,14 @@ A source-attributed refrigerant reference and calculation app for refrigeration 
 - **249 refrigerant records**, including legacy, ODS, natural and newer blends. Coverage is explicit: this is not a complete inventory of every refrigerant or property.
 - Bidirectional pressure–temperature conversion for **124 refrigerants**.
 - A combined refrigeration-cycle tool: LP/HP, suction, hot gas and liquid temperatures; superheat, subcooling and a log(p)–h diagram for **113 supported refrigerants**.
-- kg ↔ t CO₂e conversion using a visible, source-backed GWP basis.
-- EU/Finland periodic leak-check assessment, contextual restrictions and effective dates.
-- Search, favourites, comparison, saved calculation snapshots and JSON backup/restore.
+- kg ↔ t CO₂e conversion using a visible, source-backed GWP basis and source-gated component breakdown.
+- EU/Finland periodic leak-check assessment, contextual restrictions and effective dates, completed-inspection-based next due date and shareable explanation.
+- Search with regulation/model/oil filters, favourites and comparison.
+- General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity and local work checklists.
+- Frozen calculation reports, equipment/site-linked history, JSON backup/restore and browser print-to-PDF.
 - Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
 
-[Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
+[Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
 ## Development
 
@@ -41,18 +43,20 @@ pnpm exec playwright install chromium webkit
 pnpm test:e2e
 ```
 
-Chromium covers mobile and desktop workflows; the targeted WebKit project covers mobile forms and the combined refrigeration cycle. Tests use isolated browser storage. Build before testing and do not rebuild the same output directory during a browser run.
+Chromium covers mobile and desktop workflows; targeted WebKit projects cover forms, the refrigeration cycle and the preview tools. Tests use isolated browser storage. Build before testing and do not rebuild the same output directory during a browser run.
 
 ## Netlify deployment
 
-Import [huplifi/phasekit](https://github.com/huplifi/phasekit) into Netlify and deploy `main`. The repository's `netlify.toml` specifies the build command, publish directory and Node version:
+**This expansion is preview-only.** Open a pull request from the feature branch to obtain a Netlify Deploy Preview; do not merge or promote it until separately authorised. Preview storage is separate from production.
 
-| Setting | Value |
-| --- | --- |
-| Base directory | Repository root |
-| Build command | `pnpm build` |
+For the production configuration, import [huplifi/phasekit](https://github.com/huplifi/phasekit) into Netlify and deploy `main`. The repository's `netlify.toml` specifies the build command, publish directory and Node version:
+
+| Setting           | Value           |
+| ----------------- | --------------- |
+| Base directory    | Repository root |
+| Build command     | `pnpm build`    |
 | Publish directory | `apps/web/dist` |
-| Node.js | 24 |
+| Node.js           | 24              |
 
 No runtime secrets or backend services are required. Add `phasekit.app` as a custom domain in Netlify and follow the DNS records supplied for that project. See [deployment instructions](docs/DEPLOYMENT.md).
 
@@ -60,17 +64,17 @@ Browser storage belongs to an origin. Export a backup from the old site before m
 
 ## Repository layout
 
-| Path | Responsibility |
-| --- | --- |
-| `apps/web` | React PWA, local storage and interface |
-| `packages/core` | Types, units, thermodynamic providers and calculations |
-| `packages/refrigerant-data` | CSV schemas, validation, deterministic builds and search |
-| `packages/rulesets/eu-fi` | Regional rules, thresholds and restrictions |
-| `packages/i18n` | Finnish/English messages |
-| `packages/ui` | Generated semantic design tokens |
-| `data` | Canonical CSV records, source references and reviewed import inputs |
-| `tests` | Unit, integration, persistence and browser checks |
-| `docs` | Architecture, source audits, limits and verification evidence |
+| Path                        | Responsibility                                                      |
+| --------------------------- | ------------------------------------------------------------------- |
+| `apps/web`                  | React PWA, local storage and interface                              |
+| `packages/core`             | Types, units, thermodynamic providers and calculations              |
+| `packages/refrigerant-data` | CSV schemas, validation, deterministic builds and search            |
+| `packages/rulesets/eu-fi`   | Regional rules, thresholds and restrictions                         |
+| `packages/i18n`             | Finnish/English messages                                            |
+| `packages/ui`               | Generated semantic design tokens                                    |
+| `data`                      | Canonical CSV records, source references and reviewed import inputs |
+| `tests`                     | Unit, integration, persistence and browser checks                   |
+| `docs`                      | Architecture, source audits, limits and verification evidence       |
 
 The repository root is the development checkout. Local handoff archives, original design studies, build output and the previous Sites mirror are ignored. The application uses the source and assets committed here.
 

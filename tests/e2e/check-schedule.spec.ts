@@ -1,0 +1,41 @@
+import { expect, test } from "@playwright/test";
+
+test("next inspection and shareable explanation survive a saved snapshot", async ({
+  page,
+}) => {
+  await page.goto("/#/check/r134a");
+  await page.getByLabel("Täytös", { exact: true }).fill("10");
+  await page.locator("#check-date").fill("2026-09-26");
+  await page.locator("#check-last-inspection").fill("2026-01-31");
+  await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  const schedule = page.locator(".check-schedule");
+  await expect(schedule).toContainText("31.1.2027");
+  await schedule.getByText("Näytä jaettava selite", { exact: true }).click();
+  await expect(schedule.locator("textarea")).toContainText("2027-01-31");
+  await expect(schedule.locator("textarea")).toContainText("R134a");
+  await expect(schedule.locator("textarea")).toContainText("Sääntöversio");
+  await page
+    .getByRole("button", { name: "Tallenna laskelma", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Laskelma tallennettu.", exact: true }),
+  ).toBeDisabled();
+  await page.goto("/#/saved");
+  await page.locator(".saved-entry > summary").first().click();
+  await expect(page.locator(".check-schedule")).toContainText("31.1.2027");
+  await page.reload();
+  await page.locator(".saved-entry > summary").first().click();
+  await expect(page.locator(".check-schedule")).toContainText("31.1.2027");
+});
+
+test("assessment date alone never creates a completed inspection or due date", async ({
+  page,
+}) => {
+  await page.goto("/#/check/r134a");
+  await page.getByLabel("Täytös", { exact: true }).fill("10");
+  await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  await expect(page.locator(".check-schedule")).toContainText(
+    "Syötä viimeksi tehdyn tarkastuksen",
+  );
+  await expect(page.locator(".check-schedule strong")).toHaveCount(0);
+});

@@ -1,7 +1,7 @@
 {
-  "version": "2026-09-25.f4c6e6e3fbfc",
-  "sha256": "f4c6e6e3fbfc60314deb6f9f214149b9c5cd6ad350d0a6aaaba8ca927a8d8294",
-  "checkedAt": "2026-09-25",
+  "version": "2026-09-26.137e4a256905",
+  "sha256": "137e4a256905f46677604fa07e6b7c0e1fc9241b2e4884dc8fb9e30e04e0cba2",
+  "checkedAt": "2026-09-26",
   "refrigerants": [
     {
       "id": "r11",
@@ -8460,135 +8460,138 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "epa-snap-transport-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "epa-snap-compositions",
+        "epa-snap-transport-preview",
         "eu-2024-573",
         "eu-2024-590"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -9426,28 +9429,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -9463,101 +9468,102 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "dcceew-safety-2024-preview",
         "epa-snap-compositions",
         "eu-2024-573"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -9601,28 +9607,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -9638,102 +9646,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -9985,28 +9994,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -10022,102 +10033,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -11352,28 +11364,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -11389,101 +11403,102 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "dcceew-safety-2024-preview",
         "epa-snap-compositions",
         "eu-2024-573"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -12495,135 +12510,138 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "epa-snap-transport-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "epa-snap-compositions",
+        "epa-snap-transport-preview",
         "eu-2024-573",
         "eu-2024-590"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -12674,135 +12692,138 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "epa-snap-transport-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "epa-snap-compositions",
+        "epa-snap-transport-preview",
         "eu-2024-573",
         "eu-2024-590"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -13178,128 +13199,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "epa-snap-transport-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "epa-snap-transport-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -13307,7 +13331,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -13762,128 +13786,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -13891,7 +13918,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -14343,134 +14370,137 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "estimated"
       }
@@ -15924,128 +15954,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -16053,7 +16086,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -16090,28 +16123,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -16127,102 +16162,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -16280,133 +16316,136 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "dcceew-safety-2024-preview",
         "epa-snap-compositions"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "unsupported"
       }
@@ -16450,28 +16489,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -16487,102 +16528,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -16633,127 +16675,130 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "dcceew-safety-2024-preview",
         "epa-snap-compositions",
         "eu-2024-573",
         "eu-2024-590"
@@ -16761,7 +16806,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -17395,127 +17440,130 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "dcceew-safety-2024-preview",
         "epa-snap-compositions",
         "eu-2024-573",
         "eu-2024-590"
@@ -17523,7 +17571,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -17567,134 +17615,137 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "unsupported"
       }
@@ -17731,128 +17782,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -17860,7 +17914,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -17897,128 +17951,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -18026,7 +18083,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -19102,134 +19159,137 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "unsupported"
       }
@@ -20199,128 +20259,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -20328,7 +20391,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -20552,127 +20615,130 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "epa-snap-ac-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "epa-snap-ac-preview",
         "epa-snap-compositions",
         "eu-2024-573",
         "eu-2024-590"
@@ -20680,7 +20746,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -21570,128 +21636,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2L",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -21699,7 +21768,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -21743,128 +21812,131 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2L",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -21872,7 +21944,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -21916,28 +21988,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2L",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -21953,102 +22027,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -23556,28 +23631,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2L",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -23593,102 +23670,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -23725,28 +23803,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2L",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -23762,102 +23842,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -24557,134 +24638,137 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "unsupported"
       }
@@ -27097,28 +27181,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -27134,102 +27220,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -33009,136 +33096,139 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "epa-snap-transport-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "epa-gwp-identities",
         "epa-r480a-snap39",
+        "epa-snap-transport-preview",
         "eu-2024-573",
         "eu-2024-590"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -39342,28 +39432,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -39379,102 +39471,103 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -39519,19 +39612,19 @@
             "chemours-opteon-2021",
             "chemours-replacement-guide"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "verified",
@@ -39539,7 +39632,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -39555,13 +39648,13 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "verified",
@@ -39569,7 +39662,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-26",
           "unit": "°C",
           "conditions": {
             "temperatureC": -29.6,
@@ -39579,22 +39672,28 @@
           }
         },
         "critical_temp_c": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "96.5",
+          "sourceIds": [
+            "chemours-xp10-critical-preview"
+          ],
+          "checkedAt": "2026-09-26",
+          "unit": "°C"
         },
         "critical_pressure_bar_abs": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "37.657",
+          "sourceIds": [
+            "chemours-xp10-critical-preview"
+          ],
+          "checkedAt": "2026-09-26",
+          "unit": "bar abs"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "verified",
@@ -39602,7 +39701,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-26",
           "conditions": {
             "temperatureC": -29.6,
             "pressureKPaAbsolute": 101.325,
@@ -39614,7 +39713,7 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "verified",
@@ -39622,20 +39721,20 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-26",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "verified",
@@ -39643,7 +39742,7 @@
           "sourceIds": [
             "chemours-replacement-guide"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "verified",
@@ -39651,7 +39750,7 @@
           "sourceIds": [
             "chemours-replacement-guide"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "verified",
@@ -39659,7 +39758,7 @@
           "sourceIds": [
             "chemours-replacement-guide"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "verified",
@@ -39667,13 +39766,14 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
         "bitzer-refreport-table",
         "chemours-opteon-2021",
         "chemours-replacement-guide",
+        "chemours-xp10-critical-preview",
         "epa-snap-compositions",
         "eu-2024-573"
       ],
@@ -40118,28 +40218,30 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "dcceew-safety-2024-preview"
+          ],
+          "checkedAt": "2026-09-26"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -40155,101 +40257,102 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_temp_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "nominal_glide_k": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "molar_mass_g_mol": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-26"
         }
       },
       "sourceIds": [
+        "dcceew-safety-2024-preview",
         "eu-2024-573",
         "unep-ozone-blends-live-v3"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -46782,6 +46885,15 @@
       "license": "Short contextual oil guidance with attribution"
     },
     {
+      "id": "chemours-xp10-critical-preview",
+      "title": "Opteon XP10 (R513A) thermodynamic properties: critical point",
+      "url": "https://www.opteon.com/en/-/media/files/opteon/opteon-xp10-thermo-properties-si.pdf?rev=c5f4087c1e8c4d4f8c2922151995eee2",
+      "version": "SI bulletin page 1; checked 2026-09-26",
+      "checkedAt": "2026-09-26",
+      "license": "Selected factual product properties with attribution; no tables, diagrams or model reproduced",
+      "note": "Converted 3765.7 kPa absolute to 37.657 bar absolute. Published model uses NIST REFPROP 9.1 with Chemours interaction parameters. Existing BITZER boiling point retained; this bulletin is not imported as a PT or enthalpy model."
+    },
+    {
       "id": "chemours-xp30-tech",
       "title": "Opteon XP30 (R-514A) product information",
       "url": "https://pages.chemours.com/rs/509-VCL-038/images/opteonXP30-pt-BoletimTecnico.pdf",
@@ -46848,6 +46960,15 @@
       "checkedAt": "2026-09-25",
       "license": "Selected factual safety-property extract with attribution",
       "note": "Do not substitute the separate 'ignition temperature' line for the explicitly undetermined auto-ignition field."
+    },
+    {
+      "id": "dcceew-safety-2024-preview",
+      "title": "Hydrofluorocarbon refrigerants: safety classifications",
+      "url": "https://www.dcceew.gov.au/environment/protection/ozone/rac/global-warming-potential-values-hfc-refrigerants",
+      "version": "Updated 2024-12-13; checked 2026-09-26",
+      "checkedAt": "2026-09-26",
+      "license": "CC BY 4.0; https://creativecommons.org/licenses/by/4.0/",
+      "note": "Adapted factual extracts. Attribution: Department of Climate Change, Energy, the Environment and Water. 2024. Hydrofluorocarbon refrigerants - global warming potential values and safety classifications. Copyright policy https://www.dcceew.gov.au/about/copyright checked 2026-09-26. Source is general reference and asks users to independently check classifications. R440A omitted pending conflicting composition review."
     },
     {
       "id": "epa-1336-isomers",
@@ -46943,6 +47064,15 @@
       "license": "US EPA data are public domain by default unless otherwise specified"
     },
     {
+      "id": "epa-snap-ac-preview",
+      "title": "SNAP residential air conditioning: R441A safety classification",
+      "url": "https://www.epa.gov/snap/substitutes-residential-and-light-commercial-air-conditioning-and-heat-pumps",
+      "version": "Updated 2026-03-19; checked 2026-09-26",
+      "checkedAt": "2026-09-26",
+      "license": "Attributed individual factual classification from EPA-authored table; no document or third-party content reproduced",
+      "note": "ASHRAE designation/safety classification column, R441A row. EPA conditions https://www.epa.gov/web-policies-and-procedures/epa-disclaimers"
+    },
+    {
       "id": "epa-snap-compositions",
       "title": "Compositions of Refrigerant Blends",
       "url": "https://www.epa.gov/snap/compositions-refrigerant-blends",
@@ -46950,6 +47080,15 @@
       "checkedAt": "2026-09-25",
       "license": "US EPA data are public domain by default unless otherwise specified",
       "note": "Page count excludes unnumbered trade products; source denominator does not imply all refrigerants."
+    },
+    {
+      "id": "epa-snap-transport-preview",
+      "title": "SNAP refrigerated transport: selected safety classifications",
+      "url": "https://www.epa.gov/snap/substitutes-refrigerated-transport",
+      "version": "Live table checked 2026-09-26",
+      "checkedAt": "2026-09-26",
+      "license": "Attributed individual factual classifications from EPA-authored table; no document or third-party content reproduced",
+      "note": "Safety classification column checked against exact refrigerant designations. EPA copyright conditions vary by document; this extract contains individual facts only, not a republication of the table. https://www.epa.gov/web-policies-and-procedures/epa-disclaimers"
     },
     {
       "id": "eu-2024-573",

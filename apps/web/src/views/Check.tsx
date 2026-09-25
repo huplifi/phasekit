@@ -1,4 +1,6 @@
 import { InfoHelp } from "../components/InfoHelp";
+import { CheckSchedule } from "../components/CheckSchedule";
+import { isCalendarDate } from "../../../../packages/core/src/schedule";
 import { useEffect, useRef, useState } from "react";
 import { Bookmark, ChevronRight } from "lucide-react";
 import type {
@@ -152,9 +154,11 @@ export const today = () =>
 export function CheckResultView({
   result,
   snapshot,
+  lastInspectionDate,
 }: {
   result: CheckResult;
   snapshot?: Snapshot;
+  lastInspectionDate?: string;
 }) {
   const { t, data } = useApp();
   const designation = (id: string) =>
@@ -233,6 +237,12 @@ export function CheckResultView({
         )}
       </div>
       <p className="caption">{t("noMaintenanceClaim")}</p>
+      <CheckSchedule
+        result={result}
+        completed={snapshot?.lastInspectionDate ?? lastInspectionDate}
+        designation={designation(result.input.refrigerantId)}
+        sources={snapshot?.sources ?? dataset.sources.filter(s => result.sourceIds.includes(s.id))}
+      />
       <details className="calculation-details">
         <summary>{t("calculation")}</summary>
         {result.components.length > 0 && (
@@ -346,6 +356,9 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
   const [result, setResult] = useState<CheckResult | null>(null);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [lastInspectionDate, setLastInspectionDate] = useState("");
+  const [scheduleError, setScheduleError] = useState("");
+  const l = (fi: string, en: string) => data.locale === "fi" ? fi : en;
   const resultRef = useRef<HTMLDivElement>(null);
   const draftRevision = useRef(0);
   useEffect(() => () => setDraftDirty(false), [setDraftDirty]);
@@ -371,6 +384,7 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
       createdAt: new Date().toISOString(),
       refrigerant: structuredClone(r),
       result: structuredClone(result),
+      ...(lastInspectionDate ? {lastInspectionDate} : {}),
       sources: structuredClone(
         dataset.sources.filter((s) => result.sourceIds.includes(s.id)),
       ),
@@ -411,6 +425,12 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
         onSubmit={(e) => {
           e.preventDefault();
           if (!r) return;
+          if (lastInspectionDate && (!isCalendarDate(lastInspectionDate) || lastInspectionDate > input.asOf)) {
+            setScheduleError(l("Tarkastuspäivä ei voi olla arviointipäivän jälkeen.", "The inspection date cannot follow the assessment date."));
+            setResult(null);
+            return;
+          }
+          setScheduleError("");
           draftRevision.current += 1;
           setResult(evaluateCheck(input, dataset));
           setSaved(false);
@@ -542,6 +562,16 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
             </div>
           )}
         </div>
+        <div className="field-group">
+          <div className="help-heading">
+            <label htmlFor="check-last-inspection">{l("Viimeksi tehty tarkastus (valinnainen)", "Last completed inspection (optional)")}</label>
+            <InfoHelp label={l("Tarkastuspäivä", "Inspection date")}>
+              {l("Toteutuneen määräaikaistarkastuksen päivämäärä. Seuraava määräpäivä lasketaan tästä päivästä, ei arviointipäivästä. Vuodon korjauksen jälkitarkastus on erillinen asia.", "Date of a completed periodic check. The next due date is calculated from this date, not the assessment date. A post-repair check is a separate requirement.")}
+            </InfoHelp>
+          </div>
+          <input id="check-last-inspection" type="date" max={input.asOf} value={lastInspectionDate} onChange={e=>{setLastInspectionDate(e.target.value);setScheduleError("");setResult(null);setSaved(false);setDraftDirty(true);draftRevision.current+=1;}} />
+        </div>
+        {scheduleError && <p className="notice error" role="alert">{scheduleError}</p>}
         <button className="primary" type="submit" disabled={!r}>
           {t("calculate")}
           <ChevronRight size={20} />
@@ -554,7 +584,7 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
         aria-atomic="true"
         tabIndex={-1}
       >
-        {result && <CheckResultView result={result} />}
+        {result && <CheckResultView result={result} lastInspectionDate={lastInspectionDate} />}
       </div>
       {result && (
         <button

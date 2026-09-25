@@ -12,7 +12,9 @@ import {
   offlinePTProvider,
 } from "../../../../packages/core/src/pt";
 import { useApp } from "../context";
-import { byId } from "../data";
+import { byId, dataset } from "../data";
+import { ReportSave, type ReportContent } from "../components/ReportSave";
+import type { ReportRow } from "../storage";
 import { Back, SourceNote } from "../components/Common";
 import { InfoHelp } from "../components/InfoHelp";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
@@ -155,6 +157,77 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
     }
     setTempUnit(next);
   }
+  const row = (
+    fi: string,
+    en: string,
+    value: string,
+    unit?: string,
+  ): ReportRow => ({ label: { fi, en }, value, ...(unit ? { unit } : {}) });
+  const report: ReportContent | undefined =
+    result && r && !unitError && !error
+      ? {
+          tool: "pt",
+          title: `${r.designation} · P–T`,
+          dataVersion: dataset.version,
+          inputs: [
+            row("Kylmäaine", "Refrigerant", `${r.designation} (${r.id})`),
+            row("Syötetty suure", "Entered quantity", anchor.kind),
+            row(
+              "Syötetty arvo",
+              "Entered value",
+              anchor.value,
+              anchor.kind === "pressure" ? pressureUnit : `°${tempUnit}`,
+            ),
+            row("Faasiraja", "Phase boundary", effectiveSide),
+            row(
+              "Paineyksikkö ja viite",
+              "Pressure unit and reference",
+              pressureUnit,
+            ),
+            ...(pressureUnit.endsWith("(g)")
+              ? [
+                  row(
+                    "Ilmanpaineviite",
+                    "Atmospheric reference",
+                    atmosphere,
+                    "bar(a)",
+                  ),
+                ]
+              : []),
+          ],
+          outputs: [
+            row(
+              "Paine",
+              "Pressure",
+              result.pressure.value,
+              result.pressure.unit,
+            ),
+            row(
+              "Lämpötila",
+              "Temperature",
+              result.temperature.value,
+              `°${result.temperature.unit}`,
+            ),
+            row(
+              "Absoluuttinen paine",
+              "Absolute pressure",
+              result.saturation.pressureBarAbsolute,
+              "bar(a)",
+            ),
+            row(
+              "P–T-aineistoversio",
+              "P–T dataset version",
+              result.saturation.provider.dataVersion,
+            ),
+          ],
+          sources: dataset.sources.filter((source) =>
+            new Set([
+              ...r.sourceIds,
+              ...result.saturation.provider.sourceIds,
+            ]).has(source.id),
+          ),
+        }
+      : undefined;
   return (
     <>
       <Back to="/tools" />
@@ -369,6 +442,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           </p>
         </div>
       )}
+      {report && <ReportSave key={JSON.stringify(report)} content={report} />}
       {r && available.supported && (
         <details className="calculation-details">
           <summary>

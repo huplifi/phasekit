@@ -1,0 +1,284 @@
+import { useDraftGuard } from "../useDraftGuard";
+import { useState } from "react";
+import type { FormEvent } from "react";
+import { Plus, Save, Trash2, X } from "lucide-react";
+import { formatDate } from "../../../../packages/i18n/src";
+import type { EquipmentRecord } from "../storage";
+import { useApp } from "../context";
+import "./reports.css";
+
+type EquipmentDraft = Pick<EquipmentRecord, "name" | "location" | "notes">;
+const l = (locale: "fi" | "en", fi: string, en: string) =>
+  locale === "fi" ? fi : en;
+const emptyDraft: EquipmentDraft = { name: "", location: "", notes: "" };
+
+export function Equipment() {
+  const setDraftDirty = useDraftGuard();
+  const { data, setData, go } = useApp();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [draft, setDraft] = useState<EquipmentDraft>(emptyDraft);
+  const [error, setError] = useState("");
+  const t = (fi: string, en: string) => l(data.locale, fi, en);
+
+  const beginCreate = () => {
+    setEditingId("");
+    setDraft(emptyDraft);
+    setError("");
+  };
+  const beginEdit = (item: EquipmentRecord) => {
+    setEditingId(item.id);
+    setDraft({ name: item.name, location: item.location, notes: item.notes });
+    setError("");
+  };
+  const cancel = () => {
+    setDraftDirty(false);
+    setEditingId(null);
+    setDraft(emptyDraft);
+    setError("");
+  };
+  const save = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const name = draft.name.trim();
+    if (!name) {
+      setError(t("Anna laitteelle nimi.", "Enter an equipment name."));
+      return;
+    }
+    if (
+      name.length > 200 ||
+      draft.location.length > 300 ||
+      draft.notes.length > 10000
+    ) {
+      setError(
+        t(
+          "Kentän enimmäispituus ylittyy.",
+          "A field exceeds its maximum length.",
+        ),
+      );
+      return;
+    }
+    if (!editingId && data.equipment.length >= 1000) {
+      setError(
+        t(
+          "Laitteiden enimmäismäärä on 1 000. Vie varmuuskopio ja poista tarpeettomia laitteita.",
+          "The equipment limit is 1,000. Export a backup and remove unused equipment.",
+        ),
+      );
+      return;
+    }
+    if (editingId) {
+      const updatedAt = new Date().toISOString();
+      setData((current) => ({
+        ...current,
+        equipment: current.equipment.map((item) =>
+          item.id === editingId ? { ...item, ...draft, name, updatedAt } : item,
+        ),
+      }));
+    } else {
+      const item: EquipmentRecord = {
+        id: crypto.randomUUID(),
+        name,
+        location: draft.location,
+        notes: draft.notes,
+        updatedAt: new Date().toISOString(),
+      };
+      setData((current) => ({
+        ...current,
+        equipment: [item, ...current.equipment],
+      }));
+    }
+    cancel();
+  };
+  const remove = (item: EquipmentRecord) => {
+    if (
+      !window.confirm(
+        t(
+          `Poistetaanko laite “${item.name}”? Tallennetut laskelmat ja niiden laitenimi säilyvät.`,
+          `Delete “${item.name}”? Saved calculations and their recorded equipment name will remain.`,
+        ),
+      )
+    )
+      return;
+    setData((current) => ({
+      ...current,
+      equipment: current.equipment.filter((row) => row.id !== item.id),
+    }));
+  };
+
+  return (
+    <section className="equipment-view">
+      <header className="equipment-heading">
+        <div>
+          <h1>{t("Laitteet ja kohteet", "Equipment and sites")}</h1>
+          <p className="secondary">
+            {t(
+              "Pidä laskelmat järjestyksessä liittämällä ne laitteisiin tai kohteisiin.",
+              "Keep calculations organised by linking them to equipment or sites.",
+            )}
+          </p>
+        </div>
+        {editingId === null && (
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={beginCreate}
+          >
+            <Plus size={18} />
+            {t("Lisää laite", "Add equipment")}
+          </button>
+        )}
+      </header>
+      {editingId !== null && (
+        <form
+          className="equipment-form"
+          onSubmit={save}
+          onChangeCapture={() => setDraftDirty(true)}
+        >
+          <h2>
+            {editingId
+              ? t("Muokkaa laitetta", "Edit equipment")
+              : t("Uusi laite tai kohde", "New equipment or site")}
+          </h2>
+          <label htmlFor="equipment-name">
+            {t("Nimi", "Name")}
+            <input
+              id="equipment-name"
+              required
+              maxLength={200}
+              value={draft.name}
+              onChange={(event) =>
+                setDraft({ ...draft, name: event.target.value })
+              }
+            />
+          </label>
+          <label htmlFor="equipment-location">
+            {t("Sijainti", "Location")}
+            <input
+              id="equipment-location"
+              maxLength={300}
+              value={draft.location}
+              onChange={(event) =>
+                setDraft({ ...draft, location: event.target.value })
+              }
+            />
+          </label>
+          <label htmlFor="equipment-notes">
+            {t("Muistiinpanot", "Notes")}
+            <textarea
+              id="equipment-notes"
+              maxLength={10000}
+              rows={4}
+              value={draft.notes}
+              onChange={(event) =>
+                setDraft({ ...draft, notes: event.target.value })
+              }
+            />
+          </label>
+          {error && (
+            <p className="error-text" role="alert">
+              {error}
+            </p>
+          )}
+          <div className="button-group">
+            <button className="primary" type="submit">
+              <Save size={18} />
+              {t("Tallenna", "Save")}
+            </button>
+            <button className="text-button" type="button" onClick={cancel}>
+              <X size={18} />
+              {t("Peruuta", "Cancel")}
+            </button>
+          </div>
+          <p className="caption secondary">
+            {t(
+              "Nimi enintään 200 merkkiä, sijainti 300 ja muistiinpanot 10 000.",
+              "Name up to 200 characters, location 300 and notes 10,000.",
+            )}
+          </p>
+        </form>
+      )}
+      {data.equipment.length === 0 && editingId === null ? (
+        <p className="empty">
+          {t(
+            "Laitteita ei ole vielä lisätty.",
+            "No equipment has been added yet.",
+          )}
+        </p>
+      ) : (
+        <div className="equipment-list">
+          {data.equipment.map((item) => {
+            const reports = data.toolRecords.filter(
+              (record) => record.equipmentId === item.id,
+            );
+            return (
+              <article className="equipment-card" key={item.id}>
+                <div className="equipment-card-heading">
+                  <div>
+                    <h2>{item.name}</h2>
+                    {item.location && (
+                      <p className="secondary">{item.location}</p>
+                    )}
+                  </div>
+                  <div className="button-group">
+                    <button
+                      className="text-button"
+                      type="button"
+                      onClick={() => beginEdit(item)}
+                    >
+                      {t("Muokkaa", "Edit")}
+                    </button>
+                    <button
+                      className="text-button danger-text"
+                      type="button"
+                      onClick={() => remove(item)}
+                    >
+                      <Trash2 size={18} />
+                      {t("Poista", "Delete")}
+                    </button>
+                  </div>
+                </div>
+                {item.notes && <p className="equipment-notes">{item.notes}</p>}
+                <section className="equipment-history">
+                  <h3>
+                    {t("Tallennetut laskelmat", "Saved calculations")}{" "}
+                    <span className="secondary">({reports.length})</span>
+                  </h3>
+                  {reports.length ? (
+                    <ul>
+                      {reports.map((record) => (
+                        <li key={record.id}>
+                          <strong>{record.title}</strong>
+                          <span className="secondary">
+                            {" "}
+                            · {formatDate(record.createdAt, data.locale)}
+                          </span>
+                          <button
+                            className="text-button inline-link"
+                            type="button"
+                            onClick={() => go("/saved")}
+                          >
+                            {t("Avaa tallennetut", "Open saved")}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="caption secondary">
+                      {t(
+                        "Tähän laitteeseen liitettyjä laskelmia ei ole.",
+                        "No calculations are linked to this equipment.",
+                      )}
+                    </p>
+                  )}
+                </section>
+                <p className="caption secondary">
+                  {t("Päivitetty", "Updated")}:{" "}
+                  {formatDate(item.updatedAt, data.locale)}
+                </p>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}

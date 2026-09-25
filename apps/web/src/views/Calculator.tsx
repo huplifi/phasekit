@@ -5,6 +5,7 @@ import {
 } from "../../../../packages/core/src/ph";
 import { PHDiagramPanel, phErrorText } from "./PHCalculator";
 import { ArrowLeftRight } from "lucide-react";
+import { CO2eBreakdown } from "../components/CO2eBreakdown";
 import { InfoHelp } from "../components/InfoHelp";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -24,7 +25,10 @@ import {
 import type { Refrigerant } from "../../../../packages/core/src/contracts";
 import { formatDecimal } from "../../../../packages/i18n/src";
 import { useApp } from "../context";
-import { byId } from "../data";
+import { byId, dataset } from "../data";
+import { ReportSave, type ReportContent } from "../components/ReportSave";
+import type { ReportRow } from "../storage";
+import { co2eBreakdown } from "../../../../packages/core/src/co2e-breakdown";
 import { Back, SourceNote } from "../components/Common";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import "./calculator.css";
@@ -50,6 +54,7 @@ interface Output {
   saturation?: PTResult;
   sourceIds: string[];
   basis?: string;
+  kg?: string;
   negative?: boolean;
   measuredC?: string;
   differenceK?: string;
@@ -258,6 +263,7 @@ export function Calculator({
           {
             value: direction ? result.kg : result.tonnesCO2e,
             unit: direction ? "kg" : "t CO₂e",
+            kg: result.kg,
             basis: `${result.gwpBasis} · GWP ${formatDecimal(result.gwp, data.locale)}`,
             sourceIds: result.sourceIds,
           },
@@ -351,6 +357,219 @@ export function Calculator({
     requestAnimationFrame(() => resultRef.current?.focus());
   }
   const title = tool === "shsc" ? t("shsc") : "kg ↔ CO₂e";
+  const reportRow = (
+    fi: string,
+    en: string,
+    value: string,
+    unit?: string,
+  ): ReportRow => ({ label: { fi, en }, value, ...(unit ? { unit } : {}) });
+  let report: ReportContent | undefined;
+  if (r && output && !error && !unitError) {
+    const inputRows = [
+      reportRow("Kylmäaine", "Refrigerant", `${r.designation} (${r.id})`),
+      reportRow("Luokka", "Family", r.family),
+    ];
+    const outputRows = output.flatMap((item) => [
+      reportRow(
+        item.mode === "superheat"
+          ? "Tulistus"
+          : item.mode === "subcooling"
+            ? "Alijäähdytys"
+            : "Tulos",
+        item.mode === "superheat"
+          ? "Superheat"
+          : item.mode === "subcooling"
+            ? "Subcooling"
+            : "Result",
+        item.value,
+        item.unit,
+      ),
+      ...(item.saturation
+        ? [
+            reportRow(
+              item.mode === "superheat" ? "Kastepiste" : "Kuplapiste",
+              item.mode === "superheat" ? "Dew point" : "Bubble point",
+              item.saturation.temperatureC,
+              "°C",
+            ),
+          ]
+        : []),
+    ]);
+    const sourceIds = new Set([
+      ...r.sourceIds,
+      ...output.flatMap((item) => item.sourceIds),
+    ]);
+    if (tool === "co2e" && selectedGwp && output[0].kg !== undefined) {
+      inputRows.push(
+        reportRow(
+          "Syötetty määrä",
+          "Entered quantity",
+          value,
+          direction ? "t CO₂e" : "kg",
+        ),
+        reportRow("GWP", "GWP", String(selectedGwp.value)),
+        reportRow("GWP-peruste", "GWP basis", selectedGwp.basis!),
+      );
+      const breakdown = co2eBreakdown({
+        refrigerant: r,
+        refrigerants: dataset.refrigerants,
+        kg: output[0].kg,
+        gwpKey,
+      });
+      for (const component of breakdown.rows) {
+        component.sourceIds.forEach((id) => sourceIds.add(id));
+        outputRows.push(
+          reportRow(
+            `${component.designation} · massaosuus`,
+            `${component.designation} · mass fraction`,
+            component.massPercent,
+            "%",
+          ),
+          reportRow(
+            `${component.designation} · massa`,
+            `${component.designation} · mass`,
+            component.massKg,
+            "kg",
+          ),
+        );
+        if (component.gwp !== null)
+          outputRows.push(
+            reportRow(
+              `${component.designation} · GWP`,
+              `${component.designation} · GWP`,
+              component.gwp,
+            ),
+            reportRow(
+              `${component.designation} · GWP-peruste`,
+              `${component.designation} · GWP basis`,
+              component.basis!,
+            ),
+          );
+        outputRows.push(
+          reportRow(
+            `${component.designation} · CO₂e`,
+            `${component.designation} · CO₂e`,
+            component.tonnesCO2e ?? "unavailable",
+            component.tonnesCO2e === null ? undefined : "t CO₂e",
+          ),
+        );
+      }
+      outputRows.push(
+        reportRow(
+          "Erittelyn tila",
+          "Breakdown status",
+          breakdown.status === "complete"
+            ? breakdown.reconciled
+              ? "reconciled"
+              : "mismatch"
+            : `unavailable: ${breakdown.reason}`,
+        ),
+      );
+      if (breakdown.componentTonnesCO2e !== null)
+        outputRows.push(
+          reportRow(
+            "Komponenttien summa",
+            "Component total",
+            breakdown.componentTonnesCO2e,
+            "t CO₂e",
+          ),
+          reportRow(
+            "Ero kokonaistulokseen",
+            "Difference from headline total",
+            breakdown.differenceTonnesCO2e!,
+            "t CO₂e",
+          ),
+        );
+    } else if (tool === "shsc") {
+      inputRows.push(
+        reportRow(
+          "LP · Imupaine",
+          "LP · Suction pressure",
+          value,
+          pressureUnit,
+        ),
+        reportRow(
+          "HP · Korkeapaine",
+          "HP · High pressure",
+          highPressure,
+          pressureUnit,
+        ),
+        reportRow("Imu", "Suction", measured, `°${tempUnit}`),
+        reportRow("Neste", "Liquid", liquid, `°${tempUnit}`),
+      );
+      if (hotGas.trim())
+        inputRows.push(
+          reportRow("Kuumakaasu", "Hot gas", hotGas, `°${tempUnit}`),
+        );
+      if (pressureUnit.endsWith("(g)"))
+        inputRows.push(
+          reportRow(
+            "Ilmanpaineviite",
+            "Atmospheric reference",
+            atmosphere,
+            "bar(a)",
+          ),
+        );
+      if (cycle) {
+        cycle.sourceIds.forEach((id) => sourceIds.add(id));
+        for (const point of Object.values(cycle.points)) {
+          outputRows.push(
+            reportRow(
+              `Piste ${point.label} · paine`,
+              `Point ${point.label} · pressure`,
+              point.pressureBarAbsolute,
+              "bar(a)",
+            ),
+            reportRow(
+              `Piste ${point.label} · entalpia`,
+              `Point ${point.label} · enthalpy`,
+              point.enthalpyKJkg,
+              "kJ/kg",
+            ),
+          );
+          if (point.temperatureC !== null)
+            outputRows.push(
+              reportRow(
+                `Piste ${point.label} · lämpötila`,
+                `Point ${point.label} · temperature`,
+                point.temperatureC,
+                "°C",
+              ),
+            );
+        }
+        outputRows.push(
+          reportRow(
+            "Pisteen 4 oletus",
+            "Point 4 assumption",
+            cycle.point4Assumption,
+          ),
+          reportRow(
+            "p–h-aineistoversio",
+            "p–h dataset version",
+            cycle.dataVersion,
+          ),
+        );
+      } else if (diagramMessage)
+        outputRows.push(
+          reportRow("Kaavion tila", "Diagram status", diagramMessage),
+        );
+      outputRows.push(
+        reportRow(
+          "P–T-aineistoversio",
+          "P–T dataset version",
+          offlinePTProvider.metadata.dataVersion,
+        ),
+      );
+    }
+    report = {
+      tool: tool === "shsc" ? "cycle" : "co2e",
+      title: `${r.designation} · ${tool === "shsc" ? "Kylmäkierto / Refrigeration cycle" : "kg ↔ CO₂e"}`,
+      inputs: inputRows,
+      outputs: outputRows,
+      dataVersion: dataset.version,
+      sources: dataset.sources.filter((source) => sourceIds.has(source.id)),
+    };
+  }
   return (
     <>
       <Back to="/tools" />
@@ -760,6 +979,10 @@ export function Calculator({
           </section>
         ))}
       </div>
+      {report && <ReportSave key={JSON.stringify(report)} content={report} />}
+      {tool === "co2e" && r && output?.[0].kg !== undefined && (
+        <CO2eBreakdown refrigerant={r} kg={output[0].kg} gwpKey={gwpKey} />
+      )}
       {tool === "shsc" && (
         <PHDiagramPanel
           id={id}

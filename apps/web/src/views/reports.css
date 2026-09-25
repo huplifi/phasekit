@@ -1,0 +1,38 @@
+.report-list { margin-block: 1.5rem 2rem; }
+.saved-heading-actions { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.saved-heading-actions h1 { margin: 0; }
+.report-list > h2 { margin-bottom: .75rem; }
+.report-entry { margin-bottom: .75rem; }
+.report-detail { padding: .75rem 0 .25rem; }
+.report-detail section { margin-block: 1rem; }
+.report-detail h3, .equipment-history h3 { font-size: 1rem; margin: 0 0 .5rem; }
+.report-rows dl { margin: 0; }
+.report-row { display: grid; grid-template-columns: minmax(9rem, 1fr) minmax(0, 2fr); gap: .75rem; padding: .45rem 0; border-bottom: 1px solid var(--divider, #d6dddf); }
+.report-row dt { color: var(--text-secondary, #53636d); }
+.report-row dd { margin: 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.report-notes, .equipment-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
+.report-provenance li { margin-block: .45rem; overflow-wrap: anywhere; }
+.report-actions { flex-wrap: wrap; }
+.equipment-view { display: grid; gap: 1rem; }
+.equipment-heading, .equipment-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.equipment-heading h1, .equipment-card h2 { margin-top: 0; }
+.equipment-form, .equipment-card { border: 1px solid var(--divider, #d6dddf); border-radius: .8rem; padding: 1rem; background: var(--surface, transparent); }
+.equipment-form { display: grid; gap: .85rem; }
+.equipment-form h2 { margin: 0; }
+.equipment-form label { display: grid; gap: .35rem; }
+.equipment-form input, .equipment-form textarea { width: 100%; box-sizing: border-box; }
+.equipment-list { display: grid; gap: .85rem; }
+.equipment-card h2 { margin-bottom: .2rem; }
+.equipment-card-heading .button-group { margin: 0; flex-wrap: wrap; }
+.equipment-history { margin-top: 1rem; }
+.equipment-history ul { padding-left: 1.2rem; }
+.equipment-history li { margin-block: .5rem; }
+.inline-link { padding-inline: .35rem; }
+@media (max-width: 560px) {
+  .report-row { grid-template-columns: 1fr; gap: .15rem; }
+  .equipment-heading, .equipment-card-heading { flex-direction: column; }
+  .saved-heading-actions { align-items: flex-start; flex-direction: column; }
+}
+@media print {
+  .report-actions, .equipment-form, .equipment-heading button { display: none !important; }
+}
