@@ -16,7 +16,7 @@ test('the supplied R134a paper example plots with gauge pressures', async ({page
   await expect(page.locator('.ph-diagram-message')).toHaveCount(0);
   await expect(page.locator('.ph-point-table')).toContainText('2,92');
   await expect(page.locator('.ph-point-table')).toContainText('10,16');
-  await page.locator('.ph-diagram-section').screenshot({path:`/private/tmp/phasekit-paper-example-${info.project.name}.png`});
+  await page.locator('.ph-diagram-section').screenshot({path:test.info().outputPath(`phasekit-paper-example-${info.project.name}.png`)});
 });
 
 test('negative differences and near-boundary values remain visible when the diagram is blocked', async ({page}) => {
@@ -79,7 +79,7 @@ test("SH and SC use their own pressures and temperatures together", async ({
     "14,4 K",
   ]);
   await page.screenshot({
-    path: `/private/tmp/phasekit-${info.project.name}-shsc-pair.png`,
+    path: test.info().outputPath(`phasekit-${info.project.name}-shsc-pair.png`),
     fullPage: true,
   });
   await page.getByLabel("Lämpötilayksikkö").selectOption("F");

@@ -143,12 +143,12 @@ test("compact provenance, formula, restrictions and comparison remain accessible
     .analyze();
   expect(report.violations).toEqual([]);
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-restrictions.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-restrictions.png`),
     fullPage: true,
   });
   await page.goto("/#/tools");
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-tools.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-tools.png`),
     fullPage: true,
   });
   await page.goto("/#/shsc/r134a");
@@ -158,7 +158,7 @@ test("compact provenance, formula, restrictions and comparison remain accessible
   await page.locator("#shsc-liquid").fill("25");
   await page.getByRole("button", { name: "Laske", exact: true }).click();
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-shsc.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-shsc.png`),
     fullPage: true,
   });
 });
@@ -175,7 +175,7 @@ test("new tool forms work in English dark mode and enlarged text", async ({
     "15.8",
   );
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-pt-dark.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-pt-dark.png`),
     fullPage: true,
   });
   const report = await new AxeBuilder({ page })
@@ -240,7 +240,7 @@ test("transparent logos follow theme and are cached for offline use", async ({
     "/phasekit-logo-light.svg",
   );
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-logo-light.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-logo-light.png`),
     fullPage: true,
   });
   await page.getByLabel("Teema").selectOption("dark");
@@ -253,7 +253,7 @@ test("transparent logos follow theme and are cached for offline use", async ({
     "/phasekit-logo-dark.svg",
   );
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-logo-dark.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-logo-dark.png`),
     fullPage: true,
   });
   await page.evaluate(async () => {
@@ -351,7 +351,7 @@ test("field help works by touch and keyboard; charge and unit have matching heig
   await help.click();
   await expect(page.getByRole("tooltip")).toContainText("laitetyypistä");
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-help.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-help.png`),
     fullPage: true,
   });
   await page.keyboard.press("Escape");
@@ -362,7 +362,7 @@ test("field help works by touch and keyboard; charge and unit have matching heig
   await page.getByRole("heading", { level: 1 }).click();
   await expect(page.getByRole("tooltip")).toHaveCount(0);
   await page.screenshot({
-    path: `/private/tmp/phasekit-v2-${testInfo.project.name}-check.png`,
+    path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-check.png`),
     fullPage: true,
   });
   const report = await new AxeBuilder({ page })

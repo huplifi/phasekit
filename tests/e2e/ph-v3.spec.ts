@@ -46,10 +46,10 @@ test("log(p)-h plots a sourced R134a cycle and clears it after changed or invali
     ).violations,
   ).toEqual([]);
   await page.screenshot({
-    path: `/private/tmp/phasekit-v3-${info.project.name}-ph.png`,
+    path: test.info().outputPath(`phasekit-v3-${info.project.name}-ph.png`),
     fullPage: true,
   });
-  await page.locator(".ph-diagram-section").screenshot({path: `/private/tmp/phasekit-v3-${info.project.name}-ph-chart.png`});
+  await page.locator(".ph-diagram-section").screenshot({path: test.info().outputPath(`phasekit-v3-${info.project.name}-ph-chart.png`)});
   for (const id of ["shsc-suction", "shsc-hot-gas", "shsc-liquid"]) {
     await expect(page.locator(`#${id}`)).toHaveAttribute("inputmode", "text");
   }
@@ -138,7 +138,7 @@ test("log(p)-h is readable in English dark mode and enlarged text", async ({
     ).violations,
   ).toEqual([]);
   await page.screenshot({
-    path: `/private/tmp/phasekit-v3-${info.project.name}-ph-dark.png`,
+    path: test.info().outputPath(`phasekit-v3-${info.project.name}-ph-dark.png`),
     fullPage: true,
   });
   await page.evaluate(() => {

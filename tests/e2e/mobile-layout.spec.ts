@@ -30,7 +30,7 @@ test("compact cycle keeps units aligned and pressures side by side", async ({
   }
   await noOverflow(page);
   await page.screenshot({
-    path: `/private/tmp/phasekit-compact-cycle-${info.project.name}.png`,
+    path: test.info().outputPath(`phasekit-compact-cycle-${info.project.name}.png`),
     fullPage: true,
   });
 });
@@ -52,7 +52,7 @@ test("date input fits the form and remains editable at narrow widths", async ({
     await noOverflow(page);
   }
   await page.screenshot({
-    path: `/private/tmp/phasekit-date-${info.project.name}.png`,
+    path: test.info().outputPath(`phasekit-date-${info.project.name}.png`),
     fullPage: true,
   });
 });
@@ -105,7 +105,7 @@ test("PT arrows share the input centre and redundant slider is gone", async ({
   );
   await noOverflow(page);
   await page.screenshot({
-    path: `/private/tmp/phasekit-compact-pt-${info.project.name}.png`,
+    path: test.info().outputPath(`phasekit-compact-pt-${info.project.name}.png`),
     fullPage: true,
   });
 });
@@ -146,7 +146,7 @@ test("CO2e quantity and calculation fit initially with contextual help", async (
   await page.keyboard.press("Escape");
   await noOverflow(page);
   await page.screenshot({
-    path: `/private/tmp/phasekit-compact-co2e-${info.project.name}.png`,
+    path: test.info().outputPath(`phasekit-compact-co2e-${info.project.name}.png`),
     fullPage: true,
   });
 });

@@ -65,7 +65,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   await choose(page, "R134a");
   await expect(p).not.toHaveValue("");
   await page.screenshot({
-    path: `/private/tmp/phasekit-v3-${info.project.name}-pt.png`,
+    path: test.info().outputPath(`phasekit-v3-${info.project.name}-pt.png`),
     fullPage: true,
   });
 });
@@ -95,7 +95,7 @@ test("modal refrigerant selection filters favourites and restores calculator foc
     .analyze();
   expect(audit.violations).toEqual([]);
   await page.screenshot({
-    path: `/private/tmp/phasekit-v3-${info.project.name}-picker.png`,
+    path: test.info().outputPath(`phasekit-v3-${info.project.name}-picker.png`),
     fullPage: true,
   });
   await page.keyboard.press("Escape");
@@ -130,7 +130,7 @@ test("R142b uses sourced name, ODS GWP and one environmental provenance block", 
   await expect(environment).toContainText("2 300");
   await expect(page.locator(".data-footer")).toHaveCount(0);
   await page.screenshot({
-    path: `/private/tmp/phasekit-v3-${info.project.name}-properties.png`,
+    path: test.info().outputPath(`phasekit-v3-${info.project.name}-properties.png`),
     fullPage: true,
   });
 });
@@ -162,7 +162,7 @@ test("leak result exposes the controlling quantity and refrigerant family with s
     "6,75 t CO₂e",
   );
   await page.screenshot({
-    path: `/private/tmp/phasekit-v3-${info.project.name}-check.png`,
+    path: test.info().outputPath(`phasekit-v3-${info.project.name}-check.png`),
     fullPage: true,
   });
   await page.goto("/#/check/r513a");

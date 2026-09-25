@@ -86,3 +86,6 @@ Build/typecheck and lint pass. Forty-eight distinct browser cases passed across 
 The complete local suite passed before the initial GitHub publication: 149 unit/integration tests across 10 files, 76 browser cases (Chromium mobile/desktop and targeted mobile WebKit), lint and production build/typecheck. The Node runtime used locally was 26.7.0. CI and Netlify are configured for Node.js 24; their remote execution is separate evidence and is not implied by the local results.
 
 The public source baseline includes all mobile refinements, English project documentation, the original-code MIT licence, third-party notices and a Netlify static deployment configuration. Native source handoff archives and the old Sites mirror remain local and ignored. Font licence text is retained verbatim, including upstream whitespace. See DEPLOYMENT.md for the hosting transition and unconfirmed domain steps.
+
+
+The first GitHub Node.js 24 / Ubuntu run passed clean dependency installation, data validation, lint, typecheck, unit tests and the production build. Browser checks exposed macOS-specific `/private/tmp` screenshot destinations: 38 cases failed while writing screenshots, with the other 38 passing. Screenshot paths now use Playwright's per-test output directory, so they are portable and isolated between retries. CI preserves browser failure artifacts for diagnosis.
