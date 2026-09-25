@@ -1,0 +1,72 @@
+/* Generated from assets/design-tokens.json. Do not edit. */
+:root {
+  --palette-ice-white: #FAFEFF;
+  --palette-frost: #E2FCFF;
+  --palette-ice-blue: #CBF1FA;
+  --palette-light-blue: #AEDBF0;
+  --palette-mid-blue: #6BA7CC;
+  --palette-primary-blue: #3F7EB3;
+  --palette-deep-blue: #102C40;
+  --palette-night-blue: #091720;
+  --palette-accent-lime: #C6E86B;
+  --font-display: "Unbounded";
+  --font-body: "Poppins";
+  --font-data: "Ioskeley Mono";
+  --page-gutter: 24px;
+  --section-gap: 32px;
+  --group-gap: 16px;
+  --label-gap: 12px;
+  --list-row-min-height: 76px;
+  --touch-target-min: 44px;
+  --search-radius: 12px;
+}
+[data-theme="light"] {
+  --background: #FAFEFF;
+  --surface: #E2FCFF;
+  --surface-emphasis: #CBF1FA;
+  --text: #102C40;
+  --text-secondary: #495E6C;
+  --link: #102C40;
+  --divider: #AEDBF0;
+  --control-border: #3F7EB3;
+  --focus-ring: #102C40;
+  --primary-background: #102C40;
+  --primary-foreground: #FAFEFF;
+  --accent-background: #C6E86B;
+  --accent-foreground: #102C40;
+  --status-success-foreground: #3F652D;
+  --status-success-background: #EDF5E8;
+  --status-warning-foreground: #795315;
+  --status-warning-background: #FFF4DF;
+  --status-error-foreground: #A33333;
+  --status-error-background: #FCECEC;
+  --status-neutral-foreground: #495E6C;
+  --status-neutral-background: #EDF2F5;
+  --status-info-foreground: #102C40;
+  --status-info-background: #E2FCFF;
+}
+[data-theme="dark"] {
+  --background: #091720;
+  --surface: #102C40;
+  --surface-emphasis: #192A35;
+  --text: #FAFEFF;
+  --text-secondary: #B6C4CE;
+  --link: #AEDBF0;
+  --divider: #495E6C;
+  --control-border: #6BA7CC;
+  --focus-ring: #AEDBF0;
+  --primary-background: #E2FCFF;
+  --primary-foreground: #102C40;
+  --accent-background: #C6E86B;
+  --accent-foreground: #102C40;
+  --status-success-foreground: #ADD393;
+  --status-success-background: #18291D;
+  --status-warning-foreground: #E3B45B;
+  --status-warning-background: #302719;
+  --status-error-foreground: #F09191;
+  --status-error-background: #331E25;
+  --status-neutral-foreground: #B6C4CE;
+  --status-neutral-background: #192A35;
+  --status-info-foreground: #AEDBF0;
+  --status-info-background: #102C40;
+}

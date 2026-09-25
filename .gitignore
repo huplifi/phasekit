@@ -1,0 +1,26 @@
+node_modules/
+.pnpm-store/
+apps/web/dist/
+/dist/
+playwright-report/
+test-results/
+/output/
+.DS_Store
+*.log
+*.af~lock~
+.env
+.env.*
+!.env.example
+.netlify/
+__pycache__/
+*.pyc
+data/staging/coolprop-export/
+
+# Local handoff archives, original design studies and the previous hosting mirror.
+/Archive/
+/PhaseKit-update-v2/
+/Graphics/
+/PHASEKIT-*.md
+/sites-release/
+/.openai/
+.sites-runtime/

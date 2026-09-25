@@ -1,0 +1,277 @@
+.calculator-form {
+  margin-top: 2rem;
+}
+.calculator-form > label {
+  display: grid;
+  gap: 0.5rem;
+  margin-block: 1rem;
+}
+.calculator-form .form-grid {
+  margin-block: 1rem;
+}
+.calculator-form .primary {
+  margin-top: 1rem;
+}
+.calculator-result {
+  margin-top: 2rem;
+}
+.calculator-number {
+  font-size: clamp(1.4rem, 6vw, 2rem);
+  overflow-wrap: anywhere;
+}
+.calculator-result .result-card {
+  overflow-wrap: anywhere;
+}
+.shsc-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.calculator-form .shsc-unit-settings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-block: 20px;
+}
+.shsc-unit-settings label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+.shsc-unit-settings select {
+  width: auto;
+  min-width: 80px;
+  min-height: 44px;
+  margin: 0;
+}
+.shsc-fields input {
+  width: 100%;
+  margin-top: auto;
+}
+.shsc-temperatures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.calculator-result .result-card + .result-card {
+  margin-top: 16px;
+}
+@media (max-width: 620px) {
+  .shsc-temperatures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.pt-instruction {
+  margin: 24px 0 16px;
+}
+.pt-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.pt-value-field {
+  min-width: 0;
+  border-block-start: 2px solid var(--divider);
+  padding-top: 12px;
+}
+.pt-value-field.is-input {
+  border-block-start-color: var(--text);
+}
+.pt-value-field > label {
+  margin: 0 0 8px;
+}
+.pt-value-field > input {
+  display: block;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px;
+  border: 1px solid var(--control-border);
+  background: var(--background);
+  font-size: 1.5rem;
+}
+.pt-value-field > select {
+  margin: 8px 0;
+}
+.pt-value-field > .caption {
+  display: block;
+}
+.pt-feedback {
+  margin: 12px 0 24px;
+}
+.pt-atmosphere {
+  margin-top: 24px;
+}
+.pt-atmosphere > label {
+  margin-bottom: 0;
+}
+.pt-live-result {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 350px) {
+  .pt-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pt-relation {
+    display: none;
+  }
+}
+.pt-field-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+.pt-field-heading > label {
+  margin: 0;
+  font-size: 0.8125rem;
+}
+.pt-field-heading > select {
+  width: auto;
+  max-width: 100%;
+  min-height: 44px;
+  margin: -6px 0;
+  padding: 6px 2px;
+  border-color: transparent;
+  font-size: 0.8125rem;
+}
+.pt-value-field > .caption {
+  margin-top: 8px;
+}
+.pt-gauge-reference {
+  display: block;
+  margin-top: 6px;
+}
+
+/* Share the actual input row, including when headings wrap. */
+.pt-pair {
+  grid-template-rows: auto auto auto;
+}
+.pt-value-field {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: 1 / span 3;
+}
+.pt-value-field:first-child {
+  grid-column: 1;
+}
+.pt-value-field:last-child {
+  grid-column: 3;
+}
+.pt-relation {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: center;
+  justify-self: center;
+}
+.calculator-heading {
+  margin-bottom: 24px;
+}
+.calculator-heading h1 {
+  min-width: 0;
+  margin: 0;
+}
+.conversion-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+.conversion-title svg {
+  width: 0.9em;
+  height: 0.9em;
+}
+.co2e-quantity {
+  margin-top: 20px;
+}
+.co2e-quantity-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.co2e-quantity-heading label {
+  margin: 0;
+}
+.quantity-unit-toggle {
+  display: flex;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.quantity-unit-toggle button {
+  min-height: 44px;
+  padding: 6px 14px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.quantity-unit-toggle button[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--background);
+}
+.co2e-quantity > input {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--control-border);
+  background: var(--background);
+}
+.field-unit {
+  display: block;
+  font-weight: 400;
+}
+.calculator-form .shsc-fields {
+  gap: 12px;
+}
+.calculator-form .shsc-fields label {
+  margin: 0;
+}
+.calculator-form .form-grid.shsc-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-block: 24px;
+}
+.shsc-fields input {
+  margin: 0;
+}
+@media (max-width: 620px) {
+  .calculator-form .shsc-unit-settings {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .shsc-unit-settings label {
+    justify-content: space-between;
+  }
+  .shsc-unit-settings select {
+    width: 92px;
+  }
+  .shsc-temperatures {
+    gap: 12px;
+  }
+  .shsc-temperatures label {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 42%);
+    align-items: center;
+  }
+  .shsc-temperatures input {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+@media (max-width: 350px) {
+  .pt-pair {
+    grid-template-rows: auto;
+  }
+  .pt-value-field {
+    grid-template-rows: auto auto auto;
+    grid-row: auto;
+  }
+  .pt-value-field:last-child {
+    grid-column: 1;
+  }
+}

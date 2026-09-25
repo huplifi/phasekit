@@ -1,0 +1,2019 @@
+{
+  "schema": "phasekit-inventory-candidates-v3",
+  "retrievedAt": "2026-09-25",
+  "baseline": {
+    "path": "data/refrigerants.csv",
+    "recordCount": 205
+  },
+  "sources": [
+    {
+      "id": "unep-ozone-blends-live-v3",
+      "title": "Lists of substances and blends",
+      "publisher": "UNEP Ozone Secretariat",
+      "url": "https://ozone.unep.org/lists-substances-and-blends",
+      "version": "Live list retrieved 2026-09-25",
+      "retrievedAt": "2026-09-25",
+      "scope": "Historical blend designations and mass compositions; GWP values deliberately not imported."
+    },
+    {
+      "id": "unep-teap-2025-v3",
+      "title": "TEAP May 2025 Progress Report, volume 1, table 6.1",
+      "publisher": "UNEP Ozone Secretariat / TEAP",
+      "url": "https://ozone.unep.org/system/files/documents/TEAP-May2025-Progress-Report-vol1.pdf",
+      "version": "May 2025, printed pages 60-61, PDF pages 69-70",
+      "retrievedAt": "2026-09-25",
+      "scope": "New blend designations, mass compositions and reported safety classes."
+    },
+    {
+      "id": "unep-teap-2026-v3",
+      "title": "TEAP May 2026 Progress Report, volume 1, table 6.1",
+      "publisher": "UNEP Ozone Secretariat / TEAP",
+      "url": "https://ozone.unep.org/system/files/documents/TEAP-May2026-Progress-Report-vol1.pdf",
+      "version": "May 2026, printed page 80, PDF page 88",
+      "retrievedAt": "2026-09-25",
+      "scope": "Seven new blend designations, mass compositions and reported safety classes."
+    },
+    {
+      "id": "unep-teap-2020-v3",
+      "title": "TEAP May 2020 Progress Report, volume 1, table 2",
+      "publisher": "UNEP Ozone Secretariat / TEAP",
+      "url": "https://ozone.unep.org/sites/default/files/2020-06/TEAP-Progress-report-and-response-decXXXI-8-may2020_0.pdf",
+      "version": "May 2020, table 2",
+      "retrievedAt": "2026-09-25",
+      "scope": "R427B and R466A A1 safety classes only."
+    },
+    {
+      "id": "epa-ods-r31-v3",
+      "title": "Ozone-Depleting Substances: Class II ODS",
+      "publisher": "United States Environmental Protection Agency",
+      "url": "https://www.epa.gov/ozone-layer-protection/ozone-depleting-substances",
+      "version": "Live page retrieved 2026-09-25",
+      "retrievedAt": "2026-09-25",
+      "scope": "HCFC-31 chemical name, formula and CAS only."
+    },
+    {
+      "id": "epa-r31-designation-v3",
+      "title": "Wisconsin hazardous air pollutants source list (R-31 synonym)",
+      "publisher": "United States Environmental Protection Agency",
+      "url": "https://www.epa.gov/system/files/documents/2025-04/wi-nr-438.pdf",
+      "version": "EPA-hosted document, April 2025",
+      "retrievedAt": "2026-09-25",
+      "scope": "Explicit R-31 synonym of HCFC-31; no regulatory values imported."
+    },
+    {
+      "id": "epa-cf3i-identity-v3",
+      "title": "Greenhouse Gas Reporting Rule chemical identity table",
+      "publisher": "United States Environmental Protection Agency",
+      "url": "https://www.epa.gov/system/files/documents/2024-04/ghgrp-final-preamble-and-rule-april-2024.pdf",
+      "version": "Final rule, April 2024",
+      "retrievedAt": "2026-09-25",
+      "scope": "Trifluoroiodomethane chemical name, CAS and formula only; GWP excluded."
+    },
+    {
+      "id": "coolprop-r13i1-v3",
+      "title": "CoolProp R13I1 fluid identity",
+      "publisher": "CoolProp project",
+      "url": "https://github.com/CoolProp/CoolProp/blob/afce86ff977552663ca3a78d8ea318cc64dcbdfd/dev/fluids/R13I1.json",
+      "version": "git afce86ff977552663ca3a78d8ea318cc64dcbdfd",
+      "retrievedAt": "2026-09-25",
+      "license": "MIT",
+      "scope": "Designation, CAS, formula and alias only; environmental and safety fields excluded."
+    },
+    {
+      "id": "coolprop-rc318-v3",
+      "title": "CoolProp RC318 fluid identity",
+      "publisher": "CoolProp project",
+      "url": "https://github.com/CoolProp/CoolProp/blob/afce86ff977552663ca3a78d8ea318cc64dcbdfd/dev/fluids/RC318.json",
+      "version": "git afce86ff977552663ca3a78d8ea318cc64dcbdfd",
+      "retrievedAt": "2026-09-25",
+      "license": "MIT",
+      "scope": "Designation, CAS and formula only; environmental and safety fields excluded."
+    }
+  ],
+  "candidates": [
+    {
+      "id": "r31",
+      "designation": "R31",
+      "kind": "pure",
+      "name": "Monochlorofluoromethane",
+      "cas": "593-70-4",
+      "formula": "CH2FCl",
+      "sourceIds": [
+        "epa-ods-r31-v3",
+        "epa-r31-designation-v3"
+      ],
+      "composition": [],
+      "safetyGroup": null,
+      "fieldEvidence": {
+        "designation": [
+          "epa-r31-designation-v3"
+        ],
+        "name": [
+          "epa-ods-r31-v3"
+        ],
+        "cas": [
+          "epa-ods-r31-v3"
+        ],
+        "formula": [
+          "epa-ods-r31-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r13i1",
+      "designation": "R13I1",
+      "kind": "pure",
+      "name": "Trifluoroiodomethane",
+      "cas": "2314-97-8",
+      "formula": "CF3I",
+      "aliases": [
+        "CF3I"
+      ],
+      "sourceIds": [
+        "coolprop-r13i1-v3",
+        "epa-cf3i-identity-v3"
+      ],
+      "composition": [],
+      "safetyGroup": null,
+      "fieldEvidence": {
+        "designation": [
+          "coolprop-r13i1-v3"
+        ],
+        "name": [
+          "epa-cf3i-identity-v3"
+        ],
+        "cas": [
+          "coolprop-r13i1-v3",
+          "epa-cf3i-identity-v3"
+        ],
+        "formula": [
+          "coolprop-r13i1-v3",
+          "epa-cf3i-identity-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "rc318",
+      "designation": "RC318",
+      "kind": "pure",
+      "name": "Octafluorocyclobutane",
+      "cas": "115-25-3",
+      "formula": "C4F8",
+      "sourceIds": [
+        "coolprop-rc318-v3",
+        "unep-ozone-blends-live-v3"
+      ],
+      "composition": [],
+      "safetyGroup": null,
+      "fieldEvidence": {
+        "designation": [
+          "coolprop-rc318-v3"
+        ],
+        "name": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "cas": [
+          "coolprop-rc318-v3"
+        ],
+        "formula": [
+          "coolprop-rc318-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r405a",
+      "designation": "R405A",
+      "kind": "blend",
+      "name": "R405A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R22",
+          "refrigerantId": "r22",
+          "massPercent": "45",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R142b",
+          "refrigerantId": "r142b",
+          "massPercent": "5.5",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "7",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "RC318",
+          "refrigerantId": "rc318",
+          "massPercent": "42.5",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r406b",
+      "designation": "R406B",
+      "kind": "blend",
+      "name": "R406B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R22",
+          "refrigerantId": "r22",
+          "massPercent": "65",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R142b",
+          "refrigerantId": "r142b",
+          "massPercent": "31",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R600a",
+          "refrigerantId": "r600a",
+          "massPercent": "4",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r411c",
+      "designation": "R411C",
+      "kind": "blend",
+      "name": "R411C",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R22",
+          "refrigerantId": "r22",
+          "massPercent": "95.5",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "1.5",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "3",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r427b",
+      "designation": "R427B",
+      "kind": "blend",
+      "name": "R427B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "20.6",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R125",
+          "refrigerantId": "r125",
+          "massPercent": "25.6",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "34.8",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R143a",
+          "refrigerantId": "r143a",
+          "massPercent": "19",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": "A1",
+      "sourceIds": [
+        "unep-ozone-blends-live-v3",
+        "unep-teap-2020-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2020-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r466a",
+      "designation": "R466A",
+      "kind": "blend",
+      "name": "R466A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "49",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R125",
+          "refrigerantId": "r125",
+          "massPercent": "11.5",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "39.5",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": "A1",
+      "sourceIds": [
+        "unep-ozone-blends-live-v3",
+        "unep-teap-2020-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2020-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r505",
+      "designation": "R505",
+      "kind": "blend",
+      "name": "R505",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R12",
+          "refrigerantId": "r12",
+          "massPercent": "78",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R31",
+          "refrigerantId": "r31",
+          "massPercent": "22",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r506",
+      "designation": "R506",
+      "kind": "blend",
+      "name": "R506",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R114",
+          "refrigerantId": "r114",
+          "massPercent": "45",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R31",
+          "refrigerantId": "r31",
+          "massPercent": "55",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r509",
+      "designation": "R509",
+      "kind": "blend",
+      "name": "R509",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R22",
+          "refrigerantId": "r22",
+          "massPercent": "46",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R218",
+          "refrigerantId": "r218",
+          "massPercent": "54",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r515a",
+      "designation": "R515A",
+      "kind": "blend",
+      "name": "R515A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R227ea",
+          "refrigerantId": "r227ea",
+          "massPercent": "12",
+          "sourceId": "unep-ozone-blends-live-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "88",
+          "sourceId": "unep-ozone-blends-live-v3"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceIds": [
+        "unep-ozone-blends-live-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "composition": [
+          "unep-ozone-blends-live-v3"
+        ],
+        "safetyGroup": []
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r433d",
+      "designation": "R433D",
+      "kind": "blend",
+      "name": "R433D",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "35",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "65",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r454d",
+      "designation": "R454D",
+      "kind": "blend",
+      "name": "R454D",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "43",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "57",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r455b",
+      "designation": "R455B",
+      "kind": "blend",
+      "name": "R455B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R744",
+          "refrigerantId": "r744",
+          "massPercent": "6",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "42",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "52",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r455c",
+      "designation": "R455C",
+      "kind": "blend",
+      "name": "R455C",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R744",
+          "refrigerantId": "r744",
+          "massPercent": "3",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "43",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "54",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r457d",
+      "designation": "R457D",
+      "kind": "blend",
+      "name": "R457D",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "4",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "82",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "14",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r474b",
+      "designation": "R474B",
+      "kind": "blend",
+      "name": "R474B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1132(E)",
+          "refrigerantId": "r1132e",
+          "massPercent": "31.5",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "68.5",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r475b",
+      "designation": "R475B",
+      "kind": "blend",
+      "name": "R475B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "35.4",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "10.1",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "54.5",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r478a",
+      "designation": "R478A",
+      "kind": "blend",
+      "name": "R478A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R744",
+          "refrigerantId": "r744",
+          "massPercent": "7",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "26",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R125",
+          "refrigerantId": "r125",
+          "massPercent": "15",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "15",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "3",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "30",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R227ea",
+          "refrigerantId": "r227ea",
+          "massPercent": "4",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r479a",
+      "designation": "R479A",
+      "kind": "blend",
+      "name": "R479A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1132(E)",
+          "refrigerantId": "r1132e",
+          "massPercent": "28",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "21.5",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "50.5",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r481a",
+      "designation": "R481A",
+      "kind": "blend",
+      "name": "R481A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "16.9",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R125",
+          "refrigerantId": "r125",
+          "massPercent": "6.3",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "74.4",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1233zd(E)",
+          "refrigerantId": "r1233zde",
+          "massPercent": "1.8",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R601a",
+          "refrigerantId": "r601a",
+          "massPercent": "0.6",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A1",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r483a",
+      "designation": "R483A",
+      "kind": "blend",
+      "name": "R483A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "15",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600",
+          "refrigerantId": "r600",
+          "massPercent": "85",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r484a",
+      "designation": "R484A",
+      "kind": "blend",
+      "name": "R484A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "12",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600",
+          "refrigerantId": "r600",
+          "massPercent": "88",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r485a",
+      "designation": "R485A",
+      "kind": "blend",
+      "name": "R485A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1132a",
+          "refrigerantId": "r1132a",
+          "massPercent": "10",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R744",
+          "refrigerantId": "r744",
+          "massPercent": "69",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "21",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r486a",
+      "designation": "R486A",
+      "kind": "blend",
+      "name": "R486A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "21.9",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "6.3",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "38",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "33.8",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A1",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r487a",
+      "designation": "R487A",
+      "kind": "blend",
+      "name": "R487A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R170",
+          "refrigerantId": "r170",
+          "massPercent": "20",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "80",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r487b",
+      "designation": "R487B",
+      "kind": "blend",
+      "name": "R487B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R170",
+          "refrigerantId": "r170",
+          "massPercent": "17",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "83",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r488a",
+      "designation": "R488A",
+      "kind": "blend",
+      "name": "R488A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "6",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "50",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "3",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "41",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r489a",
+      "designation": "R489A",
+      "kind": "blend",
+      "name": "R489A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R50",
+          "refrigerantId": "r50",
+          "massPercent": "1.5",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1150",
+          "refrigerantId": "r1150",
+          "massPercent": "22",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600",
+          "refrigerantId": "r600",
+          "massPercent": "76.5",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r490a",
+      "designation": "R490A",
+      "kind": "blend",
+      "name": "R490A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1150",
+          "refrigerantId": "r1150",
+          "massPercent": "7.9",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "92.1",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r491a",
+      "designation": "R491A",
+      "kind": "blend",
+      "name": "R491A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1132(E)",
+          "refrigerantId": "r1132e",
+          "massPercent": "35",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "65",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r493a",
+      "designation": "R493A",
+      "kind": "blend",
+      "name": "R493A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "9.4",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600a",
+          "refrigerantId": "r600a",
+          "massPercent": "30.9",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600",
+          "refrigerantId": "r600",
+          "massPercent": "59.7",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r493b",
+      "designation": "R493B",
+      "kind": "blend",
+      "name": "R493B",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "11.8",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600a",
+          "refrigerantId": "r600a",
+          "massPercent": "29.1",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600",
+          "refrigerantId": "r600",
+          "massPercent": "59.1",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r493c",
+      "designation": "R493C",
+      "kind": "blend",
+      "name": "R493C",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "15.1",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600a",
+          "refrigerantId": "r600a",
+          "massPercent": "28.3",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R600",
+          "refrigerantId": "r600",
+          "massPercent": "56.6",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r494a",
+      "designation": "R494A",
+      "kind": "blend",
+      "name": "R494A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R744",
+          "refrigerantId": "r744",
+          "massPercent": "4",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "60",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "36",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r495a",
+      "designation": "R495A",
+      "kind": "blend",
+      "name": "R495A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "4.5",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234yf",
+          "refrigerantId": "r1234yf",
+          "massPercent": "76",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "9",
+          "sourceId": "unep-teap-2025-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "10.5",
+          "sourceId": "unep-teap-2025-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2025-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2025-v3"
+        ],
+        "composition": [
+          "unep-teap-2025-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2025-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r496a",
+      "designation": "R496A",
+      "kind": "blend",
+      "name": "R496A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R14",
+          "refrigerantId": "r14",
+          "massPercent": "18",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R23",
+          "refrigerantId": "r23",
+          "massPercent": "37.8",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R116",
+          "refrigerantId": "r116",
+          "massPercent": "44.2",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A1",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r497a",
+      "designation": "R497A",
+      "kind": "blend",
+      "name": "R497A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R1270",
+          "refrigerantId": "r1270",
+          "massPercent": "15",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "85",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A2",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r498a",
+      "designation": "R498A",
+      "kind": "blend",
+      "name": "R498A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R170",
+          "refrigerantId": "r170",
+          "massPercent": "7",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "8",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "85",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r499a",
+      "designation": "R499A",
+      "kind": "blend",
+      "name": "R499A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R170",
+          "refrigerantId": "r170",
+          "massPercent": "8",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R290",
+          "refrigerantId": "r290",
+          "massPercent": "92",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A3",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r4101a",
+      "designation": "R4101A",
+      "kind": "blend",
+      "name": "R4101A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "11",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "30.5",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "58.5",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r4102a",
+      "designation": "R4102A",
+      "kind": "blend",
+      "name": "R4102A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R134a",
+          "refrigerantId": "r134a",
+          "massPercent": "10",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "60",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R1233zd(E)",
+          "refrigerantId": "r1233zde",
+          "massPercent": "30",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A1",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    },
+    {
+      "id": "r4103a",
+      "designation": "R4103A",
+      "kind": "blend",
+      "name": "R4103A",
+      "cas": null,
+      "formula": null,
+      "composition": [
+        {
+          "designation": "R32",
+          "refrigerantId": "r32",
+          "massPercent": "10",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R152a",
+          "refrigerantId": "r152a",
+          "massPercent": "22",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R13I1",
+          "refrigerantId": "r13i1",
+          "massPercent": "17",
+          "sourceId": "unep-teap-2026-v3"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "refrigerantId": "r1234zee",
+          "massPercent": "51",
+          "sourceId": "unep-teap-2026-v3"
+        }
+      ],
+      "safetyGroup": "A2L",
+      "sourceIds": [
+        "unep-teap-2026-v3"
+      ],
+      "fieldEvidence": {
+        "designation": [
+          "unep-teap-2026-v3"
+        ],
+        "composition": [
+          "unep-teap-2026-v3"
+        ],
+        "safetyGroup": [
+          "unep-teap-2026-v3"
+        ]
+      },
+      "reviewStatus": "source_staged_not_canonical",
+      "reviewedAt": "2026-09-25"
+    }
+  ],
+  "reconciliation": [
+    {
+      "designation": "R507C",
+      "action": "alias_of_existing",
+      "existingId": "r507a",
+      "sourceId": "unep-ozone-blends-live-v3",
+      "reason": "The Ozone Secretariat list gives the same 50/50 R125/R143a composition and AZ-50/Forane 507A names; its footnote identifies R507C as an R507A name."
+    }
+  ],
+  "limits": [
+    "Candidate source facts only; no EU legal GWP or equipment status assigned.",
+    "Blend safety classes are source-reported classifications and require review before canonical publication.",
+    "The listed sources do not define a complete universe of refrigerants."
+  ]
+}

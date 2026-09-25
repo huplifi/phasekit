@@ -1,0 +1,1472 @@
+{
+  "source": {
+    "url": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+    "title": "Compositions of Refrigerant Blends | US EPA",
+    "checkedAt": "2026-09-25",
+    "sourceVersion": "Page updated 2026-03-30",
+    "scope": "R-designated blend rows on this EPA SNAP composition page only; not the complete ASHRAE Standard 34 corpus.",
+    "denominator": 44,
+    "license": "EPA data are public domain by default unless otherwise specified: https://edg.epa.gov/epa_data_license.html"
+  },
+  "entries": [
+    {
+      "designation": "R401A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.53"
+        },
+        {
+          "designation": "R124",
+          "massFraction": "0.34"
+        },
+        {
+          "designation": "R152a",
+          "massFraction": "0.13"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R401B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.61"
+        },
+        {
+          "designation": "R124",
+          "massFraction": "0.28"
+        },
+        {
+          "designation": "R152a",
+          "massFraction": "0.11"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R401C",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.33"
+        },
+        {
+          "designation": "R124",
+          "massFraction": "0.52"
+        },
+        {
+          "designation": "R152a",
+          "massFraction": "0.15"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R402A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.38"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.6"
+        },
+        {
+          "designation": "R290",
+          "massFraction": "0.02"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R402B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.6"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.38"
+        },
+        {
+          "designation": "R290",
+          "massFraction": "0.02"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R403B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.56"
+        },
+        {
+          "designation": "R290",
+          "massFraction": "0.05"
+        },
+        {
+          "designation": "R218",
+          "massFraction": "0.39"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R404A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.44"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.04"
+        },
+        {
+          "designation": "R143a",
+          "massFraction": "0.52"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R406A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.55"
+        },
+        {
+          "designation": "R142b",
+          "massFraction": "0.41"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.04"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R407A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.2"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.4"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.4"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R407B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.1"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.7"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.2"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R407C",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.23"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.25"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.52"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R407D",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.15"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.15"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.7"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R407F",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.3"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.3"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.4"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R408A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.47"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.07"
+        },
+        {
+          "designation": "R143a",
+          "massFraction": "0.46"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R409A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.6"
+        },
+        {
+          "designation": "R124",
+          "massFraction": "0.25"
+        },
+        {
+          "designation": "R142b",
+          "massFraction": "0.15"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R410A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.5"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.5"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R410B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.45"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.55"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R411A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.875"
+        },
+        {
+          "designation": "R152a",
+          "massFraction": "0.11"
+        },
+        {
+          "designation": "R1270",
+          "massFraction": "0.015"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R411B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.94"
+        },
+        {
+          "designation": "R152a",
+          "massFraction": "0.03"
+        },
+        {
+          "designation": "R1270",
+          "massFraction": "0.03"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R414A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.51"
+        },
+        {
+          "designation": "R124",
+          "massFraction": "0.285"
+        },
+        {
+          "designation": "R142b",
+          "massFraction": "0.165"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.04"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R414B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R22",
+          "massFraction": "0.5"
+        },
+        {
+          "designation": "R124",
+          "massFraction": "0.39"
+        },
+        {
+          "designation": "R142b",
+          "massFraction": "0.095"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.015"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R417A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.466"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.5"
+        },
+        {
+          "designation": "R600",
+          "massFraction": "0.034"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R420A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R142b",
+          "massFraction": "0.12"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.88"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R421A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.58"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.42"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R421B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.85"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.15"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R422A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.851"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.115"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.034"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R422B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.55"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.42"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.03"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R422C",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.82"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.15"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.03"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R422D",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.651"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.315"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.034"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R424A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.505"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.47"
+        },
+        {
+          "designation": "R600",
+          "massFraction": "0.01"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.009"
+        },
+        {
+          "designation": "R601a",
+          "massFraction": "0.006"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R426A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.051"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.93"
+        },
+        {
+          "designation": "R600",
+          "massFraction": "0.013"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.006"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R427A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.15"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.25"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.5"
+        },
+        {
+          "designation": "R143a",
+          "massFraction": "0.1"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R428A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.775"
+        },
+        {
+          "designation": "R143a",
+          "massFraction": "0.2"
+        },
+        {
+          "designation": "R290",
+          "massFraction": "0.006"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.019"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R434A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.632"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.16"
+        },
+        {
+          "designation": "R143a",
+          "massFraction": "0.18"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.028"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R438A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.085"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.45"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.442"
+        },
+        {
+          "designation": "R600",
+          "massFraction": "0.017"
+        },
+        {
+          "designation": "R601a",
+          "massFraction": "0.006"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R441A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R170",
+          "massFraction": "0.031"
+        },
+        {
+          "designation": "R290",
+          "massFraction": "0.548"
+        },
+        {
+          "designation": "R600",
+          "massFraction": "0.361"
+        },
+        {
+          "designation": "R600a",
+          "massFraction": "0.06"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R442A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.31"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.31"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.3"
+        },
+        {
+          "designation": "R152a",
+          "massFraction": "0.03"
+        },
+        {
+          "designation": "R227ea",
+          "massFraction": "0.05"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R448A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.26"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.26"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.21"
+        },
+        {
+          "designation": "R1234yf",
+          "massFraction": "0.2"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "massFraction": "0.07"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R449A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R32",
+          "massFraction": "0.243"
+        },
+        {
+          "designation": "R125",
+          "massFraction": "0.247"
+        },
+        {
+          "designation": "R134a",
+          "massFraction": "0.257"
+        },
+        {
+          "designation": "R1234yf",
+          "massFraction": "0.253"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R450A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R134a",
+          "massFraction": "0.42"
+        },
+        {
+          "designation": "R1234ze(E)",
+          "massFraction": "0.58"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R507A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R125",
+          "massFraction": "0.5"
+        },
+        {
+          "designation": "R143a",
+          "massFraction": "0.5"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R508A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R23",
+          "massFraction": "0.39"
+        },
+        {
+          "designation": "R116",
+          "massFraction": "0.61"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R508B",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R23",
+          "massFraction": "0.46"
+        },
+        {
+          "designation": "R116",
+          "massFraction": "0.54"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R513A",
+      "name": null,
+      "kind": "blend",
+      "components": [
+        {
+          "designation": "R134a",
+          "massFraction": "0.44"
+        },
+        {
+          "designation": "R1234yf",
+          "massFraction": "0.56"
+        }
+      ],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/snap/compositions-refrigerant-blends",
+      "sourceTitle": "Compositions of Refrigerant Blends | US EPA",
+      "sourceVersion": "Page updated 2026-03-30",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual composition; not a complete ASHRAE inventory or EU regulatory approval."
+    },
+    {
+      "designation": "R170",
+      "name": "ethane",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R290",
+      "name": "propane",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R449B",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R451A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R452A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R452B",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R454A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R454B",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R454C",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R455A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R456A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R457A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R457B",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R471A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R476A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R480A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R482A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R513B",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R514A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R515B",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R516A",
+      "name": null,
+      "kind": "blend",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R600",
+      "name": "butane",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R600a",
+      "name": "isobutane",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R717",
+      "name": "ammonia",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R744",
+      "name": "carbon dioxide",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R1150",
+      "name": "ethylene",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    },
+    {
+      "designation": "R1270",
+      "name": "propylene",
+      "kind": "pure",
+      "components": [],
+      "safetyGroup": null,
+      "sourceUrl": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "sourceTitle": "Technology Transitions GWP Reference Table | US EPA",
+      "sourceVersion": "Page updated 2026-04-02",
+      "checkedAt": "2026-09-25",
+      "reuseNote": "US EPA factual R-designation only. No composition or safety assignment from this table. US GWP is not an EU legal GWP."
+    }
+  ],
+  "additionalSources": [
+    {
+      "url": "https://www.epa.gov/hfcs/technology-transitions-gwp-reference-table",
+      "title": "Technology Transitions GWP Reference Table | US EPA",
+      "checkedAt": "2026-09-25",
+      "sourceVersion": "Page updated 2026-04-02",
+      "denominator": 37,
+      "overlapWithCompositionPage": 10,
+      "scope": "R-designated rows on this EPA table only; US GWP values deliberately not imported."
+    }
+  ]
+}

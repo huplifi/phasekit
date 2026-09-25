@@ -1,0 +1,675 @@
+{
+  "checkedAt": "2026-09-25",
+  "scope": "Verified matching pure designations in canonical refrigerants.csv, not a complete transcription of either Annex. Annex II R1132e exact GWP is unavailable.",
+  "sources": [
+    {
+      "id": "eu-2024-573",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202400573",
+      "title": "Regulation (EU) 2024/573, Annexes I and II"
+    },
+    {
+      "id": "eu-2024-590",
+      "url": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "title": "Regulation (EU) 2024/590, Annex I"
+    }
+  ],
+  "records": [
+    {
+      "id": "r23",
+      "designation": "R23",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "14800",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-23; GWP100 14800",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r32",
+      "designation": "R32",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "675",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-32; GWP100 675",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r41",
+      "designation": "R41",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "92",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-41; GWP100 92",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r125",
+      "designation": "R125",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "3500",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-125; GWP100 3500",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r134a",
+      "designation": "R134a",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "1430",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-134a; GWP100 1430",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r143a",
+      "designation": "R143a",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "4470",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-143a; GWP100 4470",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r152a",
+      "designation": "R152a",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "124",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-152a; GWP100 124",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r161",
+      "designation": "R161",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "12",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-161; GWP100 12",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r227ea",
+      "designation": "R227ea",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "3220",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1",
+        "entry": "HFC-227ea; GWP100 3220",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r236ea",
+      "designation": "R236EA",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "1370",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1, OJ page 49/67",
+        "entry": "HFC-236ea; GWP100 1370",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r236fa",
+      "designation": "R236FA",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "9810",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1, OJ page 49/67",
+        "entry": "HFC-236fa; GWP100 9810",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r245ca",
+      "designation": "R245ca",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "693",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1, OJ page 49/67",
+        "entry": "HFC-245ca; GWP100 693",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r245fa",
+      "designation": "R245fa",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "1030",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1, OJ page 49/67",
+        "entry": "HFC-245fa; GWP100 1030",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r365mfc",
+      "designation": "R365MFC",
+      "eu_annex": "I",
+      "legal_family": "HFC",
+      "gwp": {
+        "value": "794",
+        "basis": "EU-2024/573-Annex-I-AR4"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 1, OJ page 49/67",
+        "entry": "HFC-365mfc; GWP100 794",
+        "note": "Annex I section 1 footnote specifies IPCC AR4 GWP100."
+      }
+    },
+    {
+      "id": "r14",
+      "designation": "R14",
+      "eu_annex": "I",
+      "legal_family": "PFC",
+      "gwp": {
+        "value": "7380",
+        "basis": "EU-2024/573-Annex-I-AR6"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 2",
+        "entry": "PFC-14; GWP100 7380",
+        "note": "Annex I section 2 footnote specifies IPCC AR6 GWP100."
+      }
+    },
+    {
+      "id": "r116",
+      "designation": "R116",
+      "eu_annex": "I",
+      "legal_family": "PFC",
+      "gwp": {
+        "value": "12400",
+        "basis": "EU-2024/573-Annex-I-AR6"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 2",
+        "entry": "PFC-116; GWP100 12400",
+        "note": "Annex I section 2 footnote specifies IPCC AR6 GWP100."
+      }
+    },
+    {
+      "id": "r218",
+      "designation": "R218",
+      "eu_annex": "I",
+      "legal_family": "PFC",
+      "gwp": {
+        "value": "9290",
+        "basis": "EU-2024/573-Annex-I-AR6"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://climate.ec.europa.eu/document/download/468185e1-76f8-4723-90c7-77008ec88297_en?filename=Annex+I_OJ_L_202400573_EN_TXT.pdf",
+      "evidence": {
+        "annex": "2024/573 Annex I section 2",
+        "entry": "PFC-218; GWP100 9290",
+        "note": "Annex I section 2 footnote specifies IPCC AR6 GWP100."
+      }
+    },
+    {
+      "id": "r1132a",
+      "designation": "R1132a",
+      "eu_annex": "II-1",
+      "legal_family": "HFO",
+      "gwp": {
+        "value": "0.052",
+        "basis": "EU-2024/573-Annex-II-AR6"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202400573",
+      "evidence": {
+        "annex": "2024/573 Annex II section 1",
+        "entry": "HFC-1132a; GWP100 0.052",
+        "note": ""
+      }
+    },
+    {
+      "id": "r1132e",
+      "designation": "R1132e",
+      "eu_annex": "II-1",
+      "legal_family": "HFO",
+      "gwp": null,
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202400573",
+      "evidence": {
+        "annex": "2024/573 Annex II section 1",
+        "entry": "trans-1,2-difluoroethylene (HFC-1132) and isomers; GWP100 >1",
+        "note": "Annex lists GWP as >1, not an exact numeric value; retain null until a legal numeric value is verified."
+      }
+    },
+    {
+      "id": "r1234yf",
+      "designation": "R1234yf",
+      "eu_annex": "II-1",
+      "legal_family": "HFO",
+      "gwp": {
+        "value": "0.501",
+        "basis": "EU-2024/573-Annex-II-AR6"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202400573",
+      "evidence": {
+        "annex": "2024/573 Annex II section 1",
+        "entry": "HFC-1234yf; GWP100 0.501",
+        "note": ""
+      }
+    },
+    {
+      "id": "r1234zee",
+      "designation": "R1234ze(E)",
+      "eu_annex": "II-1",
+      "legal_family": "HFO",
+      "gwp": {
+        "value": "1.37",
+        "basis": "EU-2024/573-Annex-II-AR6"
+      },
+      "optionalODP": null,
+      "sourceIds": [
+        "eu-2024-573"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/legal-content/EN/TXT/PDF/?uri=OJ:L_202400573",
+      "evidence": {
+        "annex": "2024/573 Annex II section 1",
+        "entry": "HFC-1234ze and isomers; GWP100 1.37",
+        "note": "Annex entry covers HFC-1234ze and isomers; confirm designation-to-isomer mapping before importing numeric value."
+      }
+    },
+    {
+      "id": "r11",
+      "designation": "R11",
+      "eu_annex": "ODS-I",
+      "legal_family": "CFC",
+      "gwp": {
+        "value": "5560",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "1",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group I",
+        "entry": "CFC-11; ODP 1; GWP100 5560",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r12",
+      "designation": "R12",
+      "eu_annex": "ODS-I",
+      "legal_family": "CFC",
+      "gwp": {
+        "value": "11200",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "1",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group I",
+        "entry": "CFC-12; ODP 1; GWP100 11200",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r13",
+      "designation": "R13",
+      "eu_annex": "ODS-I",
+      "legal_family": "CFC",
+      "gwp": {
+        "value": "16200",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "1",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group I",
+        "entry": "CFC-13; ODP 1; GWP100 16200",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r113",
+      "designation": "R113",
+      "eu_annex": "ODS-I",
+      "legal_family": "CFC",
+      "gwp": {
+        "value": "6520",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.8",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group I",
+        "entry": "CFC-113; ODP 0.8; GWP100 6520",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r114",
+      "designation": "R114",
+      "eu_annex": "ODS-I",
+      "legal_family": "CFC",
+      "gwp": {
+        "value": "9430",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "1",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group I",
+        "entry": "CFC-114; ODP 1; GWP100 9430",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r115",
+      "designation": "R115",
+      "eu_annex": "ODS-I",
+      "legal_family": "CFC",
+      "gwp": {
+        "value": "9600",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.6",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group I",
+        "entry": "CFC-115; ODP 0.6; GWP100 9600",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r21",
+      "designation": "R21",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {
+        "value": "160",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.040",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group VIII",
+        "entry": "HCFC-21; ODP 0.040; GWP100 160",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r22",
+      "designation": "R22",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {
+        "value": "1960",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.055",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group VIII",
+        "entry": "HCFC-22; ODP 0.055; GWP100 1960",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r123",
+      "designation": "R123",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {
+        "value": "90.4",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.020",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group VIII",
+        "entry": "HCFC-123; ODP 0.020; GWP100 90.4",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r124",
+      "designation": "R124",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {
+        "value": "597",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.022",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group VIII",
+        "entry": "HCFC-124; ODP 0.022; GWP100 597",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r141b",
+      "designation": "R141b",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {
+        "value": "860",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.110",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group VIII",
+        "entry": "HCFC-141b; ODP 0.110; GWP100 860",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    },
+    {
+      "id": "r142b",
+      "designation": "R142b",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {
+        "value": "2300",
+        "basis": "EU-2024/590-Annex-I-GWP100"
+      },
+      "optionalODP": "0.065",
+      "sourceIds": [
+        "eu-2024-590"
+      ],
+      "sourceURL": "https://eur-lex.europa.eu/eli/reg/2024/590/2024-02-20/eng",
+      "evidence": {
+        "annex": "2024/590 Annex I, Group VIII",
+        "entry": "HCFC-142b; ODP 0.065; GWP100 2300",
+        "note": "ODS legal GWP is retained for information; leak-check engine uses ODS charge mass, not GWP."
+      }
+    }
+  ]
+}

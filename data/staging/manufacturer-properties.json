@@ -1,0 +1,206 @@
+{
+  "sources": [
+    {
+      "id": "linde-2019-safety",
+      "title": "Linde F-Gases and Alternatives — selected safety classifications",
+      "url": "https://static.prd.echannel.linde.com/wcsstore/CZ_RME_Industrial_Gas_Store/Linde/Chladiva/F_Gases_8str_tcm79-554901.pdf",
+      "version": "072019_GG; pages 3–7",
+      "checkedAt": "2026-09-25",
+      "license": "Selected factual classifications and product identifiers with attribution; no brochure reproduction",
+      "note": "2019 product brochure. Only specified safety/name facts are used; its old GWP/regulatory/replacement guidance is excluded."
+    },
+    {
+      "id": "chemours-opteon-2021",
+      "title": "Chemours Opteon Refrigerants Properties — selected product facts",
+      "url": "https://www.opteon.com/en/-/media/files/opteon/opteon-sustainable-solutions-hfo-refrigerants-under-f-gas.pdf?rev=1b2d944d87c2459382296ec9b290df6a",
+      "version": "2021 brochure, properties table",
+      "checkedAt": "2026-09-25",
+      "license": "Selected factual safety classifications and product identifiers with attribution; no brochure reproduction",
+      "note": "Only named safety classifications and trade names imported. GWP AR5 values are not EU legal GWPs; no retrofit recommendation imported."
+    },
+    {
+      "id": "honeywell-r404a",
+      "title": "Honeywell Genetron 404A product information",
+      "url": "https://www.honeywell-refrigerants.com/europe/product/genetron-404a/",
+      "version": "Product page checked 2026-09-25",
+      "checkedAt": "2026-09-25",
+      "license": "Selected factual product properties with attribution",
+      "note": "Only safety and trade name used. Page regulatory prose is outdated and excluded."
+    },
+    {
+      "id": "arkema-r134a",
+      "title": "Arkema Forane 134a product information",
+      "url": "https://forane.arkema.com/en/product/fluorochemicals/forane134a/",
+      "version": "Product page checked 2026-09-25",
+      "checkedAt": "2026-09-25",
+      "license": "Selected factual product properties with attribution",
+      "note": "Classification and trade identifier only; manufacturer guidance is not universal equipment compatibility."
+    },
+    {
+      "id": "arkema-r22-2025",
+      "title": "Arkema Forane Technical Digest — R22",
+      "url": "https://forane.arkema.com/files/live/sites/shared_arkema/files/Fluorochemicals/2025%20Forane%20Technical%20Digest-FINAL-LR.pdf",
+      "version": "2025 technical digest; Forane 22 section",
+      "checkedAt": "2026-09-25",
+      "license": "Selected factual safety classification and product identifier with attribution",
+      "note": "Only safety group and trade name imported; general US servicing/use descriptions do not determine EU legality."
+    }
+  ],
+  "entries": [
+    {
+      "id": "r290",
+      "ashrae_safety_group": "A3",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r600a",
+      "ashrae_safety_group": "A3",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r717",
+      "ashrae_safety_group": "B2L",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r744",
+      "ashrae_safety_group": "A1",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r718",
+      "ashrae_safety_group": "A1",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r1270",
+      "ashrae_safety_group": "A3",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r32",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "linde-2019-safety",
+      "aliases": []
+    },
+    {
+      "id": "r448a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "linde-2019-safety",
+      "aliases": [
+        "Solstice N40"
+      ]
+    },
+    {
+      "id": "r450a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "linde-2019-safety",
+      "aliases": [
+        "Solstice N13"
+      ]
+    },
+    {
+      "id": "r455a",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "linde-2019-safety",
+      "aliases": [
+        "Solstice L40X"
+      ]
+    },
+    {
+      "id": "r452a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XP44"
+      ]
+    },
+    {
+      "id": "r449a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XP40"
+      ]
+    },
+    {
+      "id": "r513a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XP10"
+      ]
+    },
+    {
+      "id": "r452b",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XL55"
+      ]
+    },
+    {
+      "id": "r454b",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XL41"
+      ]
+    },
+    {
+      "id": "r454a",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XL40"
+      ]
+    },
+    {
+      "id": "r454c",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XL20"
+      ]
+    },
+    {
+      "id": "r1234yf",
+      "ashrae_safety_group": "A2L",
+      "sourceId": "chemours-opteon-2021",
+      "aliases": [
+        "Opteon XL10"
+      ]
+    },
+    {
+      "id": "r404a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "honeywell-r404a",
+      "aliases": [
+        "Genetron 404A"
+      ]
+    },
+    {
+      "id": "r134a",
+      "ashrae_safety_group": "A1",
+      "sourceId": "arkema-r134a",
+      "aliases": [
+        "Forane 134a"
+      ],
+      "chemical_name": "1,1,1,2-Tetrafluoroethane"
+    },
+    {
+      "id": "r22",
+      "ashrae_safety_group": "A1",
+      "sourceId": "arkema-r22-2025",
+      "aliases": [
+        "Forane 22"
+      ]
+    }
+  ]
+}

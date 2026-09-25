@@ -1,0 +1,2259 @@
+[
+  {
+    "id": "r11",
+    "designation": "R11",
+    "normalized": "r11trichlorofluoromethanetrichlorofluoromethaner11",
+    "aliases": [
+      "R-11"
+    ],
+    "family": "CFC"
+  },
+  {
+    "id": "r12",
+    "designation": "R12",
+    "normalized": "r12dichlorodifluoromethanedichlorodifluoromethaner12",
+    "aliases": [
+      "R-12"
+    ],
+    "family": "CFC"
+  },
+  {
+    "id": "r13",
+    "designation": "R13",
+    "normalized": "r13chlorotrifluoromethanechlorotrifluoromethaner13",
+    "aliases": [
+      "R-13"
+    ],
+    "family": "CFC"
+  },
+  {
+    "id": "r13i1",
+    "designation": "R13I1",
+    "normalized": "r13i1trifluoroiodomethanetrifluoroiodomethaner13i1",
+    "aliases": [
+      "R-13I1"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r14",
+    "designation": "R14",
+    "normalized": "r14tetrafluoromethanetetrafluoromethaner14",
+    "aliases": [
+      "R-14"
+    ],
+    "family": "PFC"
+  },
+  {
+    "id": "r21",
+    "designation": "R21",
+    "normalized": "r21dichlorofluoromethanedichlorofluoromethaner21",
+    "aliases": [
+      "R-21"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r22",
+    "designation": "R22",
+    "normalized": "r22monochlorodifluoromethanemonochlorodifluoromethaneforane22r22",
+    "aliases": [
+      "Forane 22",
+      "R-22"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r23",
+    "designation": "R23",
+    "normalized": "r23trifluoromethanetrifluoromethaner23",
+    "aliases": [
+      "R-23"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r31",
+    "designation": "R31",
+    "normalized": "r31monochlorofluoromethanemonochlorofluoromethaner31",
+    "aliases": [
+      "R-31"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r32",
+    "designation": "R32",
+    "normalized": "r32difluoromethanedifluoromethaner32",
+    "aliases": [
+      "R-32"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r40",
+    "designation": "R40",
+    "normalized": "r40methylchloridemethylchlorider40",
+    "aliases": [
+      "R-40"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r41",
+    "designation": "R41",
+    "normalized": "r41fluoromethanefluoromethaner41",
+    "aliases": [
+      "R-41"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r50",
+    "designation": "R50",
+    "normalized": "r50methanemethaner50",
+    "aliases": [
+      "R-50"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r113",
+    "designation": "R113",
+    "normalized": "r113112trichlorotrifluoroethane112trichlorotrifluoroethaner113",
+    "aliases": [
+      "R-113"
+    ],
+    "family": "CFC"
+  },
+  {
+    "id": "r114",
+    "designation": "R114",
+    "normalized": "r114dichlorotetrafluoroethanedichlorotetrafluoroethaner114",
+    "aliases": [
+      "R-114"
+    ],
+    "family": "CFC"
+  },
+  {
+    "id": "r115",
+    "designation": "R115",
+    "normalized": "r115monochloropentafluoroethanemonochloropentafluoroethaner115",
+    "aliases": [
+      "R-115"
+    ],
+    "family": "CFC"
+  },
+  {
+    "id": "r116",
+    "designation": "R116",
+    "normalized": "r116hexafluoroethanehexafluoroethaner116",
+    "aliases": [
+      "R-116"
+    ],
+    "family": "PFC"
+  },
+  {
+    "id": "r123",
+    "designation": "R123",
+    "normalized": "r123dichlorotrifluoroethanedichlorotrifluoroethaner123",
+    "aliases": [
+      "R-123"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r124",
+    "designation": "R124",
+    "normalized": "r124monochlorotetrafluoroethanemonochlorotetrafluoroethaner124",
+    "aliases": [
+      "R-124"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r125",
+    "designation": "R125",
+    "normalized": "r125pentafluoroethanepentafluoroethaner125",
+    "aliases": [
+      "R-125"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r134a",
+    "designation": "R134a",
+    "normalized": "r134a1112tetrafluoroethane1112tetrafluoroethaneforane134ar134a",
+    "aliases": [
+      "Forane 134a",
+      "R-134a"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r141b",
+    "designation": "R141b",
+    "normalized": "r141bdichlorofluoroethanedichlorofluoroethaner141b",
+    "aliases": [
+      "R-141b"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r142b",
+    "designation": "R142b",
+    "normalized": "r142bmonochlorodifluoroethanemonochlorodifluoroethaner142b",
+    "aliases": [
+      "R-142b"
+    ],
+    "family": "HCFC"
+  },
+  {
+    "id": "r143a",
+    "designation": "R143a",
+    "normalized": "r143a111trifluoroethane111trifluoroethaner143a",
+    "aliases": [
+      "R-143a"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r152a",
+    "designation": "R152A",
+    "normalized": "r152a11difluoroethane11difluoroethaner152a",
+    "aliases": [
+      "R-152A"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r161",
+    "designation": "R161",
+    "normalized": "r161fluoroethanefluoroethaner161",
+    "aliases": [
+      "R-161"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r170",
+    "designation": "R170",
+    "normalized": "r170ethaneethaner170",
+    "aliases": [
+      "R-170"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r218",
+    "designation": "R218",
+    "normalized": "r218octafluoropropaneoctafluoropropaner218",
+    "aliases": [
+      "R-218"
+    ],
+    "family": "PFC"
+  },
+  {
+    "id": "r227ea",
+    "designation": "R227EA",
+    "normalized": "r227ea1112333heptafluoropropane1112333heptafluoropropaner227ea",
+    "aliases": [
+      "R-227EA"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r236ea",
+    "designation": "R236EA",
+    "normalized": "r236ea111233hexafluoropropane111233hexafluoropropaner236ea",
+    "aliases": [
+      "R-236EA"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r236fa",
+    "designation": "R236FA",
+    "normalized": "r236fa111333hexafluoropropane111333hexafluoropropaner236fa",
+    "aliases": [
+      "R-236FA"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r245ca",
+    "designation": "R245ca",
+    "normalized": "r245ca11223pentafluoropropane11223pentafluoropropaner245ca",
+    "aliases": [
+      "R-245ca"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r245fa",
+    "designation": "R245fa",
+    "normalized": "r245fa11133pentafluoropropane11133pentafluoropropaner245fa",
+    "aliases": [
+      "R-245fa"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r290",
+    "designation": "R290",
+    "normalized": "r290npropanenpropaner290",
+    "aliases": [
+      "R-290"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r365mfc",
+    "designation": "R365MFC",
+    "normalized": "r365mfc11133pentafluorobutane11133pentafluorobutaner365mfc",
+    "aliases": [
+      "R-365MFC"
+    ],
+    "family": "HFC"
+  },
+  {
+    "id": "r401a",
+    "designation": "R401A",
+    "normalized": "r401ar401ar401ar401a",
+    "aliases": [
+      "R-401A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r401b",
+    "designation": "R401B",
+    "normalized": "r401br401br401br401b",
+    "aliases": [
+      "R-401B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r401c",
+    "designation": "R401C",
+    "normalized": "r401cr401cr401cr401c",
+    "aliases": [
+      "R-401C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r402a",
+    "designation": "R402A",
+    "normalized": "r402ar402ar402ar402a",
+    "aliases": [
+      "R-402A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r402b",
+    "designation": "R402B",
+    "normalized": "r402br402br402br402b",
+    "aliases": [
+      "R-402B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r403a",
+    "designation": "R403A",
+    "normalized": "r403ar403ar403ar403a",
+    "aliases": [
+      "R-403A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r403b",
+    "designation": "R403B",
+    "normalized": "r403br403br403br403b",
+    "aliases": [
+      "R-403B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r404a",
+    "designation": "R404A",
+    "normalized": "r404ar404ar404agenetron404ar404a",
+    "aliases": [
+      "Genetron 404A",
+      "R-404A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r405a",
+    "designation": "R405A",
+    "normalized": "r405ar405ar405ar405a",
+    "aliases": [
+      "R-405A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r406a",
+    "designation": "R406A",
+    "normalized": "r406ar406ar406ar406a",
+    "aliases": [
+      "R-406A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r406b",
+    "designation": "R406B",
+    "normalized": "r406br406br406br406b",
+    "aliases": [
+      "R-406B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407a",
+    "designation": "R407A",
+    "normalized": "r407ar407ar407ar407a",
+    "aliases": [
+      "R-407A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407b",
+    "designation": "R407B",
+    "normalized": "r407br407br407br407b",
+    "aliases": [
+      "R-407B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407c",
+    "designation": "R407C",
+    "normalized": "r407cr407cr407cr407c",
+    "aliases": [
+      "R-407C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407d",
+    "designation": "R407D",
+    "normalized": "r407dr407dr407dr407d",
+    "aliases": [
+      "R-407D"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407e",
+    "designation": "R407E",
+    "normalized": "r407er407er407er407e",
+    "aliases": [
+      "R-407E"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407f",
+    "designation": "R407F",
+    "normalized": "r407fr407fr407fr407f",
+    "aliases": [
+      "R-407F"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407g",
+    "designation": "R407G",
+    "normalized": "r407gr407gr407gr407g",
+    "aliases": [
+      "R-407G"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407h",
+    "designation": "R407H",
+    "normalized": "r407hr407hr407hr407h",
+    "aliases": [
+      "R-407H"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r407i",
+    "designation": "R407I",
+    "normalized": "r407ir407ir407ir407i",
+    "aliases": [
+      "R-407I"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r408a",
+    "designation": "R408A",
+    "normalized": "r408ar408ar408ar408a",
+    "aliases": [
+      "R-408A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r409a",
+    "designation": "R409A",
+    "normalized": "r409ar409ar409ar409a",
+    "aliases": [
+      "R-409A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r409b",
+    "designation": "R409B",
+    "normalized": "r409br409br409br409b",
+    "aliases": [
+      "R-409B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r410a",
+    "designation": "R410A",
+    "normalized": "r410ar410ar410ar410a",
+    "aliases": [
+      "R-410A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r410b",
+    "designation": "R410B",
+    "normalized": "r410br410br410br410b",
+    "aliases": [
+      "R-410B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r411a",
+    "designation": "R411A",
+    "normalized": "r411ar411ar411ar411a",
+    "aliases": [
+      "R-411A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r411b",
+    "designation": "R411B",
+    "normalized": "r411br411br411br411b",
+    "aliases": [
+      "R-411B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r411c",
+    "designation": "R411C",
+    "normalized": "r411cr411cr411cr411c",
+    "aliases": [
+      "R-411C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r412a",
+    "designation": "R412A",
+    "normalized": "r412ar412ar412ar412a",
+    "aliases": [
+      "R-412A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r413a",
+    "designation": "R413A",
+    "normalized": "r413ar413ar413ar413a",
+    "aliases": [
+      "R-413A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r414a",
+    "designation": "R414A",
+    "normalized": "r414ar414ar414ar414a",
+    "aliases": [
+      "R-414A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r414b",
+    "designation": "R414B",
+    "normalized": "r414br414br414br414b",
+    "aliases": [
+      "R-414B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r415a",
+    "designation": "R415A",
+    "normalized": "r415ar415ar415ar415a",
+    "aliases": [
+      "R-415A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r415b",
+    "designation": "R415B",
+    "normalized": "r415br415br415br415b",
+    "aliases": [
+      "R-415B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r416a",
+    "designation": "R416A",
+    "normalized": "r416ar416ar416ar416a",
+    "aliases": [
+      "R-416A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r417a",
+    "designation": "R417A",
+    "normalized": "r417ar417ar417ar417a",
+    "aliases": [
+      "R-417A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r417b",
+    "designation": "R417B",
+    "normalized": "r417br417br417br417b",
+    "aliases": [
+      "R-417B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r417c",
+    "designation": "R417C",
+    "normalized": "r417cr417cr417cr417c",
+    "aliases": [
+      "R-417C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r418a",
+    "designation": "R418A",
+    "normalized": "r418ar418ar418ar418a",
+    "aliases": [
+      "R-418A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r419a",
+    "designation": "R419A",
+    "normalized": "r419ar419ar419ar419a",
+    "aliases": [
+      "R-419A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r419b",
+    "designation": "R419B",
+    "normalized": "r419br419br419br419b",
+    "aliases": [
+      "R-419B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r420a",
+    "designation": "R420A",
+    "normalized": "r420ar420ar420ar420a",
+    "aliases": [
+      "R-420A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r421a",
+    "designation": "R421A",
+    "normalized": "r421ar421ar421ar421a",
+    "aliases": [
+      "R-421A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r421b",
+    "designation": "R421B",
+    "normalized": "r421br421br421br421b",
+    "aliases": [
+      "R-421B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r422a",
+    "designation": "R422A",
+    "normalized": "r422ar422ar422ar422a",
+    "aliases": [
+      "R-422A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r422b",
+    "designation": "R422B",
+    "normalized": "r422br422br422br422b",
+    "aliases": [
+      "R-422B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r422c",
+    "designation": "R422C",
+    "normalized": "r422cr422cr422cr422c",
+    "aliases": [
+      "R-422C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r422d",
+    "designation": "R422D",
+    "normalized": "r422dr422dr422dr422d",
+    "aliases": [
+      "R-422D"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r422e",
+    "designation": "R422E",
+    "normalized": "r422er422er422er422e",
+    "aliases": [
+      "R-422E"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r423a",
+    "designation": "R423A",
+    "normalized": "r423ar423ar423ar423a",
+    "aliases": [
+      "R-423A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r424a",
+    "designation": "R424A",
+    "normalized": "r424ar424ar424ar424a",
+    "aliases": [
+      "R-424A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r425a",
+    "designation": "R425A",
+    "normalized": "r425ar425ar425ar425a",
+    "aliases": [
+      "R-425A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r426a",
+    "designation": "R426A",
+    "normalized": "r426ar426ar426ar426a",
+    "aliases": [
+      "R-426A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r427a",
+    "designation": "R427A",
+    "normalized": "r427ar427ar427ar427a",
+    "aliases": [
+      "R-427A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r427b",
+    "designation": "R427B",
+    "normalized": "r427br427br427br427b",
+    "aliases": [
+      "R-427B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r427c",
+    "designation": "R427C",
+    "normalized": "r427cr427cr427cr427c",
+    "aliases": [
+      "R-427C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r428a",
+    "designation": "R428A",
+    "normalized": "r428ar428ar428ar428a",
+    "aliases": [
+      "R-428A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r429a",
+    "designation": "R429A",
+    "normalized": "r429ar429ar429ar429a",
+    "aliases": [
+      "R-429A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r430a",
+    "designation": "R430A",
+    "normalized": "r430ar430ar430ar430a",
+    "aliases": [
+      "R-430A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r431a",
+    "designation": "R431A",
+    "normalized": "r431ar431ar431ar431a",
+    "aliases": [
+      "R-431A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r432a",
+    "designation": "R432A",
+    "normalized": "r432ar432ar432ar432a",
+    "aliases": [
+      "R-432A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r433a",
+    "designation": "R433A",
+    "normalized": "r433ar433ar433ar433a",
+    "aliases": [
+      "R-433A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r433b",
+    "designation": "R433B",
+    "normalized": "r433br433br433br433b",
+    "aliases": [
+      "R-433B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r433c",
+    "designation": "R433C",
+    "normalized": "r433cr433cr433cr433c",
+    "aliases": [
+      "R-433C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r433d",
+    "designation": "R433D",
+    "normalized": "r433dr433dr433dr433d",
+    "aliases": [
+      "R-433D"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r434a",
+    "designation": "R434A",
+    "normalized": "r434ar434ar434ar434a",
+    "aliases": [
+      "R-434A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r435a",
+    "designation": "R435A",
+    "normalized": "r435ar435ar435ar435a",
+    "aliases": [
+      "R-435A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r436a",
+    "designation": "R436A",
+    "normalized": "r436ar436ar436ar436a",
+    "aliases": [
+      "R-436A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r436b",
+    "designation": "R436B",
+    "normalized": "r436br436br436br436b",
+    "aliases": [
+      "R-436B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r436c",
+    "designation": "R436C",
+    "normalized": "r436cr436cr436cr436c",
+    "aliases": [
+      "R-436C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r437a",
+    "designation": "R437A",
+    "normalized": "r437ar437ar437ar437a",
+    "aliases": [
+      "R-437A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r438a",
+    "designation": "R438A",
+    "normalized": "r438ar438ar438ar438a",
+    "aliases": [
+      "R-438A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r439a",
+    "designation": "R439A",
+    "normalized": "r439ar439ar439ar439a",
+    "aliases": [
+      "R-439A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r440a",
+    "designation": "R440A",
+    "normalized": "r440ar440ar440ar440a",
+    "aliases": [
+      "R-440A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r441a",
+    "designation": "R441A",
+    "normalized": "r441ar441ar441ar441a",
+    "aliases": [
+      "R-441A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r442a",
+    "designation": "R442A",
+    "normalized": "r442ar442ar442ar442a",
+    "aliases": [
+      "R-442A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r443a",
+    "designation": "R443A",
+    "normalized": "r443ar443ar443ar443a",
+    "aliases": [
+      "R-443A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r444a",
+    "designation": "R444A",
+    "normalized": "r444ar444ar444ar444a",
+    "aliases": [
+      "R-444A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r444b",
+    "designation": "R444B",
+    "normalized": "r444br444br444br444b",
+    "aliases": [
+      "R-444B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r445a",
+    "designation": "R445A",
+    "normalized": "r445ar445ar445ar445a",
+    "aliases": [
+      "R-445A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r446a",
+    "designation": "R446A",
+    "normalized": "r446ar446ar446ar446a",
+    "aliases": [
+      "R-446A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r447a",
+    "designation": "R447A",
+    "normalized": "r447ar447ar447ar447a",
+    "aliases": [
+      "R-447A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r447b",
+    "designation": "R447B",
+    "normalized": "r447br447br447br447b",
+    "aliases": [
+      "R-447B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r448a",
+    "designation": "R448A",
+    "normalized": "r448ar448ar448ar448asolsticen40",
+    "aliases": [
+      "R-448A",
+      "Solstice N40"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r448b",
+    "designation": "R448B",
+    "normalized": "r448br448br448br448b",
+    "aliases": [
+      "R-448B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r449a",
+    "designation": "R449A",
+    "normalized": "r449ar449ar449aopteonxp40r449a",
+    "aliases": [
+      "Opteon XP40",
+      "R-449A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r449b",
+    "designation": "R449B",
+    "normalized": "r449br449br449br449b",
+    "aliases": [
+      "R-449B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r449c",
+    "designation": "R449C",
+    "normalized": "r449cr449cr449cr449c",
+    "aliases": [
+      "R-449C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r450a",
+    "designation": "R450A",
+    "normalized": "r450ar450ar450ar450asolsticen13",
+    "aliases": [
+      "R-450A",
+      "Solstice N13"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r451a",
+    "designation": "R451A",
+    "normalized": "r451ar451ar451ar451a",
+    "aliases": [
+      "R-451A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r451b",
+    "designation": "R451B",
+    "normalized": "r451br451br451br451b",
+    "aliases": [
+      "R-451B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r452a",
+    "designation": "R452A",
+    "normalized": "r452ar452ar452aopteonxp44r452a",
+    "aliases": [
+      "Opteon XP44",
+      "R-452A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r452b",
+    "designation": "R452B",
+    "normalized": "r452br452br452bopteonxl55r452b",
+    "aliases": [
+      "Opteon XL55",
+      "R-452B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r452c",
+    "designation": "R452C",
+    "normalized": "r452cr452cr452cr452c",
+    "aliases": [
+      "R-452C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r453a",
+    "designation": "R453A",
+    "normalized": "r453ar453ar453ar453a",
+    "aliases": [
+      "R-453A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r454a",
+    "designation": "R454A",
+    "normalized": "r454ar454ar454aopteonxl40r454a",
+    "aliases": [
+      "Opteon XL40",
+      "R-454A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r454b",
+    "designation": "R454B",
+    "normalized": "r454br454br454bopteonxl41r454b",
+    "aliases": [
+      "Opteon XL41",
+      "R-454B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r454c",
+    "designation": "R454C",
+    "normalized": "r454cr454cr454copteonxl20r454c",
+    "aliases": [
+      "Opteon XL20",
+      "R-454C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r454d",
+    "designation": "R454D",
+    "normalized": "r454dr454dr454dr454d",
+    "aliases": [
+      "R-454D"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r455a",
+    "designation": "R455A",
+    "normalized": "r455ar455ar455ar455asolsticel40x",
+    "aliases": [
+      "R-455A",
+      "Solstice L40X"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r455b",
+    "designation": "R455B",
+    "normalized": "r455br455br455br455b",
+    "aliases": [
+      "R-455B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r455c",
+    "designation": "R455C",
+    "normalized": "r455cr455cr455cr455c",
+    "aliases": [
+      "R-455C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r456a",
+    "designation": "R456A",
+    "normalized": "r456ar456ar456ar456a",
+    "aliases": [
+      "R-456A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r457a",
+    "designation": "R457A",
+    "normalized": "r457ar457ar457ar457a",
+    "aliases": [
+      "R-457A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r457b",
+    "designation": "R457B",
+    "normalized": "r457br457br457br457b",
+    "aliases": [
+      "R-457B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r457c",
+    "designation": "R457C",
+    "normalized": "r457cr457cr457cr457c",
+    "aliases": [
+      "R-457C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r457d",
+    "designation": "R457D",
+    "normalized": "r457dr457dr457dr457d",
+    "aliases": [
+      "R-457D"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r458a",
+    "designation": "R458A",
+    "normalized": "r458ar458ar458ar458a",
+    "aliases": [
+      "R-458A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r459a",
+    "designation": "R459A",
+    "normalized": "r459ar459ar459ar459a",
+    "aliases": [
+      "R-459A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r459b",
+    "designation": "R459B",
+    "normalized": "r459br459br459br459b",
+    "aliases": [
+      "R-459B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r460a",
+    "designation": "R460A",
+    "normalized": "r460ar460ar460ar460a",
+    "aliases": [
+      "R-460A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r460b",
+    "designation": "R460B",
+    "normalized": "r460br460br460br460b",
+    "aliases": [
+      "R-460B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r460c",
+    "designation": "R460C",
+    "normalized": "r460cr460cr460cr460c",
+    "aliases": [
+      "R-460C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r461a",
+    "designation": "R461A",
+    "normalized": "r461ar461ar461ar461a",
+    "aliases": [
+      "R-461A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r462a",
+    "designation": "R462A",
+    "normalized": "r462ar462ar462ar462a",
+    "aliases": [
+      "R-462A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r463a",
+    "designation": "R463A",
+    "normalized": "r463ar463ar463ar463a",
+    "aliases": [
+      "R-463A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r464a",
+    "designation": "R464A",
+    "normalized": "r464ar464ar464ar464a",
+    "aliases": [
+      "R-464A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r465a",
+    "designation": "R465A",
+    "normalized": "r465ar465ar465ar465a",
+    "aliases": [
+      "R-465A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r466a",
+    "designation": "R466A",
+    "normalized": "r466ar466ar466ar466a",
+    "aliases": [
+      "R-466A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r467a",
+    "designation": "R467A",
+    "normalized": "r467ar467ar467ar467a",
+    "aliases": [
+      "R-467A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r468a",
+    "designation": "R468A",
+    "normalized": "r468ar468ar468ar468a",
+    "aliases": [
+      "R-468A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r468b",
+    "designation": "R468B",
+    "normalized": "r468br468br468br468b",
+    "aliases": [
+      "R-468B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r468c",
+    "designation": "R468C",
+    "normalized": "r468cr468cr468cr468c",
+    "aliases": [
+      "R-468C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r469a",
+    "designation": "R469A",
+    "normalized": "r469ar469ar469ar469a",
+    "aliases": [
+      "R-469A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r470a",
+    "designation": "R470A",
+    "normalized": "r470ar470ar470ar470a",
+    "aliases": [
+      "R-470A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r470b",
+    "designation": "R470B",
+    "normalized": "r470br470br470br470b",
+    "aliases": [
+      "R-470B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r471a",
+    "designation": "R471A",
+    "normalized": "r471ar471ar471ar471a",
+    "aliases": [
+      "R-471A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r472a",
+    "designation": "R472A",
+    "normalized": "r472ar472ar472ar472a",
+    "aliases": [
+      "R-472A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r472b",
+    "designation": "R472B",
+    "normalized": "r472br472br472br472b",
+    "aliases": [
+      "R-472B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r473a",
+    "designation": "R473A",
+    "normalized": "r473ar473ar473ar473a",
+    "aliases": [
+      "R-473A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r474a",
+    "designation": "R474A",
+    "normalized": "r474ar474ar474ar474a",
+    "aliases": [
+      "R-474A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r474b",
+    "designation": "R474B",
+    "normalized": "r474br474br474br474b",
+    "aliases": [
+      "R-474B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r475a",
+    "designation": "R475A",
+    "normalized": "r475ar475ar475ar475a",
+    "aliases": [
+      "R-475A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r475b",
+    "designation": "R475B",
+    "normalized": "r475br475br475br475b",
+    "aliases": [
+      "R-475B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r476a",
+    "designation": "R476A",
+    "normalized": "r476ar476ar476ar476a",
+    "aliases": [
+      "R-476A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r478a",
+    "designation": "R478A",
+    "normalized": "r478ar478ar478ar478a",
+    "aliases": [
+      "R-478A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r479a",
+    "designation": "R479A",
+    "normalized": "r479ar479ar479ar479a",
+    "aliases": [
+      "R-479A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r480a",
+    "designation": "R480A",
+    "normalized": "r480ar480ar480ar480a",
+    "aliases": [
+      "R-480A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r481a",
+    "designation": "R481A",
+    "normalized": "r481ar481ar481ar481a",
+    "aliases": [
+      "R-481A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r482a",
+    "designation": "R482A",
+    "normalized": "r482ar482ar482ar482a",
+    "aliases": [
+      "R-482A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r483a",
+    "designation": "R483A",
+    "normalized": "r483ar483ar483ar483a",
+    "aliases": [
+      "R-483A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r484a",
+    "designation": "R484A",
+    "normalized": "r484ar484ar484ar484a",
+    "aliases": [
+      "R-484A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r485a",
+    "designation": "R485A",
+    "normalized": "r485ar485ar485ar485a",
+    "aliases": [
+      "R-485A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r486a",
+    "designation": "R486A",
+    "normalized": "r486ar486ar486ar486a",
+    "aliases": [
+      "R-486A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r487a",
+    "designation": "R487A",
+    "normalized": "r487ar487ar487ar487a",
+    "aliases": [
+      "R-487A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r487b",
+    "designation": "R487B",
+    "normalized": "r487br487br487br487b",
+    "aliases": [
+      "R-487B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r488a",
+    "designation": "R488A",
+    "normalized": "r488ar488ar488ar488a",
+    "aliases": [
+      "R-488A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r489a",
+    "designation": "R489A",
+    "normalized": "r489ar489ar489ar489a",
+    "aliases": [
+      "R-489A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r490a",
+    "designation": "R490A",
+    "normalized": "r490ar490ar490ar490a",
+    "aliases": [
+      "R-490A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r491a",
+    "designation": "R491A",
+    "normalized": "r491ar491ar491ar491a",
+    "aliases": [
+      "R-491A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r493a",
+    "designation": "R493A",
+    "normalized": "r493ar493ar493ar493a",
+    "aliases": [
+      "R-493A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r493b",
+    "designation": "R493B",
+    "normalized": "r493br493br493br493b",
+    "aliases": [
+      "R-493B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r493c",
+    "designation": "R493C",
+    "normalized": "r493cr493cr493cr493c",
+    "aliases": [
+      "R-493C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r494a",
+    "designation": "R494A",
+    "normalized": "r494ar494ar494ar494a",
+    "aliases": [
+      "R-494A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r495a",
+    "designation": "R495A",
+    "normalized": "r495ar495ar495ar495a",
+    "aliases": [
+      "R-495A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r496a",
+    "designation": "R496A",
+    "normalized": "r496ar496ar496ar496a",
+    "aliases": [
+      "R-496A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r497a",
+    "designation": "R497A",
+    "normalized": "r497ar497ar497ar497a",
+    "aliases": [
+      "R-497A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r498a",
+    "designation": "R498A",
+    "normalized": "r498ar498ar498ar498a",
+    "aliases": [
+      "R-498A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r499a",
+    "designation": "R499A",
+    "normalized": "r499ar499ar499ar499a",
+    "aliases": [
+      "R-499A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r500",
+    "designation": "R500",
+    "normalized": "r500r500r500r500",
+    "aliases": [
+      "R-500"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r501",
+    "designation": "R501",
+    "normalized": "r501r501r501r501",
+    "aliases": [
+      "R-501"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r502",
+    "designation": "R502",
+    "normalized": "r502r502r502r502",
+    "aliases": [
+      "R-502"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r503",
+    "designation": "R503",
+    "normalized": "r503r503r503r503",
+    "aliases": [
+      "R-503"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r504",
+    "designation": "R504",
+    "normalized": "r504r504r504r504",
+    "aliases": [
+      "R-504"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r505",
+    "designation": "R505",
+    "normalized": "r505r505r505r505",
+    "aliases": [
+      "R-505"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r506",
+    "designation": "R506",
+    "normalized": "r506r506r506r506",
+    "aliases": [
+      "R-506"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r507a",
+    "designation": "R507A",
+    "normalized": "r507ar507ar507ar507ar507c",
+    "aliases": [
+      "R-507A",
+      "R507C"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r508a",
+    "designation": "R508A",
+    "normalized": "r508ar508ar508ar508a",
+    "aliases": [
+      "R-508A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r508b",
+    "designation": "R508B",
+    "normalized": "r508br508br508br508b",
+    "aliases": [
+      "R-508B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r509",
+    "designation": "R509",
+    "normalized": "r509r509r509r509",
+    "aliases": [
+      "R-509"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r509a",
+    "designation": "R509A",
+    "normalized": "r509ar509ar509ar509a",
+    "aliases": [
+      "R-509A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r510a",
+    "designation": "R510A",
+    "normalized": "r510ar510ar510ar510a",
+    "aliases": [
+      "R-510A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r511a",
+    "designation": "R511A",
+    "normalized": "r511ar511ar511ar511a",
+    "aliases": [
+      "R-511A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r512a",
+    "designation": "R512A",
+    "normalized": "r512ar512ar512ar512a",
+    "aliases": [
+      "R-512A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r513a",
+    "designation": "R513A",
+    "normalized": "r513ar513ar513aopteonxp10r513a",
+    "aliases": [
+      "Opteon XP10",
+      "R-513A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r513b",
+    "designation": "R513B",
+    "normalized": "r513br513br513br513b",
+    "aliases": [
+      "R-513B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r514a",
+    "designation": "R514A",
+    "normalized": "r514ar514ar514ar514a",
+    "aliases": [
+      "R-514A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r515a",
+    "designation": "R515A",
+    "normalized": "r515ar515ar515ar515a",
+    "aliases": [
+      "R-515A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r515b",
+    "designation": "R515B",
+    "normalized": "r515br515br515br515b",
+    "aliases": [
+      "R-515B"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r516a",
+    "designation": "R516A",
+    "normalized": "r516ar516ar516ar516a",
+    "aliases": [
+      "R-516A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r600",
+    "designation": "R600",
+    "normalized": "r600nbutanenbutaner600",
+    "aliases": [
+      "R-600"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r600a",
+    "designation": "R600A",
+    "normalized": "r600aisobutaneisobutaner600a",
+    "aliases": [
+      "R-600A"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r601",
+    "designation": "R601",
+    "normalized": "r601npentanenpentaner601",
+    "aliases": [
+      "R-601"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r601a",
+    "designation": "R601a",
+    "normalized": "r601aisopentaneisopentaner601a",
+    "aliases": [
+      "R-601a"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r702",
+    "designation": "R702",
+    "normalized": "r702hydrogenhydrogenr702",
+    "aliases": [
+      "R-702"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r704",
+    "designation": "R704",
+    "normalized": "r704heliumheliumr704",
+    "aliases": [
+      "R-704"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r717",
+    "designation": "R717",
+    "normalized": "r717ammoniaammoniar717",
+    "aliases": [
+      "R-717"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r718",
+    "designation": "R718",
+    "normalized": "r718waterwaterr718",
+    "aliases": [
+      "R-718"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r720",
+    "designation": "R720",
+    "normalized": "r720neonneonr720",
+    "aliases": [
+      "R-720"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r728",
+    "designation": "R728",
+    "normalized": "r728nitrogennitrogenr728",
+    "aliases": [
+      "R-728"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r729",
+    "designation": "R729",
+    "normalized": "r729airairr729",
+    "aliases": [
+      "R-729"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r732",
+    "designation": "R732",
+    "normalized": "r732oxygenoxygenr732",
+    "aliases": [
+      "R-732"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r740",
+    "designation": "R740",
+    "normalized": "r740argonargonr740",
+    "aliases": [
+      "R-740"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r744",
+    "designation": "R744",
+    "normalized": "r744carbondioxidecarbondioxider744",
+    "aliases": [
+      "R-744"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r1123",
+    "designation": "R1123",
+    "normalized": "r1123trifluoroethylenetrifluoroethylener1123",
+    "aliases": [
+      "R-1123"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r1130e",
+    "designation": "R1130(E)",
+    "normalized": "r1130etrans12dichloroethenetrans12dichloroethener1130e",
+    "aliases": [
+      "R-1130(E)"
+    ],
+    "family": "non_fluorinated"
+  },
+  {
+    "id": "r1132e",
+    "designation": "R1132(E)",
+    "normalized": "r1132etrans12difluoroethylenetrans12difluoroethylener1132e",
+    "aliases": [
+      "R-1132(E)"
+    ],
+    "family": "HFO"
+  },
+  {
+    "id": "r1132a",
+    "designation": "R1132a",
+    "normalized": "r1132a11difluoroethylene11difluoroethylener1132a",
+    "aliases": [
+      "R-1132a"
+    ],
+    "family": "HFO"
+  },
+  {
+    "id": "r1150",
+    "designation": "R1150",
+    "normalized": "r1150ethyleneethylener1150",
+    "aliases": [
+      "R-1150"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r1224ydz",
+    "designation": "R1224YDZ",
+    "normalized": "r1224ydzz1chloro2333tetrafluoropropenez1chloro2333tetrafluoropropener1224ydz",
+    "aliases": [
+      "R-1224YDZ"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r1233zde",
+    "designation": "R1233zd(E)",
+    "normalized": "r1233zdetrans1chloro333trifluoropropenetrans1chloro333trifluoropropener1233zde",
+    "aliases": [
+      "R-1233zd(E)"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r1234yf",
+    "designation": "R1234yf",
+    "normalized": "r1234yf2333tetrafluoroprop1ene2333tetrafluoroprop1eneopteonxl10r1234yf",
+    "aliases": [
+      "Opteon XL10",
+      "R-1234yf"
+    ],
+    "family": "HFO"
+  },
+  {
+    "id": "r1234zee",
+    "designation": "R1234ze(E)",
+    "normalized": "r1234zeetrans1333tetrafluoroprop1enetrans1333tetrafluoroprop1ener1234zeer1234ze",
+    "aliases": [
+      "R-1234ze(E)",
+      "R1234ZE"
+    ],
+    "family": "HFO"
+  },
+  {
+    "id": "r1234zez",
+    "designation": "R1234ze(Z)",
+    "normalized": "r1234zezcis1333tetrafluoropropenecis1333tetrafluoropropener1234zez",
+    "aliases": [
+      "R-1234ze(Z)"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r1243zf",
+    "designation": "R1243zf",
+    "normalized": "r1243zf333trifluoropropene333trifluoropropener1243zf",
+    "aliases": [
+      "R-1243zf"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "r1270",
+    "designation": "R1270",
+    "normalized": "r1270propylenepropylener1270",
+    "aliases": [
+      "R-1270"
+    ],
+    "family": "natural"
+  },
+  {
+    "id": "r1336mzze",
+    "designation": "R1336mzz(E)",
+    "normalized": "r1336mzzetrans111444hexafluoro2butenetrans111444hexafluoro2butener1336mzze",
+    "aliases": [
+      "R-1336mzz(E)"
+    ],
+    "family": "HFO"
+  },
+  {
+    "id": "r1336mzzz",
+    "designation": "R1336mzz(Z)",
+    "normalized": "r1336mzzzcis111444hexafluoro2butenecis111444hexafluoro2butener1336mzzz",
+    "aliases": [
+      "R-1336mzz(Z)"
+    ],
+    "family": "HFO"
+  },
+  {
+    "id": "r4101a",
+    "designation": "R4101A",
+    "normalized": "r4101ar4101ar4101ar4101a",
+    "aliases": [
+      "R-4101A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r4102a",
+    "designation": "R4102A",
+    "normalized": "r4102ar4102ar4102ar4102a",
+    "aliases": [
+      "R-4102A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "r4103a",
+    "designation": "R4103A",
+    "normalized": "r4103ar4103ar4103ar4103a",
+    "aliases": [
+      "R-4103A"
+    ],
+    "family": "blend"
+  },
+  {
+    "id": "rc318",
+    "designation": "RC318",
+    "normalized": "rc318octafluorocyclobutaneoctafluorocyclobutanerc318",
+    "aliases": [
+      "R-C318"
+    ],
+    "family": "PFC"
+  },
+  {
+    "id": "re143a",
+    "designation": "RE143A",
+    "normalized": "re143amethyltrifluoromethylethermethyltrifluoromethyletherre143a",
+    "aliases": [
+      "RE-143A"
+    ],
+    "family": "unclassified"
+  },
+  {
+    "id": "re170",
+    "designation": "RE170",
+    "normalized": "re170dimethyletherdimethyletherre170",
+    "aliases": [
+      "RE-170"
+    ],
+    "family": "unclassified"
+  }
+]

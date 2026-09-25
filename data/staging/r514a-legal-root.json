@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-09-25",
+  "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+  "sourceIdentity": "Official Journal EU 2024/573, 20 February 2024, authoritative text mirrored by FAOLEX",
+  "odsSourceURL": "https://faolex.fao.org/docs/pdf/eur228346.pdf",
+  "records": [
+    {"id":"r1336mzzz","eu_annex":"II-1","legal_family":"HFO","gwp":{"value":"2.08","basis":"EU-2024/573-Annex-II-AR6"},"sourceIds":["eu-2024-573"],"evidence":"Annex II Section 1, page 51: HFC-1336mzz(Z), (Z)-CF3CH=CHCF3, GWP100 2.08. Footnote 1: IPCC AR6."},
+    {"id":"r1336mzze","eu_annex":"II-1","legal_family":"HFO","gwp":{"value":"17.9","basis":"EU-2024/573-Annex-II-AR6"},"sourceIds":["eu-2024-573"],"evidence":"Annex II Section 1, page 51: HFC-1336mzz(E), (E)-CF3CH=CHCF3, GWP100 17.9. Footnote 1: IPCC AR6."},
+    {"id":"r1130e","eu_annex":"none","gwp":{"value":"0","basis":"EU-2024/573-Annex-VI"},"sourceIds":["eu-2024-573","eu-2024-590"],"evidence":"Trans-1,2-dichloroethylene C2H2Cl2 (CAS156-60-5) contains no fluorine and is absent from 2024/590 Annex I and II (not dichloromethane CH2Cl2 or tetrachloroethene C2Cl4). No Article21 periodic ODS check applies to this component. 2024/573 Annex VI page59 assigns default0 to unlisted non-fluorinated mixture components. This is a regulatory default, not a measured zero GWP or zero ODP."}
+  ],
+  "ruleEvidence": "2024/573 Article5 uses AnnexII section1 component mass. Finnish authority ymparisto.fi confirms HFC and HFO fractions must be considered for mixtures. For R514A 26kg, verified74.7% gives19.422kg AnnexII-1:6months (12 with detection), absent exemptions. Non-fluorinated component is retained in breakdown, not dropped from recipe.",
+  "guidanceURL": "https://www.ymparisto.fi/fi/luvat-ja-velvoitteet/f-kaasut-ja-otsonikerrosta-heikentavat-aineet"
+}

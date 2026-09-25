@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-09-25",
+  "scope": "Two new pure component dependencies mapped to direct EU legal entries after identity import. No EU status is inferred for R13I1.",
+  "records": [
+    {
+      "id": "r31",
+      "designation": "R31",
+      "eu_annex": "ODS-I",
+      "legal_family": "HCFC",
+      "gwp": {"value": "79.4", "basis": "EU-2024/590-Annex-I-GWP100"},
+      "optionalODP": "0.020",
+      "sourceIds": ["eu-2024-590"],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228346.pdf",
+      "evidence": {"annex": "2024/590 Annex I, Group VIII, PDF page 30", "entry": "CH2FCl, HCFC-31, chlorofluoromethane, ODP 0.020, GWP100 79.4"}
+    },
+    {
+      "id": "rc318",
+      "designation": "RC318",
+      "eu_annex": "I",
+      "legal_family": "PFC",
+      "gwp": {"value": "10200", "basis": "EU-2024/573-Annex-I-AR6"},
+      "sourceIds": ["eu-2024-573"],
+      "sourceURL": "https://faolex.fao.org/docs/pdf/eur228342.pdf",
+      "evidence": {"annex": "2024/573 Annex I, section 2, PDF page 49", "entry": "PFC-c-318, octafluorocyclobutane, c-C4F8, GWP100 10200", "note": "Section 2 footnote specifies AR6 basis."}
+    }
+  ]
+}

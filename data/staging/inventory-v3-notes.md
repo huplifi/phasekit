@@ -1,0 +1,9 @@
+# Inventory v3 candidate review
+
+The generated `inventory-v3-candidates.json` contains 44 R-designated candidates absent from the 205-row catalogue on 2026-09-25. It is a **source union**, not a complete list of known refrigerants: 25 missing blends from the [UNEP TEAP May 2025 table 6.1](https://ozone.unep.org/system/files/documents/TEAP-May2025-Progress-Report-vol1.pdf), seven from the [May 2026 table 6.1](https://ozone.unep.org/system/files/documents/TEAP-May2026-Progress-Report-vol1.pdf), nine historical blends from the [Ozone Secretariat list](https://ozone.unep.org/lists-substances-and-blends), and three pure components needed to represent their recipes. Their exact field sources and retrieval dates are embedded in JSON.
+
+No ASHRAE page or standard text was ingested. The TEAP reports are UNEP publications that state their own table of blend mass composition and safety class. The staged safety values should be checked before publication and kept separate from equipment-level safety assessment. The 2024 TEAP table describes R485A safety as application dependent; the 2025 table reports A2L, which is the value staged here. This difference needs explicit review before treating A2L as an unconditional label.
+
+The historical Ozone Secretariat list has a `R507C` line with the same 50/50 R125/R143a composition and names as R507A. Its 2025 UNEP supplement identifies R507C as a name for R507A; the candidate file therefore records an alias reconciliation rather than a new canonical identity. `R400*` and `R400**` in the Secretariat table are variable-composition examples, so neither is staged as a discrete refrigerant.
+
+The Ozone Secretariat and TEAP GWP numbers are **not** EU 2024/573 Annex values and some TEAP Montreal Protocol figures omit non-controlled blend components. They were excluded from staged canonical fields. This supplement supplies no P–T curves, EU/FI legal class, oil guidance, or approval for a specific application.

@@ -1,0 +1,23 @@
+[build]
+  base = "."
+  command = "pnpm build"
+  publish = "apps/web/dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+  PNPM_FLAGS = "--frozen-lockfile"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"

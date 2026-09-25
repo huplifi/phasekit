@@ -1,0 +1,325 @@
+.ph-intro {
+  max-width: 65ch;
+  margin: 8px 0 24px;
+}
+
+.ph-coverage {
+  border-left: 3px solid var(--divider);
+  padding: 9px 14px;
+  margin: 18px 0 6px;
+  max-width: 68ch;
+}
+
+.ph-form {
+  margin-top: 24px;
+}
+
+.ph-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 30px 0 8px;
+}
+
+.ph-section-heading h2 {
+  margin: 0;
+}
+
+.ph-unit-row,
+.ph-input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 20px;
+  max-width: 680px;
+}
+
+.ph-temperature-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ph-unit-row label,
+.ph-input-grid label,
+.ph-atmosphere,
+.ph-temperature-unit {
+  min-width: 0;
+  margin-bottom: 14px;
+}
+
+.ph-unit-row select,
+.ph-input-grid input,
+.ph-atmosphere input,
+.ph-temperature-unit select {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  min-height: 50px;
+  border: 1px solid var(--control-border);
+  background: var(--background);
+  color: var(--text);
+  padding: 10px 12px;
+  font: inherit;
+  font-weight: 400;
+}
+
+.ph-input-grid input,
+.ph-atmosphere input {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
+.ph-atmosphere {
+  display: block;
+  max-width: 330px;
+}
+
+.ph-field-note {
+  max-width: 66ch;
+  margin: -7px 0 18px;
+}
+
+.ph-temperature-unit {
+  margin-left: auto;
+  width: 110px;
+}
+
+.ph-submit {
+  margin: 18px 0 8px;
+}
+
+.ph-result {
+  margin: 34px 0;
+}
+
+.ph-diagram-section {
+  margin: 34px 0 24px;
+}
+
+.ph-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 680px;
+  margin: 18px 0 28px;
+}
+
+.ph-metrics > div {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+}
+
+.ph-metrics strong {
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.ph-figure {
+  margin: 0;
+}
+
+.ph-chart-scroll,
+.ph-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.ph-chart {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  max-width: 780px;
+  height: auto;
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+}
+
+.ph-gridline {
+  stroke: var(--divider);
+  stroke-width: 1;
+}
+
+.ph-gridline-minor {
+  stroke-opacity: 0.4;
+  stroke-width: 0.7;
+}
+
+.ph-pressure-guide {
+  stroke: var(--text);
+  stroke-opacity: 0.5;
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+
+.ph-axis {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.4;
+}
+
+.ph-boundary {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 6 4;
+}
+
+.ph-bubble {
+  stroke: #3c7890;
+}
+
+.ph-dew {
+  stroke: #a56a40;
+}
+
+.ph-cycle-line {
+  stroke: var(--text);
+  stroke-width: 2.5;
+}
+
+.ph-assumed-line {
+  stroke-dasharray: 3 4;
+}
+
+.ph-point {
+  fill: var(--background);
+  stroke: var(--text);
+  stroke-width: 2.5;
+}
+
+.ph-point-label,
+.ph-axis-label,
+.ph-tick {
+  fill: var(--text);
+  font-family: var(--font-data);
+}
+
+.ph-point-label {
+  font-size: 17px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 4px;
+}
+
+.ph-axis-label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ph-tick {
+  font-size: 16px;
+}
+
+.ph-figure figcaption {
+  max-width: 68ch;
+  margin-top: 9px;
+}
+
+.ph-scroll-hint {
+  margin: 8px 0 0;
+}
+
+.ph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 16px 0 28px;
+}
+
+.ph-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ph-legend span::before {
+  display: inline-block;
+  width: 22px;
+  border-top: 3px solid var(--text);
+  content: "";
+}
+
+.ph-legend-bubble::before {
+  border-color: #3c7890 !important;
+  border-top-style: dashed !important;
+}
+
+.ph-legend-dew::before {
+  border-color: #a56a40 !important;
+  border-top-style: dashed !important;
+}
+
+.ph-point-table {
+  border-collapse: collapse;
+  min-width: 550px;
+  width: min(100%, 780px);
+  text-align: left;
+}
+
+.ph-point-table caption {
+  text-align: left;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.ph-point-table th,
+.ph-point-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+
+.ph-point-table th:first-child,
+.ph-point-table td:first-child {
+  padding-left: 0;
+}
+
+.ph-point-table thead th {
+  font-size: 0.82rem;
+}
+
+.ph-result > .caption {
+  max-width: 68ch;
+  margin: 12px 0;
+}
+
+@media (max-width: 620px) {
+  .ph-temperature-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .ph-unit-row,
+  .ph-input-grid,
+  .ph-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ph-unit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+}
+.ph-unit-row > label:first-child {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ph-unit-row select {
+  width: auto;
+  margin-top: 0;
+  min-height: 44px;
+}
+.ph-pressure-switch {
+  font-weight: 400;
+}
+
+.ph-temperature-grid label { display: flex; flex-direction: column; justify-content: space-between; }

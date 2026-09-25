@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "checkedAt": {
+      "type": "string"
+    },
+    "refrigerants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "designation": {
+            "type": "string"
+          },
+          "name": {
+            "type": "object",
+            "properties": {
+              "fi": {
+                "type": "string"
+              },
+              "en": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fi",
+              "en"
+            ],
+            "additionalProperties": false
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "pure",
+              "blend"
+            ]
+          },
+          "family": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cas": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "formula": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "refrigerantId": {
+                  "type": "string"
+                },
+                "massPercent": {
+                  "type": "string"
+                },
+                "sourceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "refrigerantId",
+                "massPercent",
+                "sourceIds"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "facts": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "verified",
+                    "unknown",
+                    "not_applicable"
+                  ]
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "basis": {
+                  "type": "string"
+                },
+                "sourceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "checkedAt": {
+                  "type": "string"
+                },
+                "conditions": {
+                  "type": "object",
+                  "properties": {
+                    "temperatureC": {
+                      "type": "number"
+                    },
+                    "pressureKPaAbsolute": {
+                      "type": "number"
+                    },
+                    "phase": {
+                      "type": "string"
+                    },
+                    "method": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "state",
+                "value",
+                "sourceIds"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "sourceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverage": {
+            "type": "object",
+            "properties": {
+              "identity": {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "partial"
+                ]
+              },
+              "composition": {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "partial",
+                  "not_applicable"
+                ]
+              },
+              "safety": {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "partial"
+                ]
+              },
+              "regulatory_eu_fi": {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "partial",
+                  "unsupported"
+                ]
+              },
+              "pt": {
+                "type": "string",
+                "enum": [
+                  "verified",
+                  "estimated",
+                  "unsupported"
+                ]
+              }
+            },
+            "required": [
+              "identity",
+              "composition",
+              "safety",
+              "regulatory_eu_fi",
+              "pt"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "id",
+          "designation",
+          "name",
+          "kind",
+          "family",
+          "aliases",
+          "cas",
+          "formula",
+          "components",
+          "facts",
+          "sourceIds",
+          "coverage"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "version": {
+            "type": "string"
+          },
+          "checkedAt": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "url",
+          "version",
+          "checkedAt",
+          "license"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "version",
+    "sha256",
+    "checkedAt",
+    "refrigerants",
+    "sources"
+  ],
+  "additionalProperties": false
+}

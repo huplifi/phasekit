@@ -1,0 +1,185 @@
+{
+  "format": "phasekit-tokens",
+  "version": "2.0",
+  "updated": "2026-09-25",
+  "decisions": {
+    "palette": "locked",
+    "logoColor": "locked",
+    "fontFamilies": "locked",
+    "unboundedWeights": "proposal",
+    "statusThemePairs": "proposal"
+  },
+  "palette": {
+    "ice-white": "#FAFEFF",
+    "frost": "#E2FCFF",
+    "ice-blue": "#CBF1FA",
+    "light-blue": "#AEDBF0",
+    "mid-blue": "#6BA7CC",
+    "primary-blue": "#3F7EB3",
+    "deep-blue": "#102C40",
+    "night-blue": "#091720",
+    "accent-lime": "#C6E86B"
+  },
+  "statusBase": {
+    "success": "#73A45B",
+    "warning": "#E3B45B",
+    "error": "#C34B4B",
+    "neutral": "#8A98A2"
+  },
+  "themes": {
+    "light": {
+      "background": "#FAFEFF",
+      "surface": "#E2FCFF",
+      "surfaceEmphasis": "#CBF1FA",
+      "text": "#102C40",
+      "textSecondary": "#495E6C",
+      "link": "#102C40",
+      "divider": "#AEDBF0",
+      "controlBorder": "#3F7EB3",
+      "focusRing": "#102C40",
+      "primaryBackground": "#102C40",
+      "primaryForeground": "#FAFEFF",
+      "accentBackground": "#C6E86B",
+      "accentForeground": "#102C40",
+      "status": {
+        "success": {
+          "foreground": "#3F652D",
+          "background": "#EDF5E8"
+        },
+        "warning": {
+          "foreground": "#795315",
+          "background": "#FFF4DF"
+        },
+        "error": {
+          "foreground": "#A33333",
+          "background": "#FCECEC"
+        },
+        "neutral": {
+          "foreground": "#495E6C",
+          "background": "#EDF2F5"
+        },
+        "info": {
+          "foreground": "#102C40",
+          "background": "#E2FCFF"
+        }
+      }
+    },
+    "dark": {
+      "background": "#091720",
+      "surface": "#102C40",
+      "surfaceEmphasis": "#192A35",
+      "text": "#FAFEFF",
+      "textSecondary": "#B6C4CE",
+      "link": "#AEDBF0",
+      "divider": "#495E6C",
+      "controlBorder": "#6BA7CC",
+      "focusRing": "#AEDBF0",
+      "primaryBackground": "#E2FCFF",
+      "primaryForeground": "#102C40",
+      "accentBackground": "#C6E86B",
+      "accentForeground": "#102C40",
+      "status": {
+        "success": {
+          "foreground": "#ADD393",
+          "background": "#18291D"
+        },
+        "warning": {
+          "foreground": "#E3B45B",
+          "background": "#302719"
+        },
+        "error": {
+          "foreground": "#F09191",
+          "background": "#331E25"
+        },
+        "neutral": {
+          "foreground": "#B6C4CE",
+          "background": "#192A35"
+        },
+        "info": {
+          "foreground": "#AEDBF0",
+          "background": "#102C40"
+        }
+      }
+    }
+  },
+  "typography": {
+    "display": {
+      "family": "Unbounded",
+      "weights": [
+        600,
+        700
+      ],
+      "status": "weights_proposed"
+    },
+    "body": {
+      "family": "Poppins",
+      "weights": [
+        400,
+        700
+      ]
+    },
+    "data": {
+      "family": "Ioskeley Mono",
+      "width": "normal",
+      "weights": [
+        400,
+        600,
+        800
+      ]
+    },
+    "brand": {
+      "font": "display",
+      "sizePx": 20
+    },
+    "pageTitle": {
+      "font": "display",
+      "sizePx": 26
+    },
+    "bodyText": {
+      "font": "body",
+      "weight": 400,
+      "sizePx": 16,
+      "lineHeight": 1.5
+    },
+    "dataText": {
+      "font": "data",
+      "weight": 600,
+      "sizePx": 16
+    },
+    "result": {
+      "font": "data",
+      "weight": 800,
+      "sizePx": 40
+    }
+  },
+  "layout": {
+    "unit": "px",
+    "pageGutter": 24,
+    "sectionGap": 32,
+    "groupGap": 16,
+    "labelGap": 12,
+    "listRowMinHeight": 76,
+    "touchTargetMin": 44,
+    "searchRadius": 12,
+    "spacingScale": [
+      4,
+      8,
+      12,
+      16,
+      24,
+      32,
+      48
+    ]
+  },
+  "assets": {
+    "logo": "phasekit-logo.svg",
+    "logoRaster": "phasekit-logo.png",
+    "referenceMock": "phasekit-app-vedos.png"
+  },
+  "notes": [
+    "Project-specific JSON, not an external token standard.",
+    "Brand SVG and documented hex values override generated preview pixels.",
+    "Separators are decorative; meaningful control boundaries use controlBorder.",
+    "Actual font files and licenses must be included during implementation."
+  ]
+}

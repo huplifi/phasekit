@@ -1,0 +1,16 @@
+{
+  "withheldChecks": 30564,
+  "maximumRelativePressureError": [
+    0.0009605166358354067,
+    "r411b:dew:-155.03746C"
+  ],
+  "maximumInverseTemperatureErrorC": [
+    0.02375018035409937,
+    "r1150:bubble:-66.91100C"
+  ],
+  "failedSourceEvaluations": [],
+  "acceptance": {
+    "relativePressure": 0.003,
+    "inverseTemperatureC": 0.1
+  }
+}
