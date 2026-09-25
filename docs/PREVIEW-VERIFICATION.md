@@ -19,14 +19,14 @@ Data enrichment adds 34 facts on 33 existing records: safety-group coverage incr
 
 ## Acceptance matrix
 
-| Requirement / risk | Observable evidence | Result |
-| --- | --- | --- |
-| Source-bounded enrichment | Canonical/audit checks; 34 attributed facts, no guessed missing groups | Pass for this tranche |
-| Units and calculations | Independent examples, wrong units and invalid boundaries; signed outputs | Pass in tested domains |
-| Durable history and compatibility | IndexedDB round-trip, schema-v1 migration, merge/rejection, browser reload/export | Pass locally |
-| FI/EN, responsive and offline | Chromium/WebKit flows, 320px forms, offline reload and axe checks | Pass for automated scope |
-| Production isolation | Feature branch; production main and Netlify remain on baseline | Verified before preview push; recheck in PR handoff |
-| Physical devices, regulatory review, native/store delivery | No substitute evidence from web tests | External gates remain open |
+| Requirement / risk                                         | Observable evidence                                                               | Result                                              |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------- |
+| Source-bounded enrichment                                  | Canonical/audit checks; 34 attributed facts, no guessed missing groups            | Pass for this tranche                               |
+| Units and calculations                                     | Independent examples, wrong units and invalid boundaries; signed outputs          | Pass in tested domains                              |
+| Durable history and compatibility                          | IndexedDB round-trip, schema-v1 migration, merge/rejection, browser reload/export | Pass locally                                        |
+| FI/EN, responsive and offline                              | Chromium/WebKit flows, 320px forms, offline reload and axe checks                 | Pass for automated scope                            |
+| Production isolation                                       | Feature branch; production main and Netlify remain on baseline                    | Verified before preview push; recheck in PR handoff |
+| Physical devices, regulatory review, native/store delivery | No substitute evidence from web tests                                             | External gates remain open                          |
 
 ## Regression coverage
 
@@ -44,3 +44,9 @@ Browser coverage includes mobile/desktop Chromium and targeted WebKit, signed/co
 - Fifty safety groups and many conditional properties remain unknown. No manufacturer substitution approval, refrigerant pressure-loss model, inferred COP, universal test threshold or full thermodynamic isoline model is added.
 - Qualified engineering/regulatory review, real phone installation/flight-mode cold start, assistive-technology checks and native/store releases remain external gates. See [native readiness](NATIVE-READINESS.md) and [release gates](RELEASE-GATES.md).
 - The preview has a separate browser-storage origin. Testing it does not migrate or edit production browser data; use explicit JSON backup/import when needed.
+
+## Live preview smoke check
+
+The initial candidate `8167c56` was published as [Deploy Preview #1](https://deploy-preview-1--phasekit.netlify.app) with Netlify deployment `6ab6f8d565da9100074543fd`. An isolated mobile Chromium context verified HTTPS 200, all new tool links, 0 bar(g) → 101.325 kPa(a), the 31 January 2027 inspection example, verified R513A Annex II-1 filtering and service-worker-controlled offline reload. No page errors were observed. Production remained on `1ff0dce` in Netlify. Final-head CI and preview evidence are maintained in [draft PR #1](https://github.com/huplifi/phasekit/pull/1).
+
+Visual inspection identified insufficient spacing before the new tool group. The follow-up uses the existing section spacing and updates the introduction to include field checklists. No calculation or data change is involved.
