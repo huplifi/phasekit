@@ -21,6 +21,13 @@ export function ReportSave({ content }: { content: ReportContent }) {
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const chartKey = JSON.stringify(content.chartSnapshot);
+  const currentChartKey = useRef(chartKey);
+  currentChartKey.current = chartKey;
+  useEffect(() => {
+    // A changed chart needs a new saved snapshot; keep entered notes and device.
+    setSaved(false);
+  }, [chartKey]);
   const mounted = useRef(true);
   useEffect(() => {
     mounted.current = true;
@@ -49,6 +56,7 @@ export function ReportSave({ content }: { content: ReportContent }) {
       );
   }
   async function save() {
+    const savingChartKey = chartKey;
     setSaving(true);
     try {
       await persistToolRecord({
@@ -61,8 +69,10 @@ export function ReportSave({ content }: { content: ReportContent }) {
           : {}),
       });
       if (!mounted.current) return;
-      setSaved(true);
-      setDraftDirty(false);
+      if (currentChartKey.current === savingChartKey) {
+        setSaved(true);
+        setDraftDirty(false);
+      }
       notify(l("Laskelma tallennettu.", "Calculation saved."));
     } catch {
       if (mounted.current)
@@ -132,8 +142,8 @@ export function ReportSave({ content }: { content: ReportContent }) {
       </div>
       <p className="caption secondary">
         {l(
-          "Raportti sisältää lähtötiedot, tulokset ja lähteet. Tallennettu laskelma löytyy Tallennetut-välilehdeltä.",
-          "The report includes inputs, results and sources. Saved calculations appear under Saved.",
+          "Raportti sisältää lähtötiedot, tulokset ja lähteet. Tallennettu laskelma löytyy Raportit-näkymästä.",
+          "The report includes inputs, results and sources. Saved calculations appear under Reports.",
         )}
       </p>
     </details>

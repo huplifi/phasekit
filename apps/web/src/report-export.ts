@@ -55,19 +55,66 @@ const APP_VERSION = packageInfo.version;
 // Every key fact remains legible when backgrounds and colour are disabled.
 export const PRINT_DOCUMENT_CSS = `@page{size:A4;margin:14mm}*{box-sizing:border-box}html{color-scheme:light}body{font:12px/1.45 system-ui,sans-serif;max-width:850px;margin:26px auto;padding:0 22px;color:#182127}h1,h2{line-height:1.18}h1{font-size:25px;margin:5px 0 12px}h2{font-size:15px;margin:21px 0 8px;padding-bottom:5px;border-bottom:1px solid #929fa5}.brand{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 9px}.meta,.muted{color:#405158}.meta{margin:3px 0 9px}.hero{border:2px solid #283b42;border-radius:6px;padding:12px 15px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.hero-value{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0}.hero-context{margin:7px 0 0;font-size:12px}.date-pair{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:12px}.date-card{border-top:1px solid #87969d;padding-top:8px}.date-card strong{display:block;font-size:18px;margin-top:2px}.date-card-secondary strong{font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0;break-inside:avoid}.result-card{border:1px solid #829098;border-radius:6px;padding:10px 12px;break-inside:avoid}.result-card dt{font-size:11px;color:#405158}.result-card dd{font-size:20px;font-weight:700;line-height:1.18;margin:3px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;padding:5px 0;border-bottom:1px solid #d7dfe2;break-inside:avoid}.row dt{color:#405158}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.detail-list div{border-bottom:1px solid #d7dfe2;padding:5px 0;break-inside:avoid}.detail-list dt{font-weight:650}.detail-list dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.checklist-progress{font-size:17px;font-weight:700;margin:14px 0}.checklist-steps{list-style:none;padding:0}.checklist-steps li{display:flex;gap:9px;border-bottom:1px solid #d7dfe2;padding:7px 0;break-inside:avoid}.checkmark{font:19px/1 system-ui,sans-serif;min-width:22px}.sources{font-size:10px;line-height:1.4;columns:2;column-gap:18px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:inherit}.notice{border-top:1px solid #9aa8ae;margin-top:18px;padding-top:9px;color:#405158;font-size:10px}.chart{display:block;width:100%;max-height:340px;object-fit:contain;break-inside:avoid}p{overflow-wrap:anywhere;white-space:pre-wrap}@media print{body{margin:0 auto;padding:0}a{text-decoration:none}}`;
 
-function createPrintDocument(win: Window, title: string, locale: Locale) {
+export function createPrintDocument(
+  win: Window,
+  title: string,
+  locale: Locale,
+) {
   const doc = win.document;
   doc.open();
   doc.write("<!doctype html><html><head></head><body></body></html>");
   doc.close();
   doc.documentElement.lang = locale;
   doc.title = title;
+  const viewport = doc.createElement("meta");
+  viewport.name = "viewport";
+  viewport.content = "width=device-width, initial-scale=1, viewport-fit=cover";
+  doc.head.append(viewport);
   const style = doc.createElement("style");
   style.textContent = `${PRINT_DOCUMENT_CSS}.document-status{display:inline-block;border:1px solid #263b44;border-radius:4px;padding:4px 7px;font-weight:700;margin:3px 0 10px}.document-subhead{font-size:13px;margin:4px 0 13px}.document-footer{border-top:1px solid #9aa8ae;margin-top:19px;padding-top:8px;font-size:10px;color:#405158;break-inside:avoid}.signature-line{border-bottom:1px solid #283b42;min-height:22px;margin:14px 0 4px;max-width:290px}.field-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;break-inside:avoid}.field-summary-card{border:1px solid #829098;border-radius:6px;padding:9px 11px;break-inside:avoid}.field-summary-card dt{font-size:11px}.field-summary-card dd{font-size:19px;font-weight:700;margin:3px 0 0;overflow-wrap:anywhere}.field-summary-note{margin:6px 0;font-size:11px}`;
   style.textContent += `h2{break-after:avoid;page-break-after:avoid}.field-report-document h2{margin:14px 0 6px;padding-bottom:4px}.field-report-document p{margin-top:6px;margin-bottom:6px}.field-report-document .checklist-progress{margin:8px 0}.field-report-document .checklist-steps li{padding:4px 0}.field-report-document .document-subhead{margin:3px 0 8px}.field-report-document .document-status{margin:2px 0 7px}.field-report-document .notice{margin-top:8px;padding-top:6px}.field-report-document .document-footer{margin-top:7px;padding-top:6px}.report-closing{break-inside:avoid;page-break-inside:avoid}`;
   style.textContent += `.field-report-document .field-summary-compact{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.field-report-document .field-summary-compact .field-summary-card{padding:7px 9px}.field-report-document .field-summary-compact .field-summary-card dd{font-size:17px}.field-report-document .meta{margin-bottom:4px}.field-report-document .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:7px 0}.field-report-document .signature-line{max-width:none;margin:9px 0 4px}.signature-caption{font-size:11px;color:#405158}.legacy-signature-name{font-size:11px;color:#405158}.source-list{list-style:none;margin:5px 0;padding:0;font-size:11px;line-height:1.25;columns:2;column-gap:18px}.source-list li{margin:0 0 4px;break-inside:avoid;overflow-wrap:anywhere}.source-meta{color:#405158;font-size:10.5px}.leak-document h2{margin:12px 0 5px}.leak-document .detail-list{gap:3px 15px}.leak-document .detail-list div{padding:3px 0}.leak-document .hero{margin:10px 0 8px}.hero-alert{font-weight:700;color:#84213b;border-top:1px solid #84213b;margin:9px 0 0;padding-top:8px}.compact-table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0 10px}.compact-table th{text-align:left;color:#405158;font-weight:650}.compact-table th,.compact-table td{padding:5px 6px;border-bottom:1px solid #d7dfe2;vertical-align:top;overflow-wrap:anywhere}.compact-table tr{break-inside:avoid;page-break-inside:avoid}.compact-table td:last-child,.compact-table th:last-child{text-align:right}.compact-table .subline{display:block;font-size:10px;color:#405158}.leak-document .source-version-line{font-size:11px;color:#405158;margin:4px 0}.leak-document .notice{margin-top:8px;padding-top:6px}.leak-document .document-footer{margin-top:6px;padding-top:6px}`;
   style.textContent += `.commissioning-document h2{margin:9px 0 4px}.commissioning-document .field-summary-card{padding:5px 8px}.commissioning-document .field-summary-card dd{font-size:16px;margin-top:2px}.commissioning-document .checklist-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.commissioning-document .checklist-steps li{min-width:0}.commissioning-document .field-inline-note{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px solid #d7dfe2}.commissioning-document .cycle-input-line{font-size:11px;color:#405158;margin:4px 0 8px;line-height:1.35}.commissioning-document .cycle-details .row{padding:2px 0}`;
+  style.textContent += `.print-toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:stretch;background:#fff;border-bottom:1px solid #929fa5;padding:10px 0;margin:0 0 16px}.print-toolbar a,.print-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:0;flex:1;padding:8px 12px;border:1px solid #283b42;border-radius:5px;background:#fff;color:#182127;font:600 14px/1.2 system-ui,sans-serif;text-align:center;text-decoration:none;cursor:pointer}.print-toolbar .print-action{background:#283b42;color:#fff}.print-toolbar button:disabled{opacity:.5;cursor:wait}.print-toolbar :focus-visible{outline:3px solid #276e9f;outline-offset:2px}@media screen and (max-width:500px){body{margin:0 auto;padding:0 16px 24px}.print-toolbar{margin:0 -16px 16px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px}.print-toolbar a,.print-toolbar button{padding:8px 7px}}@media print{.print-toolbar{display:none!important}}`;
   doc.head.append(style);
+  const toolbar = doc.createElement("nav");
+  toolbar.className = "print-toolbar";
+  toolbar.setAttribute(
+    "aria-label",
+    locale === "fi" ? "Raportin toiminnot" : "Report actions",
+  );
+  const back = doc.createElement("a");
+  const returnUrl = window.location.href;
+  back.href = returnUrl;
+  back.textContent = locale === "fi" ? "Takaisin raporttiin" : "Back to report";
+  back.addEventListener("click", (event) => {
+    event.preventDefault();
+    try {
+      window.focus();
+      win.close();
+      if (win.closed) return;
+    } catch {
+      /* Closing may be unavailable in an installed web app. */
+    }
+    // document.open() can inherit the original URL. A link to that exact URL
+    // then leaves the temporary print DOM in place; reload fetches the app.
+    const current = new URL(win.location.href, returnUrl);
+    const target = new URL(returnUrl);
+    const reloadRequired =
+      current.origin === target.origin &&
+      current.pathname === target.pathname &&
+      current.search === target.search;
+    win.location.replace(returnUrl);
+    if (reloadRequired) win.location.reload();
+  });
+  const print = doc.createElement("button");
+  print.type = "button";
+  print.className = "print-action";
+  print.textContent = locale === "fi" ? "Tulosta / PDF" : "Print / PDF";
+  print.disabled = true;
+  print.addEventListener("click", () => win.print());
+  toolbar.append(back, print);
+  doc.body.append(toolbar);
   const brand = doc.createElement("p");
   brand.className = "brand";
   brand.textContent = "PHASEKIT / " + (locale === "fi" ? "Raportti" : "Report");
@@ -75,7 +122,7 @@ function createPrintDocument(win: Window, title: string, locale: Locale) {
   return doc;
 }
 
-function appendPrintFooter(
+export function appendPrintFooter(
   doc: Document,
   locale: Locale,
   details: string[] = [],
@@ -960,14 +1007,16 @@ function appendSourceList(
   parent.append(list);
 }
 
-function printWhenReady(
+export function printWhenReady(
   win: Window,
   doc: Document,
   locale: Locale,
   image?: HTMLImageElement,
 ) {
+  const action = doc.querySelector<HTMLButtonElement>(".print-action");
+  if (!action) return;
   if (!image) {
-    win.requestAnimationFrame(() => win.print());
+    action.disabled = false;
     return;
   }
   const failed = () => {
@@ -981,13 +1030,11 @@ function printWhenReady(
     image.replaceWith(warning);
     win.focus();
   };
-  const print = () =>
-    image.naturalWidth > 0
-      ? win.requestAnimationFrame(() => win.print())
-      : failed();
-  if (image.complete) print();
+  const ready = () =>
+    image.naturalWidth > 0 ? (action.disabled = false) : failed();
+  if (image.complete) ready();
   else {
-    image.onload = print;
+    image.onload = ready;
     image.onerror = failed;
   }
 }
@@ -1245,7 +1292,7 @@ export function printCheckResult({
   appendPrintFooter(doc, locale, [], closing);
   doc.body.append(closing);
   win.focus();
-  win.requestAnimationFrame(() => win.print());
+  printWhenReady(win, doc, locale);
   return true;
 }
 

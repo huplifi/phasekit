@@ -6,7 +6,11 @@ import {
   type PHCycleResult,
 } from "../../../../packages/core/src/ph";
 import { PHDiagramPanel, phErrorText } from "./PHCalculator";
-import { createCycleChartSnapshot } from "../ph-chart-snapshot";
+import {
+  createCycleChartSnapshot,
+  DEFAULT_PH_CHART_VIEW,
+  type PHChartView,
+} from "../ph-chart-snapshot";
 import { ArrowLeftRight } from "lucide-react";
 import { CO2eBreakdown } from "../components/CO2eBreakdown";
 import { InfoHelp } from "../components/InfoHelp";
@@ -149,6 +153,9 @@ export function Calculator({
   const [atmosphere, setAtmosphere] = useState("1.01325");
   const [gwpKey, setGwpKey] = useState(() => defaultGwpKey(initial));
   const [cycle, setCycle] = useState<PHCycleResult | null>(null);
+  const [chartView, setChartView] = useState<PHChartView>(
+    DEFAULT_PH_CHART_VIEW,
+  );
   const [diagramMessage, setDiagramMessage] = useState("");
   const [output, setOutput] = useState<Output[] | null>(null);
   const [error, setError] = useState("");
@@ -170,6 +177,7 @@ export function Calculator({
   function changed() {
     setOutput(null);
     setCycle(null);
+    setChartView((previous) => ({ ...previous, fitCycle: false }));
     setDiagramMessage("");
     setError("");
     setUnitError(false);
@@ -572,7 +580,13 @@ export function Calculator({
       dataVersion: dataset.version,
       sources: dataset.sources.filter((source) => sourceIds.has(source.id)),
       ...(cycle && getPHDiagram(id)
-        ? { chartSnapshot: createCycleChartSnapshot(getPHDiagram(id)!, cycle) }
+        ? {
+            chartSnapshot: createCycleChartSnapshot(
+              getPHDiagram(id)!,
+              cycle,
+              chartView,
+            ),
+          }
         : {}),
     };
   }
@@ -992,10 +1006,15 @@ export function Calculator({
           result={cycle}
           message={diagramMessage}
           fi={fi}
+          view={chartView}
+          onViewChange={setChartView}
         />
       )}
       {tool === "shsc" && report && (
-        <ReportSave key={JSON.stringify(report)} content={report} />
+        <ReportSave
+          key={JSON.stringify({ ...report, chartSnapshot: undefined })}
+          content={report}
+        />
       )}
       {r &&
         tool === "shsc" &&

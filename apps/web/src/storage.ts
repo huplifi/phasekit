@@ -237,6 +237,35 @@ const chartSnapshot = z.object({
     z.tuple([chartPressure, chartEnthalpy]),
     z.tuple([chartPressure, chartEnthalpy]),
   ]),
+  view: z
+    .object({
+      fitCycle: z.boolean(),
+      visibleKinds: z.object({
+        temperature: z.boolean(),
+        entropy: z.boolean(),
+        volume: z.boolean(),
+      }),
+    })
+    .optional(),
+  isolines: z
+    .array(
+      z.object({
+        kind: z.enum(["temperature", "entropy", "volume"]),
+        phase: z.enum(["liquid", "vapour"]),
+        level: z.number().finite().min(-100000).max(100000),
+        segments: z
+          .array(
+            z
+              .array(z.tuple([chartPressure, chartEnthalpy]))
+              .min(2)
+              .max(250),
+          )
+          .max(10),
+      }),
+    )
+    .max(30)
+    .optional(),
+  isolineDataVersion: z.string().min(1).max(200).optional(),
 });
 const boundedId = z.string().min(1).max(100);
 const toolRecord = z.object({

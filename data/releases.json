@@ -1,5 +1,28 @@
 [
   {
+    "version": "0.2.0-beta.6",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Tulostuksen paluu, kaaviot ja vertailut",
+      "en": "Print navigation, charts and comparisons"
+    },
+    "changes": {
+      "fi": [
+        "Tulostusnäkymässä on oma paluulinkki ja Tulosta / PDF -painike. Toiminnot eivät näy paperilla.",
+        "Kylmäkierron tulosteessa on tarkempi ruudukko sekä valitut lämpötila-, entropia- ja ominaistilavuuskäyrät. Näkymävalinnat säilyvät uuden tallennetun laskelman mukana.",
+        "Kylmäainevertailun voi tulostaa. Vertailussa näkyvät myös aineistoon perustuvat öljytyypit ja niiden rajaukset.",
+        "Raporttilistan riveillä on yhtenäinen asettelu, tyyppitunnisteet ja erilliset luonnos- ja viimeistelty-tilat."
+      ],
+      "en": [
+        "Print previews have a back link and a manual Print / PDF button. Controls stay off paper.",
+        "Cycle printouts include a finer grid and the selected temperature, entropy and specific-volume guides. New saved calculations retain their chart view.",
+        "Refrigerant comparisons can be printed and now include sourced oil types and their limitations.",
+        "Report list rows share a consistent layout, type tags and separate draft/final status labels."
+      ]
+    }
+  },
+  {
     "version": "0.2.0-beta.5",
     "date": "2026-09-26",
     "channel": "beta",

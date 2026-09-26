@@ -1,14 +1,10 @@
-import {
-  Download,
-  ImageDown,
-  Printer,
-  Trash2,
-  Plus,
-  ChevronRight,
-} from "lucide-react";
+import { Download, ImageDown, Printer, Trash2, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useApp } from "../context";
-import { checklistDefinitions } from "../../../../packages/core/src/field-tools";
+import {
+  checklistDefinitions,
+  type ChecklistKind,
+} from "../../../../packages/core/src/field-tools";
 import { formatDate } from "../../../../packages/i18n/src";
 import { CheckResultView } from "./Check";
 import { downloadJSON } from "../storage";
@@ -31,6 +27,24 @@ import "./reports.css";
 
 const l = (locale: "fi" | "en", fi: string, en: string) =>
   locale === "fi" ? fi : en;
+
+const fieldKindLabels: Record<ChecklistKind, { fi: string; en: string }> = {
+  tightness: { fi: "Paine- ja tiiviyskoe", en: "Pressure and tightness" },
+  evacuation: { fi: "Tyhjiöinti", en: "Evacuation" },
+  commissioning: { fi: "Käyttöönotto", en: "Commissioning" },
+  service: { fi: "Huolto", en: "Service" },
+  refrigerant: { fi: "Kylmäainekirjaus", en: "Refrigerant handling" },
+};
+
+const toolKindLabels: Record<ToolRecord["tool"], { fi: string; en: string }> = {
+  cycle: { fi: "Kylmäkierto", en: "Refrigeration cycle" },
+  pt: { fi: "Paine–lämpötila", en: "Pressure–temperature" },
+  co2e: { fi: "CO₂e", en: "CO₂e" },
+  convert: { fi: "Yksikkömuunnos", en: "Unit conversion" },
+  "thermal-power": { fi: "Lämpöteho", en: "Thermal power" },
+  electrical: { fi: "Sähkölaskuri", en: "Electrical calculation" },
+  pipe: { fi: "Putkilaskelma", en: "Pipe calculation" },
+};
 
 export function Saved() {
   const { t, data, setData, go, notify } = useApp();
@@ -235,17 +249,23 @@ export function Saved() {
                   go(`/checklists/${encodeURIComponent(record.id)}`)
                 }
               >
-                <span>
+                <span className="report-row-content">
+                  <span className="report-row-tags">
+                    <span className="report-kind">
+                      {fieldKindLabels[record.kind][data.locale]}
+                    </span>
+                    <span className="report-status">
+                      {record.status === "final"
+                        ? l(data.locale, "Viimeistelty", "Finalised")
+                        : l(data.locale, "Luonnos", "Draft")}
+                    </span>
+                  </span>
                   <strong className="report-summary">
-                    {checklistDefinitions[record.kind].name[data.locale]} ·{" "}
                     {record.title ||
                       l(data.locale, "Nimetön kohde", "Untitled site")}
                   </strong>
                   <span className="secondary">
-                    {record.status === "final"
-                      ? l(data.locale, "Viimeistelty", "Finalised")
-                      : l(data.locale, "Luonnos", "Draft")}{" "}
-                    · {formatDate(record.updatedAt, data.locale)}
+                    {formatDate(record.updatedAt, data.locale)}
                     {record.fields.equipment
                       ? ` · ${record.fields.equipment}`
                       : ""}{" "}
@@ -253,7 +273,6 @@ export function Saved() {
                     {record.revision ?? 1}
                   </span>
                 </span>
-                <ChevronRight size={20} aria-hidden="true" />
               </button>
             );
           }
@@ -273,15 +292,18 @@ export function Saved() {
           return (
             <details className="saved-entry" key={s.id}>
               <summary>
-                <span>
+                <span className="report-row-content">
+                  <span className="report-row-tags">
+                    <span className="report-kind">
+                      {l(
+                        data.locale,
+                        "Vuototarkastusarvio",
+                        "Leak-check assessment",
+                      )}
+                    </span>
+                  </span>
                   <strong className="report-summary">
                     {s.refrigerant.designation} ·{" "}
-                    {l(
-                      data.locale,
-                      "Vuototarkastusarvio",
-                      "Leak-check assessment",
-                    )}{" "}
-                    ·{" "}
                     {s.result.months !== null
                       ? t("months", { count: s.result.months })
                       : t(s.result.state)}
@@ -384,7 +406,12 @@ function ToolReport({
       open={selected || undefined}
     >
       <summary>
-        <span>
+        <span className="report-row-content">
+          <span className="report-row-tags">
+            <span className="report-kind">
+              {toolKindLabels[record.tool][data.locale]}
+            </span>
+          </span>
           <strong className="report-summary">
             {reportSummary(record, data.locale)}
           </strong>

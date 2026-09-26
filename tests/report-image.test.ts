@@ -5,6 +5,7 @@ import {
   REPORT_IMAGE_MAX_HEIGHT,
 } from "../apps/web/src/report-image";
 import type { ToolRecord } from "../apps/web/src/storage";
+import { renderCycleChartSvg } from "../apps/web/src/ph-chart-snapshot";
 
 const record: ToolRecord = {
   id: "report-1",
@@ -111,9 +112,56 @@ describe("saved report image plan", () => {
     };
     const plan = planReportImage(withChart, "en", measure);
     expect(plan.chartTop).toBeGreaterThan(0);
+    expect(plan.chartHeight).toBe(616);
     expect(plan.height).toBeGreaterThan(plan.chartTop! + 616);
     expect(plan.lines.map((line) => line.text).join(" ")).toContain(
       "Straight lines show cycle order",
     );
+
+    const guides: ToolRecord = {
+      ...withChart,
+      chartSnapshot: {
+        ...withChart.chartSnapshot!,
+        view: {
+          fitCycle: true,
+          visibleKinds: { temperature: true, entropy: true, volume: true },
+        },
+        isolineDataVersion: "guides-1",
+        isolines: (["temperature", "entropy", "volume"] as const).flatMap(
+          (kind) =>
+            Array.from({ length: 12 }, (_, index) => ({
+              kind,
+              phase: "vapour" as const,
+              level: 1.23456 + index * 0.87654,
+              segments: [
+                [
+                  [2, 210],
+                  [9, 240],
+                ] as [number, number][],
+              ],
+            })),
+        ),
+      },
+    };
+    for (const locale of ["fi", "en"] as const) {
+      const guidedPlan = planReportImage(guides, locale, measure);
+      const svg = renderCycleChartSvg(guides.chartSnapshot!, locale);
+      const [, naturalWidth, naturalHeight] = svg.match(
+        /viewBox="0 0 (\d+) (\d+)"/,
+      )!;
+      expect(guidedPlan.chartHeight).toBeCloseTo(
+        (1056 * Number(naturalHeight)) / Number(naturalWidth),
+      );
+      expect(guidedPlan.chartHeight).toBeGreaterThan(616);
+      const followingText = guidedPlan.lines.find(
+        (line) => line.y > guidedPlan.chartTop!,
+      );
+      expect(followingText!.y - followingText!.size).toBeGreaterThan(
+        guidedPlan.chartTop! + guidedPlan.chartHeight!,
+      );
+      expect(guidedPlan.height).toBeGreaterThan(
+        guidedPlan.chartTop! + guidedPlan.chartHeight!,
+      );
+    }
   });
 });

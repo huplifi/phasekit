@@ -1,5 +1,5 @@
 import type { ToolRecord } from "./storage";
-import { renderCycleChartSvg } from "./ph-chart-snapshot";
+import { cycleChartDimensions, renderCycleChartSvg } from "./ph-chart-snapshot";
 import { formatDate } from "../../../packages/i18n/src";
 import { isCalendarDate } from "../../../packages/core/src/schedule";
 import {
@@ -108,10 +108,13 @@ export function planReportImage(
   rows(label("Tulokset", "Results"), record.outputs, true);
   rows(label("Lähtötiedot", "Inputs"), record.inputs);
   let chartTop: number | undefined;
+  let chartHeight: number | undefined;
   if (record.chartSnapshot) {
     heading(label("Kylmäkierron kaavio", "Cycle diagram"));
     chartTop = y + 20;
-    y += 641;
+    const natural = cycleChartDimensions(record.chartSnapshot, locale);
+    chartHeight = ((RIGHT - LEFT) / natural.width) * natural.height;
+    y += chartHeight + 25;
     add(
       label(
         "Rajattu CoolProp HEOS -malli. Suorat viivat kuvaavat kierron järjestystä, eivät prosessireittiä.",
@@ -183,6 +186,7 @@ export function planReportImage(
   return {
     lines,
     chartTop,
+    chartHeight,
     height,
     tooLarge: height > REPORT_IMAGE_MAX_HEIGHT,
   };
@@ -246,7 +250,11 @@ export async function downloadToolRecordImage(
       context.fillStyle = line.color;
       context.fillText(line.text, line.x, line.y);
     }
-    if (record.chartSnapshot && plan.chartTop !== undefined) {
+    if (
+      record.chartSnapshot &&
+      plan.chartTop !== undefined &&
+      plan.chartHeight !== undefined
+    ) {
       const chart = new Image();
       const loaded = new Promise<void>((resolve, reject) => {
         chart.onload = () => resolve();
@@ -254,7 +262,13 @@ export async function downloadToolRecordImage(
       });
       chart.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderCycleChartSvg(record.chartSnapshot, locale))}`;
       await loaded;
-      context.drawImage(chart, LEFT, plan.chartTop, RIGHT - LEFT, 616);
+      context.drawImage(
+        chart,
+        LEFT,
+        plan.chartTop,
+        RIGHT - LEFT,
+        plan.chartHeight,
+      );
     }
     const blob = await new Promise<Blob | null>((resolve) =>
       canvas.toBlob(resolve, "image/png"),

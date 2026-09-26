@@ -4,6 +4,15 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.2.0-beta.6 — 2026-09-26 · Beta
+
+Print navigation, charts and comparisons
+
+- Print previews have a back link and a manual Print / PDF button. Controls stay off paper.
+- Cycle printouts include a finer grid and the selected temperature, entropy and specific-volume guides. New saved calculations retain their chart view.
+- Refrigerant comparisons can be printed and now include sourced oil types and their limitations.
+- Report list rows share a consistent layout, type tags and separate draft/final status labels.
+
 ## 0.2.0-beta.5 — 2026-09-26 · Beta
 
 Clearer reports and installation-document preparation

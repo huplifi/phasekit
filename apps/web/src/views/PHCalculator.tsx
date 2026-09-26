@@ -1,4 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import {
   getPHDiagram,
   PHPhaseBoundaryError,
@@ -7,7 +7,7 @@ import {
   type PHIsoline,
 } from "../../../../packages/core/src/ph";
 import { SourceNote } from "../components/Common";
-import { cycleChartBounds } from "../ph-chart-snapshot";
+import { cycleChartBounds, type PHChartView } from "../ph-chart-snapshot";
 import "./ph-calculator.css";
 const pointLabels = ["1", "2", "3", "4"] as const;
 
@@ -549,28 +549,22 @@ export function PHDiagramPanel({
   result,
   message,
   fi,
+  view,
+  onViewChange,
 }: {
   id: string;
   result: PHCycleResult | null;
   message: string;
   fi: boolean;
+  view: PHChartView;
+  onViewChange: (view: PHChartView) => void;
 }) {
-  const [fitCycle, setFitCycle] = useState(false);
+  const { fitCycle, visibleKinds } = view;
   const chartId = useId();
   const [selectedGuide, setSelectedGuide] = useState<{
     diagramId: string;
     index: number;
   } | null>(null);
-  useEffect(() => {
-    if (!result) setFitCycle(false);
-  }, [result]);
-  const [visibleKinds, setVisibleKinds] = useState<
-    Record<PHIsoline["kind"], boolean>
-  >({
-    temperature: true,
-    entropy: false,
-    volume: false,
-  });
   const diagram = id ? getPHDiagram(id) : null;
   const selectedLine =
     diagram && selectedGuide?.diagramId === id
@@ -656,7 +650,9 @@ export function PHDiagramPanel({
                 checked={fitCycle && !!result}
                 disabled={!result}
                 aria-describedby={!result ? "ph-fit-unavailable" : undefined}
-                onChange={(event) => setFitCycle(event.target.checked)}
+                onChange={(event) =>
+                  onViewChange({ ...view, fitCycle: event.target.checked })
+                }
               />
               <span>{l("Sovita kiertoon", "Fit to cycle")}</span>
             </label>
@@ -697,10 +693,13 @@ export function PHDiagramPanel({
                     aria-pressed={visibleKinds[kind] && available}
                     disabled={!available}
                     onClick={() =>
-                      setVisibleKinds((previous) => ({
-                        ...previous,
-                        [kind]: !previous[kind],
-                      }))
+                      onViewChange({
+                        ...view,
+                        visibleKinds: {
+                          ...visibleKinds,
+                          [kind]: !visibleKinds[kind],
+                        },
+                      })
                     }
                   >
                     <span
