@@ -27,11 +27,12 @@ Once the CNAME resolves, use [the beta domain panel](https://app.netlify.com/pro
 ## Development and release
 
 1. Create a feature branch from the current `beta`; submit a PR targeting `beta`.
-2. Run the repository checks and inspect the PR's isolated Deploy Preview on desktop and phone. Check local-data behaviour as well as calculations.
-3. Merge reviewed work into `beta`. That updates the public beta automatically. The stable site does not change.
-4. For release, open a PR from `beta` into `main`, review the aggregate changes and source/model versions, and obtain the owner's explicit stable-release decision.
-5. Set the root `package.json` version to the intended stable version (remove the prerelease suffix), verify the channel in Settings and rerun checks. The root version is the single source for the displayed application version; the build revision comes from Netlify `COMMIT_REF`. Merge only after checks pass. The existing stable Netlify project deploys `main` automatically.
-6. Record the stable Git commit/deploy URL. Verify the actual stable site and retain the previous published deploy as the rollback target.
+2. Update the root `package.json` version and add matching Finnish and English notes at the top of `data/releases.json`. Record the version date, channel and user-visible changes; run `pnpm release:build` and commit the generated `CHANGELOG.md`. The bundled Settings → Release history view uses those same entries. The build rejects missing translations, duplicate versions, invalid dates and channel/version mismatches. Update README and run `pnpm data:coverage` when data coverage changes.
+3. Run the repository checks and inspect the PR's isolated Deploy Preview on desktop and phone. Check local-data behaviour as well as calculations.
+4. Merge reviewed work into `beta`. That updates the public beta automatically. The stable site does not change.
+5. For release, open a PR from `beta` into `main`, review the aggregate changes and source/model versions, and obtain the owner's explicit stable-release decision.
+6. Set the root `package.json` version to the intended stable version (remove the prerelease suffix), add its matching stable history entry, verify the channel in Settings and rerun checks. The root version is the single source for the displayed application version; the build revision comes from Netlify `COMMIT_REF`. Merge only after checks pass. The existing stable Netlify project deploys `main` automatically.
+7. Record the stable Git commit/deploy URL. Verify the actual stable site and retain the previous published deploy as the rollback target.
 
 Do not force-push shared branches, auto-merge beta into main, or use a production deployment command on the stable project for testing. GitHub branch protection can additionally enforce the `verify` check, but no protection rule is claimed configured by this document.
 

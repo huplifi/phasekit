@@ -2,17 +2,19 @@
 
 A source-attributed refrigerant reference and calculation app for refrigeration work. Built with React, strict TypeScript and Vite, with local IndexedDB storage and an installable offline PWA. The interface supports Finnish and English; project documentation is maintained in English.
 
+The stable `main` release remains **0.1.0**. The separate public beta contains the expanded field tools, refrigeration cycle and P–h chart, saved reports, and equipment-linked history. Beta features and data are isolated from stable production until an explicitly authorised release.
+
 - **249 refrigerant records**, including legacy, ODS, natural and newer blends. Coverage is explicit: this is not a complete inventory of every refrigerant or property.
 - Bidirectional pressure–temperature conversion for **124 refrigerants**.
-- A combined refrigeration-cycle tool: LP/HP, suction, hot gas and liquid temperatures; superheat, subcooling and a log(p)–h diagram for **113 supported refrigerants**.
+- A combined refrigeration-cycle tool: LP/HP, suction, hot gas and liquid temperatures; superheat, subcooling and a log(p)–h diagram for **113 supported refrigerants**. Saved reports retain a frozen chart and can be exported as PNG.
 - kg ↔ t CO₂e conversion using a visible, source-backed GWP basis and source-gated component breakdown.
 - EU/Finland periodic leak-check assessment, contextual restrictions and effective dates, completed-inspection-based next due date and shareable explanation.
 - Search with regulation/model/oil filters, favourites and comparison.
-- General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity and local work checklists.
-- Frozen calculation reports, equipment/site-linked history, JSON backup/restore and browser print-to-PDF.
+- General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity, material thermal expansion, bounded single-phase straight-pipe pressure loss and local work checklists.
+- Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and browser print-to-PDF.
 - Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
 
-[Public beta](https://beta.phasekit.app) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-IMPLEMENTATION.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
+[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://beta.phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-UX-ROUND-TWO.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
 ## Development
 

@@ -1,3 +1,4 @@
+import packageInfo from "../../package.json" with { type: "json" };
 import { test, expect } from "@playwright/test";
 
 test("checklist editing keeps scroll and focus stable during automatic saves", async ({
@@ -93,7 +94,9 @@ test("checklist control pairs and footer actions align", async ({
 
 test("beta version and shared choices expose their state", async ({ page }) => {
   await page.goto("/#/settings");
-  await expect(page.locator(".about-details")).toContainText("0.2.0-beta.1");
+  await expect(page.locator(".about-details")).toContainText(
+    packageInfo.version,
+  );
   await expect(page.locator(".about-details")).toContainText("Beta");
   await page.goto("/#/pipe");
   const group = page.getByRole("group", { name: "Putkilaskurin tila" });

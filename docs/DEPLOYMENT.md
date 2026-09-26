@@ -4,7 +4,7 @@
 
 As of 26 September 2026, the development repository is [huplifi/phasekit](https://github.com/huplifi/phasekit) and the intended public domain is `phasekit.app`. GitHub and Netlify replace the previous ChatGPT Sites workflow. The [previous deployment history](SITES-HISTORY.md) is retained as evidence, not as the current release procedure.
 
-`netlify.toml` runs `pnpm build` at the repository root and publishes `apps/web/dist`. `.nvmrc` and the build environment pin Node.js 24; `package.json` pins pnpm 11.19.0. Installation uses the committed lockfile. The production build validates and generates the local dataset, generates tokens, checks TypeScript and builds the PWA. No runtime secrets are required.
+`netlify.toml` runs `pnpm build` at the repository root and publishes `apps/web/dist`. `.nvmrc` and the build environment pin Node.js 24; `package.json` pins pnpm 11.19.0. Installation uses the committed lockfile. The production build validates and generates the local dataset and release history, generates tokens, checks TypeScript and builds the PWA. No runtime secrets are required.
 
 The configuration follows Netlify's [Vite guide](https://docs.netlify.com/build/frameworks/framework-setup-guides/vite/) and [dependency management documentation](https://docs.netlify.com/build/configure-builds/manage-dependencies/).
 

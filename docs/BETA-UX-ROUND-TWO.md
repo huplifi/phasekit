@@ -1,6 +1,6 @@
 # Beta UX round two — 26 September 2026
 
-Status: implemented; final beta deployment verification pending. Authorised by the owner after collecting the second beta feedback batch. Publish only to the separate beta project; the stable main release stays unchanged.
+Status: implemented and published to the separate beta as commit `50242f8` (PR #3). At that release, stable `main` was `0.1.0` and the beta application version was `0.2.0-beta.1`.
 
 ## Implementation plan and ownership
 
@@ -32,8 +32,8 @@ Status: implemented; final beta deployment verification pending. Authorised by t
 ## Integrated verification
 
 - Data validation: 249 refrigerants and 50 sources; dataset `2026-09-26.fffbb55a5c7e`.
-- TypeScript, ESLint, unit tests (22 files / 212 tests), production build and `git diff --check` passed.
-- Complete Playwright suite passed: 198 cases across desktop/mobile Chromium and WebKit, including existing offline, language/theme and axe accessibility checks. Targeted reruns cover subsequent report layout and current-device summary refinements.
+- TypeScript, ESLint, 212 unit tests (22 files), production build and `git diff --check` passed.
+- Complete Playwright suite passed: 202 cases across desktop/mobile Chromium and WebKit, including offline, language/theme and axe accessibility checks. Targeted reruns cover subsequent report layout and current-device summary refinements.
 - New regressions cover stable typing/scroll/focus and failed-storage truthfulness, constant picker bounds, aligned controls, exclusive keyboard choices, cycle centring and independent guide curves, frozen chart JSON/reload/print, and current versus original equipment identity.
 - Manually inspected desktop light/mobile dark output and generated a real A4 PDF. Important cycle metrics and the vector chart are now grouped before detailed state values; the chart and its heading stay together. PNG export uses the same aspect ratio.
 - Local visual evidence is in `output/beta-round-two/` (ignored generated review artifacts). This is browser emulation, not a claim of a physical iPhone keyboard, printer or assistive-technology run.

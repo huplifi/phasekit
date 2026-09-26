@@ -1234,3 +1234,34 @@ label textarea,
 .secondary-button {
   line-height: 1.4;
 }
+
+.release-installed {
+  margin-block: 24px 12px;
+  overflow-wrap: anywhere;
+}
+.release-history {
+  margin-top: 32px;
+}
+.release-entry {
+  padding-block: 24px 32px;
+  border-top: 1px solid var(--divider);
+}
+.release-entry header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.release-entry h2 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.release-current {
+  font-weight: 700;
+}
+.release-entry ul {
+  padding-inline-start: 24px;
+}
+.release-entry li + li {
+  margin-top: 12px;
+}
