@@ -198,3 +198,43 @@ test("CO2e quantity and calculation fit initially with contextual help", async (
     fullPage: true,
   });
 });
+
+test("all report date controls fit their labelled container on narrow screens", async ({
+  page,
+}) => {
+  await page.goto("/#/checklists/new");
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
+  const date = page.getByLabel("Suorituspäivä", { exact: true });
+  for (const width of [320, 390, 430]) {
+    await page.setViewportSize({ width, height: 844 });
+    await date.fill("2026-09-26");
+    await expect(date).toHaveValue("2026-09-26");
+    const rect = (await date.boundingBox())!;
+    const parent = (await date.locator("..").boundingBox())!;
+    expect(rect.x + rect.width).toBeLessThanOrEqual(
+      parent.x + parent.width + 1,
+    );
+    expect(await date.evaluate((el) => getComputedStyle(el).appearance)).toBe(
+      "none",
+    );
+    await noOverflow(page);
+  }
+});
+
+test("equipment empty state keeps inset space and report guidance is subordinate", async ({
+  page,
+}) => {
+  await page.goto("/#/equipment");
+  const card = page.locator(".equipment-empty");
+  const cardBox = (await card.boundingBox())!;
+  const heading = (await card.locator("h2").boundingBox())!;
+  expect(heading.x - cardBox.x).toBeGreaterThanOrEqual(20);
+  await page.goto("/#/reports");
+  const actions = (await page.locator(".reports-actions").boundingBox())!;
+  const guidance = page.locator(".reports-header > .supporting-copy");
+  const box = (await guidance.boundingBox())!;
+  expect(box.y - actions.y - actions.height).toBeGreaterThanOrEqual(12);
+  expect(
+    await guidance.evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
+  ).toBeLessThanOrEqual(14);
+});

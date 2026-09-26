@@ -74,9 +74,26 @@ export function Saved() {
       (filter === "all" || filter === "check") &&
       matches(
         record.refrigerant.designation,
-        l(data.locale, "Vuototarkastus", "Leak check"),
+        l(data.locale, "Vuototarkastusarvio", "Leak-check assessment"),
       ),
   );
+  const entries = [
+    ...fieldReports.map((record) => ({
+      type: "field" as const,
+      record,
+      date: record.updatedAt,
+    })),
+    ...toolReports.map((record) => ({
+      type: "tool" as const,
+      record,
+      date: record.createdAt,
+    })),
+    ...snapshots.map((record) => ({
+      type: "check" as const,
+      record,
+      date: record.createdAt,
+    })),
+  ].sort((a, b) => b.date.localeCompare(a.date));
   const selectedId = selectedSavedReportId(window.location.hash);
   useEffect(() => {
     if (selectedId)
@@ -120,27 +137,29 @@ export function Saved() {
   };
   return (
     <>
-      <div className="saved-heading-actions">
+      <header className="reports-header">
         <h1>{l(data.locale, "Raportit", "Reports")}</h1>
-        <button
-          className="secondary-button"
-          type="button"
-          onClick={() => go("/equipment")}
-        >
-          {l(data.locale, "Hallitse laitteita", "Manage equipment")}
-        </button>
-      </div>
-      <p className="secondary">
-        {l(
-          data.locale,
-          "Työmaakirjaukset ja tallennetut laskelmat tässä selaimessa. Luonnokset tallentuvat automaattisesti.",
-          "Field records and saved calculations in this browser. Drafts save automatically.",
-        )}
-      </p>
-      <button className="primary" onClick={() => go("/checklists/new")}>
-        <Plus size={18} />
-        {l(data.locale, "Uusi raportti", "New report")}
-      </button>
+        <div className="reports-actions">
+          <button className="primary" onClick={() => go("/checklists/new")}>
+            <Plus size={18} />
+            {l(data.locale, "Uusi raportti", "New report")}
+          </button>
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={() => go("/equipment")}
+          >
+            {l(data.locale, "Hallitse laitteita", "Manage equipment")}
+          </button>
+        </div>
+        <p className="supporting-copy">
+          {l(
+            data.locale,
+            "Raportit ja laskelmat tallentuvat tähän selaimeen. Varmuuskopio löytyy asetuksista.",
+            "Reports and calculations are stored in this browser. Backup is available in Settings.",
+          )}
+        </p>
+      </header>
       <div className="report-filters">
         <label>
           {l(
@@ -166,7 +185,7 @@ export function Saved() {
               ["final", "Viimeistellyt", "Finalised"],
               ["field", "Työmaaraportit", "Field reports"],
               ["calculation", "Laskelmat", "Calculations"],
-              ["check", "Vuototarkastukset", "Leak checks"],
+              ["check", "Vuototarkastusarviot", "Leak-check assessments"],
               ...Object.entries(checklistDefinitions).map(
                 ([key, definition]) => [
                   key,
@@ -182,83 +201,87 @@ export function Saved() {
           </select>
         </label>
       </div>
-      {fieldReports.length > 0 && (
-        <section
-          className="report-list"
-          aria-label={l(data.locale, "Työmaaraportit", "Field reports")}
-        >
-          <h2>{l(data.locale, "Työmaaraportit", "Field reports")}</h2>
-          {fieldReports.map((record) => (
-            <button
-              key={record.id}
-              className="field-report-link"
-              onClick={() => go(`/checklists/${encodeURIComponent(record.id)}`)}
-            >
-              <span>
-                <strong className="report-summary">
-                  {checklistDefinitions[record.kind].name[data.locale]} ·{" "}
-                  {record.title ||
-                    l(data.locale, "Nimetön kohde", "Untitled site")}
-                </strong>
-                <span className="secondary">
-                  {record.status === "final"
-                    ? l(data.locale, "Viimeistelty", "Finalised")
-                    : l(data.locale, "Luonnos", "Draft")}{" "}
-                  · {formatDate(record.updatedAt, data.locale)}
-                  {record.fields.equipment
-                    ? ` · ${record.fields.equipment}`
-                    : ""}{" "}
-                  · {l(data.locale, "Versio", "Revision")}{" "}
-                  {record.revision ?? 1}
+      <section
+        className="report-list report-timeline"
+        aria-label={l(
+          data.locale,
+          "Raportit ja laskelmat",
+          "Reports and calculations",
+        )}
+      >
+        <div className="report-list-heading">
+          <h2>{l(data.locale, "Tallennetut", "Saved items")}</h2>
+          <span className="caption secondary">
+            {l(data.locale, "Uusin ensin", "Newest first")} · {entries.length}
+          </span>
+        </div>
+        {entries.length === 0 && (
+          <p className="empty">
+            {l(
+              data.locale,
+              "Ei raportteja näillä valinnoilla. Luo uusi raportti tai muuta hakua.",
+              "No reports match. Create a report or change your search.",
+            )}
+          </p>
+        )}
+        {entries.map((entry) => {
+          if (entry.type === "field") {
+            const record = entry.record;
+            return (
+              <button
+                key={record.id}
+                className="field-report-link"
+                onClick={() =>
+                  go(`/checklists/${encodeURIComponent(record.id)}`)
+                }
+              >
+                <span>
+                  <strong className="report-summary">
+                    {checklistDefinitions[record.kind].name[data.locale]} ·{" "}
+                    {record.title ||
+                      l(data.locale, "Nimetön kohde", "Untitled site")}
+                  </strong>
+                  <span className="secondary">
+                    {record.status === "final"
+                      ? l(data.locale, "Viimeistelty", "Finalised")
+                      : l(data.locale, "Luonnos", "Draft")}{" "}
+                    · {formatDate(record.updatedAt, data.locale)}
+                    {record.fields.equipment
+                      ? ` · ${record.fields.equipment}`
+                      : ""}{" "}
+                    · {l(data.locale, "Versio", "Revision")}{" "}
+                    {record.revision ?? 1}
+                  </span>
                 </span>
-              </span>
-              <ChevronRight size={20} aria-hidden="true" />
-            </button>
-          ))}
-        </section>
-      )}
-      {snapshots.length === 0 &&
-      toolReports.length === 0 &&
-      fieldReports.length === 0 ? (
-        <p className="empty">
-          {l(
-            data.locale,
-            "Ei raportteja näillä valinnoilla. Luo uusi raportti tai muuta hakua.",
-            "No reports match. Create a report or change your search.",
-          )}
-        </p>
-      ) : (
-        <>
-          {toolReports.length > 0 && (
-            <section
-              className="report-list"
-              aria-label={l(
-                data.locale,
-                "Tallennetut laskelmat",
-                "Saved calculations",
-              )}
-            >
-              <h2>
-                {l(data.locale, "Tallennetut laskelmat", "Saved calculations")}
-              </h2>
-              {toolReports.map((record) => (
-                <ToolReport
-                  key={record.id}
-                  record={record}
-                  onDelete={() => removeReport(record.id)}
-                  onEquipment={() => go("/equipment")}
-                  selected={record.id === selectedId}
-                />
-              ))}
-            </section>
-          )}
-          {snapshots.map((s) => (
+                <ChevronRight size={20} aria-hidden="true" />
+              </button>
+            );
+          }
+          if (entry.type === "tool") {
+            const record = entry.record;
+            return (
+              <ToolReport
+                key={record.id}
+                record={record}
+                onDelete={() => removeReport(record.id)}
+                onEquipment={() => go("/equipment")}
+                selected={record.id === selectedId}
+              />
+            );
+          }
+          const s = entry.record;
+          return (
             <details className="saved-entry" key={s.id}>
               <summary>
                 <span>
                   <strong className="report-summary">
                     {s.refrigerant.designation} ·{" "}
-                    {l(data.locale, "Vuototarkastus", "Leak check")} ·{" "}
+                    {l(
+                      data.locale,
+                      "Vuototarkastusarvio",
+                      "Leak-check assessment",
+                    )}{" "}
+                    ·{" "}
                     {s.result.months !== null
                       ? t("months", { count: s.result.months })
                       : t(s.result.state)}
@@ -326,9 +349,9 @@ export function Saved() {
                 </button>
               </div>
             </details>
-          ))}
-        </>
-      )}
+          );
+        })}
+      </section>
     </>
   );
 }

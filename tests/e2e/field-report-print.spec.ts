@@ -11,9 +11,9 @@ test("evacuation draft and final print keep measured facts, status and provenanc
   await page.getByLabel("Laite / tunniste", { exact: true }).fill("PK-17");
   await page.getByLabel("Suorituspäivä", { exact: true }).fill("2026-09-26");
   await page.getByLabel("Tekijä", { exact: true }).fill("S. Asentaja");
-  await page
-    .getByLabel("Allekirjoituksen nimenselvennys", { exact: true })
-    .fill("Samu Asentaja");
+  await expect(
+    page.getByLabel("Allekirjoituksen nimenselvennys", { exact: true }),
+  ).toHaveCount(0);
   await page
     .locator(".field-report-field")
     .filter({ hasText: "Tyhjiöpaineen yksikkö (absoluuttinen)" })
@@ -59,6 +59,11 @@ test("evacuation draft and final print keep measured facts, status and provenanc
   await expect(printedDraft.locator("body")).toContainText(
     "Allekirjoitus paperille",
   );
+  await expect(printedDraft.locator(".signature-line")).toHaveCount(2);
+  await expect(printedDraft.locator(".signature-caption")).toContainText([
+    "Allekirjoitus",
+    "Nimenselvennys",
+  ]);
   if (info.project.name === "desktop-chromium")
     await writeFile(
       info.outputPath("evacuation-draft.pdf"),
@@ -111,16 +116,49 @@ test("commissioning print keeps pressure reference, marked steps and written not
   await page.getByLabel("LP · imupaine", { exact: true }).fill("2,1");
   await page.getByLabel("HP · korkeapaine", { exact: true }).fill("12");
   await page.getByLabel("Imukaasun lämpötila · °C", { exact: true }).fill("-8");
-  await page.locator(".field-checklist-choice input").first().check();
+  await page
+    .getByRole("checkbox", {
+      name: "Kohteen käyttöönotto-ohje ja perustiedot tarkistettu",
+    })
+    .check();
   await page
     .getByRole("textbox", { name: "Muistiinpanot", exact: true })
     .fill("Toimintakoe keskeytettiin; tarkista anturi.");
+  await page
+    .locator("summary")
+    .filter({ hasText: "Tyhjiöinti ja pitokoe" })
+    .click();
+  await page
+    .getByRole("combobox", {
+      name: "Tyhjiöpaineen yksikkö (absoluuttinen)",
+      exact: true,
+    })
+    .selectOption("mbar");
+  await page.getByLabel("Saavutettu paine", { exact: true }).fill("0,25");
+  await page.getByLabel("Pitokokeen alkupaine", { exact: true }).fill("0,25");
+  await page.getByLabel("Pitokokeen loppupaine", { exact: true }).fill("0,29");
+  await page.getByLabel("Pitokokeen kesto · min", { exact: true }).fill("15");
   const popup = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Tulosta / PDF" }).click();
   const printed = await popup;
   await expect(printed.locator("h1")).toHaveText("Käyttöönottoraportti");
-  await expect(printed.locator(".field-summary")).toContainText("2,1 bar(g)");
-  await expect(printed.locator(".field-summary")).toContainText("−8 °C");
+  await expect(
+    printed.getByRole("heading", {
+      name: "Tyhjiöinnin ja pitokokeen mittaukset",
+    }),
+  ).toBeVisible();
+  await expect(printed.locator(".field-summary").nth(1)).toContainText(
+    "0,04 mbar",
+  );
+  await expect(printed.locator(".field-summary").nth(1)).toContainText(
+    "15 min",
+  );
+  await expect(printed.locator(".field-summary").first()).toContainText(
+    "2,1 bar(g)",
+  );
+  await expect(printed.locator(".field-summary").first()).toContainText(
+    "−8 °C",
+  );
   await expect(
     printed.locator(".checklist-steps .checkmark").first(),
   ).toHaveText("☑");
@@ -146,6 +184,7 @@ test("finalised commissioning print keeps the frozen cycle chart", async ({
   await page.getByLabel("Kohteen nimi", { exact: true }).fill("Kylmähuone 3");
   await page.getByLabel("Suorituspäivä", { exact: true }).fill("2026-09-26");
   await page.getByLabel("Tekijä", { exact: true }).fill("S. Asentaja");
+  await page.getByLabel("Laite / tunniste", { exact: true }).fill("SN-123");
   await page
     .getByRole("button", { name: "Valitse kylmäaine", exact: true })
     .click();
@@ -158,6 +197,7 @@ test("finalised commissioning print keeps the frozen cycle chart", async ({
       exact: true,
     })
     .click();
+  await page.getByLabel("Täyttömäärä · kg", { exact: true }).fill("2");
   await page
     .locator(".field-report-field")
     .filter({ hasText: "Paineviite" })
@@ -175,6 +215,43 @@ test("finalised commissioning print keeps the frozen cycle chart", async ({
     .locator(".field-report-cycle img")
     .getAttribute("src");
   expect(frozenSrc).toContain("data:image/svg+xml");
+  await page.getByText("Asentaja ja vastuuhenkilö", { exact: true }).click();
+  await page.getByLabel("Asennusliike", { exact: true }).fill("Test Company");
+  await page.getByLabel("Asentajan lupanumero", { exact: true }).fill("INST-1");
+  await page
+    .getByLabel("Vastuuhenkilön nimi", { exact: true })
+    .fill("Responsible person");
+  await page
+    .getByLabel("Vastuuhenkilön lupanumero", { exact: true })
+    .fill("RESP-1");
+  await page.getByText("Koepöytäkirjat ja vakuutus", { exact: true }).click();
+  await page
+    .getByLabel("Lakisääteinen vuototarkastusväli ja peruste", { exact: true })
+    .fill("Documented assessment");
+  await page
+    .getByRole("combobox", {
+      name: "Edellyttääkö painelaitesääntely painekoetta?",
+      exact: true,
+    })
+    .selectOption("no");
+  await page
+    .getByLabel("Peruste sille, ettei painekoetta edellytetä", { exact: true })
+    .fill("Documented equipment assessment");
+  await page
+    .getByLabel("Tiiviyskoepöytäkirjan viite / liite", { exact: true })
+    .fill("Annex T-1");
+  await page
+    .getByLabel("Tyhjiöintipöytäkirjan viite / liite", { exact: true })
+    .fill("Annex V-1");
+  await page
+    .getByLabel("Koekäyttöpöytäkirjan viite / liite", { exact: true })
+    .fill("Annex R-1");
+  await page
+    .getByRole("checkbox", {
+      name: "Toiminnanharjoittajan vakuutus",
+      exact: true,
+    })
+    .check();
   const finalise = page.getByRole("button", {
     name: "Merkitse raportti valmiiksi",
   });
@@ -191,6 +268,16 @@ test("finalised commissioning print keeps the frozen cycle chart", async ({
   );
   await expect(printed.locator("body")).toContainText("Tulistus");
   await expect(printed.locator("body")).toContainText("Alijäähdytys");
+  await expect(printed.locator("body")).toContainText(
+    "Vastuuhenkilön allekirjoitus",
+  );
+  await expect(printed.locator("body")).toContainText(
+    "Viitteet yksilöivät erilliset pöytäkirjat",
+  );
+  await expect(printed.locator("body")).toContainText(
+    "Vakuutan toiminnanharjoittajan edustajana",
+  );
+  await expect(printed.locator("body")).not.toContainText("confirmed");
   await expect(printed.locator("img.chart")).toHaveAttribute("src", frozenSrc!);
   if (info.project.name === "desktop-chromium")
     await writeFile(

@@ -244,44 +244,47 @@ export function CheckResultView({
         )}
       </div>
       <p className="caption">{t("noMaintenanceClaim")}</p>
-      {!snapshot && (
-        <div className="button-group check-result-actions">
-          {saveAction}
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => {
-              const opened = printCheckResult({
-                result,
-                locale: data.locale,
-                designation: designation(result.input.refrigerantId),
-                sources: dataset.sources.filter((s) =>
-                  result.sourceIds.includes(s.id),
-                ),
-                lastInspectionDate,
-                componentDesignations: Object.fromEntries(
-                  result.components.map((c) => [
-                    c.refrigerantId,
-                    designation(c.refrigerantId),
-                  ]),
-                ),
-              });
-              if (!opened)
-                notify(
-                  data.locale === "fi"
-                    ? "Salli ponnahdusikkuna tulostamista varten."
-                    : "Allow the pop-up to print this report.",
-                );
-            }}
-          >
-            <Printer aria-hidden="true" size={18} />
-            {data.locale === "fi"
-              ? "Tulosta / tallenna PDF"
-              : "Print / save PDF"}
-          </button>
-        </div>
-      )}
+
       <CheckSchedule
+        actions={
+          !snapshot && (
+            <div className="button-group check-result-actions">
+              {saveAction}
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => {
+                  const opened = printCheckResult({
+                    result,
+                    locale: data.locale,
+                    designation: designation(result.input.refrigerantId),
+                    sources: dataset.sources.filter((s) =>
+                      result.sourceIds.includes(s.id),
+                    ),
+                    lastInspectionDate,
+                    componentDesignations: Object.fromEntries(
+                      result.components.map((c) => [
+                        c.refrigerantId,
+                        designation(c.refrigerantId),
+                      ]),
+                    ),
+                  });
+                  if (!opened)
+                    notify(
+                      data.locale === "fi"
+                        ? "Salli ponnahdusikkuna tulostamista varten."
+                        : "Allow the pop-up to print this report.",
+                    );
+                }}
+              >
+                <Printer aria-hidden="true" size={18} />
+                {data.locale === "fi"
+                  ? "Tulosta / tallenna PDF"
+                  : "Print / save PDF"}
+              </button>
+            </div>
+          )
+        }
         result={result}
         completed={snapshot?.lastInspectionDate ?? lastInspectionDate}
         designation={designation(result.input.refrigerantId)}

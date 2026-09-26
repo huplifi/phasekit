@@ -29,7 +29,7 @@ test("next inspection and shareable explanation survive a saved snapshot", async
       .locator("+ dd"),
   ).toHaveText("Ei");
   await expect(printed.locator("body")).toContainText("Aineosien laskenta");
-  await expect(printed.locator("body")).toContainText("Vaaditut tiedot");
+  await expect(printed.locator("body")).not.toContainText("Vaaditut tiedot");
   await expect(printed.locator("body")).toContainText("Sääntöversio");
   await page
     .getByRole("button", { name: "Tallenna laskelma", exact: true })
@@ -55,4 +55,28 @@ test("assessment date alone never creates a completed inspection or due date", a
     "Syötä viimeksi tehdyn tarkastuksen",
   );
   await expect(page.locator(".check-schedule strong")).toHaveCount(0);
+});
+
+test("overdue status uses the assessment date and precedes report actions", async ({
+  page,
+}) => {
+  await page.goto("/#/check/r404a");
+  await page.getByLabel("Täytös", { exact: true }).fill("20");
+  await page.locator("#check-date").fill("2026-09-26");
+  await page.locator("#check-last-inspection").fill("2025-11-01");
+  await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  const card = page.locator(".check-due-card");
+  await expect(card).toHaveClass(/error/);
+  await expect(card).toContainText("Tarkastus myöhässä");
+  await expect(card).toContainText("26.9.2026");
+  await expect(card).toContainText("1.5.2026");
+  const dueBox = (await card.boundingBox())!;
+  const actions = (await page.locator(".check-result-actions").boundingBox())!;
+  expect(dueBox.y + dueBox.height).toBeLessThanOrEqual(actions.y);
+  await page.locator("#check-date").fill("2026-05-01");
+  await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  await expect(card).not.toHaveClass(/error/);
+  await expect(
+    page.getByText("Tarkastus myöhässä", { exact: true }),
+  ).toHaveCount(0);
 });

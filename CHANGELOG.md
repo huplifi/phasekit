@@ -4,6 +4,16 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.2.0-beta.5 — 2026-09-26 · Beta
+
+Clearer reports and installation-document preparation
+
+- Reports and saved calculations share one chronological catalogue with clearer search, report creation and equipment management.
+- Commissioning records now support installation-document preparation under Finnish Decree 1063/2025 §9: responsible person, licence numbers, test-report references and evacuation readings. Completing fields does not replace attachments, technical acceptance or the responsible person’s signature.
+- Printed measurements, tables and provenance are more compact. Signature and printed-name lines are completed on paper.
+- Overdue leak checks are highlighted in red against the assessment date. Copy and share actions are inside the explanation disclosure.
+- The date-input width fix now covers report forms. Equipment empty-state padding and supporting-copy spacing are corrected.
+
 ## 0.2.0-beta.4 — 2026-09-26 · Beta
 
 Field reports for everyday work

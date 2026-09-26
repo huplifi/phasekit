@@ -5,6 +5,7 @@ import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
   checklistDefinitions,
   checklistReportFields,
+  commissioningMissingFields,
   type ChecklistDraft,
   type ChecklistField,
   type ChecklistKind,
@@ -25,6 +26,7 @@ import {
 } from "../../../packages/core/src/schedule";
 import {
   formatDate,
+  formatDecimal,
   translate,
   type MessageKey,
 } from "../../../packages/i18n/src";
@@ -63,6 +65,8 @@ function createPrintDocument(win: Window, title: string, locale: Locale) {
   const style = doc.createElement("style");
   style.textContent = `${PRINT_DOCUMENT_CSS}.document-status{display:inline-block;border:1px solid #263b44;border-radius:4px;padding:4px 7px;font-weight:700;margin:3px 0 10px}.document-subhead{font-size:13px;margin:4px 0 13px}.document-footer{border-top:1px solid #9aa8ae;margin-top:19px;padding-top:8px;font-size:10px;color:#405158;break-inside:avoid}.signature-line{border-bottom:1px solid #283b42;min-height:22px;margin:14px 0 4px;max-width:290px}.field-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;break-inside:avoid}.field-summary-card{border:1px solid #829098;border-radius:6px;padding:9px 11px;break-inside:avoid}.field-summary-card dt{font-size:11px}.field-summary-card dd{font-size:19px;font-weight:700;margin:3px 0 0;overflow-wrap:anywhere}.field-summary-note{margin:6px 0;font-size:11px}`;
   style.textContent += `h2{break-after:avoid;page-break-after:avoid}.field-report-document h2{margin:14px 0 6px;padding-bottom:4px}.field-report-document p{margin-top:6px;margin-bottom:6px}.field-report-document .checklist-progress{margin:8px 0}.field-report-document .checklist-steps li{padding:4px 0}.field-report-document .document-subhead{margin:3px 0 8px}.field-report-document .document-status{margin:2px 0 7px}.field-report-document .notice{margin-top:8px;padding-top:6px}.field-report-document .document-footer{margin-top:7px;padding-top:6px}.report-closing{break-inside:avoid;page-break-inside:avoid}`;
+  style.textContent += `.field-report-document .field-summary-compact{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.field-report-document .field-summary-compact .field-summary-card{padding:7px 9px}.field-report-document .field-summary-compact .field-summary-card dd{font-size:17px}.field-report-document .meta{margin-bottom:4px}.field-report-document .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:7px 0}.field-report-document .signature-line{max-width:none;margin:9px 0 4px}.signature-caption{font-size:11px;color:#405158}.legacy-signature-name{font-size:11px;color:#405158}.source-list{list-style:none;margin:5px 0;padding:0;font-size:11px;line-height:1.25;columns:2;column-gap:18px}.source-list li{margin:0 0 4px;break-inside:avoid;overflow-wrap:anywhere}.source-meta{color:#405158;font-size:10.5px}.leak-document h2{margin:12px 0 5px}.leak-document .detail-list{gap:3px 15px}.leak-document .detail-list div{padding:3px 0}.leak-document .hero{margin:10px 0 8px}.hero-alert{font-weight:700;color:#84213b;border-top:1px solid #84213b;margin:9px 0 0;padding-top:8px}.compact-table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0 10px}.compact-table th{text-align:left;color:#405158;font-weight:650}.compact-table th,.compact-table td{padding:5px 6px;border-bottom:1px solid #d7dfe2;vertical-align:top;overflow-wrap:anywhere}.compact-table tr{break-inside:avoid;page-break-inside:avoid}.compact-table td:last-child,.compact-table th:last-child{text-align:right}.compact-table .subline{display:block;font-size:10px;color:#405158}.leak-document .source-version-line{font-size:11px;color:#405158;margin:4px 0}.leak-document .notice{margin-top:8px;padding-top:6px}.leak-document .document-footer{margin-top:6px;padding-top:6px}`;
+  style.textContent += `.commissioning-document h2{margin:9px 0 4px}.commissioning-document .field-summary-card{padding:5px 8px}.commissioning-document .field-summary-card dd{font-size:16px;margin-top:2px}.commissioning-document .checklist-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.commissioning-document .checklist-steps li{min-width:0}.commissioning-document .field-inline-note{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px solid #d7dfe2}.commissioning-document .cycle-input-line{font-size:11px;color:#405158;margin:4px 0 8px;line-height:1.35}.commissioning-document .cycle-details .row{padding:2px 0}`;
   doc.head.append(style);
   const brand = doc.createElement("p");
   brand.className = "brand";
@@ -153,6 +157,19 @@ export function leakCheckPrintSchedule(
   } catch {
     return { status: "invalid" };
   }
+}
+
+/** An overdue marker is relative to the saved assessment date, never print time. */
+export function leakCheckPrintOverdue(
+  schedule: ReturnType<typeof leakCheckPrintSchedule>,
+  asOf: string,
+): boolean {
+  return Boolean(
+    schedule.status === "dated" &&
+    schedule.due &&
+    isCalendarDate(asOf) &&
+    schedule.due < asOf,
+  );
 }
 
 export function downloadToolRecord(record: ToolRecord) {
@@ -330,6 +347,8 @@ export function printChecklistDraft(
     locale,
   );
   doc.body.classList.add("field-report-document");
+  if (draft.kind === "commissioning")
+    doc.body.classList.add("commissioning-document");
   appendText(doc.body, "h1", title);
   const state = doc.createElement("p");
   state.className = "document-status";
@@ -342,6 +361,16 @@ export function printChecklistDraft(
         ? "Luonnos / keskeneräinen"
         : "Draft / in progress";
   doc.body.append(state);
+  if (draft.kind === "commissioning") {
+    const missing = commissioningMissingFields(draft.fields);
+    const preparation = doc.createElement("p");
+    preparation.className = "meta";
+    preparation.textContent =
+      locale === "fi"
+        ? `Asennustodistuksen valmistelu · VNa 1063/2025 § 9${missing.length ? ` · ${missing.length} täydennettävää` : ""}.`
+        : `Installation-certificate preparation · Finnish Decree 1063/2025 § 9${missing.length ? ` · ${missing.length} items to complete` : ""}.`;
+    doc.body.append(preparation);
+  }
   const subhead = doc.createElement("p");
   subhead.className = "document-subhead";
   subhead.textContent =
@@ -360,24 +389,25 @@ export function printChecklistDraft(
   meta.textContent = [
     `${locale === "fi" ? "Suorituspäivä" : "Work date"}: ${performedOn ? displayDate(performedOn, locale) : "—"}`,
     `${locale === "fi" ? "Tekijä" : "Technician"}: ${technician || "—"}`,
-    `${locale === "fi" ? "Päivitetty" : "Updated"}: ${displayDate(draft.updatedAt, locale)}`,
   ].join(" · ");
   doc.body.append(meta);
-  if (report.status === "final" && report.finalizedAt)
-    appendText(
-      doc.body,
-      "p",
-      `${locale === "fi" ? "Viimeistelty" : "Finalised"}: ${displayDate(report.finalizedAt, locale)}`,
-    );
   appendFieldSummary(doc, draft, locale);
   const complete = draft.checkedIds.filter((id) =>
     definition.steps.some((step) => step.id === id),
   ).length;
-  const progress = doc.createElement("p");
-  progress.className = "checklist-progress";
-  progress.textContent = `${locale === "fi" ? "Tila" : "Status"}: ${complete} / ${definition.steps.length} ${locale === "fi" ? "työvaihetta merkitty" : "steps marked"}`;
-  doc.body.append(progress);
-  appendText(doc.body, "h2", locale === "fi" ? "Työvaiheet" : "Steps");
+  if (draft.kind === "commissioning")
+    appendText(
+      doc.body,
+      "h2",
+      `${locale === "fi" ? "Työvaiheet" : "Steps"} · ${complete} / ${definition.steps.length} ${locale === "fi" ? "merkitty" : "marked"}`,
+    );
+  else {
+    const progress = doc.createElement("p");
+    progress.className = "checklist-progress";
+    progress.textContent = `${locale === "fi" ? "Tila" : "Status"}: ${complete} / ${definition.steps.length} ${locale === "fi" ? "työvaihetta merkitty" : "steps marked"}`;
+    doc.body.append(progress);
+    appendText(doc.body, "h2", locale === "fi" ? "Työvaiheet" : "Steps");
+  }
   const steps = doc.createElement("ul");
   steps.className = "checklist-steps";
   for (const step of definition.steps) {
@@ -391,22 +421,7 @@ export function printChecklistDraft(
     steps.append(item);
   }
   doc.body.append(steps);
-  const observations = fieldReportObservationFields(draft, locale);
-  if (observations.length) {
-    appendText(doc.body, "h2", locale === "fi" ? "Havainnot" : "Observations");
-    const fields = doc.createElement("dl");
-    fields.className = "detail-list";
-    for (const field of observations) {
-      const item = doc.createElement("div");
-      const dt = doc.createElement("dt");
-      dt.textContent = field.label[locale];
-      const dd = doc.createElement("dd");
-      dd.textContent = fieldReportValue(draft, field, locale);
-      item.append(dt, dd);
-      fields.append(item);
-    }
-    doc.body.append(fields);
-  }
+  appendObservationSections(doc, draft, locale);
   if (draft.notes.trim()) {
     appendText(doc.body, "h2", locale === "fi" ? "Muistiinpanot" : "Notes");
     appendText(doc.body, "p", draft.notes);
@@ -421,14 +436,33 @@ export function printChecklistDraft(
     "h2",
     locale === "fi" ? "Allekirjoitus paperille" : "Signature on paper",
   );
-  const signature = doc.createElement("div");
-  signature.className = "signature-line";
-  closing.append(signature);
-  appendText(
-    closing,
-    "p",
-    `${locale === "fi" ? "Nimenselvennys" : "Printed name"}: ${draft.fields.signatureName?.trim() || "—"}`,
-  );
+  const signatureGrid = doc.createElement("div");
+  signatureGrid.className = "signature-grid";
+  const signatureLabels =
+    draft.kind === "commissioning"
+      ? locale === "fi"
+        ? ["Vastuuhenkilön allekirjoitus", "Nimenselvennys"]
+        : ["Responsible person's signature", "Printed name"]
+      : locale === "fi"
+        ? ["Allekirjoitus", "Nimenselvennys"]
+        : ["Signature", "Printed name"];
+  for (const label of signatureLabels) {
+    const cell = doc.createElement("div");
+    const line = doc.createElement("div");
+    line.className = "signature-line";
+    const caption = doc.createElement("div");
+    caption.className = "signature-caption";
+    caption.textContent = label;
+    cell.append(line, caption);
+    signatureGrid.append(cell);
+  }
+  closing.append(signatureGrid);
+  if (draft.fields.signatureName?.trim()) {
+    const historicalName = doc.createElement("p");
+    historicalName.className = "legacy-signature-name";
+    historicalName.textContent = `${locale === "fi" ? "Aiemmin kirjattu nimi (ei allekirjoitus)" : "Previously recorded name (not a signature)"}: ${draft.fields.signatureName.trim()}`;
+    closing.append(historicalName);
+  }
   const notice = doc.createElement("p");
   notice.className = "notice";
   notice.textContent =
@@ -447,6 +481,10 @@ export function printChecklistDraft(
         `${locale === "fi" ? "Edellinen versio" : "Previous revision"}: ${report.previousRevisionId}`,
       report.appVersion &&
         `${locale === "fi" ? "Kirjattu sovelluksella" : "Recorded with"}: PhaseKit ${report.appVersion}`,
+      `${locale === "fi" ? "Päivitetty" : "Updated"}: ${displayDate(draft.updatedAt, locale)}`,
+      report.status === "final" &&
+        report.finalizedAt &&
+        `${locale === "fi" ? "Viimeistelty" : "Finalised"}: ${displayDate(report.finalizedAt, locale)}`,
     ].filter((detail): detail is string => Boolean(detail)),
     closing,
   );
@@ -479,6 +517,8 @@ function fieldReportValue(
 ): string {
   const raw = draft.fields[field.id]?.trim();
   if (!raw) return "—";
+  if (field.id === "operatorDeclaration" && raw !== "confirmed")
+    return `${locale === "fi" ? "Ei vahvistettu (tallennettu arvo)" : "Not confirmed (recorded value)"}: ${raw}`;
   if (field.id === "refrigerantId")
     return frozenRefrigerantDesignation(draft) ?? raw;
   if (field.type === "date") return displayDate(raw, locale);
@@ -512,6 +552,9 @@ export function fieldReportObservationFields(
     "technician",
     "signatureName",
     ...fieldReportSummary(draft, locale).map((metric) => metric.id),
+    ...(draft.kind === "commissioning"
+      ? evacuationMetrics(draft, locale).map((metric) => metric.id)
+      : []),
   ]);
   if (
     [
@@ -532,12 +575,98 @@ export function fieldReportObservationFields(
   );
 }
 
+function appendObservationSections(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  const observations = fieldReportObservationFields(draft, locale);
+  if (!observations.length) return;
+  const groups =
+    draft.kind === "commissioning"
+      ? [
+          {
+            id: "installation",
+            title:
+              locale === "fi" ? "Asennus ja vastuut" : "Installation and roles",
+          },
+          {
+            id: "test-reports",
+            title:
+              locale === "fi"
+                ? "Koepöytäkirjat ja vakuutus"
+                : "Test records and declaration",
+          },
+          {
+            id: "evacuation",
+            title:
+              locale === "fi"
+                ? "Tyhjiöinnin havainnot"
+                : "Evacuation observations",
+          },
+          {
+            id: "other",
+            title: locale === "fi" ? "Muut havainnot" : "Other observations",
+          },
+        ]
+      : [{ id: "all", title: locale === "fi" ? "Havainnot" : "Observations" }];
+  for (const group of groups) {
+    const fields = observations.filter(
+      (field) =>
+        group.id === "all" ||
+        (group.id === "other" ? !field.group : field.group === group.id),
+    );
+    if (!fields.length) continue;
+    if (
+      draft.kind === "commissioning" &&
+      fields.length === 1 &&
+      (group.id === "test-reports" || group.id === "other") &&
+      fields[0].id !== "operatorDeclaration" &&
+      !fields[0].id.endsWith("ReportReference")
+    ) {
+      const note = doc.createElement("p");
+      note.className = "field-inline-note";
+      note.textContent = `${fields[0].label[locale]}: ${fieldReportValue(draft, fields[0], locale)}`;
+      doc.body.append(note);
+      continue;
+    }
+    appendText(doc.body, "h2", group.title);
+    if (
+      group.id === "test-reports" &&
+      fields.some((field) => field.id.endsWith("ReportReference"))
+    )
+      appendText(
+        doc.body,
+        "p",
+        locale === "fi"
+          ? "Viitteet yksilöivät erilliset pöytäkirjat. Tämä PDF ei sisällä niitä liitteinä."
+          : "References identify separate test reports. They are not attached to this PDF.",
+      );
+    const list = doc.createElement("dl");
+    list.className = "detail-list";
+    for (const field of fields) {
+      const item = doc.createElement("div");
+      const dt = doc.createElement("dt");
+      dt.textContent = field.label[locale];
+      const dd = doc.createElement("dd");
+      dd.textContent = fieldReportValue(draft, field, locale);
+      item.append(dt, dd);
+      list.append(item);
+    }
+    doc.body.append(list);
+  }
+}
+
 type FieldSummaryMetric = {
   id: string;
   label: { fi: string; en: string };
   value: string;
 };
 const fieldLabel = (fi: string, en: string) => ({ fi, en });
+
+function evacuationMetrics(draft: ChecklistDraft, locale: Locale) {
+  return fieldReportSummary({ ...draft, kind: "evacuation" }, locale);
+}
 
 function structuredNumber(raw?: string): Decimal | undefined {
   const value = raw?.trim().replace(",", ".");
@@ -679,14 +808,45 @@ function appendFieldSummary(
   locale: Locale,
 ) {
   const metrics = fieldReportSummary(draft, locale);
-  if (!metrics.length) return;
-  appendText(
-    doc.body,
-    "h2",
-    locale === "fi" ? "Kirjatut pääarvot" : "Recorded key values",
-  );
+  if (metrics.length) {
+    appendText(
+      doc.body,
+      "h2",
+      locale === "fi" ? "Kirjatut pääarvot" : "Recorded key values",
+    );
+    appendMetricGrid(doc, metrics, draft.kind === "commissioning", locale);
+  }
+  const vacuumMetrics =
+    draft.kind === "commissioning" ? evacuationMetrics(draft, locale) : [];
+  if (vacuumMetrics.length) {
+    appendText(
+      doc.body,
+      "h2",
+      locale === "fi"
+        ? "Tyhjiöinnin ja pitokokeen mittaukset"
+        : "Evacuation and standing-test readings",
+    );
+    appendMetricGrid(doc, vacuumMetrics, true, locale);
+  }
+  if (draft.kind === "evacuation" || vacuumMetrics.length) {
+    const note = doc.createElement("p");
+    note.className = "field-summary-note";
+    note.textContent =
+      locale === "fi"
+        ? "Paineen muutos on kirjattujen absoluuttisten paineiden erotus. Vertaa arvoja kohteen omiin hyväksymisrajoihin."
+        : "Pressure change is the difference between recorded absolute pressures. Compare the readings with the equipment's acceptance criteria.";
+    doc.body.append(note);
+  }
+}
+
+function appendMetricGrid(
+  doc: Document,
+  metrics: FieldSummaryMetric[],
+  compact: boolean,
+  locale: Locale,
+) {
   const grid = doc.createElement("dl");
-  grid.className = "field-summary";
+  grid.className = `field-summary${compact ? " field-summary-compact" : ""}`;
   for (const metric of metrics) {
     const card = doc.createElement("div");
     card.className = "field-summary-card";
@@ -698,15 +858,6 @@ function appendFieldSummary(
     grid.append(card);
   }
   doc.body.append(grid);
-  if (draft.kind === "evacuation") {
-    const note = doc.createElement("p");
-    note.className = "field-summary-note";
-    note.textContent =
-      locale === "fi"
-        ? "Paineen muutos on kirjattujen absoluuttisten paineiden erotus. Vertaa arvoja kohteen omiin hyväksymisrajoihin."
-        : "Pressure change is the difference between recorded absolute pressures. Compare the readings with the equipment's acceptance criteria.";
-    doc.body.append(note);
-  }
 }
 
 function appendFrozenCycleReport(
@@ -722,21 +873,23 @@ function appendFrozenCycleReport(
       : "Attached refrigeration-cycle calculation",
   );
   appendText(doc.body, "p", reportName(report, locale));
+  const details = doc.createElement("section");
+  details.className = "cycle-details";
   appendRows(
     doc,
-    doc.body,
+    details,
     locale === "fi" ? "Laskelman tulokset" : "Calculation results",
     report.outputs,
     locale,
     primaryReportOutputs(report),
   );
-  appendRows(
-    doc,
-    doc.body,
-    locale === "fi" ? "Laskelman lähtötiedot" : "Calculation inputs",
-    report.inputs,
-    locale,
-  );
+  if (report.inputs.length) {
+    const inputs = doc.createElement("p");
+    inputs.className = "cycle-input-line";
+    inputs.textContent = `${locale === "fi" ? "Laskelman lähtötiedot" : "Calculation inputs"}: ${report.inputs.map((row) => `${row.label[locale]} ${formatReportRow(row, locale)}`).join(" · ")}`;
+    details.append(inputs);
+  }
+  doc.body.append(details);
   let image: HTMLImageElement | undefined;
   if (report.chartSnapshot) {
     const figure = doc.createElement("section");
@@ -772,15 +925,39 @@ function appendFrozenCycleReport(
       "p",
       `${locale === "fi" ? "Aineistoversio" : "Data version"}: ${report.dataVersion}`,
     );
-  for (const source of report.sources)
-    appendText(
-      doc.body,
-      "p",
-      [source.title, source.id, source.version, source.checkedAt, source.url]
-        .filter(Boolean)
-        .join(" · "),
-    );
+  appendSourceList(doc, doc.body, report.sources, locale);
   return image;
+}
+
+function appendSourceList(
+  doc: Document,
+  parent: HTMLElement,
+  sources: Source[],
+  locale: Locale,
+) {
+  if (!sources.length) return;
+  const list = doc.createElement("ul");
+  list.className = "source-list";
+  for (const source of sources) {
+    const item = doc.createElement("li");
+    const link = doc.createElement("a");
+    link.textContent = source.title;
+    if (safeHttpUrl(source.url)) link.href = source.url;
+    link.rel = "noreferrer";
+    const meta = doc.createElement("span");
+    meta.className = "source-meta";
+    meta.textContent = [
+      source.id,
+      source.version,
+      source.checkedAt &&
+        `${locale === "fi" ? "tark." : "checked"} ${source.checkedAt}`,
+    ]
+      .filter(Boolean)
+      .join(" · ");
+    item.append(link, doc.createTextNode(" · "), meta);
+    list.append(item);
+  }
+  parent.append(list);
 }
 
 function printWhenReady(
@@ -841,6 +1018,7 @@ export function printCheckResult({
     `${designation} · ${locale === "fi" ? "Vuototarkastusarvio" : "Leak check assessment"}`,
     locale,
   );
+  doc.body.classList.add("leak-document");
   appendText(doc.body, "h1", doc.title);
   if (createdAt)
     appendText(
@@ -865,7 +1043,7 @@ export function printCheckResult({
     doc,
     locale === "fi" ? "Vuototarkastusvaatimus" : "Leak-check requirement",
     outcome,
-    `${interval} · ${designation} · ${result.input.charge} ${result.input.unit}`,
+    `${interval} · ${designation} · ${formatDecimal(result.input.charge, locale)} ${result.input.unit}`,
   );
   const schedule = leakCheckPrintSchedule(result, lastInspectionDate);
   const dates = doc.createElement("div");
@@ -898,20 +1076,12 @@ export function printCheckResult({
     true,
   );
   hero.append(dates);
-  if (schedule.due && schedule.due < result.input.asOf)
-    appendText(
-      doc.body,
-      "p",
-      locale === "fi"
-        ? "Määräpäivä on ennen arviointipäivää."
-        : "The due date precedes the assessment date.",
-    );
-  if (result.decisiveRule)
-    appendText(
-      doc.body,
-      "p",
-      `${locale === "fi" ? "Ratkaiseva sääntö" : "Decisive rule"}: ${result.decisiveRule}`,
-    );
+  if (leakCheckPrintOverdue(schedule, result.input.asOf)) {
+    const alert = doc.createElement("p");
+    alert.className = "hero-alert";
+    alert.textContent = `${locale === "fi" ? "Tarkastus myöhässä arviointipäivänä" : "Leak check overdue on assessment date"} ${displayDate(result.input.asOf, locale)}`;
+    hero.append(alert);
+  }
   for (const code of result.reasonCodes)
     appendText(doc.body, "p", reasonMessages[code]?.[locale] ?? code);
   if (result.detectionRequired)
@@ -937,11 +1107,10 @@ export function printCheckResult({
   }
   appendText(doc.body, "h2", locale === "fi" ? "Lähtötiedot" : "Inputs");
   const inputs = doc.createElement("dl");
+  inputs.className = "detail-list";
   const input = result.input;
   const yesNo = (value: boolean) => translate(locale, value ? "yes" : "no");
   const inputRows: [string, string][] = [
-    [locale === "fi" ? "Kylmäaine" : "Refrigerant", designation],
-    [locale === "fi" ? "Täytös" : "Charge", `${input.charge} ${input.unit}`],
     [
       locale === "fi" ? "Laitetyyppi" : "Equipment type",
       translate(locale, input.equipment),
@@ -964,17 +1133,14 @@ export function printCheckResult({
       yesNo(input.residential),
     ],
   ];
-  if (lastInspectionDate)
-    inputRows.push([
-      locale === "fi" ? "Edellinen tarkastus" : "Last inspection",
-      displayDate(lastInspectionDate, locale),
-    ]);
   for (const [label, value] of inputRows) {
+    const row = doc.createElement("div");
     const dt = doc.createElement("dt");
     dt.textContent = label;
     const dd = doc.createElement("dd");
     dd.textContent = value;
-    inputs.append(dt, dd);
+    row.append(dt, dd);
+    inputs.append(row);
   }
   doc.body.append(inputs);
   if (result.components.length) {
@@ -983,33 +1149,58 @@ export function printCheckResult({
       "h2",
       locale === "fi" ? "Aineosien laskenta" : "Component calculation",
     );
-    for (const component of result.components) {
-      const lines = [
-        `${componentDesignations?.[component.refrigerantId] ?? component.refrigerantId}: ${component.massPercent} % · ${component.massKg} kg`,
-        `${locale === "fi" ? "Liite" : "Annex"}: ${component.annex}`,
-        component.gwp && `GWP ${component.gwp}`,
-        component.gwpBasis &&
-          `${locale === "fi" ? "GWP-peruste" : "GWP basis"}: ${component.gwpBasis}`,
-        component.tonnesCO2e && `${component.tonnesCO2e} t CO₂e`,
-      ];
-      appendText(doc.body, "p", lines.filter(Boolean).join(" · "));
-    }
+    const table = makeCompactTable(doc, [
+      locale === "fi" ? "Aineosa" : "Component",
+      locale === "fi" ? "Laskentaperuste" : "Calculation basis",
+      "CO₂e",
+    ]);
+    for (const component of result.components)
+      appendTableRow(doc, table, [
+        [
+          componentDesignations?.[component.refrigerantId] ??
+            component.refrigerantId,
+          `${formatDecimal(component.massPercent, locale)} % · ${formatDecimal(component.massKg, locale)} kg`,
+        ],
+        [
+          `${locale === "fi" ? "Liite" : "Annex"} ${component.annex} · ${component.gwp ? `GWP ${formatDecimal(component.gwp, locale)}` : "GWP —"}`,
+          component.gwpBasis ?? "",
+        ],
+        [
+          component.tonnesCO2e
+            ? `${formatDecimal(component.tonnesCO2e, locale)} t`
+            : "—",
+        ],
+      ]);
+    doc.body.append(table);
   }
   if (result.obligations.length) {
     appendText(doc.body, "h2", locale === "fi" ? "Velvoitteet" : "Obligations");
+    const table = makeCompactTable(doc, [
+      locale === "fi" ? "Soveltuva aine" : "Applicable gas",
+      locale === "fi" ? "Kynnys ja sääntö" : "Threshold and rule",
+      locale === "fi" ? "Väli" : "Interval",
+    ]);
     for (const item of result.obligations)
-      appendText(
-        doc.body,
-        "p",
-        `${item.component
-          .split("+")
-          .map((id) => componentDesignations?.[id] ?? id)
-          .join(
-            " + ",
-          )} · ${item.quantity} ${item.unit} · ${item.months === null ? "—" : `${item.months} ${locale === "fi" ? "kuukautta" : "months"}`} · ${item.ruleId}`,
-      );
+      appendTableRow(doc, table, [
+        [
+          item.component
+            .split("+")
+            .map((id) => componentDesignations?.[id] ?? id)
+            .join(" + "),
+        ],
+        [
+          `${formatDecimal(item.quantity, locale)} ${item.unit === "tCO2e" ? "t CO₂e" : item.unit} · ${plainRuleLabel(item.ruleId, locale)}`,
+          item.ruleId,
+        ],
+        [
+          item.months === null
+            ? "—"
+            : `${item.months} ${locale === "fi" ? "kk" : "mo"}`,
+        ],
+      ]);
+    doc.body.append(table);
   }
-  if (result.requiredInputs.length) {
+  if (result.state === "insufficient_data" && result.requiredInputs.length) {
     const labels: Record<string, MessageKey> = {
       refrigerantId: "selectRefrigerant",
       charge: "charge",
@@ -1034,48 +1225,82 @@ export function printCheckResult({
       ? "Lähteet ja versiotiedot"
       : "Sources and version information",
   );
-  appendText(
-    doc.body,
-    "p",
+  const versions = doc.createElement("p");
+  versions.className = "source-version-line";
+  versions.textContent = [
     `${locale === "fi" ? "Sääntöversio" : "Ruleset version"}: ${result.rulesetVersion}`,
-  );
-  appendText(
-    doc.body,
-    "p",
     `${locale === "fi" ? "Aineistoversio" : "Data version"}: ${result.dataVersion}`,
-  );
-  if (sources.length) {
-    const list = doc.createElement("ul");
-    list.className = "sources";
-    for (const source of sources) {
-      const item = doc.createElement("li");
-      item.textContent = [
-        source.title,
-        source.id,
-        source.version,
-        source.checkedAt &&
-          `${locale === "fi" ? "tarkistettu" : "checked"} ${source.checkedAt}`,
-        source.license,
-        source.note,
-        source.url,
-      ]
-        .filter(Boolean)
-        .join(" · ");
-      list.append(item);
-    }
-    doc.body.append(list);
-  }
+  ].join(" · ");
+  doc.body.append(versions);
+  appendSourceList(doc, doc.body, sources, locale);
+  const closing = doc.createElement("section");
+  closing.className = "report-closing";
   const notice = doc.createElement("p");
   notice.className = "notice";
   notice.textContent =
     locale === "fi"
       ? "Tämä on tallennettuihin lähtötietoihin ja lähteisiin perustuva arvio, ei todistus tehdystä tarkastuksesta."
       : "This is an assessment based on the recorded inputs and sources, not proof that an inspection was performed.";
-  doc.body.append(notice);
-  appendPrintFooter(doc, locale);
+  closing.append(notice);
+  appendPrintFooter(doc, locale, [], closing);
+  doc.body.append(closing);
   win.focus();
   win.requestAnimationFrame(() => win.print());
   return true;
+}
+
+function makeCompactTable(doc: Document, headings: string[]): HTMLTableElement {
+  const table = doc.createElement("table");
+  table.className = "compact-table";
+  const head = doc.createElement("thead");
+  const tr = doc.createElement("tr");
+  for (const label of headings) {
+    const th = doc.createElement("th");
+    th.textContent = label;
+    tr.append(th);
+  }
+  head.append(tr);
+  table.append(head, doc.createElement("tbody"));
+  return table;
+}
+
+function appendTableRow(
+  doc: Document,
+  table: HTMLTableElement,
+  cells: [string, string?][],
+) {
+  const tr = doc.createElement("tr");
+  for (const [main, secondary] of cells) {
+    const td = doc.createElement("td");
+    td.textContent = main;
+    if (secondary) {
+      const subline = doc.createElement("span");
+      subline.className = "subline";
+      subline.textContent = secondary;
+      td.append(subline);
+    }
+    tr.append(td);
+  }
+  table.tBodies[0].append(tr);
+}
+
+function plainRuleLabel(ruleId: string, locale: Locale): string {
+  const threshold = /^(fgas-I|fgas-II|ods)-(\d+)$/.exec(ruleId);
+  if (!threshold) return locale === "fi" ? "Sääntö" : "Rule";
+  const annex =
+    threshold[1] === "fgas-I"
+      ? locale === "fi"
+        ? "F-kaasu, liite I"
+        : "F-gas, Annex I"
+      : threshold[1] === "fgas-II"
+        ? locale === "fi"
+          ? "F-kaasu, liite II"
+          : "F-gas, Annex II"
+        : locale === "fi"
+          ? "Otsoniaine, liite I"
+          : "ODS, Annex I";
+  const unit = threshold[1] === "fgas-I" ? "t CO₂e" : "kg";
+  return `${annex}, ${threshold[2]} ${unit}`;
 }
 
 function appendRows(

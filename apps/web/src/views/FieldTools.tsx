@@ -24,12 +24,14 @@ import {
   type ChecklistKind,
   type ChecklistField,
   checklistReportFields,
+  commissioningMissingFields,
+  updateCommissioningFields,
   type PipeExpansionMaterial,
 } from "../../../../packages/core/src/field-tools";
 import "./field-tools.css";
 import "./field-reports.css";
 import { appVersion } from "../release";
-import { byId } from "../data";
+import { byId, getFact, factKeys, dataset } from "../data";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import {
   buildCommissioningCycle,
@@ -1250,6 +1252,25 @@ export function WorkChecklists() {
           ? {
               ...d,
               ...patch,
+              ...(d.kind === "commissioning"
+                ? {
+                    fields: {
+                      ...(patch.fields
+                        ? updateCommissioningFields(d.fields, patch.fields)
+                        : d.fields),
+                      ...((patch.title !== undefined &&
+                        patch.title !== d.title) ||
+                      (patch.notes !== undefined && patch.notes !== d.notes) ||
+                      (patch.checkedIds !== undefined &&
+                        JSON.stringify(patch.checkedIds) !==
+                          JSON.stringify(d.checkedIds)) ||
+                      ("equipmentId" in patch &&
+                        patch.equipmentId !== d.equipmentId)
+                        ? { operatorDeclaration: "" }
+                        : {}),
+                    },
+                  }
+                : {}),
               ...(!("cycleReport" in patch) &&
               patch.fields &&
               [
@@ -1290,6 +1311,7 @@ export function WorkChecklists() {
               pressureUnit: "bar",
               pressureReference: "gauge",
               atmosphericReference: "1.01325",
+              pressureTestRequired: "not_assessed",
             }
           : kind === "evacuation"
             ? { vacuumUnit: "mbar" }
@@ -1325,6 +1347,18 @@ export function WorkChecklists() {
       );
       return;
     }
+    if (
+      draft.kind === "commissioning" &&
+      commissioningMissingFields(draft.fields).length
+    ) {
+      setFormError(
+        l(
+          "Täydennä asennustodistuksen tiedot ennen raportin lukitsemista. Luonnos säilyy tallennettuna.",
+          "Complete the installation-certificate fields before locking this report. Your draft remains saved.",
+        ),
+      );
+      return;
+    }
     update({
       status: "final",
       cycleReport: draft.cycleReport,
@@ -1341,6 +1375,9 @@ export function WorkChecklists() {
       status: "draft",
       revision: (draft.revision ?? 1) + 1,
       previousRevisionId: draft.id,
+      ...(draft.kind === "commissioning"
+        ? { fields: { ...draft.fields, operatorDeclaration: "" } }
+        : {}),
       finalizedAt: undefined,
       appVersion,
       updatedAt: new Date().toISOString(),
@@ -1386,23 +1423,63 @@ export function WorkChecklists() {
       draft.fields.pressureReference !== "gauge"
     )
       return null;
-    const change = (value: string) =>
+    const change = (value: string) => {
+      const refrigerant =
+        field.id === "refrigerantId" ? byId.get(value) : undefined;
+      const safety = refrigerant
+        ? getFact(refrigerant, ...factKeys.safety)
+        : undefined;
+      const gwp = refrigerant
+        ? getFact(refrigerant, ...factKeys.gwp)
+        : undefined;
+      const sourced = (fact: typeof safety) =>
+        fact?.state === "verified" &&
+        fact.value !== null &&
+        fact.sourceIds.length > 0;
       update({
         fields: {
           ...draft.fields,
           [field.id]: value,
           ...(field.id === "refrigerantId"
-            ? { refrigerantDesignation: byId.get(value)?.designation ?? value }
+            ? {
+                refrigerantDesignation: refrigerant?.designation ?? value,
+                refrigerantSafetyClass: sourced(safety)
+                  ? String(safety!.value)
+                  : "",
+                refrigerantGwp: sourced(gwp) ? String(gwp!.value) : "",
+                refrigerantGwpBasis: sourced(gwp)
+                  ? (gwp!.basis ?? "gwp_eu_2024_573_100yr")
+                  : "",
+                refrigerantSourceNote: sourced(gwp)
+                  ? `PhaseKit ${dataset.version} · ${[...new Set([...(sourced(safety) ? safety!.sourceIds : []), ...gwp!.sourceIds])].join(", ")}`
+                  : "",
+              }
             : {}),
         },
       });
+    };
     const name = `${field.label[locale]}${field.legacy ? l(" · aiempi vapaateksti", " · original free text") : ""}`;
     return (
       <div
         key={field.id}
         className={`field-report-field ${field.type === "decimal" ? "field-report-numeric" : ""} ${["pressureUnit", "pressureReference"].includes(field.id) ? "field-report-choice" : ""} ${field.legacy ? "field-report-legacy" : ""} ${["atmosphericReference", "equipment", "chargeKg", "evacuationMinutes"].includes(field.id) ? "field-report-full" : ""}`}
       >
-        {field.type === "refrigerant" ? (
+        {field.type === "declaration" ? (
+          <div>
+            <p className="field-report-declaration-title">{name}</p>
+            <label className="checkbox field-checklist-choice">
+              <input
+                type="checkbox"
+                aria-label={name}
+                checked={draft.fields[field.id] === "confirmed"}
+                onChange={(event) =>
+                  change(event.target.checked ? "confirmed" : "")
+                }
+              />
+              {field.options?.[0].label[locale]}
+            </label>
+          </div>
+        ) : field.type === "refrigerant" ? (
           final ? (
             <label>
               {name}
@@ -1461,15 +1538,6 @@ export function WorkChecklists() {
           : l("Uusi raportti", "New report")
       }
     >
-      <p className="supporting-copy">
-        {l(
-          "Kirjaa työvaiheet ja mittaukset valmistajan ohjeen mukaan. Raportin valmistuminen tai rastit eivät tarkoita kokeen teknistä hyväksyntää.",
-          "Record work and measurements using the manufacturer instructions. A finalised report or checked steps do not imply technical test acceptance.",
-        )}
-      </p>
-      <a className="field-report-back" href="#/reports">
-        {l("Kaikki raportit ja tallennetut", "All reports and saved items")} →
-      </a>
       {!draft && (
         <>
           <div className="field-tool-grid checklist-create field-checklist-controls">
@@ -1503,23 +1571,6 @@ export function WorkChecklists() {
               )}
             </p>
           )}
-          {data.checklistDrafts.length > 0 && (
-            <label>
-              {l("Aiemmat raportit", "Previous reports")}
-              <select value="" onChange={(e) => open(e.target.value)}>
-                <option value="">
-                  {l("Valitse raportti", "Choose a report")}
-                </option>
-                {data.checklistDrafts.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {checklistDefinitions[d.kind].name[locale]} ·{" "}
-                    {d.title || l("Nimetön", "Untitled")} ·{" "}
-                    {new Date(d.updatedAt).toLocaleDateString(locale)}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
         </>
       )}
       {data.checklistDrafts.length >= 1000 && (
@@ -1534,16 +1585,9 @@ export function WorkChecklists() {
         <section className="checklist-record field-report-editor">
           <div className="field-checklist-save-state">
             {saveState()}
-            <p className="supporting-copy">
-              {l(
-                "Löydät kirjauksen Raportit-näkymästä. Kirjaukset sisältyvät asetusten varmuuskopioon.",
-                "Find this record in Reports. Records are included in Settings backups.",
-              )}{" "}
-              ·{" "}
-              {final
-                ? l("Valmis raportti", "Final report")
-                : l("Luonnos", "Draft")}{" "}
-              · {l("Versio", "Revision")} {draft.revision ?? 1}
+            <p className="field-report-status caption">
+              {final ? l("Valmis", "Final") : l("Luonnos", "Draft")} ·{" "}
+              {l("Versio", "Revision")} {draft.revision ?? 1}
             </p>
           </div>
           {final && (
@@ -1616,6 +1660,21 @@ export function WorkChecklists() {
                 )
                 .map(renderField)}
             </div>
+            {draft.kind === "commissioning" && (
+              <details className="field-report-optional">
+                <summary>
+                  {l(
+                    "Asentaja ja vastuuhenkilö",
+                    "Installer and responsible person",
+                  )}
+                </summary>
+                <div className="field-report-grid">
+                  {checklistReportFields(draft)
+                    .filter((field) => field.group === "installation")
+                    .map(renderField)}
+                </div>
+              </details>
+            )}
             <h3>
               {l("Mittaukset ja havainnot", "Measurements and observations")}
             </h3>
@@ -1623,12 +1682,42 @@ export function WorkChecklists() {
               {checklistReportFields(draft)
                 .filter(
                   (field) =>
+                    !field.group &&
                     !commonChecklistFields.some(
                       (common) => common.id === field.id,
                     ),
                 )
                 .map(renderField)}
             </div>
+            {draft.kind === "commissioning" && (
+              <details
+                className="field-report-optional"
+                open={
+                  checklistReportFields(draft).some(
+                    (field) =>
+                      field.group === "evacuation" &&
+                      Boolean(draft.fields[field.id]),
+                  )
+                    ? true
+                    : undefined
+                }
+              >
+                <summary>
+                  {l("Tyhjiöinti ja pitokoe", "Evacuation and standing test")}{" "}
+                  <span className="caption">
+                    {l(
+                      "kirjaa tähän tai liitä pöytäkirja",
+                      "record here or attach a report",
+                    )}
+                  </span>
+                </summary>
+                <div className="field-report-grid field-report-measurements">
+                  {checklistReportFields(draft)
+                    .filter((field) => field.group === "evacuation")
+                    .map(renderField)}
+                </div>
+              </details>
+            )}
             {draft.kind === "commissioning" && !final && (
               <div className="field-report-cycle-action">
                 <button
@@ -1651,6 +1740,21 @@ export function WorkChecklists() {
                   )}
                 </p>
               </div>
+            )}
+            {draft.kind === "commissioning" && (
+              <details className="field-report-optional">
+                <summary>
+                  {l(
+                    "Koepöytäkirjat ja vakuutus",
+                    "Test reports and declaration",
+                  )}
+                </summary>
+                <div className="field-report-grid field-report-measurements">
+                  {checklistReportFields(draft)
+                    .filter((field) => field.group === "test-reports")
+                    .map(renderField)}
+                </div>
+              </details>
             )}
             <h3>{l("Työvaiheet", "Work steps")}</h3>
             <p className="small">
@@ -1715,6 +1819,55 @@ export function WorkChecklists() {
                 ))}
               </div>
             </section>
+          )}
+          {draft.kind === "commissioning" && !final && (
+            <details
+              className="field-report-requirements"
+              open={Boolean(formError)}
+            >
+              <summary>
+                {l(
+                  "Asennustodistuksen tiedot",
+                  "Installation-certificate fields",
+                )}{" "}
+                · VNa 1063/2025 § 9
+                {commissioningMissingFields(draft.fields).length
+                  ? ` · ${commissioningMissingFields(draft.fields).length} ${l("täydennettävää", "to complete")}`
+                  : ""}
+              </summary>
+              <p className="supporting-copy">
+                {l(
+                  "Käyttöönottoraportti tukee asennustodistuksen valmistelua. Täydennä tunnistetiedot ja koepöytäkirjat. Viitatut liitteet toimitetaan erikseen: PhaseKit ei liitä niitä automaattisesti. Raportin lukitseminen ei ole hyväksyntä tai allekirjoitus. Vastuuhenkilö tarkastaa ja allekirjoittaa tulosteen.",
+                  "This commissioning report supports preparation of an installation certificate. Complete the identification details and test reports. Referenced attachments must be supplied separately; PhaseKit does not attach them. Locking a report is not approval or a signature. The responsible person reviews and signs the printout.",
+                )}
+              </p>
+              <p className="supporting-copy">
+                <a
+                  href="https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {l(
+                    "Lähde: VNa 1063/2025, 9 § (Finlex)",
+                    "Source: Finnish Decree 1063/2025, section 9 (Finlex)",
+                  )}
+                </a>
+              </p>
+              {commissioningMissingFields(draft.fields).length ? (
+                <ul>
+                  {commissioningMissingFields(draft.fields).map((field) => (
+                    <li key={field.id}>{field.label[locale]}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  {l(
+                    "Tietokentät on täytetty. Sisältö, koepöytäkirjat ja soveltuvuus on vielä tarkastettava.",
+                    "The fields are filled. The content, test reports and applicability still require review.",
+                  )}
+                </p>
+              )}
+            </details>
           )}
           {saveState()}
           {formError && <p role="alert">{formError}</p>}
@@ -1790,10 +1943,30 @@ export function WorkChecklists() {
       <Sources>
         <p>
           {l(
-            "Raportit ovat PhaseKitin yleisiä kirjauspohjia. Kohteen valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Poikkeavat tai soveltumattomat kohdat kirjataan muistiinpanoihin.",
-            "These are generic PhaseKit recording templates. Equipment manufacturer instructions determine sequence, media, limits and acceptance. Record exceptions or non-applicable steps in Notes.",
+            "Raportit ovat yleisiä kirjauspohjia. Valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Valmis raportti tai rastit eivät tarkoita teknistä hyväksyntää. Kirjaa poikkeamat muistiinpanoihin.",
+            "Reports are generic recording templates. Manufacturer instructions determine the sequence, media, limits and acceptance. A final report or checked steps do not imply technical acceptance. Record exceptions in Notes.",
           )}
         </p>
+        <p className="supporting-copy">
+          {l(
+            "Kirjaukset säilyvät tässä selaimessa ja sisältyvät asetusten varmuuskopioon.",
+            "Records stay in this browser and are included in Settings backups.",
+          )}
+        </p>
+        {(draft?.kind === "commissioning" || kind === "commissioning") && (
+          <p>
+            <a
+              href="https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {l(
+                "VNa 1063/2025, 9 § — asennustodistuksen tiedot",
+                "Government Decree 1063/2025, section 9 — installation-certificate content",
+              )}
+            </a>
+          </p>
+        )}
         <a
           href="https://webapps.copeland.com/online-product-information/Publication/LaunchPDF?Index=AEM&PDF=AE-105"
           target="_blank"

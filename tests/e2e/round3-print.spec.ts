@@ -62,6 +62,39 @@ test("leak-check print does not invent a completed inspection", async ({
   await expect(printed.locator(".date-card-secondary strong")).toHaveText("—");
 });
 
+test("overdue leak-check PDF leads with the saved assessment date and compact evidence", async ({
+  page,
+}, info) => {
+  await page.goto("/#/check/r404a");
+  await page.getByLabel("Täytös", { exact: true }).fill("20");
+  await page.locator("#check-date").fill("2026-09-26");
+  await page.locator("#check-last-inspection").fill("2025-11-01");
+  await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  const popup = page.waitForEvent("popup");
+  await page.getByRole("button", { name: "Tulosta / tallenna PDF" }).click();
+  const printed = await popup;
+  await expect(printed.locator(".hero")).toContainText(
+    "Tarkastus myöhässä arviointipäivänä 26.9.2026",
+  );
+  await expect(printed.locator(".hero")).toContainText("1.5.2026");
+  await expect(printed.locator(".compact-table")).toHaveCount(2);
+  await expect(printed.locator(".compact-table").last()).toContainText(
+    "F-kaasu, liite I, 50 t CO₂e",
+  );
+  await expect(printed.locator(".compact-table").first()).toContainText(
+    "1,144 t",
+  );
+  await expect(printed.locator(".compact-table").last()).toContainText(
+    "78,432 t CO₂e",
+  );
+  await expect(printed.locator("body")).not.toContainText("Vaaditut tiedot");
+  if (info.project.name === "desktop-chromium")
+    await writeFile(
+      info.outputPath("leak-r404a-overdue.pdf"),
+      await printed.pdf({ format: "A4", printBackground: false }),
+    );
+});
+
 test("commissioning print keeps marked steps, blank steps and written measurements", async ({
   page,
 }, info) => {
@@ -82,7 +115,9 @@ test("commissioning print keeps marked steps, blank steps and written measuremen
   await page
     .getByRole("textbox", { name: "Muistiinpanot", exact: true })
     .fill(longNotes);
-  const firstStep = page.locator(".field-checklist-choice input").first();
+  const firstStep = page.getByRole("checkbox", {
+    name: "Kohteen käyttöönotto-ohje ja perustiedot tarkistettu",
+  });
   await firstStep.check();
   const popup = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Tulosta / PDF" }).click();

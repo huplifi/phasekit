@@ -124,7 +124,7 @@ export function Equipment() {
       <header className="equipment-heading">
         <div>
           <h1>{t("Laitteet ja kohteet", "Equipment and sites")}</h1>
-          <p className="secondary">
+          <p className="supporting-copy">
             {t(
               "Pidä raportit ja laskelmat järjestyksessä liittämällä ne laitteisiin tai kohteisiin.",
               "Keep reports and calculations organised by linking them to equipment or sites.",
@@ -211,7 +211,7 @@ export function Equipment() {
         </form>
       )}
       {data.equipment.length === 0 && editingId === null ? (
-        <div className="empty equipment-empty">
+        <div className="equipment-empty">
           <h2>{t("Laitteita ei ole vielä lisätty", "No equipment yet")}</h2>
           <p>
             {t(
@@ -235,7 +235,7 @@ export function Equipment() {
                   <div>
                     <h2>{item.name}</h2>
                     {item.location && (
-                      <p className="secondary">{item.location}</p>
+                      <p className="supporting-copy">{item.location}</p>
                     )}
                   </div>
                   <div className="button-group">

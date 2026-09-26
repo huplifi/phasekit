@@ -146,16 +146,11 @@ test("checklist keeps observations after reload, exports them and requires delet
       exact: true,
     }),
   ).toHaveValue("300");
-  await page.goto("/#/checklists");
+  await page.goto("/#/reports");
   await page
-    .getByRole("combobox", { name: "Aiemmat raportit", exact: true })
-    .selectOption({
-      label: await page
-        .getByRole("combobox", { name: "Aiemmat raportit", exact: true })
-        .locator("option")
-        .last()
-        .innerText(),
-    });
+    .locator(".field-report-link")
+    .filter({ hasText: "Testikohde" })
+    .click();
   await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
     "Testikohde",
   );

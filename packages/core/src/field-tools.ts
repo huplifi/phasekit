@@ -84,10 +84,11 @@ type Text = { fi: string; en: string };
 export interface ChecklistField {
   id: string;
   label: Text;
-  type?: "date" | "decimal" | "select" | "refrigerant";
+  type?: "date" | "decimal" | "select" | "refrigerant" | "declaration";
   options?: { value: string; label: Text }[];
   help?: Text;
   legacy?: boolean;
+  group?: "evacuation" | "installation" | "test-reports";
 }
 const text = (fi: string, en: string): Text => ({ fi, en });
 export const checklistDefinitions: Record<
@@ -564,10 +565,179 @@ checklistDefinitions.commissioning.fields.unshift(
   ),
   decimalField("liquidC", "Nesteen lämpötila · °C", "Liquid temperature · °C"),
 );
+checklistDefinitions.commissioning.fields.push(
+  {
+    id: "installerCompany",
+    group: "installation",
+    label: text("Asennusliike", "Installation company"),
+  },
+  {
+    id: "installerQualificationNumber",
+    group: "installation",
+    label: text("Asentajan lupanumero", "Installer certificate/licence number"),
+    help: text(
+      "Asentajan nimi kirjataan Tekijä-kenttään.",
+      "Enter the installer name in Technician.",
+    ),
+  },
+  {
+    id: "responsiblePerson",
+    group: "installation",
+    label: text("Vastuuhenkilön nimi", "Responsible person name"),
+  },
+  {
+    id: "responsibleQualificationNumber",
+    group: "installation",
+    label: text(
+      "Vastuuhenkilön lupanumero",
+      "Responsible person certificate/licence number",
+    ),
+  },
+  {
+    id: "leakCheckInterval",
+    group: "test-reports",
+    label: text(
+      "Lakisääteinen vuototarkastusväli ja peruste",
+      "Statutory leak-check interval and basis",
+    ),
+    help: text(
+      "Kirjaa kohteelle arvioitu tarkastusväli tai perusteltu tieto siitä, ettei velvoitetta sovelleta.",
+      "Record the assessed interval or the reason why the obligation does not apply.",
+    ),
+  },
+  {
+    id: "pressureTestRequired",
+    group: "test-reports",
+    type: "select",
+    label: text(
+      "Edellyttääkö painelaitesääntely painekoetta?",
+      "Does pressure-equipment legislation require a pressure test?",
+    ),
+    options: [
+      { value: "yes", label: text("Kyllä", "Yes") },
+      { value: "no", label: text("Ei", "No") },
+      {
+        value: "not_assessed",
+        label: text("Ei vielä arvioitu", "Not yet assessed"),
+      },
+    ],
+  },
+  {
+    id: "pressureTestExemptionReason",
+    group: "test-reports",
+    label: text(
+      "Peruste sille, ettei painekoetta edellytetä",
+      "Reason why a pressure test is not required",
+    ),
+  },
+  {
+    id: "pressureTestReportReference",
+    group: "test-reports",
+    label: text(
+      "Painekoepöytäkirjan viite / liite",
+      "Pressure-test report reference / attachment",
+    ),
+  },
+  {
+    id: "tightnessTestReportReference",
+    group: "test-reports",
+    label: text(
+      "Tiiviyskoepöytäkirjan viite / liite",
+      "Tightness-test report reference / attachment",
+    ),
+  },
+  {
+    id: "evacuationReportReference",
+    group: "test-reports",
+    label: text(
+      "Tyhjiöintipöytäkirjan viite / liite",
+      "Evacuation report reference / attachment",
+    ),
+    help: text(
+      "Viittaa liitteeseen tai tämän raportin tyhjiöinti- ja pitokoekirjauksiin.",
+      "Reference an attachment or the evacuation and standing-test readings in this report.",
+    ),
+  },
+  {
+    id: "testRunReportReference",
+    group: "test-reports",
+    label: text(
+      "Koekäyttöpöytäkirjan viite / liite",
+      "Test-run report reference / attachment",
+    ),
+    help: text(
+      "Viittaa liitteeseen tai tämän raportin käyntiarvoihin ja toimintakokeisiin.",
+      "Reference an attachment or the operating readings and functional tests in this report.",
+    ),
+  },
+  {
+    id: "operatorDeclaration",
+    group: "test-reports",
+    type: "declaration",
+    options: [
+      {
+        value: "confirmed",
+        label: text(
+          "Vakuutan toiminnanharjoittajan edustajana, että laite täyttää F-kaasuasetuksen (EU) 2024/573 vaatimukset.",
+          "As the installation business’s representative, I declare that the equipment meets the requirements of F-gas Regulation (EU) 2024/573.",
+        ),
+      },
+    ],
+    label: text(
+      "Toiminnanharjoittajan vakuutus",
+      "Installation business declaration",
+    ),
+  },
+);
+const chargeFieldIndex = checklistDefinitions.commissioning.fields.findIndex(
+  (field) => field.id === "chargeKg",
+);
+checklistDefinitions.commissioning.fields.splice(
+  chargeFieldIndex + 1,
+  0,
+  {
+    id: "refrigerantSafetyClass",
+    label: text("Kylmäaineen turvallisuusluokka", "Refrigerant safety class"),
+  },
+  decimalField(
+    "refrigerantGwp",
+    "Kylmäaineen GWP-arvo",
+    "Refrigerant GWP value",
+  ),
+);
+checklistDefinitions.commissioning.fields.splice(
+  chargeFieldIndex + 4,
+  0,
+  { id: "refrigerantGwpBasis", label: text("GWP-peruste", "GWP basis") },
+  {
+    id: "refrigerantSourceNote",
+    label: text("GWP-lähdeviite", "GWP source reference"),
+  },
+);
+// The same recorded measurements can accompany commissioning without a second report.
+checklistDefinitions.commissioning.fields.push(
+  ...checklistDefinitions.evacuation.fields.map((field) => ({
+    ...field,
+    ...(field.id === "finding"
+      ? {
+          id: "evacuationFinding",
+          label: text(
+            "Tyhjiöinnin ja pitokokeen havainnot ja arvio",
+            "Evacuation and standing-test findings and assessment",
+          ),
+        }
+      : {}),
+    group: "evacuation" as const,
+  })),
+);
 export const commonChecklistFields: ChecklistField[] = [
   {
     id: "equipment",
     label: text("Laite / tunniste", "Equipment / identifier"),
+    help: text(
+      "Laitteen sarjanumero tai muu yksilöinti.",
+      "Equipment serial number or another unique identifier.",
+    ),
   },
   {
     id: "performedOn",
@@ -577,6 +747,7 @@ export const commonChecklistFields: ChecklistField[] = [
   { id: "technician", label: text("Tekijä", "Technician") },
   {
     id: "signatureName",
+    legacy: true,
     label: text("Allekirjoituksen nimenselvennys", "Signature name"),
     help: text(
       "Allekirjoitus lisätään tulostettuun raporttiin. Nimi ei ole sähköinen allekirjoitus.",
@@ -603,6 +774,102 @@ export function checklistReportFields(draft: ChecklistDraft): ChecklistField[] {
     ...checklistDefinitions[draft.kind].fields,
   ].filter((field) => !field.legacy || Boolean(draft.fields[field.id]));
 }
+/** Carry only still-applicable confirmations when a commissioning field changes. */
+export function updateCommissioningFields(
+  previous: Record<string, string>,
+  next: Record<string, string>,
+): Record<string, string> {
+  const updated = { ...previous, ...next };
+  if (
+    Object.keys(updated).some(
+      (id) => id !== "operatorDeclaration" && updated[id] !== previous[id],
+    )
+  )
+    updated.operatorDeclaration = "";
+  if (
+    updated.refrigerantId !== previous.refrigerantId ||
+    updated.chargeKg !== previous.chargeKg
+  )
+    updated.leakCheckInterval = "";
+  if (updated.refrigerantId !== previous.refrigerantId)
+    updated.pressureTestRequired = "not_assessed";
+  return updated;
+}
+/** Checks presence and basic number validity, not legal applicability, test acceptance or signatures. */
+export function commissioningMissingFields(
+  fields: Record<string, string>,
+): ChecklistField[] {
+  const required = [
+    "equipment",
+    "technician",
+    "installerCompany",
+    "installerQualificationNumber",
+    "responsiblePerson",
+    "responsibleQualificationNumber",
+    "refrigerantId",
+    "refrigerantSafetyClass",
+    "refrigerantGwp",
+    "refrigerantGwpBasis",
+    "refrigerantSourceNote",
+    "chargeKg",
+    "leakCheckInterval",
+    "tightnessTestReportReference",
+    "testRunReportReference",
+    "operatorDeclaration",
+  ];
+  const missing = required.filter((id) => !fields[id]?.trim());
+  if (
+    fields.operatorDeclaration !== "confirmed" &&
+    !missing.includes("operatorDeclaration")
+  )
+    missing.push("operatorDeclaration");
+  const positive = (id: string, zero = false) => {
+    try {
+      const value = parseDecimal(fields[id] ?? "");
+      return zero ? value.gte(0) : value.gt(0);
+    } catch {
+      return false;
+    }
+  };
+  for (const id of ["chargeKg", "refrigerantGwp"])
+    if (!positive(id, id === "refrigerantGwp") && !missing.includes(id))
+      missing.push(id);
+  if (!["yes", "no"].includes(fields.pressureTestRequired))
+    missing.push("pressureTestRequired");
+  else if (
+    fields.pressureTestRequired === "yes" &&
+    !fields.pressureTestReportReference?.trim()
+  )
+    missing.push("pressureTestReportReference");
+  else if (
+    fields.pressureTestRequired === "no" &&
+    !fields.pressureTestExemptionReason?.trim()
+  )
+    missing.push("pressureTestExemptionReason");
+  const inlineEvacuationComplete =
+    [
+      "criterion",
+      "instrumentName",
+      "measurementLocation",
+      "evacuationFinding",
+    ].every((id) => fields[id]?.trim()) &&
+    ["mbar", "micron", "Pa"].includes(fields.vacuumUnit) &&
+    [
+      "achievedPressure",
+      "holdStartPressure",
+      "holdEndPressure",
+      "holdMinutes",
+    ].every((id) => positive(id));
+  if (!fields.evacuationReportReference?.trim() && !inlineEvacuationComplete)
+    missing.push("evacuationReportReference");
+  const all = [
+    ...commonChecklistFields,
+    ...checklistDefinitions.commissioning.fields,
+  ];
+  return missing
+    .map((id) => all.find((field) => field.id === id)!)
+    .filter(Boolean);
+}
 export function checklistText(
   draft: ChecklistDraft,
   locale: "fi" | "en",
@@ -614,7 +881,8 @@ export function checklistText(
     `${locale === "fi" ? "Muokattu" : "Updated"}: ${draft.updatedAt}`,
     "",
     ...checklistReportFields(draft).map(
-      (f) => `${f.label[locale]}: ${draft.fields[f.id] || "—"}`,
+      (f) =>
+        `${f.label[locale]}: ${f.options?.find((option) => option.value === draft.fields[f.id])?.label[locale] ?? (draft.fields[f.id] || "—")}`,
     ),
     "",
     ...definition.steps.map(
