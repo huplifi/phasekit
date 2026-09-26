@@ -263,14 +263,19 @@ test('serves the app shell offline after first online load and exposes PWA metad
   return {status:response.status,body:await response.json()};
  },manifestHref);
  expect(manifest.status).toBe(200);
- expect(manifest.body.name).toBe('PhaseKit');
+ const beta=await page.locator('.beta-banner').count()>0;
+ const iconPrefix=beta?'/icons/icon-beta':'/icons/icon';
+ expect(manifest.body.name).toBe(beta?'PhaseKit Beta':'PhaseKit');
+ expect(manifest.body.short_name).toBe(beta?'PhaseKit Beta':'PhaseKit');
+ await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href',beta?'/icons/icon-beta-180.png':'/icons/icon-192.png');
+ if(beta)await expect(page.locator('meta[name="apple-mobile-web-app-title"]')).toHaveAttribute('content','PhaseKit Beta');
  expect(manifest.body.display).toBe('standalone');
  expect(manifest.body.scope).toBe('/');
  expect(manifest.body.icons).toEqual(expect.arrayContaining([
-  expect.objectContaining({src:'/icons/icon-192.png',sizes:'192x192',type:'image/png'}),
-  expect.objectContaining({src:'/icons/icon-512.png',sizes:'512x512',type:'image/png'}),
+  expect.objectContaining({src:`${iconPrefix}-192.png`,sizes:'192x192',type:'image/png'}),
+  expect.objectContaining({src:`${iconPrefix}-512.png`,sizes:'512x512',type:'image/png'}),
  ]));
- for(const path of ['/icons/icon-192.png','/icons/icon-512.png']){
+ for(const path of [`${iconPrefix}-192.png`,`${iconPrefix}-512.png`]){
   const response=await page.request.get(new URL(path,page.url()).toString());
   expect(response.ok()).toBeTruthy();
   expect(response.headers()['content-type']).toContain('image/png');
