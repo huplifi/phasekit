@@ -788,7 +788,9 @@ export function updateCommissioningFields(
     updated.operatorDeclaration = "";
   if (
     updated.refrigerantId !== previous.refrigerantId ||
-    updated.chargeKg !== previous.chargeKg
+    updated.chargeKg !== previous.chargeKg ||
+    updated.refrigerantGwp !== previous.refrigerantGwp ||
+    updated.refrigerantGwpBasis !== previous.refrigerantGwpBasis
   )
     updated.leakCheckInterval = "";
   if (updated.refrigerantId !== previous.refrigerantId)

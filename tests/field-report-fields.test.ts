@@ -209,6 +209,32 @@ describe("structured field reports", () => {
       }),
     ).toEqual([]);
   });
+  it.each([
+    ["refrigerantGwp", "2088"],
+    ["refrigerantGwpBasis", "Updated regulatory basis"],
+  ])("requires a fresh leak interval when %s changes", (field, value) => {
+    const before = {
+      refrigerantId: "r134a",
+      refrigerantGwp: "1430",
+      refrigerantGwpBasis: "EU-2024/573-Annex-I-AR4",
+      chargeKg: "2",
+      leakCheckInterval: "12 months",
+      pressureTestRequired: "no",
+      operatorDeclaration: "confirmed",
+    };
+    const updated = updateCommissioningFields(before, { [field]: value });
+    expect(updated).toMatchObject({
+      [field]: value,
+      leakCheckInterval: "",
+      operatorDeclaration: "",
+      pressureTestRequired: "no",
+    });
+    const reconfirmed = updateCommissioningFields(updated, {
+      operatorDeclaration: "confirmed",
+    });
+    expect(commissioningMissingFields(reconfirmed).map((item) => item.id))
+      .toContain("leakCheckInterval");
+  });
   it("requires renewed declaration and dependent assessments after substantive changes", () => {
     const before = {
       refrigerantId: "r134a",

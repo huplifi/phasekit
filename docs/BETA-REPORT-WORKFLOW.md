@@ -19,7 +19,7 @@ Every PDF keeps its key result prominent; detail rows, components and provenance
 
 ## Verification
 
-- TypeScript, ESLint, production build and all 269 unit tests passed locally.
+- TypeScript, ESLint, production build and all 269 initial unit tests passed locally. PR review identified one further dependency: changing GWP or its basis must invalidate the recorded leak-check interval. Two regressions reproduced the stale interval, then passed after the fix; fresh type/lint and all **271 unit tests** passed.
 - The initial full four-profile browser run exposed an autosave status-height jump and outdated test selectors/expectations. After fixing them, all 104 targeted Chromium/WebKit desktop/mobile checks passed. The final complete browser run passed **308 tests with 2 existing WebKit offline-reload skips**, covering revision preservation, inline evacuation, report printing, date sizing, equipment empty-state spacing and the prior calculator/UI fixes.
 - Isolated 390 px Chromium inspection confirmed the catalogue, equipment empty state, report date control, red overdue card and grouped explanation actions. Automated report date checks also cover 320 px widths.
 - The R404A 20 kg assessment (last inspection 2025-11-01; assessment 2026-09-26) renders as one A4 page with a red overdue label, compact input/component tables, source information and footer. Decimal precision is retained with Finnish formatting.
