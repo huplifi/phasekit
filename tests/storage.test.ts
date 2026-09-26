@@ -286,6 +286,41 @@ it("keeps old reports readable and validates frozen chart vectors in backups", (
   expect(
     parseBackup(JSON.stringify(withChart)).toolRecords[0].chartSnapshot,
   ).toEqual(chartSnapshot);
+  const withGuides = {
+    ...chartSnapshot,
+    view: {
+      fitCycle: false,
+      visibleKinds: { temperature: true, entropy: false, volume: true },
+    },
+    isolineDataVersion: "isolines-frozen-1",
+    isolines: [
+      {
+        kind: "temperature",
+        phase: "vapour",
+        level: 20,
+        segments: [
+          [
+            [1, 220],
+            [2, 230],
+          ],
+          [
+            [8, 245],
+            [9, 250],
+          ],
+        ],
+      },
+    ],
+  };
+  const guidesBackup = {
+    ...emptyData(),
+    toolRecords: [{ ...report, chartSnapshot: withGuides }],
+  };
+  expect(
+    parseBackup(JSON.stringify(guidesBackup)).toolRecords[0].chartSnapshot,
+  ).toEqual(withGuides);
+  const badGuide = structuredClone(guidesBackup);
+  badGuide.toolRecords[0].chartSnapshot.isolines[0].segments[0][0][0] = 0;
+  expect(() => parseBackup(JSON.stringify(badGuide))).toThrow();
   expect(() =>
     parseBackup(
       JSON.stringify({
