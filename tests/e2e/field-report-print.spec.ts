@@ -20,9 +20,7 @@ test("evacuation draft and final print keep measured facts, status and provenanc
     .locator("select")
     .selectOption("mbar");
   await page.getByLabel("Tavoitepaine", { exact: true }).fill("0,30");
-  await page
-    .getByLabel("Saavutettu paine ennen pumpun erottamista", { exact: true })
-    .fill("0,25");
+  await page.getByLabel("Saavutettu paine", { exact: true }).fill("0,25");
   await page.getByLabel("Pitokokeen alkupaine", { exact: true }).fill("0,25");
   await page.getByLabel("Pitokokeen loppupaine", { exact: true }).fill("0,29");
   await page.getByLabel("Pitokokeen kesto · min", { exact: true }).fill("15");

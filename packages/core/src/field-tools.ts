@@ -483,8 +483,12 @@ checklistDefinitions.evacuation.fields.unshift(
   decimalField("targetPressure", "Tavoitepaine", "Target pressure"),
   decimalField(
     "achievedPressure",
-    "Saavutettu paine ennen pumpun erottamista",
-    "Achieved pressure before pump isolation",
+    "Saavutettu paine",
+    "Achieved pressure",
+    text(
+      "Paine pumpun käydessä, ennen sen erottamista järjestelmästä.",
+      "Pressure while the pump is running, before isolating it from the system.",
+    ),
   ),
   decimalField(
     "evacuationMinutes",

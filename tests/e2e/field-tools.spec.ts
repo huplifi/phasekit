@@ -110,9 +110,7 @@ test("checklist keeps observations after reload, exports them and requires delet
       exact: true,
     })
     .selectOption("Pa");
-  await page
-    .getByLabel("Saavutettu paine ennen pumpun erottamista", { exact: true })
-    .fill("300");
+  await page.getByLabel("Saavutettu paine", { exact: true }).fill("300");
   await page
     .getByLabel("Tyhjiöinnin kesto tavoitepaineeseen · min", { exact: true })
     .fill("30");
@@ -144,7 +142,7 @@ test("checklist keeps observations after reload, exports them and requires delet
     .toBe(true);
   await page.reload();
   await expect(
-    page.getByLabel("Saavutettu paine ennen pumpun erottamista", {
+    page.getByLabel("Saavutettu paine", {
       exact: true,
     }),
   ).toHaveValue("300");
@@ -162,7 +160,7 @@ test("checklist keeps observations after reload, exports them and requires delet
     "Testikohde",
   );
   await expect(
-    page.getByLabel("Saavutettu paine ennen pumpun erottamista", {
+    page.getByLabel("Saavutettu paine", {
       exact: true,
     }),
   ).toHaveValue("300");
