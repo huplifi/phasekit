@@ -1,5 +1,32 @@
 [
   {
+    "version": "0.2.0-beta.4",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Työmaaraportit mukaan työpäivään",
+      "en": "Field reports for everyday work"
+    },
+    "changes": {
+      "fi": [
+        "Raportit kokoaa työmaakirjaukset, luonnokset ja tallennetut laskelmat. Raportteja voi hakea kohteen tai laitteen nimellä ja suodattaa tyypin mukaan.",
+        "Automaattinen tallennus näkyy myös lomakkeen lopussa. Viimeistellyn raportin muokkaus luo uuden version ja säilyttää alkuperäisen.",
+        "Päivä, tekijä ja allekirjoituksen nimenselvennys ovat erillisiä kenttiä. Tyhjiöinnin ja pitokokeen mittaukset sekä käyttöönoton käyntiarvot kirjataan erikseen.",
+        "Käyttöönoton tuetuista mittausarvoista voi muodostaa tulistus- ja alijäähdytyslaskelman sekä log(p)–h-kaavion raporttiin. Aineisto ja kaavio säilyvät tallenteen mukana.",
+        "Tulosteissa näkyvät raportin tyyppi, keskeiset mittaukset, versiotiedot ja allekirjoituskohta. Mukana ovat myös huolto- ja kylmäainekirjauspohjat.",
+        "Tarkistuslistojen rastit ovat siniset. Tallennettujen vuototarkastusten otsikot ja fontit yhtenäistetty. Aiemmat kirjaukset ja niiden vapaatekstit säilyvät."
+      ],
+      "en": [
+        "Reports brings together field records, drafts and saved calculations, with site/equipment search and type filters.",
+        "Automatic save feedback also appears beside the final actions. Editing a finalised report creates a new revision and preserves the original.",
+        "Work date, technician and printed signature name have separate fields. Evacuation and standing-test measurements and commissioning readings are recorded individually.",
+        "Supported commissioning measurements can generate frozen superheat/subcooling results and a log(p)–h diagram, retaining sources and chart data with the record.",
+        "Printouts show report type, key measurements, version information and a signature line. Service and refrigerant movement templates are included.",
+        "Checklist ticks are blue and saved leak-check summaries share consistent titles and typography. Existing records and original free text remain available."
+      ]
+    }
+  },
+  {
     "version": "0.2.0-beta.3",
     "date": "2026-09-26",
     "channel": "beta",

@@ -100,13 +100,20 @@ test("checklist keeps observations after reload, exports them and requires delet
 }) => {
   await page.goto("/#/checklists");
   await page
-    .getByRole("combobox", { name: "Uusi lista", exact: true })
+    .getByRole("combobox", { name: "Raporttipohja", exact: true })
     .selectOption("evacuation");
-  await page.getByRole("button", { name: "Luo lista", exact: true }).click();
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   await page.getByLabel("Kohteen nimi", { exact: true }).fill("Testikohde");
   await page
-    .getByLabel("Saavutettu tyhjiö ja aika (yksiköineen)", { exact: true })
-    .fill("300 Pa · 10:30");
+    .getByRole("combobox", {
+      name: "Tyhjiöpaineen yksikkö (absoluuttinen)",
+      exact: true,
+    })
+    .selectOption("Pa");
+  await page.getByLabel("Saavutettu paine", { exact: true }).fill("300");
+  await page
+    .getByLabel("Tyhjiöinnin kesto tavoitepaineeseen · min", { exact: true })
+    .fill("30");
   await page
     .getByLabel("Saavutettu tyhjiö ja mittauspaikka kirjattu", { exact: true })
     .check();
@@ -134,11 +141,17 @@ test("checklist keeps observations after reload, exports them and requires delet
     )
     .toBe(true);
   await page.reload();
+  await expect(
+    page.getByLabel("Saavutettu paine", {
+      exact: true,
+    }),
+  ).toHaveValue("300");
+  await page.goto("/#/checklists");
   await page
-    .getByRole("combobox", { name: "Omat listat", exact: true })
+    .getByRole("combobox", { name: "Aiemmat raportit", exact: true })
     .selectOption({
       label: await page
-        .getByRole("combobox", { name: "Omat listat", exact: true })
+        .getByRole("combobox", { name: "Aiemmat raportit", exact: true })
         .locator("option")
         .last()
         .innerText(),
@@ -147,8 +160,21 @@ test("checklist keeps observations after reload, exports them and requires delet
     "Testikohde",
   );
   await expect(
-    page.getByLabel("Saavutettu tyhjiö ja aika (yksiköineen)", { exact: true }),
-  ).toHaveValue("300 Pa · 10:30");
+    page.getByLabel("Saavutettu paine", {
+      exact: true,
+    }),
+  ).toHaveValue("300");
+  await expect(
+    page.getByRole("combobox", {
+      name: "Tyhjiöpaineen yksikkö (absoluuttinen)",
+      exact: true,
+    }),
+  ).toHaveValue("Pa");
+  await expect(
+    page.getByLabel("Tyhjiöinnin kesto tavoitepaineeseen · min", {
+      exact: true,
+    }),
+  ).toHaveValue("30");
   await expect(
     page.getByLabel("Saavutettu tyhjiö ja mittauspaikka kirjattu", {
       exact: true,
@@ -169,12 +195,16 @@ test("checklist keeps observations after reload, exports them and requires delet
     path: test.info().outputPath("checklist.png"),
     fullPage: true,
   });
-  await page.getByRole("button", { name: "Poista lista", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Poista raportti", exact: true })
+    .click();
   await page.getByRole("button", { name: "Peruuta", exact: true }).click();
   await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
     "Testikohde",
   );
-  await page.getByRole("button", { name: "Poista lista", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Poista raportti", exact: true })
+    .click();
   await page
     .getByRole("button", { name: "Vahvista poisto", exact: true })
     .click();

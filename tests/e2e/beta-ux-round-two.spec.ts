@@ -5,7 +5,7 @@ test("checklist editing keeps scroll and focus stable during automatic saves", a
   page,
 }) => {
   await page.goto("/#/checklists");
-  await page.getByRole("button", { name: "Luo lista", exact: true }).click();
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   const notes = page.getByRole("textbox", {
     name: "Muistiinpanot",
     exact: true,
@@ -24,8 +24,8 @@ test("checklist editing keeps scroll and focus stable during automatic saves", a
   });
   await notes.pressSequentially("Mittaus", { delay: 140 });
   await expect(
-    page.getByRole("status").filter({ hasText: "Tallennettu" }),
-  ).toBeVisible();
+    page.locator(".field-checklist-save-state > [role=status]"),
+  ).toHaveText("Tallennettu automaattisesti tähän selaimeen");
   await expect(notes).toBeFocused();
   const positions = await page.evaluate(
     () => (window as unknown as { scrollSamples: number[] }).scrollSamples,
@@ -35,8 +35,10 @@ test("checklist editing keeps scroll and focus stable during automatic saves", a
   );
   await expect(notes).toHaveValue("Mittaus");
   await page.reload();
+  await expect(notes).toHaveValue("Mittaus");
+  await page.goto("/#/checklists");
   await page
-    .getByRole("combobox", { name: "Omat listat", exact: true })
+    .getByRole("combobox", { name: "Aiemmat raportit", exact: true })
     .selectOption({ index: 1 });
   await expect(
     page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
@@ -70,10 +72,13 @@ test("checklist control pairs and footer actions align", async ({
 }, info) => {
   await page.goto("/#/checklists");
   const select = page.getByRole("combobox", {
-    name: "Uusi lista",
+    name: "Raporttipohja",
     exact: true,
   });
-  const create = page.getByRole("button", { name: "Luo lista", exact: true });
+  const create = page.getByRole("button", {
+    name: "Luo raportti",
+    exact: true,
+  });
   if (!info.project.name.startsWith("mobile")) {
     const a = await select.boundingBox(),
       b = await create.boundingBox();
@@ -125,7 +130,7 @@ test("failed initial storage never labels a checklist as saved", async ({
     });
   });
   await page.goto("/#/checklists");
-  await page.getByRole("button", { name: "Luo lista", exact: true }).click();
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   await expect(
     page.locator(".field-checklist-save-state > [role=status]"),
   ).toContainText("epäonnistui");

@@ -1,9 +1,9 @@
 export function savedReportPath(id: string): string {
-  return `/saved/${encodeURIComponent(id)}`;
+  return `/reports/${encodeURIComponent(id)}`;
 }
 
 export function selectedSavedReportId(hash: string): string {
-  const match = /^#\/saved\/(.+)$/.exec(hash);
+  const match = /^#\/(?:saved|reports)\/(.+)$/.exec(hash);
   if (!match) return "";
   try {
     return decodeURIComponent(match[1]);

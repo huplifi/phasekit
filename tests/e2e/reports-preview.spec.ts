@@ -41,7 +41,7 @@ test("saved report keeps frozen provenance and equipment history after equipment
     page.getByRole("button", { name: "Tallennettu", exact: true }),
   ).toBeDisabled();
 
-  await page.goto("/#/saved");
+  await page.goto("/#/reports");
   const report = page.locator(".report-entry");
   await expect(report.locator(".report-summary")).toContainText("20 mm");
   await report.locator(".report-summary").click();
@@ -82,7 +82,7 @@ test("saved report keeps frozen provenance and equipment history after equipment
   page.once("dialog", (dialog) => dialog.accept());
   await page.getByRole("button", { name: "Poista", exact: true }).click();
   await expect(page.getByText("Testikohde 4", { exact: true })).toHaveCount(0);
-  await page.goto("/#/saved");
+  await page.goto("/#/reports");
   await expect(page.locator(".report-entry")).toContainText("Testikohde 4");
   expect(errors).toEqual([]);
 });
@@ -113,7 +113,7 @@ test("current result prints with notes without creating a saved record", async (
   await expect(printPage.locator("body")).toContainText(
     "Lähteet ja versiotiedot",
   );
-  await page.goto("/#/saved");
+  await page.goto("/#/reports");
   await expect(
     page.getByText("Tallennetut laskelmat", { exact: true }),
   ).toHaveCount(0);

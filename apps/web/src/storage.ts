@@ -43,6 +43,16 @@ export interface ToolRecord {
   sources: Source[];
   chartSnapshot?: PHChartSnapshot;
 }
+/** Additive report metadata; legacy checklists remain readable without migration. */
+export interface FieldReport extends ChecklistDraft {
+  status?: "draft" | "final";
+  revision?: number;
+  previousRevisionId?: string;
+  finalizedAt?: string;
+  appVersion?: string;
+  equipmentId?: string;
+  cycleReport?: ToolRecord;
+}
 export interface Snapshot {
   id: string;
   createdAt: string;
@@ -65,7 +75,7 @@ export interface UserData {
   favourites: string[];
   recent: string[];
   snapshots: Snapshot[];
-  checklistDrafts: ChecklistDraft[];
+  checklistDrafts: FieldReport[];
   toolRecords: ToolRecord[];
   equipment: EquipmentRecord[];
   locale: Locale;
@@ -273,10 +283,23 @@ export const backupSchema = z.object({
     .array(
       z.object({
         id: boundedId,
-        kind: z.enum(["tightness", "evacuation", "commissioning"]),
-        title: z.string().max(200),
+        kind: z.enum([
+          "tightness",
+          "evacuation",
+          "commissioning",
+          "service",
+          "refrigerant",
+        ]),
+        title: z.string().max(300),
         updatedAt: z.iso.datetime(),
         checkedIds: z.array(z.string().max(80)).max(100),
+        status: z.enum(["draft", "final"]).optional(),
+        revision: z.number().int().min(1).max(10000).optional(),
+        previousRevisionId: boundedId.optional(),
+        finalizedAt: z.iso.datetime().optional(),
+        appVersion: z.string().max(100).optional(),
+        equipmentId: boundedId.optional(),
+        cycleReport: toolRecord.optional(),
         fields: z
           .record(z.string().max(80), z.string().max(2000))
           .refine((v) => Object.keys(v).length <= 100),

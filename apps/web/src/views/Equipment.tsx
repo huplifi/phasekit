@@ -5,6 +5,8 @@ import { Plus, Save, Trash2, X } from "lucide-react";
 import { formatDate } from "../../../../packages/i18n/src";
 import { reportSummary } from "../report-summary";
 import { savedReportPath } from "../saved-report-route";
+import { checklistDefinitions } from "../../../../packages/core/src/field-tools";
+import { isCalendarDate } from "../../../../packages/core/src/schedule";
 import type { EquipmentRecord } from "../storage";
 import { useApp } from "../context";
 import "./reports.css";
@@ -94,8 +96,8 @@ export function Equipment() {
     if (
       !window.confirm(
         t(
-          `Poistetaanko laite “${item.name}”? Tallennetut laskelmat säilyvät, mutta niiden linkki laitteeseen poistuu. Alkuperäinen laitenimi säilyy.`,
-          `Delete “${item.name}”? Saved calculations remain, but their link to this equipment is removed. The original equipment name is kept.`,
+          `Poistetaanko laite “${item.name}”? Raportit ja laskelmat säilyvät. Laskelmien laitelinkki poistuu. Raporttien alkuperäiset laite- ja kohdetiedot säilyvät muuttumattomina.`,
+          `Delete “${item.name}”? Reports and calculations remain. Calculation links are removed. The original equipment and site details in reports remain unchanged.`,
         ),
       )
     )
@@ -124,8 +126,8 @@ export function Equipment() {
           <h1>{t("Laitteet ja kohteet", "Equipment and sites")}</h1>
           <p className="secondary">
             {t(
-              "Pidä laskelmat järjestyksessä liittämällä ne laitteisiin tai kohteisiin.",
-              "Keep calculations organised by linking them to equipment or sites.",
+              "Pidä raportit ja laskelmat järjestyksessä liittämällä ne laitteisiin tai kohteisiin.",
+              "Keep reports and calculations organised by linking them to equipment or sites.",
             )}
           </p>
         </div>
@@ -213,8 +215,8 @@ export function Equipment() {
           <h2>{t("Laitteita ei ole vielä lisätty", "No equipment yet")}</h2>
           <p>
             {t(
-              "Lisää ensimmäinen laite tai kohde, jotta voit liittää tallennetut laskelmat siihen.",
-              "Add a device or site to organise saved calculations around it.",
+              "Lisää ensimmäinen laite tai kohde, jotta voit liittää raportit ja laskelmat siihen.",
+              "Add a device or site to organise reports and calculations around it.",
             )}
           </p>
         </div>
@@ -224,6 +226,9 @@ export function Equipment() {
             const reports = data.toolRecords.filter(
               (record) => record.equipmentId === item.id,
             );
+            const fieldReports = data.checklistDrafts
+              .filter((record) => record.equipmentId === item.id)
+              .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
             return (
               <article className="equipment-card" key={item.id}>
                 <div className="equipment-card-heading">
@@ -254,11 +259,45 @@ export function Equipment() {
                 {item.notes && <p className="equipment-notes">{item.notes}</p>}
                 <section className="equipment-history">
                   <h3>
-                    {t("Tallennetut laskelmat", "Saved calculations")}{" "}
-                    <span className="secondary">({reports.length})</span>
+                    {t("Raportit ja laskelmat", "Reports and calculations")}{" "}
+                    <span className="secondary">
+                      ({reports.length + fieldReports.length})
+                    </span>
                   </h3>
-                  {reports.length ? (
+                  {reports.length + fieldReports.length ? (
                     <ul className="equipment-record-list">
+                      {fieldReports.map((record) => (
+                        <li key={`field-${record.id}`}>
+                          <button
+                            className="equipment-record-link equipment-field-report-link"
+                            type="button"
+                            onClick={() =>
+                              go(`/checklists/${encodeURIComponent(record.id)}`)
+                            }
+                          >
+                            <strong>
+                              {
+                                checklistDefinitions[record.kind].name[
+                                  data.locale
+                                ]
+                              }{" "}
+                              · {record.title || t("Nimetön", "Untitled")}
+                            </strong>
+                            <span className="secondary">
+                              {formatDate(
+                                isCalendarDate(record.fields.performedOn ?? "")
+                                  ? record.fields.performedOn
+                                  : record.updatedAt,
+                                data.locale,
+                              )}{" "}
+                              ·{" "}
+                              {record.status === "final"
+                                ? t("Valmis", "Final")
+                                : t("Luonnos", "Draft")}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
                       {reports.map((record) => (
                         <li key={record.id}>
                           <button
@@ -279,8 +318,8 @@ export function Equipment() {
                   ) : (
                     <p className="caption secondary">
                       {t(
-                        "Tähän laitteeseen liitettyjä laskelmia ei ole.",
-                        "No calculations are linked to this equipment.",
+                        "Tähän laitteeseen liitettyjä raportteja tai laskelmia ei ole.",
+                        "No reports or calculations are linked to this equipment.",
                       )}
                     </p>
                   )}

@@ -4,6 +4,17 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.2.0-beta.4 — 2026-09-26 · Beta
+
+Field reports for everyday work
+
+- Reports brings together field records, drafts and saved calculations, with site/equipment search and type filters.
+- Automatic save feedback also appears beside the final actions. Editing a finalised report creates a new revision and preserves the original.
+- Work date, technician and printed signature name have separate fields. Evacuation and standing-test measurements and commissioning readings are recorded individually.
+- Supported commissioning measurements can generate frozen superheat/subcooling results and a log(p)–h diagram, retaining sources and chart data with the record.
+- Printouts show report type, key measurements, version information and a signature line. Service and refrigerant movement templates are included.
+- Checklist ticks are blue and saved leak-check summaries share consistent titles and typography. Existing records and original free text remain available.
+
 ## 0.2.0-beta.3 — 2026-09-26 · Beta
 
 Clearer results and field reports

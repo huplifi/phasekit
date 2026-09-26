@@ -149,7 +149,7 @@ test('calculates and saves the R513A 50 kg component result',async({page})=>{
  expect(resultVersion).toBeTruthy();
 
  await page.getByRole('button',{name:fi.save}).click();
- await page.getByRole('navigation',{name:'PhaseKit'}).getByRole('link',{name:'Tallennetut'}).click();
+ await page.getByRole('navigation',{name:'PhaseKit'}).getByRole('link',{name:'Raportit'}).click();
  const saved=page.locator('.saved-entry').first();
  await expect(saved).toContainText('R513A');
  await expect(saved).toContainText('50 kg');
@@ -314,7 +314,7 @@ test('serves the app shell offline after first online load and exposes PWA metad
  const offlineComparison=freshPage.getByRole('region',{name:fi.compare});
  await expect(offlineComparison.getByRole('columnheader',{name:/R513A/})).toBeVisible();
  await expect(offlineComparison.getByRole('columnheader',{name:/R134a/})).toBeVisible();
- await freshPage.getByRole('navigation',{name:'PhaseKit'}).getByRole('link',{name:'Tallennetut'}).click();
+ await freshPage.getByRole('navigation',{name:'PhaseKit'}).getByRole('link',{name:'Raportit'}).click();
  await expect(freshPage.locator('.saved-entry').first()).toContainText('R513A');
  await expect(freshPage.locator('.saved-entry').first()).toContainText('50 kg');
  await freshPage.close();

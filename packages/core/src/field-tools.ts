@@ -69,7 +69,8 @@ export function calculateElectrical(input: {
   };
 }
 
-export type ChecklistKind = "tightness" | "evacuation" | "commissioning";
+export type ChecklistKind =
+  "tightness" | "evacuation" | "commissioning" | "service" | "refrigerant";
 export interface ChecklistDraft {
   id: string;
   kind: ChecklistKind;
@@ -80,13 +81,21 @@ export interface ChecklistDraft {
   notes: string;
 }
 type Text = { fi: string; en: string };
+export interface ChecklistField {
+  id: string;
+  label: Text;
+  type?: "date" | "decimal" | "select" | "refrigerant";
+  options?: { value: string; label: Text }[];
+  help?: Text;
+  legacy?: boolean;
+}
 const text = (fi: string, en: string): Text => ({ fi, en });
 export const checklistDefinitions: Record<
   ChecklistKind,
   {
     name: Text;
     steps: { id: string; label: Text }[];
-    fields: { id: string; label: Text }[];
+    fields: ChecklistField[];
   }
 > = {
   tightness: {
@@ -318,13 +327,267 @@ export const checklistDefinitions: Record<
       },
     ],
   },
+
+  service: {
+    name: text("Huoltokirjaus", "Service record"),
+    steps: [
+      {
+        id: "assessment",
+        label: text(
+          "Lähtötilanne ja huollon tarve kirjattu",
+          "Initial condition and service need recorded",
+        ),
+      },
+      {
+        id: "work",
+        label: text(
+          "Tehdyt työt ja vaihdetut osat kirjattu",
+          "Work and replaced parts recorded",
+        ),
+      },
+      {
+        id: "verification",
+        label: text(
+          "Toiminta ja jatkotoimet kirjattu",
+          "Operation and follow-up recorded",
+        ),
+      },
+    ],
+    fields: [
+      {
+        id: "initialCondition",
+        label: text("Lähtötilanne ja oireet", "Initial condition and symptoms"),
+      },
+      {
+        id: "workPerformed",
+        label: text(
+          "Tehdyt työt ja vaihdetut osat",
+          "Work performed and replaced parts",
+        ),
+      },
+      {
+        id: "measurements",
+        label: text(
+          "Mittaukset ennen ja jälkeen (yksiköineen)",
+          "Before and after measurements (with units)",
+        ),
+      },
+      {
+        id: "finding",
+        label: text("Havainnot ja jatkotoimet", "Findings and follow-up"),
+      },
+    ],
+  },
+  refrigerant: {
+    name: text("Kylmäainekirjaus", "Refrigerant record"),
+    steps: [
+      {
+        id: "identification",
+        label: text(
+          "Kylmäaine ja laite tunnistettu",
+          "Refrigerant and equipment identified",
+        ),
+      },
+      {
+        id: "weighing",
+        label: text(
+          "Punnitukset ja käsitellyt määrät kirjattu",
+          "Weights and handled quantities recorded",
+        ),
+      },
+      {
+        id: "completion",
+        label: text(
+          "Työn syy ja jatkokäsittely kirjattu",
+          "Reason for work and further handling recorded",
+        ),
+      },
+    ],
+    fields: [
+      {
+        id: "refrigerantId",
+        label: text("Kylmäaine", "Refrigerant"),
+        type: "refrigerant",
+      },
+      { id: "reason", label: text("Työn syy", "Reason for work") },
+      {
+        id: "addedKg",
+        label: text("Lisätty kylmäaine · kg", "Refrigerant added · kg"),
+        type: "decimal",
+      },
+      {
+        id: "recoveredKg",
+        label: text(
+          "Talteenotettu kylmäaine · kg",
+          "Refrigerant recovered · kg",
+        ),
+        type: "decimal",
+      },
+      {
+        id: "cylinderId",
+        label: text("Pullon tunniste", "Cylinder identifier"),
+      },
+      {
+        id: "cylinderBeforeKg",
+        label: text("Pullon paino ennen · kg", "Cylinder weight before · kg"),
+        type: "decimal",
+      },
+      {
+        id: "cylinderAfterKg",
+        label: text("Pullon paino jälkeen · kg", "Cylinder weight after · kg"),
+        type: "decimal",
+      },
+      {
+        id: "finding",
+        label: text(
+          "Havainnot ja jatkokäsittely",
+          "Findings and further handling",
+        ),
+      },
+    ],
+  },
 };
-export const commonChecklistFields = [
+const decimalField = (
+  id: string,
+  fi: string,
+  en: string,
+  help?: Text,
+): ChecklistField => ({
+  id,
+  label: text(fi, en),
+  type: "decimal",
+  ...(help ? { help } : {}),
+});
+const legacyIds: Partial<Record<ChecklistKind, string[]>> = {
+  evacuation: ["instrument", "vacuum", "hold"],
+  commissioning: ["charge", "pressures", "temperatures"],
+};
+for (const kind of ["evacuation", "commissioning"] as const) {
+  for (const field of checklistDefinitions[kind].fields) {
+    if (legacyIds[kind]?.includes(field.id)) field.legacy = true;
+  }
+}
+checklistDefinitions.evacuation.fields.unshift(
+  {
+    id: "vacuumUnit",
+    label: text(
+      "Tyhjiöpaineen yksikkö (absoluuttinen)",
+      "Vacuum pressure unit (absolute)",
+    ),
+    type: "select",
+    options: ["mbar", "micron", "Pa"].map((value) => ({
+      value,
+      label: text(value, value),
+    })),
+  },
+  decimalField("targetPressure", "Tavoitepaine", "Target pressure"),
+  decimalField(
+    "achievedPressure",
+    "Saavutettu paine",
+    "Achieved pressure",
+    text(
+      "Paine pumpun käydessä, ennen sen erottamista järjestelmästä.",
+      "Pressure while the pump is running, before isolating it from the system.",
+    ),
+  ),
+  decimalField(
+    "evacuationMinutes",
+    "Tyhjiöinnin kesto tavoitepaineeseen · min",
+    "Evacuation duration to target pressure · min",
+  ),
+  decimalField(
+    "holdStartPressure",
+    "Pitokokeen alkupaine",
+    "Standing-test start pressure",
+    text(
+      "Paine pumpusta erotetussa järjestelmässä kokeen alkaessa.",
+      "System pressure after isolating the pump, at the start of the test.",
+    ),
+  ),
+  decimalField(
+    "holdEndPressure",
+    "Pitokokeen loppupaine",
+    "Standing-test end pressure",
+  ),
+  decimalField(
+    "holdMinutes",
+    "Pitokokeen kesto · min",
+    "Standing-test duration · min",
+  ),
+  { id: "instrumentName", label: text("Mittari", "Instrument") },
+  {
+    id: "measurementLocation",
+    label: text("Mittauspaikka", "Measurement location"),
+  },
+);
+checklistDefinitions.commissioning.fields.unshift(
+  {
+    id: "refrigerantId",
+    label: text("Kylmäaine", "Refrigerant"),
+    type: "refrigerant",
+  },
+  decimalField("chargeKg", "Täyttömäärä · kg", "Charge · kg"),
+  {
+    id: "pressureUnit",
+    label: text("Paineyksikkö", "Pressure unit"),
+    type: "select",
+    options: ["bar", "kPa", "MPa", "psi"].map((value) => ({
+      value,
+      label: text(value, value),
+    })),
+  },
+  {
+    id: "pressureReference",
+    label: text("Paineviite", "Pressure reference"),
+    type: "select",
+    options: [
+      { value: "gauge", label: text("Ylipaine (g)", "Gauge (g)") },
+      { value: "absolute", label: text("Absoluuttinen (a)", "Absolute (a)") },
+    ],
+  },
+  decimalField(
+    "atmosphericReference",
+    "Ilmanpaine · bar(a)",
+    "Atmospheric pressure · bar(a)",
+  ),
+  decimalField("lp", "LP · imupaine", "LP · suction pressure"),
+  decimalField("hp", "HP · korkeapaine", "HP · high pressure"),
+  decimalField(
+    "suctionC",
+    "Imukaasun lämpötila · °C",
+    "Suction temperature · °C",
+  ),
+  decimalField(
+    "dischargeC",
+    "Kuumakaasun lämpötila · °C",
+    "Discharge temperature · °C",
+  ),
+  decimalField("liquidC", "Nesteen lämpötila · °C", "Liquid temperature · °C"),
+);
+export const commonChecklistFields: ChecklistField[] = [
   {
     id: "equipment",
     label: text("Laite / tunniste", "Equipment / identifier"),
   },
-  { id: "date", label: text("Päivä ja tekijä", "Date and technician") },
+  {
+    id: "performedOn",
+    label: text("Suorituspäivä", "Work date"),
+    type: "date",
+  },
+  { id: "technician", label: text("Tekijä", "Technician") },
+  {
+    id: "signatureName",
+    label: text("Allekirjoituksen nimenselvennys", "Signature name"),
+    help: text(
+      "Allekirjoitus lisätään tulostettuun raporttiin. Nimi ei ole sähköinen allekirjoitus.",
+      "Sign the printed report. A typed name is not an electronic signature.",
+    ),
+  },
+  {
+    id: "date",
+    label: text("Päivä ja tekijä", "Date and technician"),
+    legacy: true,
+  },
   {
     id: "instructions",
     label: text(
@@ -333,6 +596,13 @@ export const commonChecklistFields = [
     ),
   },
 ];
+/** Includes untouched legacy data only when present; never parses free text into measurements. */
+export function checklistReportFields(draft: ChecklistDraft): ChecklistField[] {
+  return [
+    ...commonChecklistFields,
+    ...checklistDefinitions[draft.kind].fields,
+  ].filter((field) => !field.legacy || Boolean(draft.fields[field.id]));
+}
 export function checklistText(
   draft: ChecklistDraft,
   locale: "fi" | "en",
@@ -343,7 +613,7 @@ export function checklistText(
     draft.title,
     `${locale === "fi" ? "Muokattu" : "Updated"}: ${draft.updatedAt}`,
     "",
-    ...[...commonChecklistFields, ...definition.fields].map(
+    ...checklistReportFields(draft).map(
       (f) => `${f.label[locale]}: ${draft.fields[f.id] || "—"}`,
     ),
     "",
