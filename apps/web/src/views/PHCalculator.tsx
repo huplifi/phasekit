@@ -4,6 +4,7 @@ import {
   PHPhaseBoundaryError,
   type PHCycleResult,
   type PHDiagram,
+  type PHIsoline,
 } from "../../../../packages/core/src/ph";
 import { SourceNote } from "../components/Common";
 import "./ph-calculator.css";
@@ -86,14 +87,17 @@ function PHChart({
   result,
   fi,
   fitCycle,
+  visibleKinds,
 }: {
   diagram: PHDiagram;
   result?: PHCycleResult | null;
   fi: boolean;
   fitCycle: boolean;
+  visibleKinds: Record<PHIsoline["kind"], boolean>;
 }) {
   const titleId = useId();
   const descriptionId = useId();
+  const clipId = useId();
   const allNodes = diagram.dome.map((node) => ({
     p: Number(node.pressureBarAbsolute),
     liquid: Number(node.liquidEnthalpyKJkg),
@@ -129,9 +133,16 @@ function PHChart({
           : Math.min(allNodes.length, firstBeyond + 1),
       )
     : allNodes;
+  const selectedIsolines = diagram.isolines.filter(
+    (line) => visibleKinds[line.kind],
+  );
+  const isolinePoints = focusCycle
+    ? []
+    : selectedIsolines.flatMap((line) => line.segments.flat());
   const allH = [
     ...nodes.flatMap((node) => [node.liquid, node.vapour]),
     ...points.map((point) => point.h),
+    ...isolinePoints.map((point) => point[1]),
   ];
   const lowH = Math.min(...allH);
   const highH = Math.max(...allH);
@@ -227,9 +238,14 @@ function PHChart({
         </title>
         <desc id={descriptionId}>
           {fi
-            ? `Pystyakseli on absoluuttisen paineen logaritminen asteikko, vaaka-akseli ominaisentalpia. Avoimet käyrät ovat rajatun malliaineiston kylläisyysrajat.${result ? " Suorat viivat yhdistävät laskettuja pisteitä 1–2–3–4 kaavamaisesti." : ""}`
-            : `Vertical axis is logarithmic absolute pressure, horizontal axis is specific enthalpy. Open curves are saturation boundaries from a limited model domain.${result ? " Straight lines connect calculated points 1–2–3–4 schematically." : ""}`}
+            ? `Pystyakseli on absoluuttisen paineen logaritminen asteikko, vaaka-akseli ominaisentalpia. Avoimet käyrät ovat rajatun malliaineiston kylläisyysrajat. Näkyvät apukäyrät ovat rajattuja yksifaasisen alueen malliarvoja.${result ? " Suorat viivat yhdistävät laskettuja pisteitä 1–2–3–4 kaavamaisesti." : ""}`
+            : `Vertical axis is logarithmic absolute pressure, horizontal axis is specific enthalpy. Open curves are saturation boundaries from a limited model domain. Visible guide curves are bounded single-phase model values.${result ? " Straight lines connect calculated points 1–2–3–4 schematically." : ""}`}
         </desc>
+        <defs>
+          <clipPath id={clipId}>
+            <rect x={box.left} y={box.top} width={width} height={height} />
+          </clipPath>
+        </defs>
         {hGrid.map(({ value: tick, major }, index) => (
           <g key={`h-${index}`}>
             <line
@@ -281,6 +297,22 @@ function PHChart({
           className="ph-axis"
           d={`M ${box.left} ${box.top} V ${box.top + height} H ${box.left + width}`}
         />
+        <g clipPath={`url(#${clipId})`}>
+          {selectedIsolines.flatMap((line, lineIndex) =>
+            line.segments.map((segment, segmentIndex) => (
+              <path
+                key={`${lineIndex}-${segmentIndex}`}
+                className={`ph-isoline ph-isoline-${line.kind}`}
+                d={segment
+                  .map(
+                    ([p, h], index) =>
+                      `${index ? "L" : "M"} ${x(h).toFixed(2)} ${y(p).toFixed(2)}`,
+                  )
+                  .join(" ")}
+              />
+            )),
+          )}
+        </g>
         <path className="ph-boundary ph-bubble" d={boundary("liquid")} />
         <path className="ph-boundary ph-dew" d={boundary("vapour")} />
         {result &&
@@ -369,6 +401,13 @@ export function PHDiagramPanel({
   fi: boolean;
 }) {
   const [fitCycle, setFitCycle] = useState(false);
+  const [visibleKinds, setVisibleKinds] = useState<
+    Record<PHIsoline["kind"], boolean>
+  >({
+    temperature: true,
+    entropy: false,
+    volume: false,
+  });
   const diagram = id ? getPHDiagram(id) : null;
   const l = (a: string, b: string) => (fi ? a : b);
   const formatted = (value: string) =>
@@ -435,12 +474,57 @@ export function PHDiagramPanel({
               {l("Sovita kiertoon", "Fit cycle")}
             </button>
           </div>
+          {diagram.isolines.length > 0 && (
+            <div
+              className="ph-isoline-controls"
+              role="group"
+              aria-label={l("Apukäyrät", "Guide curves")}
+            >
+              {(
+                [
+                  ["temperature", l("Lämpötila T", "Temperature T"), "°C"],
+                  ["entropy", l("Entropia s", "Entropy s"), "kJ/(kg·K)"],
+                  [
+                    "volume",
+                    l("Ominaistilavuus v", "Specific volume v"),
+                    "m³/kg",
+                  ],
+                ] as const
+              ).map(([kind, name, unit]) => {
+                const available = diagram.isolines.some(
+                  (line) => line.kind === kind,
+                );
+                return (
+                  <button
+                    type="button"
+                    key={kind}
+                    className={`secondary-button ph-isoline-toggle ph-isoline-toggle-${kind}`}
+                    aria-pressed={visibleKinds[kind] && available}
+                    disabled={!available}
+                    onClick={() =>
+                      setVisibleKinds((previous) => ({
+                        ...previous,
+                        [kind]: !previous[kind],
+                      }))
+                    }
+                  >
+                    <span
+                      className={`ph-isoline-key ph-isoline-key-${kind}`}
+                      aria-hidden="true"
+                    />
+                    {name} · {unit}
+                  </button>
+                );
+              })}
+            </div>
+          )}
           <figure className="ph-figure">
             <PHChart
               diagram={diagram}
               result={result}
               fi={fi}
               fitCycle={fitCycle}
+              visibleKinds={visibleKinds}
             />
             <figcaption className="caption secondary">
               {l(
@@ -451,6 +535,12 @@ export function PHDiagramPanel({
                 l(
                   "Suorat pisteiden välit kuvaavat kierron järjestystä kaavamaisesti, eivät laskettua prosessireittiä.",
                   "Straight connections show cycle order schematically, not a calculated process path.",
+                )}
+              {diagram.isolines.length > 0 && " "}
+              {diagram.isolines.length > 0 &&
+                l(
+                  "Apukäyrät näyttävät vain CoolPropista lasketut, tarkistetut yksifaasisen alueen osat. Puuttuvia alueita ei yhdistetä.",
+                  "Guide curves show only checked single-phase segments calculated from CoolProp. Missing regions remain gaps.",
                 )}
             </figcaption>
           </figure>

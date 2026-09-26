@@ -4,6 +4,11 @@ import { VitePWA } from "vite-plugin-pwa";
 import { fileURLToPath } from "node:url";
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
+  define: {
+    "import.meta.env.VITE_BUILD_REVISION": JSON.stringify(
+      process.env.COMMIT_REF?.slice(0, 7) || "development",
+    ),
+  },
   plugins: [
     react(),
     VitePWA({

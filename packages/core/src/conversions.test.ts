@@ -1,6 +1,33 @@
 import { describe, it, expect } from "vitest";
 import { convertUnits } from "./conversions";
 describe("general unit conversion", () => {
+  it("supports refrigeration, vacuum and actual length conversions", () => {
+    expect(
+      Number(
+        convertUnits({
+          group: "power",
+          value: "12000",
+          from: "Btu_IT/h",
+          to: "kW",
+        }),
+      ),
+    ).toBeCloseTo(3.516853, 6);
+    expect(
+      convertUnits({ group: "power", value: "1", from: "TR", to: "kW" }),
+    ).toBe("3.516853");
+    expect(
+      convertUnits({ group: "vacuum", value: "500", from: "µmHg", to: "Pa" }),
+    ).toBe("66.6612");
+    expect(
+      convertUnits({ group: "vacuum", value: "500", from: "µmHg", to: "mbar" }),
+    ).toBe("0.666612");
+    expect(
+      convertUnits({ group: "length", value: "3,5", from: "in", to: "mm" }),
+    ).toBe("88.9");
+    expect(() =>
+      convertUnits({ group: "vacuum", value: "-1", from: "Pa", to: "Torr" }),
+    ).toThrow("negative_absolute_pressure");
+  });
   it("converts independently known mass, energy, power and flow values", () => {
     expect(
       convertUnits({ group: "mass", value: "1", from: "lb", to: "kg" }),

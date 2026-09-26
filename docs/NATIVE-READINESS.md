@@ -1,62 +1,38 @@
 # Native readiness
 
-## Current state
+## Current implementation
 
-PhaseKit is a React, TypeScript and Vite web app with a production PWA build. Capacitor is only partially prepared:
+The beta branch now includes generated Capacitor 8.5.2 projects in `ios/` and `android/`, alongside matching core/CLI/platform dependencies. Both `cap add ios` and `cap add android` completed on 26 September 2026. The iOS project uses Swift Package Manager. Generated web assets and local platform build/configuration files are ignored by Git; Android signing stores are ignored as well.
 
-- [`capacitor.config.ts`](../capacitor.config.ts) sets app ID `fi.phasekit.app`, display name `PhaseKit`, and web output directory `apps/web/dist`.
-- The repository has `@capacitor/core` and `@capacitor/cli` at `^8.5.2` in `package.json`.
-- The Android and iOS platform packages are not declared. There are no generated `android/` or `ios/` projects, and the package scripts do not define native build, run, or sync commands.
-- No native plugins, platform permissions, deep links, signing configuration, store metadata, or release artifacts are configured here.
+The app identity remains `fi.phasekit.app`, display name PhaseKit, and web directory `apps/web/dist`. This is native project preparation, not a verified native application or store release. The current supported runtime remains the browser/PWA.
 
-The supported, documented product today is the browser/PWA. The web app includes local IndexedDB data, offline web assets, Finnish and English UI, saved records, and JSON backup and restore. Browser/PWA behavior does not establish equivalent native WebView storage, offline startup, print/export, link handling, or lifecycle behavior. Native support remains future work in [M5 of the roadmap](ROADMAP.md) and its boundaries are also listed in [release gates](RELEASE-GATES.md).
+## Repeatable workflow
 
-## Prerequisites
-
-The repository pins Node.js 24 in `.nvmrc` and pnpm 11.19.0 in `package.json`. The Capacitor packages are version 8. Capacitor's current v8 environment guide lists Node.js 22 or later, Xcode 26.0 or later plus Xcode Command Line Tools for iOS, and Android Studio 2025.2.1 or later with Android SDK Tools and an API 24 or later platform for Android. The repository's Node and pnpm versions are the project-specific choices; platform tool requirements come from the [Capacitor v8 environment setup](https://capacitorjs.com/docs/getting-started/environment-setup).
-
-An iOS build requires macOS with Xcode. Capacitor 8 defaults to Swift Package Manager for iOS; CocoaPods is optional unless a dependency requires it. Android Studio provides the JDK required by Capacitor's Android workflow. Verify the installed versions against the Capacitor guide before starting platform work.
-
-## Setup commands when native work is authorised
-
-These commands describe the next setup sequence; they have not been run as part of this readiness review. Adding platform packages changes the manifest and lockfile, and `cap add` generates platform projects.
-
-First install the repository dependencies and produce the configured web bundle:
+Use the pinned Node 24 and pnpm 11.19.0 toolchain, then:
 
 ```sh
-corepack enable
 pnpm install --frozen-lockfile
-pnpm build
+pnpm native:sync
+pnpm native:ios
+# or
+pnpm native:android
 ```
 
-The current build script runs refrigerant-data generation, token generation, TypeScript checking, and Vite production build. Confirm that `apps/web/dist/index.html` exists before Capacitor sync.
+`native:sync` rebuilds the web app before copying it into both native projects. Do not commit generated web bundles. Open the appropriate IDE to select a simulator/device and build. The projects currently use the standard generated native assets; app icons and launch assets must be finished before distribution.
 
-Add the Capacitor 8 platform packages, then generate the native projects:
+References: [Capacitor installation](https://capacitorjs.com/docs/getting-started), [environment setup](https://capacitorjs.com/docs/getting-started/environment-setup), [development workflow](https://capacitorjs.com/docs/basics/workflow).
 
-```sh
-pnpm add @capacitor/android@^8.5.2 @capacitor/ios@^8.5.2
-pnpm exec cap add android
-pnpm exec cap add ios
-```
+## Observed toolchain blockers
 
-After each web build, copy the current bundle and update native dependencies with:
+On the current host, `xcodebuild -version` reports Command Line Tools selected without full Xcode, `java -version` reports no Java runtime, and no Android SDK was found at the standard user location. Project generation succeeds without demonstrating compilation. Install/select the official supported Xcode and Android Studio/JDK/SDK toolchains before claiming a build.
 
-```sh
-pnpm build
-pnpm exec cap sync
-```
+## Required before native distribution
 
-Open the generated projects in their native IDEs with `pnpm exec cap open android` or `pnpm exec cap open ios`. Capacitor's [installation guide](https://capacitorjs.com/docs/getting-started) documents adding platform packages, generating projects, and syncing the configured `webDir`. These are setup instructions only; no native project generation, build, or installation has been verified for this repository.
+- Build both projects and resolve platform-specific compilation issues; record exact toolchain versions.
+- Test physical-device first launch, force-close/restart, update and offline cold launch.
+- Verify WebView IndexedDB persistence, backup/import, print/PDF/image export, external links, keyboard, orientation and OS back behaviour. Browser success does not establish native success.
+- Test VoiceOver/TalkBack, text scaling and touch accessibility.
+- Finish app icons/launch assets, privacy/store descriptions and signing/provisioning. No credentials or signing stores belong in Git.
+- Complete qualified review and user pilots from [release gates](RELEASE-GATES.md).
 
-## Unverified device and store gates
-
-There is no evidence in this repository that a native Android or iOS package has been built or installed. The following remain release gates:
-
-- Generate and build Android and iOS projects with the pinned Capacitor major version; resolve platform-specific build issues and record toolchain versions.
-- Install on physical Android and iOS devices. Test first launch, app restart, force-close, update from an earlier app version, and flight-mode cold start.
-- Confirm IndexedDB records and settings survive app restarts and app updates on each platform. Test data export/import, JSON download behavior, printing, external source links, hash-based routes, keyboard behavior, orientation, and OS back/navigation behavior.
-- Complete VoiceOver and TalkBack checks, platform text scaling, focus behavior, and touch usability. Automated web accessibility checks do not replace these device checks.
-- Review privacy disclosures, app icons and store assets, target SDK and permission needs, signing identities, provisioning, and store listing requirements. Configure deep links and a crash-feedback path only when product requirements and privacy decisions are settled.
-- Complete the qualified engineering and regulatory review recorded in [release gates](RELEASE-GATES.md). A native wrapper would not convert model estimates or rule assessments into certified instrument results.
-
-Until those checks have evidence, describe PhaseKit as a web/PWA application with Capacitor configuration present, not as an installable or store-ready native app. No signing, app-store submission, or store release is claimed.
+No native binary, device installation, signing or store submission has been verified or performed.

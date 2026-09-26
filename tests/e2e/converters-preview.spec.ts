@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 test("general converter distinguishes temperature intervals and clears invalid results", async ({
   page,
@@ -57,7 +58,7 @@ test("inverse CO2e calculation shows actual component masses and clears after ed
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.getByText("Tallenna laskelma", { exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Tallennettu", exact: true }),
@@ -69,7 +70,7 @@ test("inverse CO2e calculation shows actual component masses and clears after ed
   await record.locator("summary").click();
   await expect(record).toContainText("R32 · massa");
   await expect(record).toContainText("R125 · massa");
-  await expect(record).toContainText("20.875 t CO₂e");
+  await expect(record).toContainText("20,875 t CO₂e");
   await expect(record).toContainText("EU-2024/573-Annex-I-AR4");
 });
 
@@ -81,27 +82,38 @@ test("live conversion reports reset on edits and retain exact input and referenc
     .getByRole("combobox", { name: "Lähtöpaine", exact: true })
     .selectOption("gauge");
   await page.getByLabel("Arvo · bar", { exact: true }).fill("2,50");
-  await page.getByText("Tallenna laskelma", { exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Tallennettu", exact: true }),
   ).toBeDisabled();
   await page.getByLabel("Arvo · bar", { exact: true }).fill("3");
-  await page.getByText("Tallenna laskelma", { exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Tallenna", exact: true }),
   ).toBeEnabled();
   await page.getByLabel("Arvo · bar", { exact: true }).fill("invalid");
   await expect(
-    page.getByText("Tallenna laskelma", { exact: true }),
+    page.getByText("Tallenna tai tulosta", { exact: true }),
   ).toHaveCount(0);
   await page.goto("/#/saved");
   const entry = page.locator(".report-entry");
   await entry.locator("summary").click();
-  await expect(entry).toContainText("2,50 bar");
-  await expect(entry).toContainText("1.01325 bar(a)");
-  await expect(entry).toContainText("351.325 kPa");
+  await expect(entry).toContainText("2,5 bar");
+  await expect(entry).toContainText("1,01325 bar(a)");
+  await expect(entry).toContainText("351,325 kPa");
   await expect(entry).toContainText("NIST SP 811");
+  const downloaded = page.waitForEvent("download");
+  await entry.getByRole("button", { name: "Vie JSON", exact: true }).click();
+  const frozen = JSON.parse(
+    await readFile(await (await downloaded).path(), "utf8"),
+  );
+  expect(
+    frozen.inputs.find(
+      (row: { label: { en: string } }) => row.label.en === "Entered value",
+    ).value,
+  ).toBe("2,50");
+  expect(frozen.outputs[0].value).toBe("351.325");
 });
 
 test("PT saves model precision and phase boundary and removes save for invalid input", async ({
@@ -109,14 +121,14 @@ test("PT saves model precision and phase boundary and removes save for invalid i
 }) => {
   await page.goto("/#/pt/r134a");
   await page.locator("#pt-temperature").fill("20");
-  await page.getByText("Tallenna laskelma", { exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Tallennettu", exact: true }),
   ).toBeDisabled();
   await page.locator("#pt-temperature").fill("invalid");
   await expect(
-    page.getByText("Tallenna laskelma", { exact: true }),
+    page.getByText("Tallenna tai tulosta", { exact: true }),
   ).toHaveCount(0);
   await page.goto("/#/saved");
   const entry = page.locator(".report-entry");

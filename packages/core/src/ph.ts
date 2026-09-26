@@ -1,4 +1,5 @@
 import rawGrids from '../generated/ph-grids.json';
+import rawIsolines from '../generated/ph-isolines.json';
 import { convertPressure, parseDecimal, type AtmosphericReference, type PressureUnit, type Quantity } from './units';
 import { offlinePTProvider } from './pt';
 
@@ -15,12 +16,28 @@ interface GridPlane {
 interface Grid { coolPropFluid: string; planes: GridPlane[] }
 interface GridFile { dataVersion: string; sourceId: string; grids: Record<string, Grid> }
 const table = rawGrids as GridFile;
+export interface PHIsoline {
+  kind: 'temperature' | 'entropy' | 'volume';
+  phase: Phase;
+  /** °C, kJ/(kg·K), or m³/kg according to kind. */
+  level: number;
+  segments: [number, number][][];
+}
+interface IsolineFile {
+  dataVersion: string;
+  phGridVersion: string;
+  curves: Record<string, PHIsoline[]>;
+}
+const isolineTable = rawIsolines as unknown as IsolineFile;
+if (isolineTable.phGridVersion !== table.dataVersion)
+  throw new Error('ph_isoline_grid_version_mismatch');
 
 export const phMetadata = {
   providerId: 'coolprop-heos-ph-offline',
   sourceIds: [table.sourceId, ...offlinePTProvider.metadata.sourceIds],
   coolPropVersion: '7.2.0',
   dataVersion: table.dataVersion,
+  isolineDataVersion: isolineTable.dataVersion,
   ptDataVersion: offlinePTProvider.metadata.dataVersion,
   ptProviderId: offlinePTProvider.metadata.id,
   pressureConvention: 'absolute' as const,
@@ -50,6 +67,7 @@ export interface PHDomeNode {
 export interface PHDiagram {
   refrigerantId: string;
   dome: PHDomeNode[];
+  isolines: PHIsoline[];
   availability: PHAvailability;
   provider: typeof phMetadata;
 }
@@ -127,6 +145,7 @@ export function getPHDiagram(refrigerantId: string): PHDiagram | null {
       liquidEnthalpyKJkg: String(plane.liquidEnthalpyKJkg),
       vapourEnthalpyKJkg: String(plane.vapourEnthalpyKJkg),
     })),
+    isolines: isolineTable.curves[refrigerantId] ?? [],
     availability: getPHAvailability(refrigerantId), provider: phMetadata,
   };
 }

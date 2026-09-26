@@ -19,6 +19,8 @@ const labels: Record<ConversionGroup, [string, string]> = {
   mass: ["Massa", "Mass"],
   energy: ["Energia", "Energy"],
   power: ["Teho", "Power"],
+  vacuum: ["Tyhjiö · absoluuttinen paine", "Vacuum · absolute pressure"],
+  length: ["Pituus", "Length"],
   volume: ["Tilavuus", "Volume"],
   volume_flow: ["Tilavuusvirta", "Volume flow"],
 };
@@ -76,8 +78,8 @@ export function UnitConverter() {
     result !== null
       ? {
           tool: "convert",
-          title: "Yksikkömuunnos / Unit conversion",
-          dataVersion: "unit-conversions-v1",
+          title: `${labels[group][fi ? 0 : 1]} · ${value} ${from} → ${result} ${to}`,
+          dataVersion: "unit-conversions-v2",
           inputs: [
             row(
               "Suure",
@@ -144,8 +146,21 @@ export function UnitConverter() {
             onChange={(e) => {
               const next = e.target.value as ConversionGroup;
               setGroup(next);
-              setFrom(conversionGroups[next][0]);
-              setTo(conversionGroups[next][1]);
+              const defaults: Partial<
+                Record<ConversionGroup, [string, string]>
+              > = {
+                power: ["Btu_IT/h", "kW"],
+                vacuum: ["µmHg", "Pa"],
+                length: ["in", "mm"],
+                pressure: ["psi", "bar"],
+                volume_flow: ["L/min", "m³/h"],
+              };
+              const pair = defaults[next] ?? [
+                conversionGroups[next][0],
+                conversionGroups[next][1],
+              ];
+              setFrom(pair[0]);
+              setTo(pair[1]);
               setValue("");
             }}
           >
@@ -156,6 +171,36 @@ export function UnitConverter() {
             ))}
           </select>
         </label>
+        <p className="caption secondary">
+          {l(
+            "Esimerkiksi psi → bar, BTU/h → kW, tyhjiömittarin mikronit → Pa tai tuumat → mm.",
+            "For example psi → bar, BTU/h → kW, vacuum microns → Pa or inches → mm.",
+          )}
+        </p>
+        {group === "power" && (
+          <p className="caption secondary">
+            {l(
+              "Btu_IT/h käyttää kansainvälisen taulukon BTU:ta. TR tarkoittaa yhdysvaltalaista kylmätonnia (12 000 Btu_IT/h), ei massaa.",
+              "Btu_IT/h uses the International Table BTU. TR means a US refrigeration ton (12,000 Btu_IT/h), not mass.",
+            )}
+          </p>
+        )}
+        {group === "vacuum" && (
+          <p className="caption secondary">
+            {l(
+              "Tyhjiömittarin mikroni (µmHg) on paineyksikkö. Kaikki tämän ryhmän arvot ovat absoluuttisia; ilmanpainetta ei lisätä.",
+              "A vacuum micron (µmHg) is a pressure unit. All values in this group are absolute; atmospheric pressure is not added.",
+            )}
+          </p>
+        )}
+        {group === "length" && (
+          <p className="caption secondary">
+            {l(
+              "Pituusmuunnos ei muuta putken nimelliskokoa todelliseksi sisä- tai ulkohalkaisijaksi.",
+              "Length conversion does not convert nominal pipe sizes into actual internal or external diameters.",
+            )}
+          </p>
+        )}
         <div className="unit-converter-pair">
           <label>
             {l("Lähtöyksikkö", "From unit")}

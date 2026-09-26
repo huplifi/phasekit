@@ -72,6 +72,61 @@
 .checklist-record .checkbox input {
   flex-shrink: 0;
 }
+.field-checklist-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 12px;
+}
+.field-checklist-controls > * {
+  min-width: 0;
+}
+.field-checklist-choice {
+  min-height: 50px;
+}
+.field-checklist-save-state {
+  margin: 12px 0;
+}
+.field-checklist-print {
+  margin-top: 16px;
+}
+.field-expansion-result {
+  margin-block: 20px;
+}
+.field-pipe-loss,
+.field-expansion {
+  margin-top: 20px;
+}
+
+.field-pipe-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 22px;
+}
+
+.field-pipe-modes [aria-pressed="true"] {
+  background: var(--text);
+  color: var(--background);
+  border-color: var(--text);
+}
+.checklist-record .field-checklist-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 50px;
+  margin-block: 12px;
+  padding: 12px;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+}
+.checklist-record .field-checklist-choice input {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  margin: 0;
+  accent-color: var(--text);
+}
 .field-confirm {
   border: 1px solid var(--control-border);
   border-radius: 8px;
@@ -86,6 +141,9 @@
     font-size: 0.875rem;
   }
   .checklist-record .field-tool-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .field-checklist-controls {
     grid-template-columns: minmax(0, 1fr);
   }
 }

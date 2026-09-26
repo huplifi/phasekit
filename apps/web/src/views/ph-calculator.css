@@ -133,6 +133,36 @@
   border-color: var(--text);
 }
 
+.ph-isoline-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.ph-isoline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.ph-isoline-toggle[aria-pressed="true"] {
+  border-color: var(--text);
+}
+
+.ph-isoline-key {
+  width: 22px;
+  border-top: 2px solid currentColor;
+}
+
+.ph-isoline-key-entropy {
+  border-top-style: dashed;
+}
+.ph-isoline-key-volume {
+  border-top-style: dotted;
+}
+
 .ph-chart-scroll,
 .ph-table-scroll {
   max-width: 100%;
@@ -178,6 +208,21 @@
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 6 4;
+}
+
+.ph-isoline {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.1;
+  stroke-opacity: 0.38;
+  vector-effect: non-scaling-stroke;
+}
+
+.ph-isoline-entropy {
+  stroke-dasharray: 5 4;
+}
+.ph-isoline-volume {
+  stroke-dasharray: 2 4;
 }
 
 .ph-bubble {
@@ -335,4 +380,8 @@
   font-weight: 400;
 }
 
-.ph-temperature-grid label { display: flex; flex-direction: column; justify-content: space-between; }
+.ph-temperature-grid label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 test("saved report keeps frozen provenance and equipment history after equipment deletion", async ({
   page,
@@ -18,11 +19,17 @@ test("saved report keeps frozen provenance and equipment history after equipment
   ).toBeVisible();
 
   await page.goto("/#/pipe");
-  await page.getByLabel("Sisähalkaisija · mm", { exact: true }).fill("20");
-  await page.getByLabel("Pituus · m", { exact: true }).fill("10");
-  await page.getByLabel("Tilavuusvirta", { exact: true }).fill("0.5");
+  await page
+    .getByRole("textbox", { name: "Sisähalkaisija · mm", exact: true })
+    .fill("20");
+  await page
+    .getByRole("textbox", { name: "Pituus · m", exact: true })
+    .fill("10");
+  await page
+    .getByRole("textbox", { name: "Tilavuusvirta", exact: true })
+    .fill("0.5");
   await page.getByRole("button", { name: "Laske", exact: true }).click();
-  await page.getByText("Tallenna laskelma", { exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page
     .getByRole("combobox", { name: "Laite / kohde", exact: true })
     .selectOption({ label: "Testikohde 4" });
@@ -36,7 +43,8 @@ test("saved report keeps frozen provenance and equipment history after equipment
 
   await page.goto("/#/saved");
   const report = page.locator(".report-entry");
-  await report.getByText("Putken tilavuus ja virtaus", { exact: true }).click();
+  await expect(report.locator(".report-summary")).toContainText("20 mm");
+  await report.locator(".report-summary").click();
   await expect(report).toContainText("Testikohde 4");
   await expect(report).toContainText("Lähtötiedot mitattu paikan päällä.");
   await expect(report).toContainText("Lähteet ja versiotiedot");
@@ -49,6 +57,14 @@ test("saved report keeps frozen provenance and equipment history after equipment
   expect((await jsonDownload).suggestedFilename()).toMatch(
     /^phasekit-report-.*\.json$/,
   );
+  const imageDownload = page.waitForEvent("download");
+  await report.getByRole("button", { name: "Tallenna kuvana" }).click();
+  const image = await imageDownload;
+  expect(image.suggestedFilename()).toMatch(/^phasekit-report-.*\.png$/);
+  const png = await readFile(await image.path());
+  expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
+  expect(png.readUInt32BE(16)).toBe(1200);
+  expect(png.readUInt32BE(20)).toBeGreaterThan(500);
   const popupPromise = page.waitForEvent("popup");
   await report
     .getByRole("button", { name: "Tulosta / tallenna PDF", exact: true })
@@ -69,4 +85,36 @@ test("saved report keeps frozen provenance and equipment history after equipment
   await page.goto("/#/saved");
   await expect(page.locator(".report-entry")).toContainText("Testikohde 4");
   expect(errors).toEqual([]);
+});
+
+test("current result prints with notes without creating a saved record", async ({
+  page,
+}) => {
+  await page.goto("/#/pipe");
+  await page
+    .getByRole("textbox", { name: "Sisähalkaisija · mm", exact: true })
+    .fill("20");
+  await page
+    .getByRole("textbox", { name: "Pituus · m", exact: true })
+    .fill("10");
+  await page
+    .getByRole("textbox", { name: "Tilavuusvirta", exact: true })
+    .fill("0.5");
+  await page.getByRole("button", { name: "Laske", exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
+  await page
+    .getByLabel("Muistiinpanot", { exact: true })
+    .fill("Mitattu työmaalla.");
+  const popupPromise = page.waitForEvent("popup");
+  await page.getByRole("button", { name: "Tulosta / tallenna PDF" }).click();
+  const printPage = await popupPromise;
+  await expect(printPage.locator("body")).toContainText("Mitattu työmaalla.");
+  await expect(printPage.locator("body")).toContainText("20 mm");
+  await expect(printPage.locator("body")).toContainText(
+    "Lähteet ja versiotiedot",
+  );
+  await page.goto("/#/saved");
+  await expect(
+    page.getByText("Tallennetut laskelmat", { exact: true }),
+  ).toHaveCount(0);
 });

@@ -6,6 +6,7 @@ import {
   Check,
   Gauge,
   ChartNoAxesCombined,
+  GitCompareArrows,
   Plus,
   Scale,
   Star,
@@ -188,7 +189,7 @@ const toolItems = [
   { key: "pt", label: "pt", icon: Gauge },
   { key: "ph", label: "shsc", icon: ChartNoAxesCombined },
   { key: "co2e", label: "kgCO2", icon: Scale },
-  { key: "compare", label: "compare", icon: ArrowLeftRight },
+  { key: "compare", label: "compare", icon: GitCompareArrows },
 ] as const;
 
 export function ToolMenu({ refrigerant }: { refrigerant?: Refrigerant }) {
@@ -204,7 +205,15 @@ export function ToolMenu({ refrigerant }: { refrigerant?: Refrigerant }) {
           }
         >
           <Icon size={22} aria-hidden="true" />
-          <span>{t(label)}</span>
+          <span>
+            {key === "co2e" ? (
+              <>
+                kg <ArrowLeftRight size={16} aria-hidden="true" /> CO₂e
+              </>
+            ) : (
+              t(label)
+            )}
+          </span>
           <ChevronRight size={20} aria-hidden="true" />
         </button>
       ))}

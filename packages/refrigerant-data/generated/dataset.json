@@ -1,6 +1,6 @@
 {
-  "version": "2026-09-26.137e4a256905",
-  "sha256": "137e4a256905f46677604fa07e6b7c0e1fc9241b2e4884dc8fb9e30e04e0cba2",
+  "version": "2026-09-26.3bbc1ce9b0a5",
+  "sha256": "3bbc1ce9b0a5c9a706ddefbdb7e255e1d8a2f0c59e7410b88f2b0c9d05b47343",
   "checkedAt": "2026-09-26",
   "refrigerants": [
     {
@@ -608,9 +608,11 @@
       "components": [],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -729,13 +731,14 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-r13i1-v3",
         "epa-cf3i-identity-v3"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "not_applicable",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "estimated"
       }
@@ -7085,9 +7088,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -7206,6 +7211,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "epa-snap-compositions",
         "eu-2024-573",
         "eu-2024-590"
@@ -7213,7 +7219,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -10382,9 +10388,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -10507,6 +10515,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
@@ -10514,7 +10523,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -12124,9 +12133,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -12245,6 +12256,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -12253,7 +12265,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -12860,9 +12872,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -12981,6 +12995,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -12989,7 +13004,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -13026,9 +13041,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -13147,6 +13164,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -13155,7 +13173,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -17257,9 +17275,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -17382,6 +17402,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
@@ -17389,7 +17410,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -18120,9 +18141,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -18241,13 +18264,14 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "estimated"
       }
@@ -18284,9 +18308,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -18405,6 +18431,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -18413,7 +18440,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -18450,9 +18477,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -18571,6 +18600,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -18579,7 +18609,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -18616,9 +18646,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -18737,6 +18769,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -18745,7 +18778,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -19326,9 +19359,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -19447,6 +19482,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -19455,7 +19491,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -19492,9 +19528,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -19613,6 +19651,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -19621,7 +19660,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -19658,9 +19697,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -19779,6 +19820,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -19787,7 +19829,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -20435,9 +20477,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -20556,6 +20600,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -20564,7 +20609,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -22612,9 +22657,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -22737,6 +22784,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
@@ -22744,7 +22792,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -28217,9 +28265,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -28342,6 +28392,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
@@ -28349,7 +28400,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -28407,9 +28458,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -28528,6 +28581,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -28536,7 +28590,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -28594,9 +28648,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A2",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -28715,6 +28771,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -28723,7 +28780,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -28994,9 +29051,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -29119,6 +29178,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "unep-ozone-oewg47-inf3-rev1"
@@ -29126,7 +29186,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -29556,9 +29616,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A2L",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -29677,6 +29739,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -29685,7 +29748,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -30575,9 +30638,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -30696,6 +30761,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -30704,7 +30770,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -30769,9 +30835,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -30890,6 +30958,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -30898,7 +30967,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "unsupported"
       }
@@ -33458,9 +33527,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -33579,13 +33650,14 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "epa-gwp-identities",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "unsupported"
       }
@@ -37088,9 +37160,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -37209,6 +37283,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-590",
         "unep-ozone-oewg47-inf3-rev1"
@@ -37216,7 +37291,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -38905,9 +38980,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -39026,6 +39103,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
@@ -39034,7 +39112,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -39071,9 +39149,11 @@
       ],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -39192,13 +39272,14 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit",
         "unep-ozone-oewg47-inf3-rev1"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "verified",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "estimated"
       }
@@ -41184,9 +41265,11 @@
       "components": [],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A3",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -41319,12 +41402,13 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-mit"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "not_applicable",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "unsupported",
         "pt": "estimated"
       }
@@ -46356,9 +46440,11 @@
       "components": [],
       "facts": {
         "ashrae_safety_group": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
+          "state": "verified",
+          "value": "A1",
+          "sourceIds": [
+            "ashrae-handbook-f25-safety"
+          ],
           "checkedAt": "2026-09-25"
         },
         "ped_fluid_group": {
@@ -46482,6 +46568,7 @@
         }
       },
       "sourceIds": [
+        "ashrae-handbook-f25-safety",
         "coolprop-rc318-v3",
         "eu-2024-573",
         "unep-ozone-blends-live-v3"
@@ -46489,7 +46576,7 @@
       "coverage": {
         "identity": "verified",
         "composition": "not_applicable",
-        "safety": "partial",
+        "safety": "verified",
         "regulatory_eu_fi": "verified",
         "pt": "estimated"
       }
@@ -46849,6 +46936,15 @@
       "checkedAt": "2026-09-25",
       "license": "Selected factual safety classification and product identifier with attribution",
       "note": "Only safety group and trade name imported; general US servicing/use descriptions do not determine EU legality."
+    },
+    {
+      "id": "ashrae-handbook-f25-safety",
+      "title": "ASHRAE Handbook 2025 Refrigerants chapter, Tables 1 and 2",
+      "url": "https://handbook.ashrae.org/Handbooks/F25/SI/F25_Ch29/F25_Ch29_si.aspx",
+      "version": "2025 edition, tables cite ANSI/ASHRAE Standard 34-2022",
+      "checkedAt": "2026-09-26",
+      "license": "Selected individual factual classifications with attribution; no table reproduction",
+      "note": "The Handbook table is not the current Standard 34-2024 consolidated text; classifications are used only where exact rows are explicit. R-161 is excluded because the source also notes it is not listed in Standard 34/ISO 817 and a government table marks it n/a."
     },
     {
       "id": "bitzer-refreport-table",

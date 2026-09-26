@@ -12,7 +12,9 @@ test("thermal power retains cooling sign, uses explicit properties and clears st
   page,
 }) => {
   await page.goto("/#/thermal-power");
-  await page.getByLabel("Tilavuusvirta", { exact: true }).fill("60");
+  await page
+    .getByRole("textbox", { name: "Tilavuusvirta", exact: true })
+    .fill("60");
   await page
     .getByRole("combobox", { name: "Virtaaman yksikkö", exact: true })
     .selectOption("l/min");
@@ -26,7 +28,9 @@ test("thermal power retains cooling sign, uses explicit properties and clears st
   const result = page.getByRole("region", { name: "Lämpötehon tulos" });
   await expect(result).toContainText(/20,9 kW/);
   await expect(result).toContainText(/−|-/);
-  await page.getByLabel("Tilavuusvirta", { exact: true }).fill("-1");
+  await page
+    .getByRole("textbox", { name: "Tilavuusvirta", exact: true })
+    .fill("-1");
   await expect(result).toHaveCount(0);
   await page.getByRole("button", { name: "Laske", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText(
@@ -66,14 +70,20 @@ test("pipe geometry converts flow without inferring a recommended pipe size", as
   page,
 }) => {
   await page.goto("/#/pipe");
-  await page.getByLabel("Sisähalkaisija · mm", { exact: true }).fill("20");
-  await page.getByLabel("Pituus · m", { exact: true }).fill("10");
-  await page.getByLabel("Tilavuusvirta", { exact: true }).fill("0.5");
+  await page
+    .getByRole("textbox", { name: "Sisähalkaisija · mm", exact: true })
+    .fill("20");
+  await page
+    .getByRole("textbox", { name: "Pituus · m", exact: true })
+    .fill("10");
+  await page
+    .getByRole("textbox", { name: "Tilavuusvirta", exact: true })
+    .fill("0.5");
   await page.getByRole("button", { name: "Laske", exact: true }).click();
   await expect(
     page.getByRole("region", { name: "Putkilaskennan tulos" }),
   ).toContainText("3,14159 l");
-  await page.getByText("Tallenna laskelma", { exact: true }).click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
     page.getByRole("button", { name: "Tallennettu", exact: true }),

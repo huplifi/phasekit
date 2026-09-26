@@ -1,8 +1,9 @@
+import { printCheckResult } from "../report-export";
 import { InfoHelp } from "../components/InfoHelp";
 import { CheckSchedule } from "../components/CheckSchedule";
 import { isCalendarDate } from "../../../../packages/core/src/schedule";
 import { useEffect, useRef, useState } from "react";
-import { Bookmark, ChevronRight } from "lucide-react";
+import { Bookmark, ChevronRight, Printer } from "lucide-react";
 import type {
   CheckInput,
   CheckResult,
@@ -160,7 +161,7 @@ export function CheckResultView({
   snapshot?: Snapshot;
   lastInspectionDate?: string;
 }) {
-  const { t, data } = useApp();
+  const { t, data, notify } = useApp();
   const designation = (id: string) =>
     snapshot
       ? snapshotDesignation(snapshot, id)
@@ -237,11 +238,50 @@ export function CheckResultView({
         )}
       </div>
       <p className="caption">{t("noMaintenanceClaim")}</p>
+      {!snapshot && (
+        <div className="button-row">
+          <button
+            type="button"
+            className="secondary"
+            onClick={() => {
+              const opened = printCheckResult({
+                result,
+                locale: data.locale,
+                designation: designation(result.input.refrigerantId),
+                sources: dataset.sources.filter((s) =>
+                  result.sourceIds.includes(s.id),
+                ),
+                lastInspectionDate,
+                componentDesignations: Object.fromEntries(
+                  result.components.map((c) => [
+                    c.refrigerantId,
+                    designation(c.refrigerantId),
+                  ]),
+                ),
+              });
+              if (!opened)
+                notify(
+                  data.locale === "fi"
+                    ? "Salli ponnahdusikkuna tulostamista varten."
+                    : "Allow the pop-up to print this report.",
+                );
+            }}
+          >
+            <Printer aria-hidden="true" size={18} />
+            {data.locale === "fi"
+              ? "Tulosta / tallenna PDF"
+              : "Print / save PDF"}
+          </button>
+        </div>
+      )}
       <CheckSchedule
         result={result}
         completed={snapshot?.lastInspectionDate ?? lastInspectionDate}
         designation={designation(result.input.refrigerantId)}
-        sources={snapshot?.sources ?? dataset.sources.filter(s => result.sourceIds.includes(s.id))}
+        sources={
+          snapshot?.sources ??
+          dataset.sources.filter((s) => result.sourceIds.includes(s.id))
+        }
       />
       <details className="calculation-details">
         <summary>{t("calculation")}</summary>
@@ -358,7 +398,7 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
   const [saving, setSaving] = useState(false);
   const [lastInspectionDate, setLastInspectionDate] = useState("");
   const [scheduleError, setScheduleError] = useState("");
-  const l = (fi: string, en: string) => data.locale === "fi" ? fi : en;
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   const resultRef = useRef<HTMLDivElement>(null);
   const draftRevision = useRef(0);
   useEffect(() => () => setDraftDirty(false), [setDraftDirty]);
@@ -384,7 +424,7 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
       createdAt: new Date().toISOString(),
       refrigerant: structuredClone(r),
       result: structuredClone(result),
-      ...(lastInspectionDate ? {lastInspectionDate} : {}),
+      ...(lastInspectionDate ? { lastInspectionDate } : {}),
       sources: structuredClone(
         dataset.sources.filter((s) => result.sourceIds.includes(s.id)),
       ),
@@ -425,8 +465,17 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
         onSubmit={(e) => {
           e.preventDefault();
           if (!r) return;
-          if (lastInspectionDate && (!isCalendarDate(lastInspectionDate) || lastInspectionDate > input.asOf)) {
-            setScheduleError(l("Tarkastuspäivä ei voi olla arviointipäivän jälkeen.", "The inspection date cannot follow the assessment date."));
+          if (
+            lastInspectionDate &&
+            (!isCalendarDate(lastInspectionDate) ||
+              lastInspectionDate > input.asOf)
+          ) {
+            setScheduleError(
+              l(
+                "Tarkastuspäivä ei voi olla arviointipäivän jälkeen.",
+                "The inspection date cannot follow the assessment date.",
+              ),
+            );
             setResult(null);
             return;
           }
@@ -525,17 +574,19 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
             .join(" ")}
         </p>
         <div className="check-options">
-          <label className="checkbox">
+          <label className="switch-label">
             <input
               type="checkbox"
+              role="switch"
               checked={input.detection}
               onChange={(e) => change("detection", e.target.checked)}
             />
             {t("detection")}
           </label>
-          <label className="checkbox">
+          <label className="switch-label">
             <input
               type="checkbox"
+              role="switch"
               checked={input.hermetic}
               onChange={(e) => change("hermetic", e.target.checked)}
             />
@@ -543,17 +594,19 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
           </label>
           {input.hermetic && (
             <div className="conditional-options">
-              <label className="checkbox">
+              <label className="switch-label">
                 <input
                   type="checkbox"
+                  role="switch"
                   checked={input.hermeticLabel}
                   onChange={(e) => change("hermeticLabel", e.target.checked)}
                 />
                 {t("hermeticLabel")}
               </label>
-              <label className="checkbox">
+              <label className="switch-label">
                 <input
                   type="checkbox"
+                  role="switch"
                   checked={input.residential}
                   onChange={(e) => change("residential", e.target.checked)}
                 />
@@ -564,14 +617,39 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
         </div>
         <div className="field-group">
           <div className="help-heading">
-            <label htmlFor="check-last-inspection">{l("Viimeksi tehty tarkastus (valinnainen)", "Last completed inspection (optional)")}</label>
+            <label htmlFor="check-last-inspection">
+              {l(
+                "Viimeksi tehty tarkastus (valinnainen)",
+                "Last completed inspection (optional)",
+              )}
+            </label>
             <InfoHelp label={l("Tarkastuspäivä", "Inspection date")}>
-              {l("Toteutuneen määräaikaistarkastuksen päivämäärä. Seuraava määräpäivä lasketaan tästä päivästä, ei arviointipäivästä. Vuodon korjauksen jälkitarkastus on erillinen asia.", "Date of a completed periodic check. The next due date is calculated from this date, not the assessment date. A post-repair check is a separate requirement.")}
+              {l(
+                "Toteutuneen määräaikaistarkastuksen päivämäärä. Seuraava määräpäivä lasketaan tästä päivästä, ei arviointipäivästä. Vuodon korjauksen jälkitarkastus on erillinen asia.",
+                "Date of a completed periodic check. The next due date is calculated from this date, not the assessment date. A post-repair check is a separate requirement.",
+              )}
             </InfoHelp>
           </div>
-          <input id="check-last-inspection" type="date" max={input.asOf} value={lastInspectionDate} onChange={e=>{setLastInspectionDate(e.target.value);setScheduleError("");setResult(null);setSaved(false);setDraftDirty(true);draftRevision.current+=1;}} />
+          <input
+            id="check-last-inspection"
+            type="date"
+            max={input.asOf}
+            value={lastInspectionDate}
+            onChange={(e) => {
+              setLastInspectionDate(e.target.value);
+              setScheduleError("");
+              setResult(null);
+              setSaved(false);
+              setDraftDirty(true);
+              draftRevision.current += 1;
+            }}
+          />
         </div>
-        {scheduleError && <p className="notice error" role="alert">{scheduleError}</p>}
+        {scheduleError && (
+          <p className="notice error" role="alert">
+            {scheduleError}
+          </p>
+        )}
         <button className="primary" type="submit" disabled={!r}>
           {t("calculate")}
           <ChevronRight size={20} />
@@ -584,7 +662,12 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
         aria-atomic="true"
         tabIndex={-1}
       >
-        {result && <CheckResultView result={result} lastInspectionDate={lastInspectionDate} />}
+        {result && (
+          <CheckResultView
+            result={result}
+            lastInspectionDate={lastInspectionDate}
+          />
+        )}
       </div>
       {result && (
         <button

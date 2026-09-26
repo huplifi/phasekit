@@ -12,7 +12,7 @@ A source-attributed refrigerant reference and calculation app for refrigeration 
 - Frozen calculation reports, equipment/site-linked history, JSON backup/restore and browser print-to-PDF.
 - Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
 
-[Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
+[Public beta](https://beta.phasekit.app) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-IMPLEMENTATION.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
 ## Development
 
@@ -47,7 +47,7 @@ Chromium covers mobile and desktop workflows; targeted WebKit projects cover for
 
 ## Netlify deployment
 
-**This expansion is preview-only.** Open a pull request from the feature branch to obtain a Netlify Deploy Preview; do not merge or promote it until separately authorised. Preview storage is separate from production.
+**This expansion is a separate public beta.** `beta` deploys to the `phasekit-beta` Netlify project; `main` still deploys the stable app. Feature PRs should target `beta`. A beta-to-main release PR requires the owner’s explicit stable-release decision. Beta and preview storage are separate from production. See the [release workflow](docs/BETA-RELEASE-WORKFLOW.md).
 
 For the production configuration, import [huplifi/phasekit](https://github.com/huplifi/phasekit) into Netlify and deploy `main`. The repository's `netlify.toml` specifies the build command, publish directory and Node version:
 

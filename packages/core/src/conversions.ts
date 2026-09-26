@@ -6,7 +6,9 @@ export const conversionGroups = {
   temperature_difference: ["K", "°C Δ", "°F Δ"],
   mass: ["kg", "g", "t", "lb"],
   energy: ["J", "kJ", "MJ", "Wh", "kWh"],
-  power: ["W", "kW", "MW"],
+  power: ["W", "kW", "MW", "Btu_IT/h", "TR"],
+  vacuum: ["Pa", "mbar", "Torr", "µmHg"],
+  length: ["mm", "cm", "m", "in", "ft"],
   volume: ["L", "m³", "mL"],
   volume_flow: ["L/s", "L/min", "m³/h", "m³/s"],
 } as const;
@@ -28,7 +30,17 @@ const factors: Record<string, Record<string, string>> = {
   },
   mass: { kg: "1", g: "0.001", t: "1000", lb: "0.45359237" },
   energy: { J: "1", kJ: "1000", MJ: "1000000", Wh: "3600", kWh: "3600000" },
-  power: { W: "1", kW: "1000", MW: "1000000" },
+  // Non-SI heat-flow and mercury factors use the precision published in
+  // NIST SP 811 B.9. TR is a US refrigeration ton, not a unit of mass.
+  power: {
+    W: "1",
+    kW: "1000",
+    MW: "1000000",
+    "Btu_IT/h": "0.2930711",
+    TR: "3516.853",
+  },
+  vacuum: { Pa: "1", mbar: "100", Torr: "133.3224", µmHg: "0.1333224" },
+  length: { mm: "0.001", cm: "0.01", m: "1", in: "0.0254", ft: "0.3048" },
   volume: { L: "1", "m³": "1000", mL: "0.001" },
   // Common base is litres per hour, preserving finite conversion factors.
   volume_flow: {
@@ -56,6 +68,8 @@ export function convertUnits(input: {
   )
     throw new Error("invalid_unit");
   const value = parseDecimal(input.value);
+  if (group === "vacuum" && value.lt(0))
+    throw new Error("negative_absolute_pressure");
   let result;
   if (group === "temperature") {
     const kelvin =

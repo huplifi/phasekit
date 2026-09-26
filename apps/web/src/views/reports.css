@@ -13,6 +13,10 @@
 .report-notes, .equipment-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
 .report-provenance li { margin-block: .45rem; overflow-wrap: anywhere; }
 .report-actions { flex-wrap: wrap; }
+.report-save-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1rem; }
+.report-summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .75rem; }
+.report-save details > summary { min-height: 44px; }
+.report-save textarea { margin-block: .5rem 1rem; }
 .equipment-view { display: grid; gap: 1rem; }
 .equipment-heading, .equipment-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
 .equipment-heading h1, .equipment-card h2 { margin-top: 0; }

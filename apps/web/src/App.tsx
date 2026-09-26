@@ -33,11 +33,20 @@ import {
   WorkChecklists,
   PipeCalculator,
 } from "./views/FieldTools";
+const isBeta =
+  import.meta.env.VITE_RELEASE_CHANNEL === "beta" ||
+  window.location.hostname === "beta.phasekit.app" ||
+  window.location.hostname.startsWith("deploy-preview-");
+const buildVersion = import.meta.env.VITE_BUILD_REVISION || "development";
 const pathNow = () => window.location.hash.replace(/^#/, "") || "/";
 export function App() {
   const [data, setRenderedData] = useState(emptyData);
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
+  const [persistenceStatus, setPersistenceStatus] = useState<
+    "saving" | "saved" | "error"
+  >("saved");
+  const writeRevision = useRef(0);
   const [path, setPath] = useState(pathNow);
   const [online, setOnline] = useState(navigator.onLine);
   const [message, setMessage] = useState("");
@@ -61,13 +70,19 @@ export function App() {
     if (!dirty) setShowUpdateDraft(false);
   }, []);
   const enqueue = useCallback((next: UserData) => {
+    const revision = ++writeRevision.current;
+    setPersistenceStatus("saving");
     const attempt = writer.current.enqueue(next);
     void attempt.then(
       () => {
+        if (revision !== writeRevision.current) return;
+        setPersistenceStatus("saved");
         storageErrorRef.current = false;
         setStorageError(false);
       },
       () => {
+        if (revision !== writeRevision.current) return;
+        setPersistenceStatus("error");
         storageErrorRef.current = true;
         setStorageError(true);
       },
@@ -320,6 +335,7 @@ export function App() {
       value={{
         data,
         setData,
+        persistenceStatus,
         persistSnapshot,
         persistToolRecord,
         setDraftDirty,
@@ -363,6 +379,20 @@ export function App() {
             </span>
           )}
         </header>
+        {isBeta && (
+          <p className="beta-banner caption">
+            <strong>Beta · {buildVersion}</strong>
+            {" · "}
+            {data.locale === "fi"
+              ? "Testiversio. Tallennukset säilyvät vain tässä selaimessa ja osoitteessa."
+              : "Test version. Records stay in this browser and site."}{" "}
+            <a href="https://phasekit.app">
+              {data.locale === "fi"
+                ? "Avaa vakaa versio"
+                : "Open stable version"}
+            </a>
+          </p>
+        )}
         {storageError && (
           <p role="alert" className="notice error">
             {t("storageError")}

@@ -1,9 +1,19 @@
-import { Download, Printer, Trash2 } from "lucide-react";
+import { Download, ImageDown, Printer, Trash2 } from "lucide-react";
 import { useApp } from "../context";
 import { formatDate } from "../../../../packages/i18n/src";
 import { CheckResultView } from "./Check";
 import { downloadJSON } from "../storage";
-import { downloadToolRecord, printToolRecord } from "../report-export";
+import {
+  downloadToolRecord,
+  printToolRecord,
+  printCheckResult,
+} from "../report-export";
+import {
+  formatReportRow,
+  reportHasRoundedValues,
+  reportSummary,
+} from "../report-summary";
+import { downloadToolRecordImage } from "../report-image";
 import type { ToolRecord } from "../storage";
 import "./reports.css";
 
@@ -11,7 +21,7 @@ const l = (locale: "fi" | "en", fi: string, en: string) =>
   locale === "fi" ? fi : en;
 
 export function Saved() {
-  const { t, data, setData, go } = useApp();
+  const { t, data, setData, go, notify } = useApp();
   const removeSnapshot = (id: string) => {
     if (
       !window.confirm(
@@ -103,6 +113,37 @@ export function Saved() {
               <div className="button-group">
                 <button
                   className="text-button"
+                  type="button"
+                  onClick={() => {
+                    if (
+                      !printCheckResult({
+                        result: s.result,
+                        locale: data.locale,
+                        designation: s.refrigerant.designation,
+                        sources: s.sources,
+                        createdAt: s.createdAt,
+                        lastInspectionDate: s.lastInspectionDate,
+                        componentDesignations: s.componentDesignations,
+                      })
+                    )
+                      notify(
+                        l(
+                          data.locale,
+                          "Tulostusikkuna estettiin. Salli ponnahdusikkuna ja yritä uudelleen.",
+                          "The print window was blocked. Allow pop-ups and try again.",
+                        ),
+                      );
+                  }}
+                >
+                  <Printer size={18} />
+                  {l(
+                    data.locale,
+                    "Tulosta / tallenna PDF",
+                    "Print / save as PDF",
+                  )}
+                </button>
+                <button
+                  className="text-button"
                   onClick={() =>
                     downloadJSON(s, `phasekit-${s.refrigerant.id}-${s.id}.json`)
                   }
@@ -137,24 +178,17 @@ function ToolReport({
 }) {
   const { data, notify } = useApp();
   const lcl = (fi: string, en: string) => l(data.locale, fi, en);
-  const toolName: Record<ToolRecord["tool"], string> = {
-    cycle: lcl("Kylmäprosessi", "Refrigeration cycle"),
-    pt: lcl("Paine–lämpötila", "Pressure–temperature"),
-    co2e: "CO₂e",
-    convert: lcl("Yksikkömuunnin", "Unit converter"),
-    "thermal-power": lcl("Lämpöteho", "Thermal power"),
-    electrical: lcl("Sähkölaskuri", "Electrical calculator"),
-    pipe: lcl("Putken tilavuus ja virtaus", "Pipe volume and flow"),
-  };
   const sources = record.sources;
   return (
     <details className="saved-entry report-entry">
       <summary>
         <span>
-          <strong>{record.title}</strong>
+          <strong className="report-summary">
+            {reportSummary(record, data.locale)}
+          </strong>
           <span className="secondary">
-            {formatDate(record.createdAt, data.locale)} ·{" "}
-            {toolName[record.tool]}
+            {formatDate(record.createdAt, data.locale)}
+            {record.equipmentName && ` · ${record.equipmentName}`}
           </span>
         </span>
       </summary>
@@ -167,6 +201,14 @@ function ToolReport({
         )}
         <ReportRows title={lcl("Lähtötiedot", "Inputs")} rows={record.inputs} />
         <ReportRows title={lcl("Tulokset", "Results")} rows={record.outputs} />
+        {reportHasRoundedValues(record) && (
+          <p className="caption secondary">
+            {lcl(
+              "≈ tarkoittaa näytöllä pyöristettyä arvoa. JSON-vienti säilyttää tarkat tallennetut luvut.",
+              "≈ marks a rounded display value. JSON export keeps the exact recorded numbers.",
+            )}
+          </p>
+        )}
         {record.notes && (
           <section>
             <h3>{lcl("Muistiinpanot", "Notes")}</h3>
@@ -187,9 +229,13 @@ function ToolReport({
             <ul>
               {sources.map((source, index) => (
                 <li key={`${source.id}-${index}`}>
-                  <a href={source.url} target="_blank" rel="noreferrer">
-                    {source.title}
-                  </a>
+                  {/^https?:\/\//i.test(source.url) ? (
+                    <a href={source.url} target="_blank" rel="noreferrer">
+                      {source.title}
+                    </a>
+                  ) : (
+                    source.title
+                  )}
                   {` · ${source.id}`}
                   {source.version && ` · ${source.version}`}
                   {source.checkedAt &&
@@ -216,6 +262,31 @@ function ToolReport({
         </section>
       </div>
       <div className="button-group report-actions">
+        <button
+          className="text-button"
+          type="button"
+          onClick={() => {
+            void downloadToolRecordImage(record, data.locale).then((status) => {
+              if (status === "too_large")
+                notify(
+                  lcl(
+                    "Raportti on liian pitkä kuvaksi. Tulosta tai tallenna se PDF:nä.",
+                    "This report is too long for an image. Print or save it as PDF.",
+                  ),
+                );
+              else if (status === "failed")
+                notify(
+                  lcl(
+                    "Kuvan tallennus epäonnistui. Kokeile PDF-tulostusta.",
+                    "Could not save the image. Try printing to PDF.",
+                  ),
+                );
+            });
+          }}
+        >
+          <ImageDown size={18} />
+          {lcl("Tallenna kuvana", "Save as image")}
+        </button>
         <button
           className="text-button"
           type="button"
@@ -276,10 +347,7 @@ function ReportRows({
         {rows.map((row, index) => (
           <div className="report-row" key={`${row.label.fi}-${index}`}>
             <dt>{label(row.label.fi, row.label.en)}</dt>
-            <dd>
-              {row.value}
-              {row.unit ? ` ${row.unit}` : ""}
-            </dd>
+            <dd>{formatReportRow(row, data.locale)}</dd>
           </div>
         ))}
       </dl>

@@ -11,7 +11,6 @@ import { StarButton } from "./Common";
 
 interface PickerBaseProps {
   label?: string;
-  initialLimit?: number;
 }
 
 export interface SingleRefrigerantPickerProps extends PickerBaseProps {
@@ -110,11 +109,8 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
   const inputId = useId();
   const changeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [favouritesOnly, setFavouritesOnly] = useState(false);
   const [query, setQuery] = useState("");
-  const [showAll, setShowAll] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const initialLimit = Math.max(props.initialLimit ?? 6, 1);
   const favouriteIds = data.favourites;
   const favouriteSet = useMemo(() => new Set(favouriteIds), [favouriteIds]);
   const foldedQuery = foldSearch(query.trim());
@@ -122,7 +118,6 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
   const results = useMemo(() => {
     const matches = dataset.refrigerants.filter(
       (r) =>
-        (!favouritesOnly || favouriteIds.includes(r.id)) &&
         (!foldedQuery || searchableText(r).includes(foldedQuery)),
     );
     return matches.sort((a, b) => {
@@ -133,17 +128,15 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
       if (bIndex >= 0) return 1;
       return 0;
     });
-  }, [favouriteIds, foldedQuery, favouritesOnly]);
+  }, [favouriteIds, foldedQuery]);
 
-  const visibleResults = showAll ? results : results.slice(0, initialLimit);
-  const favourites = visibleResults.filter((r) => favouriteSet.has(r.id));
-  const others = visibleResults.filter((r) => !favouriteSet.has(r.id));
+  const favourites = results.filter((r) => favouriteSet.has(r.id));
+  const others = results.filter((r) => !favouriteSet.has(r.id));
   const selectedIds = props.mode === "multi" ? props.selectedIds : [];
   const selectedCount = selectedIds.length;
   const selectedRefrigerant =
     props.mode !== "multi" && props.value ? byId.get(props.value) : undefined;
   const limit = props.mode === "multi" ? (props.maxSelected ?? 3) : Infinity;
-  const hasMore = results.length > initialLimit;
 
   useEffect(
     () => setExpanded(false),
@@ -195,7 +188,6 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
             props.onChange(r.id);
             setExpanded(false);
             setQuery("");
-            setShowAll(false);
             requestAnimationFrame(() => changeButtonRef.current?.focus());
           }
         }}
@@ -339,7 +331,6 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                   value={query}
                   onChange={(event) => {
                     setQuery(event.target.value);
-                    setShowAll(false);
                   }}
                   placeholder={t("searchHint")}
                   aria-label={props.label ?? t("search")}
@@ -356,36 +347,6 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                 )}
               </span>
             </div>
-            <div
-              className="picker-scope"
-              role="group"
-              aria-label={
-                data.locale === "fi"
-                  ? "Näytettävät kylmäaineet"
-                  : "Refrigerants to show"
-              }
-            >
-              <button
-                type="button"
-                aria-pressed={!favouritesOnly}
-                onClick={() => {
-                  setFavouritesOnly(false);
-                  setShowAll(false);
-                }}
-              >
-                {data.locale === "fi" ? "Kaikki" : "All"}
-              </button>
-              <button
-                type="button"
-                aria-pressed={favouritesOnly}
-                onClick={() => {
-                  setFavouritesOnly(true);
-                  setShowAll(false);
-                }}
-              >
-                {t("favourites")}
-              </button>
-            </div>
             <p className="caption picker-result-count" aria-live="polite">
               {t("results", { count: results.length })}
               {props.mode === "multi" &&
@@ -393,13 +354,7 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
             </p>
             <div className="picker-results">
               {results.length === 0 ? (
-                <p className="empty">
-                  {favouritesOnly && !favouriteIds.length
-                    ? data.locale === "fi"
-                      ? "Ei suosikkeja vielä. Lisää aine suosikiksi Kaikki-listan tähdestä."
-                      : "No favourites yet. Add one using its star in the All list."
-                    : t("noResults")}
-                </p>
+                <p className="empty">{t("noResults")}</p>
               ) : (
                 <>
                   {favourites.length > 0 && (
@@ -413,19 +368,6 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                       {favourites.length > 0 && <h3>{t("all")}</h3>}
                       {others.map(renderResult)}
                     </div>
-                  )}
-                  {hasMore && (
-                    <button
-                      className="text-button picker-more"
-                      type="button"
-                      onClick={() => setShowAll((value) => !value)}
-                    >
-                      {showAll
-                        ? refinementText(data.locale, "showFewerResults")
-                        : refinementText(data.locale, "showMoreResults", {
-                            count: results.length - initialLimit,
-                          })}
-                    </button>
                   )}
                 </>
               )}

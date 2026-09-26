@@ -384,3 +384,61 @@ export function calculatePipe(input: {
     areaM2: area.toString(),
   };
 }
+
+/** Mean linear expansion coefficients for the stated, source-backed range. */
+export const pipeExpansionMaterials = {
+  copper_c12200: {
+    fi: "Kupari C12200",
+    en: "Copper C12200",
+    // CDA gives 9.4 × 10⁻⁶ /°F over 68–212 °F; 9.4 × 1.8 = 16.92 /K.
+    coefficientPerK: "0.00001692",
+    minC: 20,
+    maxC: 100,
+    sourceTitle: "Copper Development Association — C12200 alloy properties",
+    sourceUrl: "https://alloys.copper.org/alloy/C12200",
+  },
+  stainless_304: {
+    fi: "Ruostumaton teräs 304 / 1.4301",
+    en: "Stainless steel 304 / 1.4301",
+    coefficientPerK: "0.0000160",
+    minC: 20,
+    maxC: 100,
+    sourceTitle: "Outokumpu — Core range datasheet, Core 304/4301",
+    sourceUrl:
+      "https://www.outokumpu.com/-/media/files/products/core/outokumpu-core-range-datasheet.pdf",
+  },
+} as const;
+export type PipeExpansionMaterial = keyof typeof pipeExpansionMaterials;
+
+/** Free, uniform axial expansion: ΔL = α L₀ (T₁ − T₀). */
+export function calculatePipeExpansion(input: {
+  material: PipeExpansionMaterial;
+  referenceLengthM: string;
+  initialC: string;
+  finalC: string;
+}) {
+  const material = pipeExpansionMaterials[input.material];
+  if (!material) throw new Error("invalid_expansion_material");
+  const length = parseDecimal(input.referenceLengthM);
+  const initial = parseDecimal(input.initialC);
+  const final = parseDecimal(input.finalC);
+  if (length.lte(0)) throw new Error("positive_expansion_length_required");
+  if (
+    initial.lt(material.minC) ||
+    initial.gt(material.maxC) ||
+    final.lt(material.minC) ||
+    final.gt(material.maxC)
+  )
+    throw new Error("expansion_temperature_out_of_range");
+  const difference = final.minus(initial);
+  const changeMm = length
+    .mul(1000)
+    .mul(material.coefficientPerK)
+    .mul(difference);
+  return {
+    differenceK: difference.toString(),
+    changeMm: changeMm.toString(),
+    finalLengthM: length.plus(changeMm.div(1000)).toString(),
+    coefficientPerK: material.coefficientPerK,
+  };
+}

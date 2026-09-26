@@ -2,7 +2,7 @@
 
 ## General unit converter
 
-`packages/core/src/conversions.ts` is a pure, offline decimal conversion function. The UI is `UnitConverter` at `/convert`. Supported dimensions are pressure, temperature, temperature difference, mass, energy, power, volume and volumetric flow. These dimensions cannot be mixed. Energy is not power, and litres are not litres per second.
+`packages/core/src/conversions.ts` is a pure, offline decimal conversion function. The UI is `UnitConverter` at `/convert`. Supported dimensions are pressure, temperature, temperature difference, mass, energy, power, vacuum as absolute pressure, length, volume and volumetric flow. These dimensions cannot be mixed. Energy is not power, and litres are not litres per second. The vacuum group converts nonnegative absolute pressure values; it does not infer gauge vacuum or equipment performance.
 
 Inputs accept a decimal comma or point, an optional sign, and at most 40 digits through the existing shared parser. Empty or invalid edits immediately remove the previous result. Results are rounded to 14 significant digits in the core and displayed at 12 significant digits; this is a conversion precision, not measurement accuracy. The text keyboard allows negative values on iOS.
 
@@ -15,6 +15,9 @@ Reviewed on 26 September 2026 against [NIST SP 811, Appendix B.9](https://www.ni
 - SI decimal prefixes; 1 bar = 100,000 Pa; 1 mbar = 100 Pa.
 - 1 lb = 0.45359237 kg; inch = 0.0254 m; standard gravity = 9.80665 m/s². PSI is calculated from these definitions rather than a shortened decimal coefficient.
 - 1 Wh = 3,600 J; 1 kWh = 3.6 MJ.
+- 1 Btu (IT)/h = 0.2930711 W and 1 US refrigeration ton = 3516.853 W, at the precision quoted in NIST SP 811. A refrigeration ton is a cooling-power unit, not a mass unit.
+- 1 Torr = 133.3224 Pa and 1 micrometre of mercury (µmHg) = 0.1333224 Pa at the published precision; 1 mbar = 100 Pa. These are absolute-pressure unit conversions here.
+- 1 inch = 0.0254 m and 1 foot = 0.3048 m, with metric prefixes for mm and cm.
 - 1 m³ = 1,000 L; 1 L = 1,000 mL; minute = 60 s; hour = 3,600 s.
 - Celsius = kelvin − 273.15; Fahrenheit = Celsius × 9/5 + 32. A Fahrenheit interval is 5/9 of a kelvin interval.
 

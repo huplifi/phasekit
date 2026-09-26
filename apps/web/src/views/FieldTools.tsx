@@ -1,16 +1,20 @@
 import { useDraftGuard } from "../useDraftGuard";
 import { useState, type ReactNode } from "react";
-import { Download, Plus, Trash2 } from "lucide-react";
+import { Download, Plus, Printer, Trash2 } from "lucide-react";
 import { useApp } from "../context";
 import { ReportSave } from "../components/ReportSave";
 import type { ReportRow } from "../storage";
 import type { Source } from "../../../../packages/core/src/contracts";
 import { Back } from "../components/Common";
 import { InfoHelp } from "../components/InfoHelp";
+import { printChecklistDraft } from "../report-export";
+import { calculateStraightPipePressureLoss } from "../../../../packages/core/src/pipe-pressure-loss";
 import {
   calculateElectrical,
   calculateThermalPower,
   calculatePipe,
+  calculatePipeExpansion,
+  pipeExpansionMaterials,
   checklistDefinitions,
   commonChecklistFields,
   checklistText,
@@ -18,6 +22,7 @@ import {
   type FlowUnit,
   type ChecklistKind,
   type ChecklistDraft,
+  type PipeExpansionMaterial,
 } from "../../../../packages/core/src/field-tools";
 import "./field-tools.css";
 
@@ -64,6 +69,11 @@ const pipeSources = [
     "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/conservation-of-mass/",
   ),
 ];
+const pipeLossSource = formulaSource(
+  "epa-epanet-darcy-weisbach",
+  "US EPA — EPANET 2.2 User Manual, Darcy–Weisbach friction factors",
+  "https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P10113EM.TXT",
+);
 
 function useLabels() {
   const { data } = useApp();
@@ -166,6 +176,26 @@ function ErrorMessage({ error }: { error: string }) {
     invalid_pipe_dimensions: [
       "Sisähalkaisijan on oltava positiivinen. Pituus ja virtaama eivät voi olla negatiivisia.",
       "Internal diameter must be positive. Length and flow cannot be negative.",
+    ],
+    positive_expansion_length_required: [
+      "Vertailupituuden on oltava nollaa suurempi.",
+      "Reference length must be greater than zero.",
+    ],
+    expansion_temperature_out_of_range: [
+      "Molempien lämpötilojen on oltava valitun materiaalin lähdealueella 20–100 °C.",
+      "Both temperatures must be within the selected material's source range, 20–100 °C.",
+    ],
+    invalid_pipe_loss_inputs: [
+      "Tarkista putken mitat, virtaama, tiheys, dynaaminen viskositeetti ja karheus. Pituuden, tiheyden ja viskositeetin on oltava positiivisia.",
+      "Check pipe dimensions, flow, density, dynamic viscosity and roughness. Length, density and viscosity must be positive.",
+    ],
+    pipe_roughness_out_of_range: [
+      "Suhteellisen karheuden on oltava enintään 0,05. Tarkista sisähalkaisija ja karheus.",
+      "Relative roughness must be at most 0.05. Check bore and roughness.",
+    ],
+    pipe_transitional_flow: [
+      "Reynoldsin luku on siirtymäalueella 2 000–4 000. Tällä mallilla ei anneta painehäviöarviota.",
+      "Reynolds number is in the 2,000–4,000 transition range. This model does not give a pressure-loss estimate there.",
     ],
   };
   const msg = messages[error] ?? [
@@ -582,7 +612,10 @@ export function ElectricalCalculator() {
 }
 export function PipeCalculator() {
   const setDraftDirty = useDraftGuard();
-  const { l, number } = useLabels();
+  const { l, number, locale } = useLabels();
+  const [mode, setMode] = useState<"geometry" | "expansion" | "loss">(
+    "geometry",
+  );
   const [input, setInput] = useState({
     diameterMm: "",
     lengthM: "",
@@ -593,146 +626,567 @@ export function PipeCalculator() {
     null,
   );
   const [error, setError] = useState("");
+  const [expansionInput, setExpansionInput] = useState({
+    material: "copper_c12200" as PipeExpansionMaterial,
+    referenceLengthM: "",
+    initialC: "",
+    finalC: "",
+  });
+  const [expansionResult, setExpansionResult] = useState<ReturnType<
+    typeof calculatePipeExpansion
+  > | null>(null);
+  const [expansionError, setExpansionError] = useState("");
+  const [lossInput, setLossInput] = useState({
+    densityKgM3: "",
+    dynamicViscosityPaS: "",
+    roughnessMm: "",
+  });
+  const [lossResult, setLossResult] = useState<ReturnType<
+    typeof calculateStraightPipePressureLoss
+  > | null>(null);
+  const [lossError, setLossError] = useState("");
+  const selectedMaterial = pipeExpansionMaterials[expansionInput.material];
+  const changeExpansion = (key: keyof typeof expansionInput, value: string) => {
+    setExpansionInput((previous) => ({ ...previous, [key]: value }));
+    setExpansionResult(null);
+    setExpansionError("");
+  };
   const change = (key: keyof typeof input, value: string) => {
     setInput((v) => ({ ...v, [key]: value }));
     setResult(null);
     setError("");
+    setLossResult(null);
+    setLossError("");
+  };
+  const changeLoss = (key: keyof typeof lossInput, value: string) => {
+    setLossInput((previous) => ({ ...previous, [key]: value }));
+    setLossResult(null);
+    setLossError("");
   };
   return (
-    <Layout title={l("Putken tilavuus ja virtaus", "Pipe volume and flow")}>
-      <p>
-        {l(
-          "Suoran, pyöreän putken sisätilavuus ja keskimääräinen virtausnopeus. Käytä todellista sisähalkaisijaa, älä nimelliskokoa.",
-          "Internal volume and mean flow velocity of a straight circular pipe. Use actual internal diameter, not nominal size.",
-        )}
-      </p>
-      <form
-        onChangeCapture={() => setDraftDirty(true)}
-        onSubmit={(e) => {
-          e.preventDefault();
-          try {
-            setResult(calculatePipe(input));
-            setError("");
-          } catch (err) {
-            setResult(null);
-            setError((err as Error).message);
-          }
-        }}
+    <Layout title={l("Putkilaskurit", "Pipe calculators")}>
+      <div
+        className="field-pipe-modes"
+        role="group"
+        aria-label={l("Putkilaskurin tila", "Pipe calculator mode")}
       >
-        <div className="field-tool-grid">
-          <Numeric
-            label={l("Sisähalkaisija · mm", "Internal diameter · mm")}
-            value={input.diameterMm}
-            onChange={(v) => change("diameterMm", v)}
-          />
-          <Numeric
-            label={l("Pituus · m", "Length · m")}
-            value={input.lengthM}
-            onChange={(v) => change("lengthM", v)}
-          />
-          <Numeric
-            label={l("Tilavuusvirta", "Volume flow")}
-            value={input.flow}
-            onChange={(v) => change("flow", v)}
-          />
-          <FlowSelect
-            value={input.flowUnit}
-            onChange={(v) => change("flowUnit", v)}
-          />
-        </div>
-        <button className="primary" type="submit">
-          {l("Laske", "Calculate")}
-        </button>
-        <ErrorMessage error={error} />
-      </form>
-      {result && (
-        <section
-          className="result-card field-result"
-          aria-label={l("Putkilaskennan tulos", "Pipe result")}
-          aria-live="polite"
-        >
-          <h2>{number(result.volumeLitres)} l</h2>
-          <p>
-            {l("Keskimääräinen virtausnopeus", "Mean flow velocity")}:{" "}
-            {number(result.velocityMS)} m/s
-          </p>
-        </section>
-      )}
-      {result && (
-        <ReportSave
-          key={JSON.stringify({ input, result })}
-          content={{
-            tool: "pipe",
-            title: l("Putken tilavuus ja virtaus", "Pipe volume and flow"),
-            inputs: [
-              reportRow(
-                "Sisähalkaisija",
-                "Internal diameter",
-                input.diameterMm,
-                "mm",
-              ),
-              reportRow("Pituus", "Length", input.lengthM, "m"),
-              reportRow(
-                "Tilavuusvirta",
-                "Actual volume flow",
-                input.flow,
-                input.flowUnit,
-              ),
-              reportRow(
-                "Oletus",
-                "Assumption",
-                "Straight circular bore; geometry only; no pressure-drop or sizing model",
-              ),
-            ],
-            outputs: [
-              reportRow(
-                "Sisätilavuus",
-                "Internal volume",
-                result.volumeLitres,
-                "l",
-              ),
-              reportRow(
-                "Keskimääräinen virtausnopeus",
-                "Mean flow velocity",
-                result.velocityMS,
-                "m/s",
-              ),
-              reportRow(
-                "Poikkipinta-ala",
-                "Cross-sectional area",
-                result.areaM2,
-                "m²",
-              ),
-            ],
-            sources: pipeSources,
-          }}
-        />
-      )}
-      <Sources>
-        <p className="mono">A = π · d² / 4 · · · V = A · L · · · v = qᵥ / A</p>
+        {(
+          [
+            ["geometry", l("Tilavuus ja virtaus", "Volume and flow")],
+            ["expansion", l("Lämpölaajeneminen", "Thermal expansion")],
+            ["loss", l("Painehäviö", "Pressure loss")],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            className="secondary-button"
+            aria-pressed={mode === value}
+            onClick={() => setMode(value)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <section hidden={mode !== "geometry"}>
         <p>
           {l(
-            "Virtaama on tilavuusvirta putken käyttöolosuhteissa. Laskenta ei huomioi painehäviöitä, liittimiä, kaksifaasivirtausta tai öljynpalautumista eikä valitse sopivaa kylmäaineputkikokoa.",
-            "Flow is the actual volume flow at pipe operating conditions. Calculation does not cover pressure losses, fittings, two-phase flow or oil return, and does not select refrigerant pipe size.",
+            "Suoran, pyöreän putken sisätilavuus ja keskimääräinen virtausnopeus. Käytä todellista sisähalkaisijaa, älä nimelliskokoa.",
+            "Internal volume and mean flow velocity of a straight circular pipe. Use actual internal diameter, not nominal size.",
           )}
         </p>
-        {pipeSources.map((source) => (
-          <p key={source.id}>
-            <a href={source.url} target="_blank" rel="noreferrer">
-              {source.title}
-            </a>
+        <form
+          onChangeCapture={() => setDraftDirty(true)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            try {
+              setResult(calculatePipe(input));
+              setError("");
+            } catch (err) {
+              setResult(null);
+              setError((err as Error).message);
+            }
+          }}
+        >
+          <div className="field-tool-grid">
+            <Numeric
+              label={l("Sisähalkaisija · mm", "Internal diameter · mm")}
+              value={input.diameterMm}
+              onChange={(v) => change("diameterMm", v)}
+            />
+            <Numeric
+              label={l("Pituus · m", "Length · m")}
+              value={input.lengthM}
+              onChange={(v) => change("lengthM", v)}
+            />
+            <Numeric
+              label={l("Tilavuusvirta", "Volume flow")}
+              value={input.flow}
+              onChange={(v) => change("flow", v)}
+            />
+            <FlowSelect
+              value={input.flowUnit}
+              onChange={(v) => change("flowUnit", v)}
+            />
+          </div>
+          <button className="primary" type="submit">
+            {l("Laske", "Calculate")}
+          </button>
+          <ErrorMessage error={error} />
+        </form>
+        {result && (
+          <section
+            className="result-card field-result"
+            aria-label={l("Putkilaskennan tulos", "Pipe result")}
+            aria-live="polite"
+          >
+            <h2>{number(result.volumeLitres)} l</h2>
+            <p>
+              {l("Keskimääräinen virtausnopeus", "Mean flow velocity")}:{" "}
+              {number(result.velocityMS)} m/s
+            </p>
+          </section>
+        )}
+        {result && (
+          <ReportSave
+            key={JSON.stringify({ input, result })}
+            content={{
+              tool: "pipe",
+              title: l("Putken tilavuus ja virtaus", "Pipe volume and flow"),
+              inputs: [
+                reportRow(
+                  "Sisähalkaisija",
+                  "Internal diameter",
+                  input.diameterMm,
+                  "mm",
+                ),
+                reportRow("Pituus", "Length", input.lengthM, "m"),
+                reportRow(
+                  "Tilavuusvirta",
+                  "Actual volume flow",
+                  input.flow,
+                  input.flowUnit,
+                ),
+                reportRow(
+                  "Oletus",
+                  "Assumption",
+                  "Straight circular bore; geometry only; no pressure-drop or sizing model",
+                ),
+              ],
+              outputs: [
+                reportRow(
+                  "Sisätilavuus",
+                  "Internal volume",
+                  result.volumeLitres,
+                  "l",
+                ),
+                reportRow(
+                  "Keskimääräinen virtausnopeus",
+                  "Mean flow velocity",
+                  result.velocityMS,
+                  "m/s",
+                ),
+                reportRow(
+                  "Poikkipinta-ala",
+                  "Cross-sectional area",
+                  result.areaM2,
+                  "m²",
+                ),
+              ],
+              sources: pipeSources,
+            }}
+          />
+        )}
+      </section>
+      <section className="field-pipe-loss" hidden={mode !== "loss"}>
+        <h2>{l("Suoran putken painehäviö", "Straight-pipe pressure loss")}</h2>
+        <p>
+          {l(
+            "Arvio tasaiselle, yksifaasille virtaukselle suorassa pyöreässä putkessa. Anna todellinen sisähalkaisija, pituus, käyttöolosuhteiden tilavuusvirta, fluidin tiheys ja dynaaminen viskositeetti sekä putken sisäpinnan karheus.",
+            "Estimate for steady, single-phase flow in a straight circular pipe. Enter actual bore, length, operating volume flow, fluid density and dynamic viscosity, and internal pipe roughness.",
+          )}
+        </p>
+        <form
+          onChangeCapture={() => setDraftDirty(true)}
+          onSubmit={(event) => {
+            event.preventDefault();
+            try {
+              setLossResult(
+                calculateStraightPipePressureLoss({ ...input, ...lossInput }),
+              );
+              setLossError("");
+            } catch (err) {
+              setLossResult(null);
+              setLossError((err as Error).message);
+            }
+          }}
+        >
+          <div className="field-tool-grid">
+            <Numeric
+              label={l("Sisähalkaisija · mm", "Internal diameter · mm")}
+              value={input.diameterMm}
+              onChange={(value) => change("diameterMm", value)}
+            />
+            <Numeric
+              label={l("Pituus · m", "Length · m")}
+              value={input.lengthM}
+              onChange={(value) => change("lengthM", value)}
+            />
+            <Numeric
+              label={l("Tilavuusvirta", "Volume flow")}
+              value={input.flow}
+              onChange={(value) => change("flow", value)}
+            />
+            <FlowSelect
+              value={input.flowUnit}
+              onChange={(value) => change("flowUnit", value)}
+            />
+            <Numeric
+              label={l("Tiheys · kg/m³", "Density · kg/m³")}
+              value={lossInput.densityKgM3}
+              onChange={(value) => changeLoss("densityKgM3", value)}
+            />
+            <Numeric
+              label={l(
+                "Dynaaminen viskositeetti · Pa·s",
+                "Dynamic viscosity · Pa·s",
+              )}
+              value={lossInput.dynamicViscosityPaS}
+              onChange={(value) => changeLoss("dynamicViscosityPaS", value)}
+            />
+            <Numeric
+              label={l("Sisäpinnan karheus · mm", "Internal roughness · mm")}
+              value={lossInput.roughnessMm}
+              onChange={(value) => changeLoss("roughnessMm", value)}
+            />
+          </div>
+          <button className="primary" type="submit">
+            {l("Arvioi painehäviö", "Estimate pressure loss")}
+          </button>
+          <ErrorMessage error={lossError} />
+        </form>
+        {lossResult && (
+          <section className="result-card field-result" aria-live="polite">
+            <h3>
+              {l("Suoran putken painehäviö", "Straight-pipe pressure loss")}
+            </h3>
+            <p className="mono">
+              {number(String(Number(lossResult.pressureLossPa) / 1000))} kPa
+            </p>
+            <p>
+              {l("Virtausalue", "Flow regime")}:{" "}
+              {lossResult.regime === "laminar"
+                ? l("laminaarinen", "laminar")
+                : lossResult.regime === "turbulent"
+                  ? l("turbulentti", "turbulent")
+                  : l("ei virtausta", "no flow")}
+            </p>
+            <p>
+              Re = {number(lossResult.reynolds)} · f ={" "}
+              {lossResult.frictionFactor === null
+                ? "—"
+                : number(lossResult.frictionFactor)}
+            </p>
+            <p>
+              {l("Virtausnopeus", "Velocity")}: {number(lossResult.velocityMS)}{" "}
+              m/s
+            </p>
+          </section>
+        )}
+        {lossResult && (
+          <ReportSave
+            key={JSON.stringify({ input, lossInput, lossResult })}
+            content={{
+              tool: "pipe",
+              title: l(
+                "Suoran putken painehäviö",
+                "Straight-pipe pressure loss",
+              ),
+              inputs: [
+                reportRow(
+                  "Sisähalkaisija",
+                  "Actual internal diameter",
+                  input.diameterMm,
+                  "mm",
+                ),
+                reportRow("Pituus", "Straight length", input.lengthM, "m"),
+                reportRow(
+                  "Tilavuusvirta",
+                  "Volume flow at operating conditions",
+                  input.flow,
+                  input.flowUnit,
+                ),
+                reportRow(
+                  "Tiheys",
+                  "Density at operating conditions",
+                  lossInput.densityKgM3,
+                  "kg/m³",
+                ),
+                reportRow(
+                  "Dynaaminen viskositeetti",
+                  "Dynamic viscosity at operating conditions",
+                  lossInput.dynamicViscosityPaS,
+                  "Pa·s",
+                ),
+                reportRow(
+                  "Sisäpinnan karheus",
+                  "Internal roughness",
+                  lossInput.roughnessMm,
+                  "mm",
+                ),
+                reportRow(
+                  "Oletus",
+                  "Assumption",
+                  "Steady, fully developed, single-phase, constant-property flow in a straight circular bore",
+                ),
+              ],
+              outputs: [
+                reportRow(
+                  "Painehäviö",
+                  "Pressure loss",
+                  lossResult.pressureLossPa,
+                  "Pa",
+                ),
+                reportRow("Virtausalue", "Flow regime", lossResult.regime),
+                reportRow(
+                  "Reynoldsin luku",
+                  "Reynolds number",
+                  lossResult.reynolds,
+                ),
+                reportRow(
+                  "Darcy-kitkakerroin",
+                  "Darcy friction factor",
+                  lossResult.frictionFactor ?? "—",
+                ),
+                reportRow(
+                  "Virtausnopeus",
+                  "Velocity",
+                  lossResult.velocityMS,
+                  "m/s",
+                ),
+              ],
+              sources: [pipeLossSource],
+            }}
+          />
+        )}
+        <p className="small muted">
+          {l(
+            "Arvio käyttää Darcy–Weisbachin yhtälöä: laminaarinen Re < 2 000, turbulentti Re > 4 000. Siirtymäalue estetään. Ei sisällä kaksifaasivirtausta, kaasun merkittävää kokoonpuristumista, liittimiä, korkeuseroa, öljynpalautumista eikä putkikoon valintaa.",
+            "Darcy–Weisbach estimate: laminar Re < 2,000, turbulent Re > 4,000. The transition range is blocked. It excludes two-phase flow, significant gas compressibility, fittings, elevation, oil return and pipe-size selection.",
+          )}
+        </p>
+      </section>
+      <section className="field-expansion" hidden={mode !== "expansion"}>
+        <h2>{l("Putken lämpölaajeneminen", "Pipe thermal expansion")}</h2>
+        <p>
+          {l(
+            "Arvio vapaan, tasalämpöisen putken pituuden muutoksesta. Valitse tunnettu materiaali ja anna pituus alkulämpötilassa.",
+            "Estimate the length change of a free, uniformly heated pipe. Select a known material and enter its length at the initial temperature.",
+          )}
+        </p>
+        <form
+          onChangeCapture={() => setDraftDirty(true)}
+          onSubmit={(event) => {
+            event.preventDefault();
+            try {
+              setExpansionResult(calculatePipeExpansion(expansionInput));
+              setExpansionError("");
+            } catch (err) {
+              setExpansionResult(null);
+              setExpansionError((err as Error).message);
+            }
+          }}
+        >
+          <div className="field-tool-grid">
+            <label>
+              {l("Materiaali", "Material")}
+              <select
+                value={expansionInput.material}
+                onChange={(event) =>
+                  changeExpansion("material", event.target.value)
+                }
+              >
+                {Object.entries(pipeExpansionMaterials).map(
+                  ([id, material]) => (
+                    <option key={id} value={id}>
+                      {material[locale]}
+                    </option>
+                  ),
+                )}
+              </select>
+            </label>
+            <Numeric
+              label={l("Vertailupituus · m", "Reference length · m")}
+              value={expansionInput.referenceLengthM}
+              onChange={(value) => changeExpansion("referenceLengthM", value)}
+            />
+            <Numeric
+              label={l("Alkulämpötila · °C", "Initial temperature · °C")}
+              value={expansionInput.initialC}
+              onChange={(value) => changeExpansion("initialC", value)}
+            />
+            <Numeric
+              label={l("Loppulämpötila · °C", "Final temperature · °C")}
+              value={expansionInput.finalC}
+              onChange={(value) => changeExpansion("finalC", value)}
+            />
+          </div>
+          <p className="small muted">
+            α = {number(selectedMaterial.coefficientPerK)} /K ·{" "}
+            {l("lähdealue", "source range")}: {selectedMaterial.minC}–
+            {selectedMaterial.maxC} °C
           </p>
-        ))}
+          <button className="primary" type="submit">
+            {l("Laske pituuden muutos", "Calculate length change")}
+          </button>
+          <ErrorMessage error={expansionError} />
+        </form>
+        {expansionResult && (
+          <section
+            className="result-card field-result field-expansion-result"
+            aria-live="polite"
+          >
+            <h3>{l("Pituuden muutos", "Length change")}</h3>
+            <p className="mono">
+              {Number(expansionResult.changeMm) > 0 ? "+" : ""}
+              {number(expansionResult.changeMm)} mm
+            </p>
+            <p>
+              {l("Loppupituus", "Final length")}:{" "}
+              {number(expansionResult.finalLengthM)} m
+            </p>
+            <p className="small muted">
+              {l("Lämpötilaero", "Temperature difference")}:{" "}
+              {number(expansionResult.differenceK)} K
+            </p>
+          </section>
+        )}
+        {expansionResult && (
+          <ReportSave
+            key={JSON.stringify({ expansionInput, expansionResult })}
+            content={{
+              tool: "pipe",
+              title: l("Putken lämpölaajeneminen", "Pipe thermal expansion"),
+              inputs: [
+                reportRow("Materiaali", "Material", selectedMaterial.en),
+                reportRow(
+                  "Vertailupituus",
+                  "Reference length",
+                  expansionInput.referenceLengthM,
+                  "m",
+                ),
+                reportRow(
+                  "Alkulämpötila",
+                  "Initial temperature",
+                  expansionInput.initialC,
+                  "°C",
+                ),
+                reportRow(
+                  "Loppulämpötila",
+                  "Final temperature",
+                  expansionInput.finalC,
+                  "°C",
+                ),
+                reportRow(
+                  "Laajenemiskerroin",
+                  "Expansion coefficient",
+                  expansionResult.coefficientPerK,
+                  "/K",
+                ),
+                reportRow(
+                  "Oletus",
+                  "Assumption",
+                  "Free, uniform axial expansion; source range 20–100 °C",
+                ),
+              ],
+              outputs: [
+                reportRow(
+                  "Pituuden muutos",
+                  "Length change",
+                  expansionResult.changeMm,
+                  "mm",
+                ),
+                reportRow(
+                  "Loppupituus",
+                  "Final length",
+                  expansionResult.finalLengthM,
+                  "m",
+                ),
+              ],
+              sources: [
+                formulaSource(
+                  `expansion-${expansionInput.material}`,
+                  selectedMaterial.sourceTitle,
+                  selectedMaterial.sourceUrl,
+                ),
+              ],
+            }}
+          />
+        )}
+        <p className="small muted">
+          {l(
+            "Arvio ei mitoita kiinnikkeitä, jännityksiä eikä paisuntalenkkejä. Lähdearvoa ei sovelleta 20–100 °C alueen ulkopuolelle.",
+            "This estimate does not design supports, stress or expansion loops. The source coefficient is not applied outside 20–100 °C.",
+          )}
+        </p>
+      </section>
+      <Sources>
+        {mode === "geometry" && (
+          <>
+            <p className="mono">
+              A = π · d² / 4 · · · V = A · L · · · v = qᵥ / A
+            </p>
+            <p>
+              {l(
+                "Virtaama on tilavuusvirta putken käyttöolosuhteissa. Laskenta ei huomioi painehäviöitä, liittimiä, kaksifaasivirtausta tai öljynpalautumista eikä valitse sopivaa kylmäaineputkikokoa.",
+                "Flow is the actual volume flow at pipe operating conditions. Calculation does not cover pressure losses, fittings, two-phase flow or oil return, and does not select refrigerant pipe size.",
+              )}
+            </p>
+            {pipeSources.map((source) => (
+              <p key={source.id}>
+                <a href={source.url} target="_blank" rel="noreferrer">
+                  {source.title}
+                </a>
+              </p>
+            ))}
+          </>
+        )}
+        {mode === "loss" && (
+          <>
+            <p>
+              Δp = f · (L/D) · ρv²/2; Re = ρvD/μ; f = 64/Re (Re &lt; 2,000) or
+              Swamee–Jain (Re &gt; 4,000).
+            </p>
+            <p>
+              <a href={pipeLossSource.url} target="_blank" rel="noreferrer">
+                {pipeLossSource.title}
+              </a>
+            </p>
+          </>
+        )}
+        {mode === "expansion" && (
+          <>
+            <p>ΔL = α · L₀ · (T₁ − T₀)</p>
+            {Object.values(pipeExpansionMaterials).map((material) => (
+              <p key={material.sourceUrl}>
+                <a href={material.sourceUrl} target="_blank" rel="noreferrer">
+                  {material.sourceTitle}
+                </a>
+              </p>
+            ))}
+          </>
+        )}
       </Sources>
     </Layout>
   );
 }
 export function WorkChecklists() {
-  const { data, setData } = useApp();
+  const { data, setData, persistenceStatus } = useApp();
   const { l, locale } = useLabels();
   const [kind, setKind] = useState<ChecklistKind>("tightness");
   const [selected, setSelected] = useState("");
   const [deletePending, setDeletePending] = useState(false);
+  const [printError, setPrintError] = useState(false);
   const draft = data.checklistDrafts.find((d) => d.id === selected);
   const definition = draft ? checklistDefinitions[draft.kind] : null;
   const update = (patch: Partial<ChecklistDraft>) => {
@@ -784,7 +1238,7 @@ export function WorkChecklists() {
           "Record work steps and measurements for your equipment. Use manufacturer instructions for target values. Checkmarks are not test acceptance or certification of compliance.",
         )}
       </p>
-      <div className="field-tool-grid checklist-create">
+      <div className="field-tool-grid checklist-create field-checklist-controls">
         <label>
           {l("Uusi lista", "New checklist")}
           <select
@@ -838,11 +1292,18 @@ export function WorkChecklists() {
       {draft && definition && (
         <section className="checklist-record">
           <h2>{definition.name[locale]}</h2>
-          <p className="muted small">
-            {l(
-              "Muutokset säilytetään tällä laitteella ja sisältyvät asetusten varmuuskopioon.",
-              "Changes are stored on this device and included in Settings backups.",
-            )}
+          <p className="field-checklist-save-state small" role="status">
+            {persistenceStatus === "saving"
+              ? l("Tallennetaan tälle laitteelle…", "Saving on this device…")
+              : persistenceStatus === "error"
+                ? l(
+                    "Tallennus epäonnistui. Tarkista tallennustilan virheilmoitus ennen sulkemista.",
+                    "Save failed. Check the storage error message before closing.",
+                  )
+                : l(
+                    "Tallennettu tälle laitteelle. Avaa uudelleen Omat listat -valikosta; sisältyy asetusten varmuuskopioon.",
+                    "Saved on this device. Reopen from Your checklists; included in Settings backups.",
+                  )}
           </p>
           <label>
             {l("Kohteen nimi", "Site name")}
@@ -874,7 +1335,7 @@ export function WorkChecklists() {
             {l("merkitty", "marked")}
           </p>
           {definition.steps.map((s) => (
-            <label className="checkbox" key={s.id}>
+            <label className="checkbox field-checklist-choice" key={s.id}>
               <input
                 type="checkbox"
                 checked={draft.checkedIds.includes(s.id)}
@@ -916,6 +1377,13 @@ export function WorkChecklists() {
             />
           </label>
           <div className="field-actions">
+            <button
+              className="secondary-button field-checklist-print"
+              onClick={() => setPrintError(!printChecklistDraft(draft, locale))}
+            >
+              <Printer size={18} />
+              {l("Tulosta / PDF", "Print / PDF")}
+            </button>
             <button className="secondary-button" onClick={download}>
               <Download size={18} />
               {l("Vie tekstinä", "Export text")}
@@ -928,6 +1396,14 @@ export function WorkChecklists() {
               {l("Poista lista", "Delete checklist")}
             </button>
           </div>
+          {printError && (
+            <p role="alert" className="field-error">
+              {l(
+                "Tulostusikkuna estettiin. Salli ponnahdusikkunat tälle sivustolle ja yritä uudelleen.",
+                "Print window was blocked. Allow pop-ups for this site and try again.",
+              )}
+            </p>
+          )}
           {deletePending && (
             <div className="field-confirm">
               <p>

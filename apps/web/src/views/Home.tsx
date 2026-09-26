@@ -165,7 +165,7 @@ export function Home() {
             </summary>
             <div className="form-grid">
               <label>
-                {t("family")}
+                <span className="help-heading">{t("family")}</span>
                 <select
                   id="family-filter"
                   value={family}
@@ -214,20 +214,22 @@ export function Home() {
                 </select>
               </div>
               <label>
-                {t("identity")}
+                <span className="help-heading">{t("identity")}</span>
                 <select value={kind} onChange={(e) => setKind(e.target.value)}>
                   <option value="">{t("allKinds")}</option>
                   <option value="pure">{t("pure")}</option>
                   <option value="blend">{t("blend")}</option>
                 </select>
               </label>
-              <label className="checkbox">
+              <label className="switch-label">
+                <span>{t("checkSupported")}</span>
                 <input
                   type="checkbox"
+                  role="switch"
+                  aria-label={t("checkSupported")}
                   checked={support}
                   onChange={(e) => setSupport(e.target.checked)}
                 />
-                {t("checkSupported")}
               </label>
               <div>
                 <div className="help-heading">

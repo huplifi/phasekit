@@ -44,8 +44,23 @@ describe("preview source-attributed enrichment", () => {
     expect(byId.get("r480a")!.ashrae_safety_group).toBe("A1");
   });
 
+  it("retains exact Handbook safety provenance without filling conflicts", () => {
+    expect(byId.get("r440a")!.ashrae_safety_group).toBe("A2");
+    expect(byId.get("r467a")!.ashrae_safety_group).toBe("A2L");
+    expect(byId.get("r509a")!.ashrae_safety_group).toBe("A1");
+    const imported = rows.refrigerants.filter((r) =>
+      JSON.parse(r.fact_source_ids_json || "{}").ashrae_safety_group?.includes(
+        "ashrae-handbook-f25-safety",
+      ),
+    );
+    expect(imported).toHaveLength(29);
+    expect(
+      rows.sources.some((s) => s.source_id === "ashrae-handbook-f25-safety"),
+    ).toBe(true);
+  });
+
   it("leaves unclassified and unresolved refrigerants unknown", () => {
-    for (const id of ["r41", "r141b", "r365mfc", "r485a", "r440a"]) {
+    for (const id of ["r41", "r141b", "r365mfc", "r485a", "r161", "r509"]) {
       expect(byId.get(id)!.ashrae_safety_group).toBe("");
       expect(byId.get(id)!.safety_status).not.toBe("verified");
     }

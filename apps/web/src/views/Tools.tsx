@@ -1,5 +1,5 @@
 import {
-  ArrowLeftRight,
+  ArrowRightLeft,
   ChevronRight,
   Thermometer,
   Zap,
@@ -32,7 +32,7 @@ export function Tools() {
               path: "convert",
               fi: "Yleinen yksikkömuunnin",
               en: "Unit converter",
-              icon: ArrowLeftRight,
+              icon: ArrowRightLeft,
             },
             {
               path: "thermal-power",
@@ -48,8 +48,8 @@ export function Tools() {
             },
             {
               path: "pipe",
-              fi: "Putken tilavuus ja virtaus",
-              en: "Pipe volume and flow",
+              fi: "Putkilaskurit",
+              en: "Pipe calculators",
               icon: Ruler,
             },
             {

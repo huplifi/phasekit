@@ -17,10 +17,15 @@
     "data:build": "node --import tsx packages/refrigerant-data/scripts/cli.ts build",
     "data:coverage": "node --import tsx packages/refrigerant-data/scripts/cli.ts coverage",
     "tokens:build": "node --import tsx scripts/tokens.ts",
-    "build:sites": "pnpm build && node scripts/sites-static.mjs"
+    "build:sites": "pnpm build && node scripts/sites-static.mjs",
+    "native:sync": "pnpm build && cap sync",
+    "native:ios": "cap open ios",
+    "native:android": "cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "8.5.2",
     "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "8.5.2",
     "csv-parse": "^7.0.2",
     "csv-stringify": "^6.8.3",
     "decimal.js": "^10.6.0",

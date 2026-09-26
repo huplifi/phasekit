@@ -1,5 +1,7 @@
 # Verification record
 
+> Historical verification record. The September 26 beta adds bounded T/s/v guide curves and further tools; see [beta implementation](BETA-IMPLEMENTATION.md) for current evidence and remaining gates. Earlier observations below retain their original scope.
+
 Updated 25 September 2026 for the local PhaseKit v3 web candidate.
 
 ## Checks

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Printer } from "lucide-react";
 import { useApp } from "../context";
+import { printToolRecord } from "../report-export";
 import type { ToolRecord } from "../storage";
 export type ReportContent = Pick<
   ToolRecord,
@@ -22,10 +23,28 @@ export function ReportSave({ content }: { content: ReportContent }) {
     };
   }, []);
   const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
+  const equipment = data.equipment.find((item) => item.id === equipmentId);
+  function print() {
+    if (
+      !printToolRecord(
+        {
+          ...structuredClone(content),
+          notes,
+          ...(equipment ? { equipmentName: equipment.name } : {}),
+        },
+        data.locale,
+      )
+    )
+      notify(
+        l(
+          "Tulostusikkuna estettiin. Salli ponnahdusikkuna ja yritä uudelleen.",
+          "The print window was blocked. Allow pop-ups and try again.",
+        ),
+      );
+  }
   async function save() {
     setSaving(true);
     try {
-      const equipment = data.equipment.find((item) => item.id === equipmentId);
       await persistToolRecord({
         ...structuredClone(content),
         id: crypto.randomUUID(),
@@ -53,7 +72,7 @@ export function ReportSave({ content }: { content: ReportContent }) {
   }
   return (
     <details className="report-save">
-      <summary>{l("Tallenna laskelma", "Save calculation")}</summary>
+      <summary>{l("Tallenna tai tulosta", "Save or print")}</summary>
       {data.equipment.length > 0 && (
         <label>
           {l("Laite / kohde", "Equipment / site")}
@@ -86,23 +105,29 @@ export function ReportSave({ content }: { content: ReportContent }) {
           rows={3}
         />
       </label>
-      <button
-        type="button"
-        className="secondary-button"
-        disabled={saving || saved}
-        onClick={() => void save()}
-      >
-        <Bookmark size={18} />
-        {saved
-          ? l("Tallennettu", "Saved")
-          : saving
-            ? l("Tallennetaan…", "Saving…")
-            : l("Tallenna", "Save")}
-      </button>
+      <div className="report-save-actions">
+        <button
+          type="button"
+          className="secondary-button"
+          disabled={saving || saved}
+          onClick={() => void save()}
+        >
+          <Bookmark size={18} />
+          {saved
+            ? l("Tallennettu", "Saved")
+            : saving
+              ? l("Tallennetaan…", "Saving…")
+              : l("Tallenna", "Save")}
+        </button>
+        <button type="button" className="secondary-button" onClick={print}>
+          <Printer size={18} />
+          {l("Tulosta / tallenna PDF", "Print / save as PDF")}
+        </button>
+      </div>
       <p className="caption secondary">
         {l(
-          "Tallennettu laskelma säilyttää arvot ja lähteet. Löydät sen Tallennetut-välilehdeltä ja voit tulostaa raportin PDF:ksi.",
-          "Saved calculations retain their values and sources. Find them under Saved and print a report to PDF.",
+          "Raportti sisältää lähtötiedot, tulokset ja lähteet. Tallennettu laskelma löytyy Tallennetut-välilehdeltä.",
+          "The report includes inputs, results and sources. Saved calculations appear under Saved.",
         )}
       </p>
     </details>

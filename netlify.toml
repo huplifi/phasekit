@@ -21,3 +21,9 @@
   for = "/index.html"
   [headers.values]
     Cache-Control = "no-cache"
+
+[context.deploy-preview.environment]
+  VITE_RELEASE_CHANNEL = "beta"
+
+[context.beta.environment]
+  VITE_RELEASE_CHANNEL = "beta"

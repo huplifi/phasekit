@@ -46,7 +46,7 @@ test('the supplied R134a paper example plots with gauge pressures', async ({page
   await expect(page.locator(".ph-bubble")).toHaveAttribute("d", fullBoundary!);
   await expect(page.locator(".calculator-number")).toHaveText(["10 K", "5 K"]);
   await page.locator('.ph-diagram-section').screenshot({path:test.info().outputPath(`phasekit-paper-example-${info.project.name}.png`)});
-  await page.getByText('Tallenna laskelma',{exact:true}).click();
+  await page.getByText('Tallenna tai tulosta',{exact:true}).click();
   await page.getByRole('button',{name:'Tallenna',exact:true}).click();
   await expect(page.getByRole('button',{name:'Tallennettu',exact:true})).toBeDisabled();
   await page.goto('/#/saved');

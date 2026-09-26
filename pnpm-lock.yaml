@@ -8,9 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@capacitor/android':
+        specifier: 8.5.2
+        version: 8.5.2(@capacitor/core@8.5.2)
       '@capacitor/core':
         specifier: ^8.5.2
         version: 8.5.2
+      '@capacitor/ios':
+        specifier: 8.5.2
+        version: 8.5.2(@capacitor/core@8.5.2)
       csv-parse:
         specifier: ^7.0.2
         version: 7.0.2
@@ -626,6 +632,11 @@ packages:
   '@cacheable/utils@2.5.0':
     resolution: {integrity: sha512-buipgOVDkkPXNR5+xBpDw7Zk2n1EvU7qBJCNUcL7rhQ//kfpOXPAvQ511Os0vpLYJ1pZnvudNytkQt2hst3wqA==}
 
+  '@capacitor/android@8.5.2':
+    resolution: {integrity: sha512-rtiaz78egCcS+vs29wkWCL3C+RhazKMSygXcjutwWP8NmO6r5UBxOvGf3Wjz5+ahobyQ723tn9gCePwRwcNDZQ==}
+    peerDependencies:
+      '@capacitor/core': ^8.5.0
+
   '@capacitor/cli@8.5.2':
     resolution: {integrity: sha512-O2kpA5ZPJUAmliDCcmpMf8xnJwMezxlFPUrlyOAjbL3U9MFNY3l4ZpPI/UXwvyPmR8ETcVF9pFr+VdWq61rqTQ==}
     engines: {node: '>=22.0.0'}
@@ -633,6 +644,11 @@ packages:
 
   '@capacitor/core@8.5.2':
     resolution: {integrity: sha512-agnQbGdhGw/KZFuLf7H9SY2o+oE7upkr/WPQsYaokXP6f9chaE8iVmbKkfN6SVl4w3pmz7oZ3Ur1hbkmy1hx+w==}
+
+  '@capacitor/ios@8.5.2':
+    resolution: {integrity: sha512-eOT2S67AfTFG7KN0T3oxwAajrJz4rSye+ODfvChiwrk0F/+kWufFM1qU6cDjGJUOfwdAoeuEpZyWHSwZlu4GFg==}
+    peerDependencies:
+      '@capacitor/core': ^8.5.0
 
   '@esbuild/aix-ppc64@0.28.2':
     resolution: {integrity: sha512-XExcO+dvLKvVtNTibSTBej1NCAbaGhWn9Ww1ZPx80qsahhPFe/8jgWP0IchNe0F3HwkU7n8ejhH8bjonqht8mQ==}
@@ -3630,6 +3646,10 @@ snapshots:
       hashery: 1.5.1
       keyv: 5.6.0
 
+  '@capacitor/android@8.5.2(@capacitor/core@8.5.2)':
+    dependencies:
+      '@capacitor/core': 8.5.2
+
   '@capacitor/cli@8.5.2':
     dependencies:
       '@ionic/cli-framework-output': 2.2.8
@@ -3656,6 +3676,10 @@ snapshots:
   '@capacitor/core@8.5.2':
     dependencies:
       tslib: 2.8.1
+
+  '@capacitor/ios@8.5.2(@capacitor/core@8.5.2)':
+    dependencies:
+      '@capacitor/core': 8.5.2
 
   '@esbuild/aix-ppc64@0.28.2':
     optional: true

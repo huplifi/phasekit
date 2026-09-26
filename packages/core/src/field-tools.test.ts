@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   calculateElectrical,
   calculateThermalPower,
+  calculatePipeExpansion,
   checklistText,
 } from "./field-tools";
 const thermal = {
@@ -49,6 +50,46 @@ describe("sensible thermal power", () => {
       { outletC: "" },
     ])
       expect(() => calculateThermalPower({ ...thermal, ...change })).toThrow();
+  });
+});
+
+describe("pipe thermal expansion", () => {
+  it("preserves expansion and contraction sign and final length", () => {
+    const input = {
+      material: "copper_c12200" as const,
+      referenceLengthM: "10",
+      initialC: "20",
+      finalC: "80",
+    };
+    expect(calculatePipeExpansion(input)).toMatchObject({
+      differenceK: "60",
+      changeMm: "10.152",
+      finalLengthM: "10.010152",
+    });
+    expect(
+      calculatePipeExpansion({ ...input, initialC: "80", finalC: "20" }),
+    ).toMatchObject({
+      differenceK: "-60",
+      changeMm: "-10.152",
+      finalLengthM: "9.989848",
+    });
+  });
+  it("enforces the exact material range and valid reference length", () => {
+    const input = {
+      material: "stainless_304" as const,
+      referenceLengthM: "5",
+      initialC: "20",
+      finalC: "100",
+    };
+    expect(calculatePipeExpansion(input).changeMm).toBe("6.4");
+    for (const patch of [
+      { referenceLengthM: "0" },
+      { referenceLengthM: "-1" },
+      { initialC: "19.9" },
+      { finalC: "100.1" },
+      { finalC: "" },
+    ])
+      expect(() => calculatePipeExpansion({ ...input, ...patch })).toThrow();
   });
 });
 describe("electrical power", () => {

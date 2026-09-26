@@ -172,6 +172,21 @@ strong.mono {
 .brand-header img {
   border-radius: 8px;
 }
+.beta-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin: -16px 0 24px;
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--link);
+  border-radius: 0 6px 6px 0;
+  background: var(--surface, color-mix(in srgb, var(--link) 7%, var(--background)));
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.beta-banner strong { color: var(--text); }
+.beta-banner a { font-weight: 600; }
 .offline-indicator {
   display: flex;
   align-items: center;
@@ -991,6 +1006,10 @@ input[aria-invalid="true"] {
   background: rgb(0 0 0 / 45%);
 }
 .picker-dialog-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 34px);
+  min-height: 0;
   padding: 20px;
 }
 .picker-dialog-heading {
@@ -1005,24 +1024,10 @@ input[aria-invalid="true"] {
   font-size: 1.125rem;
 }
 .picker-dialog .picker-results {
-  max-height: min(55dvh, 32rem);
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-.picker-scope {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--divider);
-  margin-top: 16px;
-}
-.picker-scope button {
-  min-height: 44px;
-  border-radius: 0;
-  padding: 8px;
-  border-bottom: 3px solid transparent;
-}
-.picker-scope button[aria-pressed="true"] {
-  border-bottom-color: var(--text);
 }
 .switch-label {
   display: inline-flex;

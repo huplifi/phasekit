@@ -17,7 +17,7 @@ test("preview tools remain reachable in English offline, with narrow-screen labe
     ["convert", "Unit converter"],
     ["thermal-power", "Liquid thermal power"],
     ["electrical", "Electrical calculator"],
-    ["pipe", "Pipe volume and flow"],
+    ["pipe", "Pipe calculators"],
     ["checklists", "Work checklists"],
     ["equipment", "Equipment and sites"],
   ] as const;
