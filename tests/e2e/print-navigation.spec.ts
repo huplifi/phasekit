@@ -45,7 +45,11 @@ test("print preview has manual controls, keeps them off paper and closes back to
   await printed.emulateMedia({ media: "screen" });
   await expect(toolbar).toBeVisible();
   const close = printed.waitForEvent("close");
-  await back.click();
+  await back.click().catch((error: unknown) => {
+    // Chromium can close this page before acknowledging the successful click.
+    // Still require the close event and the intact editor below.
+    if (!printed.isClosed()) throw error;
+  });
   await close;
   await expect(page).toHaveURL(reportUrl);
   await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(

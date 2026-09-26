@@ -24,4 +24,5 @@ The report catalogue uses one content/chevron grid across field records and save
 - Focused browser regressions cover print controls/close-unavailable return, frozen guide selections through save/reload, two/three-column comparison printing, blocked popups, and mixed catalogue rows at 390 px.
 - Visual PDF review covered every page of the two/three-refrigerant comparisons and the fitted cycle with all guides. Grid lines, guide legends, table columns and source appendices remain legible; controls are absent on paper.
 - Independent review found and fixed a save-in-flight view race and dynamic-height SVG distortion in PNG export. Backup validation preserves the additive guide/view fields and rejects invalid guide pressure vectors.
+- Linux CI exposed a test-only race when Chromium closed the preview before acknowledging the back-link click. The test now accepts only an already-closed preview, still requires the close event and intact original editor, and passed 24 repeated four-profile cases.
 - No user browser records were changed; tests used isolated contexts. Automated WebKit is not a physical installed-iPhone verification.
