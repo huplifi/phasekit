@@ -173,7 +173,16 @@ it("keeps common-fluid ignition limits tied to their measured or published condi
     value: "3.9",
     sourceIds: ["chemours-a2l-charge-guidance"],
   });
-  expect(get("r717").autoignition_c.state).toBe("unknown");
+  expect(get("r717").lower_flammability_limit_vol_pct).toMatchObject({
+    state: "verified",
+    value: "15.4",
+    sourceIds: ["linde-r717-sds-2020"],
+  });
+  expect(get("r717").autoignition_c).toMatchObject({
+    state: "verified",
+    value: "651",
+    sourceIds: ["linde-r717-sds-2020"],
+  });
   expect(get("r1234zee").lower_flammability_limit_vol_pct.state).toBe(
     "unknown",
   );

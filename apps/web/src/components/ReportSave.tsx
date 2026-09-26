@@ -5,7 +5,13 @@ import { printToolRecord } from "../report-export";
 import type { ToolRecord } from "../storage";
 export type ReportContent = Pick<
   ToolRecord,
-  "tool" | "title" | "inputs" | "outputs" | "dataVersion" | "sources"
+  | "tool"
+  | "title"
+  | "inputs"
+  | "outputs"
+  | "dataVersion"
+  | "sources"
+  | "chartSnapshot"
 >;
 
 /** Parent should key this by its result so edited/recalculated values need a fresh save. */

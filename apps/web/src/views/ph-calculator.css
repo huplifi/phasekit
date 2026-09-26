@@ -121,16 +121,12 @@
 }
 
 .ph-view-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
-.ph-view-controls [aria-pressed="true"] {
-  background: var(--text);
-  color: var(--background);
-  border-color: var(--text);
+.ph-isoline-toggle:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
 }
 
 .ph-isoline-controls {
@@ -144,11 +140,26 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 38px;
+  padding: 7px 11px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
   font-size: 0.82rem;
+  cursor: pointer;
 }
 
 .ph-isoline-toggle[aria-pressed="true"] {
   border-color: var(--text);
+  background: var(--text);
+  color: var(--background);
+}
+
+.ph-isoline-toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .ph-isoline-key {
@@ -163,7 +174,11 @@
   border-top-style: dotted;
 }
 
-.ph-chart-scroll,
+.ph-chart-scroll {
+  width: 100%;
+  min-width: 0;
+}
+
 .ph-table-scroll {
   max-width: 100%;
   overflow-x: auto;
@@ -172,7 +187,6 @@
 .ph-chart {
   display: block;
   width: 100%;
-  min-width: 560px;
   max-width: 780px;
   height: auto;
   background: var(--surface);
@@ -216,6 +230,16 @@
   stroke-width: 1.1;
   stroke-opacity: 0.38;
   vector-effect: non-scaling-stroke;
+}
+
+.ph-isoline-label {
+  fill: var(--text);
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
 }
 
 .ph-isoline-entropy {
@@ -275,10 +299,6 @@
 .ph-figure figcaption {
   max-width: 68ch;
   margin-top: 9px;
-}
-
-.ph-scroll-hint {
-  margin: 8px 0 0;
 }
 
 .ph-legend {

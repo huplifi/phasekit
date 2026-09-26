@@ -33,11 +33,7 @@ import {
   WorkChecklists,
   PipeCalculator,
 } from "./views/FieldTools";
-const isBeta =
-  import.meta.env.VITE_RELEASE_CHANNEL === "beta" ||
-  window.location.hostname === "beta.phasekit.app" ||
-  window.location.hostname.startsWith("deploy-preview-");
-const buildVersion = import.meta.env.VITE_BUILD_REVISION || "development";
+import { appVersion, isBeta, buildRevision as buildVersion } from "./release";
 const pathNow = () => window.location.hash.replace(/^#/, "") || "/";
 export function App() {
   const [data, setRenderedData] = useState(emptyData);
@@ -184,6 +180,7 @@ export function App() {
       })
       .catch(() => {
         if (active) {
+          setPersistenceStatus("error");
           storageErrorRef.current = true;
           setStorageError(true);
         }
@@ -381,7 +378,9 @@ export function App() {
         </header>
         {isBeta && (
           <p className="beta-banner caption">
-            <strong>Beta · {buildVersion}</strong>
+            <strong>
+              Beta {appVersion} · {buildVersion}
+            </strong>
             {" · "}
             {data.locale === "fi"
               ? "Testiversio. Tallennukset säilyvät vain tässä selaimessa ja osoitteessa."

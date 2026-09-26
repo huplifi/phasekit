@@ -1,4 +1,5 @@
 import type { ToolRecord } from "./storage";
+import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
   checklistDefinitions,
   commonChecklistFields,
@@ -6,6 +7,7 @@ import {
 } from "../../../packages/core/src/field-tools";
 import {
   formatReportRow,
+  isCyclePrimaryOutput,
   reportHasRoundedValues,
   reportName,
 } from "./report-summary";
@@ -23,7 +25,15 @@ type PrintableToolRecord = Pick<
   "tool" | "title" | "inputs" | "outputs" | "sources"
 > &
   Partial<
-    Pick<ToolRecord, "createdAt" | "equipmentName" | "notes" | "dataVersion">
+    Pick<
+      ToolRecord,
+      | "createdAt"
+      | "equipmentName"
+      | "lastLinkedEquipmentName"
+      | "notes"
+      | "dataVersion"
+      | "chartSnapshot"
+    >
   >;
 
 export function downloadToolRecord(record: ToolRecord) {
@@ -58,9 +68,13 @@ export function printToolRecord(
   const displayTitle = reportName(record, locale);
   title.textContent = displayTitle;
   const style = doc.createElement("style");
-  style.textContent = `body{font:15px/1.5 system-ui,sans-serif;max-width:850px;margin:40px auto;padding:0 24px;color:#182127}h1,h2{line-height:1.2}h1{font-size:26px}h2{font-size:18px;margin-top:28px}.meta,.muted{color:#53636d}dl{margin:0}dt{font-weight:650;margin-top:12px}dd{margin:2px 0 0 0;white-space:pre-wrap}li{margin:8px 0;overflow-wrap:anywhere}a{color:#174f72}.notice{border-top:1px solid #bbc6ca;margin-top:24px;padding-top:12px;color:#53636d}@media print{body{margin:0 auto;padding:0 12mm}a{color:inherit;text-decoration:none}}`;
+  style.textContent = `@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font:12px/1.35 system-ui,sans-serif;max-width:850px;margin:28px auto;padding:0 24px;color:#182127}h1,h2{line-height:1.15}h1{font-size:27px;margin:8px 0}h2{font-size:15px;margin:20px 0 9px;padding-bottom:5px;border-bottom:1px solid #cbd5d9}.brand{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#477d50;font-weight:700}.meta,.muted{color:#53636d}.meta{margin:5px 0}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.result-card{border:1px solid #b9d3c0;border-radius:8px;background:#f1f8f2;padding:11px 14px;break-inside:avoid}.result-card dt{font-size:11px;color:#405d48}.result-card dd{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}.row{display:grid;grid-template-columns:40% 60%;gap:8px;padding:5px 0;border-bottom:1px solid #e4eaec;break-inside:avoid}.row dt{color:#53636d}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.sources{font-size:10px;line-height:1.3;color:#53636d;columns:2;column-gap:20px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:#174f72}.notice{border-top:1px solid #bbc6ca;margin-top:17px;padding-top:8px;color:#53636d;font-size:10px}.chart{width:100%;max-height:350px;object-fit:contain;break-inside:avoid}@media print{body{margin:0 auto;padding:0}a{color:inherit;text-decoration:none}}`;
   head.append(title, style);
   const body = doc.createElement("body");
+  const brand = doc.createElement("p");
+  brand.className = "brand";
+  brand.textContent = "PhaseKit / Report";
+  body.append(brand);
   const h1 = doc.createElement("h1");
   h1.textContent = displayTitle;
   body.append(h1);
@@ -74,7 +88,13 @@ export function printToolRecord(
     appendText(
       body,
       "p",
-      `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${record.equipmentName}`,
+      `${record.createdAt ? (locale === "fi" ? "Alkuperäinen laitenimi" : "Equipment name when saved") : locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${record.equipmentName}`,
+    );
+  else if (record.lastLinkedEquipmentName)
+    appendText(
+      body,
+      "p",
+      `${locale === "fi" ? "Aiempi laitelinkki (nimi poistettaessa)" : "Former equipment link (name at removal)"}: ${record.lastLinkedEquipmentName}`,
     );
   appendRows(
     doc,
@@ -83,21 +103,61 @@ export function printToolRecord(
     record.inputs,
     locale,
   );
-  if (reportHasRoundedValues(record))
-    appendText(
-      body,
-      "p",
-      locale === "fi"
-        ? "≈ tarkoittaa näytössä pyöristettyä arvoa. JSON-vienti säilyttää tarkat tallennetut luvut."
-        : "≈ marks a rounded display value. JSON export keeps the exact recorded numbers.",
-    );
   appendRows(
     doc,
     body,
     locale === "fi" ? "Tulokset" : "Results",
-    record.outputs,
+    record.tool === "cycle" && record.chartSnapshot
+      ? record.outputs.filter(isCyclePrimaryOutput)
+      : record.outputs,
     locale,
+    record.tool === "cycle",
   );
+  if (reportHasRoundedValues(record)) {
+    const roundingNote = doc.createElement("p");
+    roundingNote.className = "muted";
+    roundingNote.textContent =
+      locale === "fi"
+        ? "≈ tarkoittaa näytössä pyöristettyä arvoa. JSON-vienti säilyttää tarkat tallennetut luvut."
+        : "≈ marks a rounded display value. JSON export keeps the exact recorded numbers.";
+    body.append(roundingNote);
+  }
+  let chartImage: HTMLImageElement | undefined;
+  if (record.chartSnapshot) {
+    const figure = doc.createElement("section");
+    figure.style.breakInside = "avoid";
+    appendText(
+      figure,
+      "h2",
+      locale === "fi" ? "Kylmäkierron kaavio" : "Cycle diagram",
+    );
+    chartImage = doc.createElement("img");
+    chartImage.className = "chart";
+    chartImage.alt =
+      locale === "fi"
+        ? "Tallennettu log(p)–h-kaavio"
+        : "Saved log(p)–h diagram";
+    chartImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderCycleChartSvg(record.chartSnapshot, locale))}`;
+    figure.append(chartImage);
+    const caption = doc.createElement("p");
+    caption.className = "muted";
+    caption.textContent =
+      locale === "fi"
+        ? "Rajattu CoolProp HEOS -malli. Suorat viivat kuvaavat kierron järjestystä, eivät prosessireittiä."
+        : "Bounded CoolProp HEOS model. Straight lines show cycle order, not the process path.";
+    figure.append(caption);
+    body.append(figure);
+    if (record.tool === "cycle")
+      appendRows(
+        doc,
+        body,
+        locale === "fi"
+          ? "Tilapisteet ja malliversiot"
+          : "State points and model versions",
+        record.outputs.filter((row) => !isCyclePrimaryOutput(row)),
+        locale,
+      );
+  }
   if (record.notes) {
     appendText(body, "h2", locale === "fi" ? "Muistiinpanot" : "Notes");
     appendText(body, "p", record.notes);
@@ -116,6 +176,7 @@ export function printToolRecord(
       `${locale === "fi" ? "Aineistoversio" : "Data version"}: ${record.dataVersion}`,
     );
   const sourceList = doc.createElement("ul");
+  sourceList.className = "sources";
   for (const source of record.sources) {
     const item = doc.createElement("li");
     const link = doc.createElement("a");
@@ -147,7 +208,29 @@ export function printToolRecord(
   root.append(head, body);
   doc.replaceChild(root, doc.documentElement);
   win.focus();
-  win.requestAnimationFrame(() => win.print());
+  if (chartImage) {
+    const image = chartImage;
+    const failed = () => {
+      const warning = doc.createElement("p");
+      warning.className = "notice";
+      warning.setAttribute("role", "alert");
+      warning.textContent =
+        locale === "fi"
+          ? "Tallennetun kaavion lataus epäonnistui. Tulostusta ei aloitettu. Yritä uudelleen tai vie laskelma JSON-muodossa."
+          : "The saved chart could not load. Printing was cancelled. Try again or export the calculation as JSON.";
+      image.replaceWith(warning);
+      win.focus();
+    };
+    const print = () => {
+      if (image.naturalWidth > 0) win.requestAnimationFrame(() => win.print());
+      else failed();
+    };
+    if (image.complete) print();
+    else {
+      image.onload = print;
+      image.onerror = failed;
+    }
+  } else win.requestAnimationFrame(() => win.print());
   return true;
 }
 
@@ -451,16 +534,38 @@ function appendRows(
   title: string,
   rows: ToolRecord["inputs"],
   locale: "fi" | "en",
+  emphasizeCycle = false,
 ) {
   if (!rows.length) return;
   appendText(body, "h2", title);
+  const primary = emphasizeCycle ? rows.filter(isCyclePrimaryOutput) : [];
+  if (primary.length) {
+    const hero = doc.createElement("dl");
+    hero.className = "result-grid";
+    for (const row of primary) {
+      const card = doc.createElement("div");
+      card.className = "result-card";
+      const dt = doc.createElement("dt");
+      dt.textContent = locale === "fi" ? row.label.fi : row.label.en;
+      const dd = doc.createElement("dd");
+      dd.textContent = formatReportRow(row, locale);
+      card.append(dt, dd);
+      hero.append(card);
+    }
+    body.append(hero);
+  }
   const dl = doc.createElement("dl");
+  dl.className = "rows";
   for (const row of rows) {
+    if (primary.includes(row)) continue;
+    const item = doc.createElement("div");
+    item.className = "row";
     const dt = doc.createElement("dt");
     dt.textContent = locale === "fi" ? row.label.fi : row.label.en;
     const dd = doc.createElement("dd");
     dd.textContent = formatReportRow(row, locale);
-    dl.append(dt, dd);
+    item.append(dt, dd);
+    dl.append(item);
   }
   body.append(dl);
 }

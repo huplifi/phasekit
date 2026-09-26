@@ -181,12 +181,19 @@ strong.mono {
   padding: 10px 12px;
   border-inline-start: 3px solid var(--link);
   border-radius: 0 6px 6px 0;
-  background: var(--surface, color-mix(in srgb, var(--link) 7%, var(--background)));
+  background: var(
+    --surface,
+    color-mix(in srgb, var(--link) 7%, var(--background))
+  );
   color: var(--text-secondary);
   overflow-wrap: anywhere;
 }
-.beta-banner strong { color: var(--text); }
-.beta-banner a { font-weight: 600; }
+.beta-banner strong {
+  color: var(--text);
+}
+.beta-banner a {
+  font-weight: 600;
+}
 .offline-indicator {
   display: flex;
   align-items: center;
@@ -995,7 +1002,18 @@ input[aria-invalid="true"] {
 }
 .picker-dialog {
   width: min(38rem, calc(100vw - 32px));
-  max-height: calc(100dvh - 32px);
+  height: min(44rem, calc(var(--picker-viewport-height, 100dvh) - 32px));
+  max-height: calc(var(--picker-viewport-height, 100dvh) - 32px);
+  position: fixed;
+  left: 50%;
+  top: calc(
+    var(--picker-offset-top, 0px) + var(--picker-viewport-height, 100dvh) / 2
+  );
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  overflow: hidden;
   padding: 0;
   border: 1px solid var(--control-border);
   border-radius: 12px;
@@ -1008,7 +1026,7 @@ input[aria-invalid="true"] {
 .picker-dialog-content {
   display: flex;
   flex-direction: column;
-  max-height: calc(100dvh - 34px);
+  height: 100%;
   min-height: 0;
   padding: 20px;
 }
@@ -1028,6 +1046,7 @@ input[aria-invalid="true"] {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 .switch-label {
   display: inline-flex;
@@ -1135,9 +1154,83 @@ label textarea,
   border: 1px solid var(--control-border);
   border-radius: 8px;
   resize: vertical;
-  font: 400 1rem/1.5 var(--font-body), sans-serif;
+  font:
+    400 1rem/1.5 var(--font-body),
+    sans-serif;
 }
-.check-schedule .notice p { margin: 8px 0 0; }
-.report-save { margin: 24px 0; }
-.report-save > summary { padding: 12px 0; }
-.report-save .caption { margin-top: 12px; }
+.check-schedule .notice p {
+  margin: 8px 0 0;
+}
+.report-save {
+  margin: 24px 0;
+}
+.report-save > summary {
+  padding: 12px 0;
+}
+.report-save .caption {
+  margin-top: 12px;
+}
+
+/* Shared exclusive choices: the same underlined language as detail tabs. */
+.choice-tabs {
+  margin: 16px 0 24px;
+  gap: 16px;
+  justify-content: flex-start;
+  scrollbar-width: thin;
+}
+.choice-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 0;
+  line-height: 1.4;
+  padding: 12px 8px;
+  min-height: 48px;
+}
+.choice-tabs button[aria-pressed="true"] {
+  color: var(--text);
+  font-weight: 700;
+}
+.choice-tabs button[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 3px;
+  background: var(--link);
+}
+.choice-tabs button:disabled {
+  opacity: 0.5;
+}
+.quantity-choices {
+  margin: 0;
+  gap: 12px;
+}
+.quantity-choices button {
+  flex: 0 0 auto;
+  min-width: 64px;
+}
+@media (max-width: 480px) {
+  .field-pipe-modes {
+    gap: 4px;
+  }
+  .field-pipe-modes button {
+    padding-inline: 0;
+  }
+}
+.supporting-copy {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-block: 16px;
+  overflow-wrap: anywhere;
+}
+.picker-dialog-heading,
+.picker-search-row,
+.picker-result-count {
+  flex: 0 0 auto;
+}
+.primary,
+.secondary-button {
+  line-height: 1.4;
+}

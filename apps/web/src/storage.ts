@@ -7,6 +7,7 @@ import type {
 } from "../../../packages/core/src/contracts";
 import type { Locale } from "../../../packages/i18n/src";
 import type { ChecklistDraft } from "../../../packages/core/src/field-tools";
+import type { PHChartSnapshot } from "./ph-chart-snapshot";
 export interface EquipmentRecord {
   id: string;
   name: string;
@@ -33,11 +34,14 @@ export interface ToolRecord {
   title: string;
   equipmentId?: string;
   equipmentName?: string;
+  /** Name of a former link recovered at deletion; not a name recorded at calculation time. */
+  lastLinkedEquipmentName?: string;
   notes: string;
   inputs: ReportRow[];
   outputs: ReportRow[];
   dataVersion?: string;
   sources: Source[];
+  chartSnapshot?: PHChartSnapshot;
 }
 export interface Snapshot {
   id: string;
@@ -208,6 +212,22 @@ const reportRow = z.object({
   value: z.string().max(3000),
   unit: z.string().max(80).optional(),
 });
+const chartPressure = z.number().finite().positive().max(100000);
+const chartEnthalpy = z.number().finite().min(-100000).max(100000);
+const chartSnapshot = z.object({
+  kind: z.literal("ph-cycle-v1"),
+  dataVersion: z.string().min(1).max(200),
+  dome: z
+    .array(z.tuple([chartPressure, chartEnthalpy, chartEnthalpy]))
+    .min(2)
+    .max(1000),
+  points: z.tuple([
+    z.tuple([chartPressure, chartEnthalpy]),
+    z.tuple([chartPressure, chartEnthalpy]),
+    z.tuple([chartPressure, chartEnthalpy]),
+    z.tuple([chartPressure, chartEnthalpy]),
+  ]),
+});
 const boundedId = z.string().min(1).max(100);
 const toolRecord = z.object({
   id: boundedId,
@@ -224,11 +244,13 @@ const toolRecord = z.object({
   title: z.string().min(1).max(200),
   equipmentId: boundedId.optional(),
   equipmentName: z.string().max(200).optional(),
+  lastLinkedEquipmentName: z.string().max(200).optional(),
   notes: z.string().max(10000),
   inputs: z.array(reportRow).max(200),
   outputs: z.array(reportRow).max(200),
   dataVersion: z.string().max(200).optional(),
   sources: z.array(source).max(100),
+  chartSnapshot: chartSnapshot.optional(),
 });
 export const backupSchema = z.object({
   schemaVersion: z.literal(1),

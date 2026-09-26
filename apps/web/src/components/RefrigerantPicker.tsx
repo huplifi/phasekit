@@ -109,6 +109,7 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
   const inputId = useId();
   const changeButtonRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
   const favouriteIds = data.favourites;
@@ -117,8 +118,7 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
 
   const results = useMemo(() => {
     const matches = dataset.refrigerants.filter(
-      (r) =>
-        (!foldedQuery || searchableText(r).includes(foldedQuery)),
+      (r) => !foldedQuery || searchableText(r).includes(foldedQuery),
     );
     return matches.sort((a, b) => {
       const aIndex = favouriteIds.indexOf(a.id);
@@ -154,6 +154,37 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
       dialogRef.current?.close();
     }
   }, [expanded, inputId]);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const viewport = window.visualViewport;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const resize = () => {
+      dialogRef.current?.style.setProperty(
+        "--picker-viewport-height",
+        `${viewport?.height ?? window.innerHeight}px`,
+      );
+      dialogRef.current?.style.setProperty(
+        "--picker-offset-top",
+        `${viewport?.offsetTop ?? 0}px`,
+      );
+    };
+    resize();
+    viewport?.addEventListener("resize", resize);
+    viewport?.addEventListener("scroll", resize);
+    window.addEventListener("resize", resize);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      viewport?.removeEventListener("resize", resize);
+      viewport?.removeEventListener("scroll", resize);
+      window.removeEventListener("resize", resize);
+    };
+  }, [expanded]);
+
+  useEffect(() => {
+    if (resultsRef.current) resultsRef.current.scrollTop = 0;
+  }, [query]);
 
   function toggleCompared(id: string) {
     if (props.mode !== "multi") return;
@@ -352,7 +383,7 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
               {props.mode === "multi" &&
                 ` · ${t("compareCount", { count: selectedCount })}`}
             </p>
-            <div className="picker-results">
+            <div className="picker-results" ref={resultsRef}>
               {results.length === 0 ? (
                 <p className="empty">{t("noResults")}</p>
               ) : (

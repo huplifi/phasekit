@@ -87,9 +87,6 @@
 .field-checklist-save-state {
   margin: 12px 0;
 }
-.field-checklist-print {
-  margin-top: 16px;
-}
 .field-expansion-result {
   margin-block: 20px;
 }
@@ -98,18 +95,6 @@
   margin-top: 20px;
 }
 
-.field-pipe-modes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 16px 0 22px;
-}
-
-.field-pipe-modes [aria-pressed="true"] {
-  background: var(--text);
-  color: var(--background);
-  border-color: var(--text);
-}
 .checklist-record .field-checklist-choice {
   display: flex;
   align-items: flex-start;
@@ -146,4 +131,63 @@
   .field-checklist-controls {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+/* Labels and actions share the same control baseline. */
+.field-tool-grid > label {
+  margin-bottom: 0;
+}
+.field-actions {
+  align-items: center;
+}
+.field-actions > button {
+  min-height: 44px;
+  margin: 0;
+}
+.field-actions > .danger-text {
+  margin-inline-start: 8px;
+}
+.field-checklist-save-state > [role="status"] {
+  min-height: 1.6em;
+  margin: 0;
+}
+.field-checklist-save-state > .supporting-copy {
+  margin-top: 8px;
+}
+.field-tools .small {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.field-tools form + .supporting-copy,
+.field-tools form + .small {
+  margin-top: 20px;
+}
+.field-tools .field-result {
+  background: var(--status-info-background);
+  color: var(--status-info-foreground);
+  border: 1px solid var(--divider);
+  margin-block: 24px 16px;
+}
+.field-result > h2,
+.field-result > h3 {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  margin: 0 0 12px;
+}
+.field-result .field-result-value {
+  font-family: var(--font-data);
+  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+.field-result > p {
+  margin-block: 10px;
+}
+.field-result .supporting-copy {
+  color: inherit;
+}
+.field-formula {
+  font-family: var(--font-data);
 }
