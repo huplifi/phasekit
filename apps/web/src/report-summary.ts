@@ -120,7 +120,44 @@ export function formatReportRow(
   locale: Locale,
 ): string {
   if (!row?.value?.trim()) return "";
-  return `${formatReportValue(row.value, locale)}${row.unit ? ` ${row.unit}` : ""}`;
+  const enums: Record<string, Record<string, [string, string]>> = {
+    "Breakdown status": {
+      reconciled: [
+        "Komponenttien summa vastaa kokonaistulosta",
+        "Component sum matches the total",
+      ],
+      mismatch: [
+        "Komponenttien summa poikkeaa kokonaistuloksesta",
+        "Component sum differs from the total",
+      ],
+    },
+    "Entered quantity": {
+      pressure: ["Paine", "Pressure"],
+      temperature: ["Lämpötila", "Temperature"],
+    },
+    "Phase boundary": {
+      dew: ["Kastepiste", "Dew point"],
+      bubble: ["Kuplapiste", "Bubble point"],
+    },
+    "Flow regime": {
+      laminar: ["Laminaarinen", "Laminar"],
+      turbulent: ["Turbulenttinen", "Turbulent"],
+    },
+  };
+  const translated =
+    enums[row.label.en]?.[row.value]?.[locale === "fi" ? 0 : 1];
+  const unavailable =
+    row.value === "unavailable" ||
+    (row.label.en === "Breakdown status" &&
+      row.value.startsWith("unavailable:"));
+  const value =
+    translated ??
+    (unavailable
+      ? locale === "fi"
+        ? "Erittelyyn tarvittavia tietoja puuttuu"
+        : "Data needed for the breakdown is missing"
+      : formatReportValue(row.value, locale));
+  return `${value}${row.unit ? ` ${row.unit}` : ""}`;
 }
 
 /** Readable presentation only; the stored record and JSON retain exact strings. */
@@ -175,4 +212,42 @@ function firstValue(
       !excluded.includes(row.label.en) &&
       !/version|versio/i.test(`${row.label.fi} ${row.label.en}`),
   );
+}
+
+/** Select headline results without changing the stored values or their order. */
+export function primaryReportOutputs(
+  report: Pick<ToolRecord, "tool" | "inputs" | "outputs">,
+): ReportRow[] {
+  if (report.tool === "cycle")
+    return report.outputs.filter(isCyclePrimaryOutput);
+  if (report.tool === "pt") {
+    const entered = findRow(
+      report.inputs,
+      "Syötetty suure",
+      "Entered quantity",
+    )?.value;
+    const label = entered === "temperature" ? "Pressure" : "Temperature";
+    return report.outputs.filter((row) => row.label.en === label);
+  }
+  const preferred: Record<string, string[]> = {
+    co2e: ["Result"],
+    convert: ["Result"],
+    "thermal-power": ["Thermal power"],
+    electrical:
+      findRow(report.inputs, "Laskenta", "Calculation")?.value === "ohm"
+        ? ["Real power", "Current"]
+        : ["Real power"],
+    pipe: [
+      "Pressure loss",
+      "Length change",
+      "Internal volume",
+      "Mean flow velocity",
+    ],
+  };
+  const rows = report.outputs.filter((row) =>
+    preferred[report.tool]?.includes(row.label.en),
+  );
+  return rows.length
+    ? rows
+    : report.outputs.filter((row) => row.unit).slice(0, 1);
 }

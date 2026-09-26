@@ -11,7 +11,7 @@ import {
 } from "../report-export";
 import {
   formatReportRow,
-  isCyclePrimaryOutput,
+  primaryReportOutputs,
   reportHasRoundedValues,
   reportSummary,
 } from "../report-summary";
@@ -197,6 +197,8 @@ function ToolReport({
   const [draftNotes, setDraftNotes] = useState(record.notes);
   const lcl = (fi: string, en: string) => l(data.locale, fi, en);
   const sources = record.sources;
+  const headline = primaryReportOutputs(record);
+  const detailOutputs = record.outputs.filter((row) => !headline.includes(row));
   const linkedEquipment = data.equipment.find(
     (item) => item.id === record.equipmentId,
   );
@@ -213,81 +215,36 @@ function ToolReport({
           </strong>
           <span className="secondary">
             {formatDate(record.createdAt, data.locale)}
-            {` · ${linkedEquipment ? `${lcl("Nykyinen laite", "Current equipment")}: ${linkedEquipment.name}` : lcl("Ei liitetty", "Unlinked")}`}
+            {` · ${linkedEquipment ? `${lcl("Laite", "Equipment")}: ${linkedEquipment.name}` : lcl("Ei liitetty", "Unlinked")}`}
           </span>
         </span>
       </summary>
       <div className="report-detail">
-        {record.equipmentName && (
-          <p>
-            <strong>
-              {lcl("Alkuperäinen laitenimi", "Equipment name when saved")}:
-            </strong>{" "}
-            {record.equipmentName}
-          </p>
-        )}
-        {!record.equipmentName && record.lastLinkedEquipmentName && (
-          <p>
-            <strong>
-              {lcl(
-                "Aiempi laitelinkki (nimi poistettaessa)",
-                "Former equipment link (name at removal)",
-              )}
-              :
-            </strong>{" "}
-            {record.lastLinkedEquipmentName}
-          </p>
-        )}
-        <label className="report-linkage">
-          {lcl("Nykyinen laitelinkki", "Current equipment link")}
-          <select
-            value={
-              data.equipment.some((item) => item.id === record.equipmentId)
-                ? record.equipmentId
-                : ""
-            }
-            onChange={(event) =>
-              setData((current) => ({
-                ...current,
-                toolRecords: current.toolRecords.map((item) =>
-                  item.id === record.id
-                    ? {
-                        ...item,
-                        equipmentId: event.target.value || undefined,
-                        lastLinkedEquipmentName: event.target.value
-                          ? undefined
-                          : !item.equipmentName && item.equipmentId
-                            ? (current.equipment.find(
-                                (equipment) =>
-                                  equipment.id === item.equipmentId,
-                              )?.name ?? item.lastLinkedEquipmentName)
-                            : item.lastLinkedEquipmentName,
-                      }
-                    : item,
-                ),
-              }))
-            }
+        {headline.length > 0 && (
+          <section
+            className="result-card saved-result-card"
+            aria-label={lcl("Päätulos", "Main result")}
           >
-            <option value="">{lcl("Ei liitetty", "Unlinked")}</option>
-            {data.equipment.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
+            {headline.map((row, index) => (
+              <div key={index}>
+                <p className="result-label">{row.label[data.locale]}</p>
+                <p className="result-number">
+                  {formatReportRow(row, data.locale)}
+                </p>
+              </div>
             ))}
-          </select>
-        </label>
-        <p className="caption secondary">
-          {lcl(
-            "Laitelinkin muuttaminen ei muuta alkuperäisiä laskentatietoja.",
-            "Changing the link leaves the original calculation unchanged.",
-          )}
-        </p>
+          </section>
+        )}
         <ReportRows title={lcl("Lähtötiedot", "Inputs")} rows={record.inputs} />
-        <ReportRows
-          title={lcl("Tulokset", "Results")}
-          rows={record.outputs}
-          primary={record.tool === "cycle"}
-        />
+        {detailOutputs.length > 0 && (
+          <details className="report-secondary-details">
+            <summary>{lcl("Tuloksen erittely", "Result breakdown")}</summary>
+            <ReportRows
+              title={lcl("Lisätiedot", "Details")}
+              rows={detailOutputs}
+            />
+          </details>
+        )}
         {record.chartSnapshot && (
           <section className="report-chart">
             <h3>{lcl("Kylmäkierron kaavio", "Cycle diagram")}</h3>
@@ -317,6 +274,7 @@ function ToolReport({
             {editingNotes ? (
               <div className="report-note-editor">
                 <textarea
+                  aria-label={lcl("Muistiinpanot", "Notes")}
                   value={draftNotes}
                   maxLength={10000}
                   rows={4}
@@ -357,10 +315,78 @@ function ToolReport({
             )}
           </section>
         )}
-        <section className="report-provenance">
-          <h3>
+        <details className="report-secondary-details report-equipment-details">
+          <summary>{lcl("Vaihda laitetta", "Change equipment")}</summary>
+          {record.equipmentName &&
+            record.equipmentName !== linkedEquipment?.name && (
+              <p>
+                <strong>
+                  {lcl("Alkuperäinen laitenimi", "Equipment name when saved")}:
+                </strong>{" "}
+                {record.equipmentName}
+              </p>
+            )}
+          {!record.equipmentName && record.lastLinkedEquipmentName && (
+            <p>
+              <strong>
+                {lcl(
+                  "Aiempi laitelinkki (nimi poistettaessa)",
+                  "Former equipment link (name at removal)",
+                )}
+                :
+              </strong>{" "}
+              {record.lastLinkedEquipmentName}
+            </p>
+          )}
+          <label className="report-linkage">
+            {lcl("Laite", "Equipment")}
+            <select
+              value={
+                data.equipment.some((item) => item.id === record.equipmentId)
+                  ? record.equipmentId
+                  : ""
+              }
+              onChange={(event) =>
+                setData((current) => ({
+                  ...current,
+                  toolRecords: current.toolRecords.map((item) =>
+                    item.id === record.id
+                      ? {
+                          ...item,
+                          equipmentId: event.target.value || undefined,
+                          lastLinkedEquipmentName: event.target.value
+                            ? undefined
+                            : !item.equipmentName && item.equipmentId
+                              ? (current.equipment.find(
+                                  (equipment) =>
+                                    equipment.id === item.equipmentId,
+                                )?.name ?? item.lastLinkedEquipmentName)
+                              : item.lastLinkedEquipmentName,
+                        }
+                      : item,
+                  ),
+                }))
+              }
+            >
+              <option value="">{lcl("Ei liitetty", "Unlinked")}</option>
+              {data.equipment.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p className="caption secondary">
+            {lcl(
+              "Laitelinkin muuttaminen ei muuta alkuperäisiä laskentatietoja.",
+              "Changing the link leaves the original calculation unchanged.",
+            )}
+          </p>
+        </details>
+        <details className="report-provenance report-secondary-details">
+          <summary>
             {lcl("Lähteet ja versiotiedot", "Sources and version information")}
-          </h3>
+          </summary>
           {record.dataVersion && (
             <p>
               <strong>{lcl("Aineistoversio", "Data version")}:</strong>{" "}
@@ -401,7 +427,7 @@ function ToolReport({
               "This calculation is an estimate based on its recorded inputs and sources. It is not a compliance certificate or equipment approval.",
             )}
           </p>
-        </section>
+        </details>
       </div>
       <div className="button-group report-actions">
         {!editingNotes && (
@@ -487,35 +513,19 @@ function ToolReport({
 function ReportRows({
   title,
   rows,
-  primary = false,
 }: {
   title: string;
   rows: ToolRecord["inputs"];
-  primary?: boolean;
 }) {
   const { data } = useApp();
-  const label = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   if (!rows.length) return null;
   return (
     <section className="report-rows">
       <h3>{title}</h3>
-      {primary && (
-        <div className="report-key-results">
-          {rows.filter(isCyclePrimaryOutput).map((row) => (
-            <div className="report-key-result" key={row.label.en}>
-              <span>{label(row.label.fi, row.label.en)}</span>
-              <strong>{formatReportRow(row, data.locale)}</strong>
-            </div>
-          ))}
-        </div>
-      )}
       <dl>
         {rows.map((row, index) => (
-          <div
-            className={`report-row${primary && isCyclePrimaryOutput(row) ? " report-row-key" : ""}`}
-            key={`${row.label.fi}-${index}`}
-          >
-            <dt>{label(row.label.fi, row.label.en)}</dt>
+          <div className="report-row" key={`${row.label.fi}-${index}`}>
+            <dt>{row.label[data.locale]}</dt>
             <dd>{formatReportRow(row, data.locale)}</dd>
           </div>
         ))}

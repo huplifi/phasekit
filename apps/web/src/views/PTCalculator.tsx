@@ -19,6 +19,7 @@ import { Back, SourceNote } from "../components/Common";
 import { InfoHelp } from "../components/InfoHelp";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import "./calculator.css";
+import "./pt-result.css";
 
 type Anchor = { kind: "pressure" | "temperature"; value: string };
 const units = ["bar", "kPa", "MPa", "psi"] as const;
@@ -353,14 +354,48 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             )}
           </p>
         )}
-        {result && (
-          <p className="caption secondary pt-live-result">
-            {r?.designation} ·{" "}
-            <span className="mono">
-              {pressure} {pressureUnit} ↔ {temperature} °{tempUnit}
-            </span>
+        {result && r && !unitError && !error && (
+          <section className="result-card info pt-live-result">
+            <p className="result-label">
+              {anchor.kind === "pressure"
+                ? l("Laskettu lämpötila", "Calculated temperature")
+                : l("Laskettu paine", "Calculated pressure")}
+            </p>
+            <p className="result-number">
+              <span className="mono">
+                {anchor.kind === "pressure"
+                  ? editableNumber(result.temperature.value, true)
+                  : editableNumber(result.pressure.value)}
+              </span>{" "}
+              <span className="pt-result-unit">
+                {anchor.kind === "pressure" ? `°${tempUnit}` : pressureUnit}
+              </span>
+            </p>
+            <p className="pt-result-context">
+              <span>{r.designation} · </span>
+              <span>
+                {anchor.kind === "pressure"
+                  ? l("Syötetystä paineesta", "Based on entered pressure")
+                  : l(
+                      "Syötetystä lämpötilasta",
+                      "Based on entered temperature",
+                    )}
+              </span>
+              <strong className="mono">
+                {anchor.kind === "pressure"
+                  ? `${pressure} ${pressureUnit}`
+                  : `${temperature} °${tempUnit}`}
+              </strong>
+            </p>
+            {r.kind === "blend" && (
+              <p className="caption pt-result-phase">
+                {effectiveSide === "dew"
+                  ? l("Höyry · kastepiste", "Vapour · dew point")
+                  : l("Neste · kuplapiste", "Liquid · bubble point")}
+              </p>
+            )}
             {pressureUnit.endsWith("(g)") && (
-              <span className="pt-gauge-reference">
+              <p className="caption secondary pt-gauge-reference">
                 {l("Ilmanpaineviite", "Atmospheric reference")}: {atmosphere}{" "}
                 bar(a)
                 {Number(atmosphere.replace(",", ".")) === 1.01325
@@ -369,9 +404,9 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
                       " · standard atmosphere (assumed)",
                     )
                   : ""}
-              </span>
+              </p>
             )}
-          </p>
+          </section>
         )}
       </div>
       {r?.kind === "blend" && (

@@ -31,22 +31,23 @@ test("saved calculation keeps its original identity while its equipment link cha
 
   await page.goto("/#/saved");
   const report = page.locator(".report-entry").first();
-  await expect(report.locator("summary")).toContainText(
-    "Nykyinen laite: Unit A",
+  await expect(report.locator(":scope > summary")).toContainText(
+    "Laite: Unit A",
   );
-  await report.locator("summary").click();
-  await expect(report).toContainText("Alkuperäinen laitenimi");
+  await report.locator(":scope > summary").click();
+  await expect(report).not.toContainText("Alkuperäinen laitenimi");
+  await report.getByText("Vaihda laitetta", { exact: true }).click();
   await expect(report).toContainText("Unit A");
   await expect(report).toContainText("20 mm");
   const currentLink = report.getByRole("combobox", {
-    name: "Nykyinen laitelinkki",
+    name: "Laite",
   });
   await currentLink.selectOption({ label: "Unit B" });
   await expect(currentLink.locator("option:checked")).toHaveText("Unit B");
-  await expect(report.locator("summary")).toContainText(
-    "Nykyinen laite: Unit B",
+  await expect(report.locator(":scope > summary")).toContainText(
+    "Laite: Unit B",
   );
-  await expect(report.locator("summary")).not.toContainText("Unit A");
+  await expect(report.locator(":scope > summary")).not.toContainText("Unit A");
   await expect(report).toContainText("Unit A");
 
   await page.goto("/#/equipment");
@@ -58,9 +59,13 @@ test("saved calculation keeps its original identity while its equipment link cha
 
   await page
     .locator(".report-entry[open]")
-    .getByRole("combobox", { name: "Nykyinen laitelinkki" })
+    .getByText("Vaihda laitetta", { exact: true })
+    .click();
+  await page
+    .locator(".report-entry[open]")
+    .getByRole("combobox", { name: "Laite" })
     .selectOption("");
-  await expect(page.locator(".report-entry[open] summary")).toContainText(
+  await expect(page.locator(".report-entry[open] > summary")).toContainText(
     "Ei liitetty",
   );
   await expect(page.locator(".report-entry[open]")).toContainText("Unit A");

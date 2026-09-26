@@ -169,7 +169,13 @@ export function Settings() {
           </div>
           <div>
             <dt>{l("Sovellusversio", "App version")}</dt>
-            <dd className="mono">{appVersion}</dd>
+            <dd>
+              <span className="mono">{appVersion}</span>
+              <a className="release-history-link" href="#/releases">
+                {l("Versiohistoria ja uutta", "Release history and what’s new")}{" "}
+                <span aria-hidden="true">→</span>
+              </a>
+            </dd>
           </div>
           <div>
             <dt>{l("Version päivämäärä", "Version date")}</dt>
@@ -222,9 +228,6 @@ export function Settings() {
             </dd>
           </div>
         </dl>
-        <a className="text-button" href="#/releases">
-          {l("Versiohistoria ja uutta", "Release history and what’s new")}
-        </a>
         <p className="caption secondary">
           {l(
             "MIT-lisenssi koskee PhaseKitin omaa koodia ja dokumentaatiota. Lähdeaineistoilla, fonteilla ja muilla ulkopuolisilla osilla on omat käyttöehtonsa.",

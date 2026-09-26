@@ -136,7 +136,13 @@ export function Back({ to = "/" }: { to?: string }) {
     </button>
   );
 }
-export function StarButton({ r }: { r: Refrigerant }) {
+export function StarButton({
+  r,
+  onToggled,
+}: {
+  r: Refrigerant;
+  onToggled?: (added: boolean) => void;
+}) {
   const { data, t, toggleFavourite } = useApp();
   const active = data.favourites.includes(r.id);
   return (
@@ -146,7 +152,10 @@ export function StarButton({ r }: { r: Refrigerant }) {
         name: r.designation,
       })}
       aria-pressed={active}
-      onClick={() => toggleFavourite(r.id)}
+      onClick={() => {
+        toggleFavourite(r.id);
+        onToggled?.(!active);
+      }}
     >
       <Star size={22} fill={active ? "currentColor" : "none"} />
     </button>
@@ -205,7 +214,7 @@ export function ToolMenu({ refrigerant }: { refrigerant?: Refrigerant }) {
           }
         >
           <Icon size={22} aria-hidden="true" />
-          <span>
+          <span className={key === "co2e" ? "tool-row-co2e-label" : undefined}>
             {key === "co2e" ? (
               <>
                 kg <ArrowLeftRight size={16} aria-hidden="true" /> CO₂e

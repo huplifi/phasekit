@@ -6,6 +6,7 @@ import {
   Bookmark,
   Settings as SettingsIcon,
   WifiOff,
+  RefreshCw,
   ArrowRight,
   X,
 } from "lucide-react";
@@ -399,12 +400,21 @@ export function App() {
           </p>
         )}
         {needRefresh && (
-          <aside className="notice">
-            <p>
-              {t("updateReady")} {t("updateNote")}
-            </p>
+          <aside
+            className="notice update-notice"
+            aria-label={
+              data.locale === "fi" ? "Sovelluspäivitys" : "Application update"
+            }
+          >
+            <strong className="update-notice-heading">
+              <RefreshCw size={20} aria-hidden="true" />
+              {data.locale === "fi"
+                ? "Päivitys saatavilla"
+                : "Update available"}
+            </strong>
+            <p className="caption secondary">{t("updateNote")}</p>
             <button
-              className="text-button"
+              className="secondary-button"
               disabled={updating}
               onClick={() => void applyUpdate()}
             >

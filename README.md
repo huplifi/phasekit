@@ -11,10 +11,10 @@ The stable `main` release remains **0.1.0**. The separate public beta contains t
 - EU/Finland periodic leak-check assessment, contextual restrictions and effective dates, completed-inspection-based next due date and shareable explanation.
 - Search with regulation/model/oil filters, favourites and comparison.
 - General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity, material thermal expansion, bounded single-phase straight-pipe pressure loss and local work checklists.
-- Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and browser print-to-PDF.
+- Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and consistent result-first print-to-PDF reports. Commissioning and other work checklists retain both marked and unmarked steps and written observations.
 - Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
 
-[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://beta.phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-UX-ROUND-TWO.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
+[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://beta.phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-UX-ROUND-THREE.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
 ## Development
 

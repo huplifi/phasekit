@@ -8,12 +8,16 @@ import {
 import {
   formatReportRow,
   isCyclePrimaryOutput,
+  primaryReportOutputs,
   reportHasRoundedValues,
   reportName,
 } from "./report-summary";
 import type { CheckResult, Source } from "../../../packages/core/src/contracts";
 import { reasonMessages } from "../../../packages/rulesets/eu-fi/src/reasons";
-import { nextInspectionDate } from "../../../packages/core/src/schedule";
+import {
+  isCalendarDate,
+  nextInspectionDate,
+} from "../../../packages/core/src/schedule";
 import {
   formatDate,
   translate,
@@ -36,6 +40,90 @@ type PrintableToolRecord = Pick<
     >
   >;
 
+type Locale = "fi" | "en";
+
+// These rules belong to the new print document, not the application's theme.
+// Every key fact remains legible when backgrounds and colour are disabled.
+export const PRINT_DOCUMENT_CSS = `@page{size:A4;margin:14mm}*{box-sizing:border-box}html{color-scheme:light}body{font:12px/1.45 system-ui,sans-serif;max-width:850px;margin:26px auto;padding:0 22px;color:#182127}h1,h2{line-height:1.18}h1{font-size:25px;margin:5px 0 12px}h2{font-size:15px;margin:21px 0 8px;padding-bottom:5px;border-bottom:1px solid #929fa5}.brand{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 9px}.meta,.muted{color:#405158}.meta{margin:3px 0 9px}.hero{border:2px solid #283b42;border-radius:6px;padding:12px 15px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.hero-value{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0}.hero-context{margin:7px 0 0;font-size:12px}.date-pair{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:12px}.date-card{border-top:1px solid #87969d;padding-top:8px}.date-card strong{display:block;font-size:18px;margin-top:2px}.date-card-secondary strong{font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0;break-inside:avoid}.result-card{border:1px solid #829098;border-radius:6px;padding:10px 12px;break-inside:avoid}.result-card dt{font-size:11px;color:#405158}.result-card dd{font-size:20px;font-weight:700;line-height:1.18;margin:3px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;padding:5px 0;border-bottom:1px solid #d7dfe2;break-inside:avoid}.row dt{color:#405158}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.detail-list div{border-bottom:1px solid #d7dfe2;padding:5px 0;break-inside:avoid}.detail-list dt{font-weight:650}.detail-list dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.checklist-progress{font-size:17px;font-weight:700;margin:14px 0}.checklist-steps{list-style:none;padding:0}.checklist-steps li{display:flex;gap:9px;border-bottom:1px solid #d7dfe2;padding:7px 0;break-inside:avoid}.checkmark{font:19px/1 system-ui,sans-serif;min-width:22px}.sources{font-size:10px;line-height:1.4;columns:2;column-gap:18px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:inherit}.notice{border-top:1px solid #9aa8ae;margin-top:18px;padding-top:9px;color:#405158;font-size:10px}.chart{display:block;width:100%;max-height:340px;object-fit:contain;break-inside:avoid}p{overflow-wrap:anywhere;white-space:pre-wrap}@media print{body{margin:0 auto;padding:0}a{text-decoration:none}}`;
+
+function createPrintDocument(win: Window, title: string, locale: Locale) {
+  const doc = win.document;
+  doc.open();
+  doc.write("<!doctype html><html><head></head><body></body></html>");
+  doc.close();
+  doc.documentElement.lang = locale;
+  doc.title = title;
+  const style = doc.createElement("style");
+  style.textContent = PRINT_DOCUMENT_CSS;
+  doc.head.append(style);
+  const brand = doc.createElement("p");
+  brand.className = "brand";
+  brand.textContent = "PHASEKIT / " + (locale === "fi" ? "Raportti" : "Report");
+  doc.body.append(brand);
+  return doc;
+}
+
+function addHero(
+  doc: Document,
+  label: string,
+  value: string,
+  context?: string,
+) {
+  const hero = doc.createElement("section");
+  hero.className = "hero";
+  const caption = doc.createElement("div");
+  caption.className = "hero-label";
+  caption.textContent = label;
+  const main = doc.createElement("p");
+  main.className = "hero-value";
+  main.textContent = value;
+  hero.append(caption, main);
+  if (context) {
+    const detail = doc.createElement("p");
+    detail.className = "hero-context";
+    detail.textContent = context;
+    hero.append(detail);
+  }
+  doc.body.append(hero);
+  return hero;
+}
+
+function appendDateCard(
+  doc: Document,
+  parent: HTMLElement,
+  label: string,
+  value: string,
+  secondary = false,
+) {
+  const card = doc.createElement("div");
+  card.className = secondary ? "date-card date-card-secondary" : "date-card";
+  const caption = doc.createElement("span");
+  caption.textContent = label;
+  const date = doc.createElement("strong");
+  date.textContent = value;
+  card.append(caption, date);
+  parent.append(card);
+}
+
+export function leakCheckPrintSchedule(
+  result: Pick<CheckResult, "state" | "months" | "input">,
+  lastInspectionDate?: string,
+): {
+  status: "dated" | "no_previous" | "no_schedule" | "invalid";
+  previous?: string;
+  due?: string;
+} {
+  if (!lastInspectionDate) return { status: "no_previous" };
+  try {
+    const due = nextInspectionDate(result, lastInspectionDate);
+    return due
+      ? { status: "dated", previous: lastInspectionDate, due }
+      : { status: "no_schedule", previous: lastInspectionDate };
+  } catch {
+    return { status: "invalid" };
+  }
+}
+
 export function downloadToolRecord(record: ToolRecord) {
   const blob = new Blob([JSON.stringify(record, null, 2)], {
     type: "application/json;charset=utf-8",
@@ -56,32 +144,16 @@ export function printToolRecord(
 ) {
   const win = window.open("", "_blank");
   if (!win) return false;
-  const doc = win.document;
-  // Finish the initial blank navigation before inserting user data as text.
-  doc.open();
-  doc.write("<!doctype html><html><head></head><body></body></html>");
-  doc.close();
-  const root = doc.createElement("html");
-  root.lang = locale;
-  const head = doc.createElement("head");
-  const title = doc.createElement("title");
   const displayTitle = reportName(record, locale);
-  title.textContent = displayTitle;
-  const style = doc.createElement("style");
-  style.textContent = `@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font:12px/1.35 system-ui,sans-serif;max-width:850px;margin:28px auto;padding:0 24px;color:#182127}h1,h2{line-height:1.15}h1{font-size:27px;margin:8px 0}h2{font-size:15px;margin:20px 0 9px;padding-bottom:5px;border-bottom:1px solid #cbd5d9}.brand{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#477d50;font-weight:700}.meta,.muted{color:#53636d}.meta{margin:5px 0}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.result-card{border:1px solid #b9d3c0;border-radius:8px;background:#f1f8f2;padding:11px 14px;break-inside:avoid}.result-card dt{font-size:11px;color:#405d48}.result-card dd{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:18px}.row{display:grid;grid-template-columns:40% 60%;gap:8px;padding:5px 0;border-bottom:1px solid #e4eaec;break-inside:avoid}.row dt{color:#53636d}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.sources{font-size:10px;line-height:1.3;color:#53636d;columns:2;column-gap:20px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:#174f72}.notice{border-top:1px solid #bbc6ca;margin-top:17px;padding-top:8px;color:#53636d;font-size:10px}.chart{width:100%;max-height:350px;object-fit:contain;break-inside:avoid}@media print{body{margin:0 auto;padding:0}a{color:inherit;text-decoration:none}}`;
-  head.append(title, style);
-  const body = doc.createElement("body");
-  const brand = doc.createElement("p");
-  brand.className = "brand";
-  brand.textContent = "PhaseKit / Report";
-  body.append(brand);
+  const doc = createPrintDocument(win, displayTitle, locale);
+  const body = doc.body;
   const h1 = doc.createElement("h1");
   h1.textContent = displayTitle;
   body.append(h1);
   const meta = doc.createElement("p");
   meta.className = "meta";
   if (record.createdAt) {
-    meta.textContent = `${locale === "fi" ? "Tallennettu" : "Saved"}: ${record.createdAt}`;
+    meta.textContent = `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(record.createdAt, locale)}`;
     body.append(meta);
   }
   if (record.equipmentName)
@@ -99,19 +171,19 @@ export function printToolRecord(
   appendRows(
     doc,
     body,
-    locale === "fi" ? "Lähtötiedot" : "Inputs",
-    record.inputs,
-    locale,
-  );
-  appendRows(
-    doc,
-    body,
     locale === "fi" ? "Tulokset" : "Results",
     record.tool === "cycle" && record.chartSnapshot
       ? record.outputs.filter(isCyclePrimaryOutput)
       : record.outputs,
     locale,
-    record.tool === "cycle",
+    primaryReportOutputs(record),
+  );
+  appendRows(
+    doc,
+    body,
+    locale === "fi" ? "Lähtötiedot" : "Inputs",
+    record.inputs,
+    locale,
   );
   if (reportHasRoundedValues(record)) {
     const roundingNote = doc.createElement("p");
@@ -205,8 +277,6 @@ export function printToolRecord(
       ? "Laskelma on tallennettuihin lähtötietoihin ja lähteisiin perustuva arvio. Se ei ole vaatimustenmukaisuussertifikaatti tai laitehyväksyntä."
       : "This calculation is an estimate based on its recorded inputs and sources. It is not a compliance certificate or equipment approval.";
   body.append(notice);
-  root.append(head, body);
-  doc.replaceChild(root, doc.documentElement);
   win.focus();
   if (chartImage) {
     const image = chartImage;
@@ -240,47 +310,54 @@ export function printChecklistDraft(
 ) {
   const win = window.open("", "_blank");
   if (!win) return false;
-  const doc = win.document;
-  doc.open();
-  doc.write("<!doctype html><html><head></head><body></body></html>");
-  doc.close();
   const definition = checklistDefinitions[draft.kind];
   const title = draft.title.trim() || definition.name[locale];
-  doc.documentElement.lang = locale;
-  doc.title = `${title} · PhaseKit`;
-  const style = doc.createElement("style");
-  style.textContent = `body{font:15px/1.5 system-ui,sans-serif;max-width:850px;margin:40px auto;padding:0 24px;color:#182127}h1,h2{line-height:1.2}h1{font-size:26px}h2{font-size:18px;margin-top:28px}li{margin:8px 0;break-inside:avoid}dt{font-weight:650;margin-top:12px}dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.meta{color:#53636d}@media print{body{margin:0 auto;padding:0 12mm}}`;
-  doc.head.append(style);
+  const doc = createPrintDocument(win, `${title} · PhaseKit`, locale);
   appendText(doc.body, "h1", title);
   appendText(
     doc.body,
     "p",
-    `${definition.name[locale]} · ${locale === "fi" ? "Päivitetty" : "Updated"}: ${draft.updatedAt}`,
+    `${definition.name[locale]} · ${locale === "fi" ? "Päivitetty" : "Updated"}: ${displayDate(draft.updatedAt, locale)}`,
   );
+  const equipment = draft.fields.equipment?.trim();
+  if (equipment)
+    appendText(
+      doc.body,
+      "p",
+      `${locale === "fi" ? "Laite / tunniste" : "Equipment / identifier"}: ${equipment}`,
+    );
   const complete = draft.checkedIds.filter((id) =>
     definition.steps.some((step) => step.id === id),
   ).length;
-  appendText(
-    doc.body,
-    "p",
-    `${locale === "fi" ? "Tila" : "Status"}: ${complete} / ${definition.steps.length} ${locale === "fi" ? "tehtävää valmiina" : "steps complete"}`,
-  );
+  const progress = doc.createElement("p");
+  progress.className = "checklist-progress";
+  progress.textContent = `${locale === "fi" ? "Tila" : "Status"}: ${complete} / ${definition.steps.length} ${locale === "fi" ? "työvaihetta merkitty" : "steps marked"}`;
+  doc.body.append(progress);
   appendText(doc.body, "h2", locale === "fi" ? "Työvaiheet" : "Steps");
   const steps = doc.createElement("ul");
+  steps.className = "checklist-steps";
   for (const step of definition.steps) {
     const item = doc.createElement("li");
-    item.textContent = `${draft.checkedIds.includes(step.id) ? "☑" : "☐"} ${step.label[locale]}`;
+    const mark = doc.createElement("span");
+    mark.className = "checkmark";
+    mark.textContent = draft.checkedIds.includes(step.id) ? "☑" : "☐";
+    const label = doc.createElement("span");
+    label.textContent = step.label[locale];
+    item.append(mark, label);
     steps.append(item);
   }
   doc.body.append(steps);
   appendText(doc.body, "h2", locale === "fi" ? "Havainnot" : "Observations");
   const fields = doc.createElement("dl");
+  fields.className = "detail-list";
   for (const field of [...commonChecklistFields, ...definition.fields]) {
+    const item = doc.createElement("div");
     const dt = doc.createElement("dt");
     dt.textContent = field.label[locale];
     const dd = doc.createElement("dd");
     dd.textContent = draft.fields[field.id]?.trim() || "—";
-    fields.append(dt, dd);
+    item.append(dt, dd);
+    fields.append(item);
   }
   doc.body.append(fields);
   if (draft.notes.trim()) {
@@ -288,7 +365,7 @@ export function printChecklistDraft(
     appendText(doc.body, "p", draft.notes);
   }
   const notice = doc.createElement("p");
-  notice.className = "meta";
+  notice.className = "notice";
   notice.textContent =
     locale === "fi"
       ? "Tämä on kirjattujen havaintojen työlista. Valmiiksi merkityt työvaiheet eivät yksin osoita, että koe tai käyttöönotto on hyväksytty."
@@ -307,6 +384,7 @@ export function printCheckResult({
   createdAt,
   lastInspectionDate,
   componentDesignations,
+  equipmentName,
 }: {
   result: CheckResult;
   locale: "fi" | "en";
@@ -315,35 +393,79 @@ export function printCheckResult({
   createdAt?: string;
   lastInspectionDate?: string;
   componentDesignations?: Record<string, string>;
+  equipmentName?: string;
 }): boolean {
   const win = window.open("", "_blank");
   if (!win) return false;
-  const doc = win.document;
-  doc.open();
-  doc.write("<!doctype html><html><head></head><body></body></html>");
-  doc.close();
-  doc.documentElement.lang = locale;
-  doc.title = `${designation} · ${locale === "fi" ? "Vuototarkastusarvio" : "Leak check assessment"}`;
-  const style = doc.createElement("style");
-  style.textContent = `body{font:15px/1.5 system-ui,sans-serif;max-width:850px;margin:40px auto;padding:0 24px;color:#182127}h1,h2{line-height:1.2}h1{font-size:26px}h2{font-size:18px;margin-top:28px}dt{font-weight:650;margin-top:12px}dd{margin:2px 0 0;white-space:pre-wrap}li{margin:8px 0;overflow-wrap:anywhere}.notice{border-top:1px solid #bbc6ca;margin-top:24px;padding-top:12px;color:#53636d}@media print{body{margin:0 auto;padding:0 12mm}}`;
-  doc.head.append(style);
+  const doc = createPrintDocument(
+    win,
+    `${designation} · ${locale === "fi" ? "Vuototarkastusarvio" : "Leak check assessment"}`,
+    locale,
+  );
   appendText(doc.body, "h1", doc.title);
   if (createdAt)
     appendText(
       doc.body,
       "p",
-      `${locale === "fi" ? "Tallennettu" : "Saved"}: ${createdAt}`,
+      `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(createdAt, locale)}`,
     );
-  appendText(
-    doc.body,
-    "h2",
-    `${locale === "fi" ? "Tulos" : "Result"}: ${translate(locale, result.state)}`,
-  );
-  if (result.months !== null)
+  if (equipmentName)
     appendText(
       doc.body,
       "p",
-      `${locale === "fi" ? "Tarkastusväli" : "Inspection interval"}: ${result.months} ${locale === "fi" ? "kuukautta" : "months"}`,
+      `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${equipmentName}`,
+    );
+  const outcome = translate(locale, result.state);
+  const interval =
+    result.months !== null
+      ? `${locale === "fi" ? "Tarkastusväli" : "Inspection interval"}: ${result.months} ${locale === "fi" ? "kuukautta" : "months"}`
+      : locale === "fi"
+        ? "Ei laskettavaa tarkastusväliä"
+        : "No calculable inspection interval";
+  const hero = addHero(
+    doc,
+    locale === "fi" ? "Vuototarkastusvaatimus" : "Leak-check requirement",
+    outcome,
+    `${interval} · ${designation} · ${result.input.charge} ${result.input.unit}`,
+  );
+  const schedule = leakCheckPrintSchedule(result, lastInspectionDate);
+  const dates = doc.createElement("div");
+  dates.className = "date-pair";
+  appendDateCard(
+    doc,
+    dates,
+    locale === "fi"
+      ? "Seuraava vuototarkastus viimeistään"
+      : "Next leak check by",
+    schedule.due
+      ? displayDate(schedule.due, locale)
+      : schedule.status === "no_previous"
+        ? locale === "fi"
+          ? "Edellistä tarkastuspäivää ei kirjattu"
+          : "Previous inspection date not recorded"
+        : schedule.status === "no_schedule"
+          ? locale === "fi"
+            ? "Ei laskettavaa määräpäivää"
+            : "No calculable due date"
+          : locale === "fi"
+            ? "Tarkastuspäivä on virheellinen"
+            : "Inspection date is invalid",
+  );
+  appendDateCard(
+    doc,
+    dates,
+    locale === "fi" ? "Edellinen vuototarkastus" : "Previous leak check",
+    schedule.previous ? displayDate(schedule.previous, locale) : "—",
+    true,
+  );
+  hero.append(dates);
+  if (schedule.due && schedule.due < result.input.asOf)
+    appendText(
+      doc.body,
+      "p",
+      locale === "fi"
+        ? "Määräpäivä on ennen arviointipäivää."
+        : "The due date precedes the assessment date.",
     );
   if (result.decisiveRule)
     appendText(
@@ -361,34 +483,6 @@ export function printCheckResult({
         ? "Vuodonilmaisujärjestelmä vaaditaan."
         : "Leak detection system required.",
     );
-  if (lastInspectionDate) {
-    try {
-      const due = nextInspectionDate(result, lastInspectionDate);
-      if (due) {
-        appendText(
-          doc.body,
-          "p",
-          `${locale === "fi" ? "Seuraava määräpäivä" : "Next due date"}: ${formatDate(due, locale)}`,
-        );
-        if (due < result.input.asOf)
-          appendText(
-            doc.body,
-            "p",
-            locale === "fi"
-              ? "Määräpäivä on ennen arviointipäivää."
-              : "The due date precedes the assessment date.",
-          );
-      }
-    } catch {
-      appendText(
-        doc.body,
-        "p",
-        locale === "fi"
-          ? "Tarkastuspäivän on oltava kelvollinen eikä se voi olla arviointipäivän jälkeen."
-          : "The inspection date must be valid and cannot follow the assessment date.",
-      );
-    }
-  }
   if (result.missingData?.length) {
     appendText(
       doc.body,
@@ -413,7 +507,10 @@ export function printCheckResult({
       locale === "fi" ? "Laitetyyppi" : "Equipment type",
       translate(locale, input.equipment),
     ],
-    [locale === "fi" ? "Arviointipäivä" : "Assessment date", input.asOf],
+    [
+      locale === "fi" ? "Arviointipäivä" : "Assessment date",
+      displayDate(input.asOf, locale),
+    ],
     [
       locale === "fi" ? "Vuodonilmaisu" : "Leak detection",
       yesNo(input.detection),
@@ -431,7 +528,7 @@ export function printCheckResult({
   if (lastInspectionDate)
     inputRows.push([
       locale === "fi" ? "Edellinen tarkastus" : "Last inspection",
-      lastInspectionDate,
+      displayDate(lastInspectionDate, locale),
     ]);
   for (const [label, value] of inputRows) {
     const dt = doc.createElement("dt");
@@ -508,14 +605,27 @@ export function printCheckResult({
     "p",
     `${locale === "fi" ? "Aineistoversio" : "Data version"}: ${result.dataVersion}`,
   );
-  for (const source of sources)
-    appendText(
-      doc.body,
-      "p",
-      [source.title, source.id, source.version, source.checkedAt, source.url]
+  if (sources.length) {
+    const list = doc.createElement("ul");
+    list.className = "sources";
+    for (const source of sources) {
+      const item = doc.createElement("li");
+      item.textContent = [
+        source.title,
+        source.id,
+        source.version,
+        source.checkedAt &&
+          `${locale === "fi" ? "tarkistettu" : "checked"} ${source.checkedAt}`,
+        source.license,
+        source.note,
+        source.url,
+      ]
         .filter(Boolean)
-        .join(" · "),
-    );
+        .join(" · ");
+      list.append(item);
+    }
+    doc.body.append(list);
+  }
   const notice = doc.createElement("p");
   notice.className = "notice";
   notice.textContent =
@@ -534,11 +644,11 @@ function appendRows(
   title: string,
   rows: ToolRecord["inputs"],
   locale: "fi" | "en",
-  emphasizeCycle = false,
+  primaryOutputs: ToolRecord["outputs"] = [],
 ) {
   if (!rows.length) return;
   appendText(body, "h2", title);
-  const primary = emphasizeCycle ? rows.filter(isCyclePrimaryOutput) : [];
+  const primary = rows.filter((row) => primaryOutputs.includes(row));
   if (primary.length) {
     const hero = doc.createElement("dl");
     hero.className = "result-grid";
@@ -567,7 +677,12 @@ function appendRows(
     item.append(dt, dd);
     dl.append(item);
   }
-  body.append(dl);
+  if (dl.childElementCount) body.append(dl);
+}
+
+function displayDate(value: string, locale: Locale): string {
+  const date = value.slice(0, 10);
+  return isCalendarDate(date) ? formatDate(date, locale) : value;
 }
 
 function appendText(

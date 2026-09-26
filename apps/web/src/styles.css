@@ -1265,3 +1265,53 @@ label textarea,
 .release-entry li + li {
   margin-top: 12px;
 }
+
+/* Round-three: clear result actions and stable, readable secondary content. */
+.check-options,
+.conditional-options {
+  display: grid;
+  gap: 12px;
+  margin-block: 16px 24px;
+}
+.check-options .switch-label {
+  width: fit-content;
+  max-width: 100%;
+}
+.check-result-context {
+  margin-top: 0;
+}
+.check-result-actions {
+  margin-block: 20px;
+}
+.share-explanation {
+  margin-block: 24px;
+}
+pre.share-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 24rem;
+  overflow: auto;
+  min-height: 12rem;
+  user-select: text;
+}
+.update-notice-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.update-notice-heading svg {
+  flex: 0 0 auto;
+}
+.update-notice p {
+  margin-top: 8px;
+}
+
+.release-history-link {
+  display: block;
+  width: fit-content;
+  padding-block: 10px;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 0.875rem;
+}
