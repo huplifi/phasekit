@@ -2,7 +2,7 @@ import { printCheckResult } from "../report-export";
 import { InfoHelp } from "../components/InfoHelp";
 import { CheckSchedule } from "../components/CheckSchedule";
 import { isCalendarDate } from "../../../../packages/core/src/schedule";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Bookmark, ChevronRight, Printer } from "lucide-react";
 import type {
   CheckInput,
@@ -156,10 +156,12 @@ export function CheckResultView({
   result,
   snapshot,
   lastInspectionDate,
+  saveAction,
 }: {
   result: CheckResult;
   snapshot?: Snapshot;
   lastInspectionDate?: string;
+  saveAction?: ReactNode;
 }) {
   const { t, data, notify } = useApp();
   const designation = (id: string) =>
@@ -171,6 +173,10 @@ export function CheckResultView({
       <div
         className={`result-card ${result.state === "required" ? "warning" : result.state === "insufficient_data" ? "error" : "info"}`}
       >
+        <p className="caption mono check-result-context">
+          {designation(result.input.refrigerantId)} ·{" "}
+          {formatDecimal(result.input.charge, data.locale)} {result.input.unit}
+        </p>
         <p className="result-label">{t(result.state)}</p>
         {result.months !== null && (
           <p className="result-number">
@@ -239,10 +245,11 @@ export function CheckResultView({
       </div>
       <p className="caption">{t("noMaintenanceClaim")}</p>
       {!snapshot && (
-        <div className="button-row">
+        <div className="button-group check-result-actions">
+          {saveAction}
           <button
             type="button"
-            className="secondary"
+            className="secondary-button"
             onClick={() => {
               const opened = printCheckResult({
                 result,
@@ -637,8 +644,8 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
             value={lastInspectionDate}
             onChange={(e) => {
               setLastInspectionDate(e.target.value);
-              setScheduleError("");
               setResult(null);
+              setScheduleError("");
               setSaved(false);
               setDraftDirty(true);
               draftRevision.current += 1;
@@ -666,25 +673,25 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
           <CheckResultView
             result={result}
             lastInspectionDate={lastInspectionDate}
+            saveAction={
+              <button
+                className="secondary-button"
+                onClick={() => void save()}
+                disabled={saved || saving}
+              >
+                <Bookmark size={20} />
+                {t(
+                  saving
+                    ? "savingCalculation"
+                    : saved
+                      ? "calculationSaved"
+                      : "saveCalculation",
+                )}
+              </button>
+            }
           />
         )}
       </div>
-      {result && (
-        <button
-          className="secondary-button"
-          onClick={() => void save()}
-          disabled={saved || saving}
-        >
-          <Bookmark size={20} />
-          {t(
-            saving
-              ? "savingCalculation"
-              : saved
-                ? "calculationSaved"
-                : "saveCalculation",
-          )}
-        </button>
-      )}
     </>
   );
 }

@@ -1,8 +1,10 @@
 import type { ToolRecord } from "./storage";
 import { renderCycleChartSvg } from "./ph-chart-snapshot";
+import { formatDate } from "../../../packages/i18n/src";
+import { isCalendarDate } from "../../../packages/core/src/schedule";
 import {
   formatReportRow,
-  isCyclePrimaryOutput,
+  primaryReportOutputs,
   reportHasRoundedValues,
   reportName,
 } from "./report-summary";
@@ -56,7 +58,7 @@ export function planReportImage(
   add("PHASEKIT", 25, 700, "#477d50");
   add(reportName(record, locale), 47, 700, TEXT, 24);
   add(
-    `${label("Tallennettu", "Saved")}: ${record.createdAt}`,
+    `${label("Tallennettu", "Saved")}: ${isCalendarDate(record.createdAt.slice(0, 10)) ? formatDate(record.createdAt.slice(0, 10), locale) : record.createdAt}`,
     23,
     400,
     MUTED,
@@ -86,13 +88,14 @@ export function planReportImage(
   ) => {
     if (!values.length) return;
     heading(title);
+    const primaryRows = primary ? primaryReportOutputs(record) : [];
     if (primary)
-      for (const row of values.filter(isCyclePrimaryOutput)) {
+      for (const row of primaryRows) {
         add(row.label[locale], 23, 600, MUTED, 22);
         add(formatReportRow(row, locale), 43, 700, TEXT, 2);
       }
     for (const row of values) {
-      if (primary && isCyclePrimaryOutput(row)) continue;
+      if (primaryRows.includes(row)) continue;
       add(
         `${row.label[locale]}: ${formatReportRow(row, locale)}`,
         24,
@@ -102,8 +105,8 @@ export function planReportImage(
       );
     }
   };
+  rows(label("Tulokset", "Results"), record.outputs, true);
   rows(label("Lähtötiedot", "Inputs"), record.inputs);
-  rows(label("Tulokset", "Results"), record.outputs, record.tool === "cycle");
   let chartTop: number | undefined;
   if (record.chartSnapshot) {
     heading(label("Kylmäkierron kaavio", "Cycle diagram"));

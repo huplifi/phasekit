@@ -4,6 +4,17 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.2.0-beta.3 — 2026-09-26 · Beta
+
+Clearer results and field reports
+
+- Saved calculations lead with their main result. Equipment association, breakdown and sources have their own sections.
+- Consistent print layouts for calculations and work checklists. Leak-check reports show refrigerant, charge, and previous and next inspection dates when available.
+- The pressure–temperature result card follows the last edited value. Leak-check explanations and save/print actions are easier to find.
+- A single switch fits the chart to the cycle. Guide labels avoid overlap, with all selected values also available in a separate list.
+- Improved picker spacing and a continuation cue. Marking a favourite keeps the row in place while browsing.
+- Clearer release-history link and available-update notice.
+
 ## 0.2.0-beta.2 — 2026-09-26 · Beta
 
 Visible release history

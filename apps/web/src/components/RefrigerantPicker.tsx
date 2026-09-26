@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { Check, ChevronRight, Search, X } from "lucide-react";
+import { Check, ChevronDown, ChevronRight, Search, X } from "lucide-react";
 import type { Refrigerant } from "../../../../packages/core/src/contracts";
 import {
   refinementText,
@@ -8,6 +8,7 @@ import {
 import { byId, dataset } from "../data";
 import { useApp } from "../context";
 import { StarButton } from "./Common";
+import "./picker-refinements.css";
 
 interface PickerBaseProps {
   label?: string;
@@ -59,12 +60,14 @@ function RefrigerantResult({
   multi,
   disabled,
   onChoose,
+  onFavouriteToggled,
 }: {
   r: Refrigerant;
   active: boolean;
   multi: boolean;
   disabled: boolean;
   onChoose: () => void;
+  onFavouriteToggled: (added: boolean) => void;
 }) {
   const { data, t } = useApp();
   const { locale } = data;
@@ -98,7 +101,7 @@ function RefrigerantResult({
         )}
       </button>
       <div className="picker-result-favourite">
-        <StarButton r={r} />
+        <StarButton r={r} onToggled={onFavouriteToggled} />
       </div>
     </div>
   );
@@ -112,8 +115,15 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
   const resultsRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState(false);
-  const favouriteIds = data.favourites;
-  const favouriteSet = useMemo(() => new Set(favouriteIds), [favouriteIds]);
+  const [hasResultsBelow, setHasResultsBelow] = useState(false);
+  const [sessionFavouriteIds, setSessionFavouriteIds] = useState(
+    data.favourites,
+  );
+  const [favouriteMessage, setFavouriteMessage] = useState("");
+  const sessionFavouriteSet = useMemo(
+    () => new Set(sessionFavouriteIds),
+    [sessionFavouriteIds],
+  );
   const foldedQuery = foldSearch(query.trim());
 
   const results = useMemo(() => {
@@ -121,17 +131,17 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
       (r) => !foldedQuery || searchableText(r).includes(foldedQuery),
     );
     return matches.sort((a, b) => {
-      const aIndex = favouriteIds.indexOf(a.id);
-      const bIndex = favouriteIds.indexOf(b.id);
+      const aIndex = sessionFavouriteIds.indexOf(a.id);
+      const bIndex = sessionFavouriteIds.indexOf(b.id);
       if (aIndex >= 0 && bIndex >= 0) return aIndex - bIndex;
       if (aIndex >= 0) return -1;
       if (bIndex >= 0) return 1;
       return 0;
     });
-  }, [favouriteIds, foldedQuery]);
+  }, [sessionFavouriteIds, foldedQuery]);
 
-  const favourites = results.filter((r) => favouriteSet.has(r.id));
-  const others = results.filter((r) => !favouriteSet.has(r.id));
+  const favourites = results.filter((r) => sessionFavouriteSet.has(r.id));
+  const others = results.filter((r) => !sessionFavouriteSet.has(r.id));
   const selectedIds = props.mode === "multi" ? props.selectedIds : [];
   const selectedCount = selectedIds.length;
   const selectedRefrigerant =
@@ -186,6 +196,39 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
     if (resultsRef.current) resultsRef.current.scrollTop = 0;
   }, [query]);
 
+  useEffect(() => {
+    if (!expanded) {
+      setHasResultsBelow(false);
+      return;
+    }
+    const resultsElement = resultsRef.current;
+    if (!resultsElement) return;
+
+    const updateContinuation = () => {
+      const remaining =
+        resultsElement.scrollHeight -
+        resultsElement.clientHeight -
+        resultsElement.scrollTop;
+      setHasResultsBelow(remaining > 2);
+    };
+
+    updateContinuation();
+    resultsElement.addEventListener("scroll", updateContinuation, {
+      passive: true,
+    });
+    const resizeObserver = new ResizeObserver(updateContinuation);
+    resizeObserver.observe(resultsElement);
+    Array.from(resultsElement.children).forEach((child) =>
+      resizeObserver.observe(child),
+    );
+    window.addEventListener("resize", updateContinuation);
+    return () => {
+      resultsElement.removeEventListener("scroll", updateContinuation);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateContinuation);
+    };
+  }, [expanded, results.length, query]);
+
   function toggleCompared(id: string) {
     if (props.mode !== "multi") return;
     props.onToggle(id);
@@ -196,6 +239,16 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
       setExpanded(false);
       requestAnimationFrame(() => changeButtonRef.current?.focus());
     }
+  }
+
+  function setQueryForSession(value: string) {
+    setQuery(value);
+    setSessionFavouriteIds(data.favourites);
+  }
+
+  function openPicker() {
+    setSessionFavouriteIds(data.favourites);
+    setExpanded(true);
   }
 
   function renderResult(r: Refrigerant) {
@@ -212,13 +265,18 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
         active={active}
         multi={props.mode === "multi"}
         disabled={disabled}
+        onFavouriteToggled={(added) => {
+          setFavouriteMessage(
+            `${r.designation} ${data.locale === "fi" ? (added ? "lisätty suosikkeihin" : "poistettu suosikeista") : added ? "added to favourites" : "removed from favourites"}`,
+          );
+        }}
         onChoose={() => {
           if (props.mode === "multi") {
             toggleCompared(r.id);
           } else {
             props.onChange(r.id);
             setExpanded(false);
-            setQuery("");
+            setQueryForSession("");
             requestAnimationFrame(() => changeButtonRef.current?.focus());
           }
         }}
@@ -262,7 +320,10 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
             className="secondary-button picker-disclosure-button"
             type="button"
             aria-expanded={expanded}
-            onClick={() => setExpanded((value) => !value)}
+            onClick={() => {
+              if (expanded) setExpanded(false);
+              else openPicker();
+            }}
           >
             {expanded
               ? t("done")
@@ -284,7 +345,7 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                 ? `${refinementText(data.locale, "changeSelection")}: ${selectedRefrigerant?.designation ?? props.value}`
                 : t("selectRefrigerant")
             }
-            onClick={() => setExpanded(true)}
+            onClick={openPicker}
           >
             <span>
               {props.value ? (
@@ -361,7 +422,7 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                   enterKeyHint="search"
                   value={query}
                   onChange={(event) => {
-                    setQuery(event.target.value);
+                    setQueryForSession(event.target.value);
                   }}
                   placeholder={t("searchHint")}
                   aria-label={props.label ?? t("search")}
@@ -371,14 +432,21 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                     className="icon-button picker-clear-search"
                     type="button"
                     aria-label={t("clearSearch")}
-                    onClick={() => setQuery("")}
+                    onClick={() => setQueryForSession("")}
                   >
                     <X size={18} />
                   </button>
                 )}
               </span>
             </div>
-            <p className="caption picker-result-count" aria-live="polite">
+            <span
+              className="picker-live-message"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {favouriteMessage}
+            </span>
+            <p className="caption mono picker-result-count" aria-live="polite">
               {t("results", { count: results.length })}
               {props.mode === "multi" &&
                 ` · ${t("compareCount", { count: selectedCount })}`}
@@ -403,6 +471,11 @@ export function RefrigerantPicker(props: RefrigerantPickerProps) {
                 </>
               )}
             </div>
+            {hasResultsBelow && (
+              <div className="picker-continuation-cue" aria-hidden="true">
+                <ChevronDown size={16} />
+              </div>
+            )}
           </div>
         )}
       </dialog>

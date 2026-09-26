@@ -38,16 +38,14 @@ test("cycle fit centres only the four calculated points and guide controls remai
   page,
 }) => {
   await calculateR134aCycle(page);
-  const full = page.getByRole("button", { name: "Koko alue", exact: true });
-  const fit = page.getByRole("button", {
+  const fit = page.getByRole("switch", {
     name: "Sovita kiertoon",
     exact: true,
   });
-  await expect(full).toHaveAttribute("aria-pressed", "true");
+  await expect(fit).not.toBeChecked();
   const fullExtent = await pointExtent(page);
-  await fit.click();
-  await expect(fit).toHaveAttribute("aria-pressed", "true");
-  await expect(full).toHaveAttribute("aria-pressed", "false");
+  await fit.check();
+  await expect(fit).toBeChecked();
   const fitExtent = await pointExtent(page);
   const plot = await plotRect(page);
   expect(fitExtent.width).toBeGreaterThan(plot.width * 0.75);
@@ -95,8 +93,8 @@ test("390px chart shows all four cycle points and readable labels without horizo
   await page.setViewportSize({ width: 390, height: 844 });
   await calculateR134aCycle(page);
   await page
-    .getByRole("button", { name: "Sovita kiertoon", exact: true })
-    .click();
+    .getByRole("switch", { name: "Sovita kiertoon", exact: true })
+    .check();
   await expect(page.locator(".ph-point")).toHaveCount(4);
   const plot = await plotRect(page);
   const extent = await pointExtent(page);
@@ -131,6 +129,81 @@ test("390px chart shows all four cycle points and readable labels without horizo
   ).toBeGreaterThanOrEqual(2);
 });
 
+test("fit switch is explained until a cycle exists, and all selected guide labels clear point labels", async ({
+  page,
+}) => {
+  await page.goto("/#/ph/r134a");
+  const fit = page.getByRole("switch", { name: "Sovita kiertoon" });
+  await expect(fit).toBeDisabled();
+  await expect(fit).not.toBeChecked();
+  await expect(page.locator("#ph-fit-unavailable")).toContainText(
+    "Laske kelvollinen kierto",
+  );
+  await calculateR134aCycle(page);
+  await expect(fit).toBeEnabled();
+  const entropy = page.getByRole("button", { name: /Entropia s/ });
+  const volume = page.getByRole("button", { name: /Ominaistilavuus v/ });
+  await entropy.click();
+  await volume.click();
+  const details = page.getByText("Näytä apukäyrien arvot");
+  await details.click();
+  await expect(page.locator(".ph-guide-list")).toContainText("Lämpötila T");
+  await expect(page.locator(".ph-guide-list")).toContainText("Entropia s");
+  await expect(page.locator(".ph-guide-list")).toContainText(
+    "Ominaistilavuus v",
+  );
+  const guideValues = page.locator(".ph-guide-value");
+  expect(await guideValues.count()).toBeGreaterThan(2);
+  await guideValues.first().focus();
+  await expect(guideValues.first()).toHaveAttribute("aria-pressed", "true");
+  const firstGuideIndex = await guideValues
+    .first()
+    .evaluate((button) => Number(button.getAttribute("data-guide-index")));
+  await expect(
+    page.locator(`.ph-isoline[data-guide-index="${firstGuideIndex}"]`),
+  ).toHaveClass(/ph-isoline-highlighted/);
+  await guideValues.nth(1).click();
+  await expect(guideValues.first()).toHaveAttribute("aria-pressed", "false");
+  await expect(guideValues.nth(1)).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".ph-isoline-highlighted")).not.toHaveCount(0);
+
+  async function assertLabelSpacing() {
+    const collisions = await page.locator(".ph-chart").evaluate((svg) => {
+      const labels = [
+        ...svg.querySelectorAll<SVGGraphicsElement>(".ph-isoline-label"),
+      ];
+      const protectedItems = [
+        ...svg.querySelectorAll<SVGGraphicsElement>(
+          ".ph-point, .ph-point-label",
+        ),
+      ];
+      const intersects = (
+        a: DOMRect | SVGRect,
+        b: DOMRect | SVGRect,
+        gap: number,
+      ) =>
+        a.x < b.x + b.width + gap &&
+        a.x + a.width + gap > b.x &&
+        a.y < b.y + b.height + gap &&
+        a.y + a.height + gap > b.y;
+      return labels.flatMap((label, index) => {
+        const box = label.getBBox();
+        return [...labels.slice(0, index), ...protectedItems]
+          .filter((other) => intersects(box, other.getBBox(), 2))
+          .map((other) => `${label.textContent}/${other.textContent}`);
+      });
+    });
+    expect(collisions).toEqual([]);
+  }
+  await assertLabelSpacing();
+  await fit.check();
+  await assertLabelSpacing();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await assertLabelSpacing();
+  await fit.uncheck();
+  await assertLabelSpacing();
+});
+
 test("saved cycle retains its vector chart across reload and prints the stored chart", async ({
   page,
 }) => {
@@ -150,7 +223,7 @@ test("saved cycle retains its vector chart across reload and prints the stored c
   await page.goto("/#/saved");
   const report = page.locator(".report-entry");
   await expect(report).toHaveCount(1);
-  await report.locator("summary").click();
+  await report.locator(":scope > summary").click();
   const savedChart = report.locator(".report-chart img");
   await expect(savedChart).toBeVisible();
   await expect
@@ -177,7 +250,7 @@ test("saved cycle retains its vector chart across reload and prints the stored c
 
   await page.reload();
   if (!(await report.evaluate((details: HTMLDetailsElement) => details.open)))
-    await report.locator("summary").click();
+    await report.locator(":scope > summary").click();
   await expect(report.locator(".report-chart img")).toHaveAttribute(
     "src",
     chartSource!,

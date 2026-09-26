@@ -1,5 +1,32 @@
 [
   {
+    "version": "0.2.0-beta.3",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät tulokset ja työmaan tulosteet",
+      "en": "Clearer results and field reports"
+    },
+    "changes": {
+      "fi": [
+        "Tallennetut laskelmat näyttävät päätuloksen ensin. Laitekytkentä, erittely ja lähteet löytyvät omista osioistaan.",
+        "Yhtenäiset tulosteet laskelmille ja tarkistuslistoille. Vuototarkastuksen tulosteessa näkyvät kylmäaine, täyttömäärä sekä edellinen ja seuraava tarkastuspäivä, kun ne ovat saatavilla.",
+        "Paine–lämpötilalaskurin tuloskortti seuraa viimeksi muokattua arvoa. Vuototarkastuksen selite sekä tallennus- ja tulostustoiminnot ovat selkeämmin esillä.",
+        "Kaavion sovitus yhdellä kytkimellä ja apukäyrien arvot ilman päällekkäisiä tekstejä. Kaikki valitut arvot löytyvät myös erillisestä luettelosta.",
+        "Kylmäainevalitsimen välit ja vieritysvihje selkeytetty. Suosikin merkitseminen ei siirrä riviä kesken selaamisen.",
+        "Versiohistorian linkki ja saatavilla olevan päivityksen ilmoitus erottuvat selvemmin."
+      ],
+      "en": [
+        "Saved calculations lead with their main result. Equipment association, breakdown and sources have their own sections.",
+        "Consistent print layouts for calculations and work checklists. Leak-check reports show refrigerant, charge, and previous and next inspection dates when available.",
+        "The pressure–temperature result card follows the last edited value. Leak-check explanations and save/print actions are easier to find.",
+        "A single switch fits the chart to the cycle. Guide labels avoid overlap, with all selected values also available in a separate list.",
+        "Improved picker spacing and a continuation cue. Marking a favourite keeps the row in place while browsing.",
+        "Clearer release-history link and available-update notice."
+      ]
+    }
+  },
+  {
     "version": "0.2.0-beta.2",
     "date": "2026-09-26",
     "channel": "beta",

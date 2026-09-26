@@ -235,3 +235,67 @@
     display: none !important;
   }
 }
+
+/* Saved summaries remain one clear disclosure row; details sit beneath it. */
+.saved-entry > summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  list-style: none;
+}
+.saved-entry > summary::-webkit-details-marker {
+  display: none;
+}
+.saved-entry > summary::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  flex: 0 0 auto;
+  margin-top: 7px;
+}
+.saved-entry[open] > summary::before {
+  transform: rotate(45deg);
+  margin-top: 4px;
+}
+.saved-entry > summary > span {
+  min-width: 0;
+}
+.report-summary {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.report-detail {
+  padding-top: 20px;
+}
+.report-detail .saved-result-card {
+  margin: 0 0 24px;
+  display: grid;
+  gap: 16px;
+}
+.saved-result-card .result-number {
+  font-size: clamp(1.6rem, 5vw, 2.25rem);
+  margin-block: 6px 0;
+}
+.saved-result-card .result-label {
+  margin: 0;
+}
+.report-secondary-details {
+  margin-block: 24px;
+}
+.report-secondary-details > summary {
+  padding-block: 8px;
+}
+.report-equipment-details > label {
+  margin-top: 12px;
+}
+.report-provenance {
+  font-size: 0.875rem;
+  color: var(--secondary-text);
+}
+.report-actions {
+  padding-block: 12px 20px;
+}

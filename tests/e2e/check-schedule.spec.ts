@@ -11,15 +11,16 @@ test("next inspection and shareable explanation survive a saved snapshot", async
   const schedule = page.locator(".check-schedule");
   await expect(schedule).toContainText("31.1.2027");
   await schedule.getByText("Näytä jaettava selite", { exact: true }).click();
-  await expect(schedule.locator("textarea")).toContainText("2027-01-31");
-  await expect(schedule.locator("textarea")).toContainText("R134a");
-  await expect(schedule.locator("textarea")).toContainText("Sääntöversio");
+  await expect(schedule.locator(".share-text")).toContainText("2027-01-31");
+  await expect(schedule.locator(".share-text")).toContainText("R134a");
+  await expect(schedule.locator(".share-text")).toContainText("Sääntöversio");
   const printPromise = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Tulosta / tallenna PDF" }).click();
   const printed = await printPromise;
-  await expect(printed.locator("body")).toContainText(
-    "Seuraava määräpäivä: 31.1.2027",
+  await expect(printed.locator(".hero")).toContainText(
+    "Seuraava vuototarkastus viimeistään",
   );
+  await expect(printed.locator(".hero")).toContainText("31.1.2027");
   await expect(printed.locator("body")).toContainText("Kiinteä jäähdytyslaite");
   await expect(
     printed

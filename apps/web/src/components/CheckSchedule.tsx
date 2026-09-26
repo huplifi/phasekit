@@ -131,16 +131,16 @@ export function CheckSchedule({
         <summary>
           {l("Näytä jaettava selite", "Show shareable explanation")}
         </summary>
-        <label>
+        <p className="caption secondary">
           {l("Seliteteksti", "Explanation text")}
-          <textarea
-            className="share-text"
-            readOnly
-            value={text}
-            rows={12}
-            onFocus={(e) => e.target.select()}
-          />
-        </label>
+        </p>
+        <pre
+          className="share-text"
+          tabIndex={0}
+          aria-label={l("Seliteteksti", "Explanation text")}
+        >
+          {text}
+        </pre>
       </details>
       <p role="status" className="caption">
         {notice}
