@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import {
   getPHDiagram,
   PHPhaseBoundaryError,
@@ -7,6 +7,8 @@ import {
   type PHIsoline,
 } from "../../../../packages/core/src/ph";
 import { SourceNote } from "../components/Common";
+import { ExclusiveChoices } from "../components/ExclusiveChoices";
+import { cycleChartBounds } from "../ph-chart-snapshot";
 import "./ph-calculator.css";
 const pointLabels = ["1", "2", "3", "4"] as const;
 
@@ -98,6 +100,17 @@ function PHChart({
   const titleId = useId();
   const descriptionId = useId();
   const clipId = useId();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(720);
+  useLayoutEffect(() => {
+    const element = containerRef.current;
+    if (!element) return;
+    const update = () => setContainerWidth(Math.round(element.clientWidth));
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   const allNodes = diagram.dome.map((node) => ({
     p: Number(node.pressureBarAbsolute),
     liquid: Number(node.liquidEnthalpyKJkg),
@@ -119,50 +132,47 @@ function PHChart({
   const highCycleP = points.length
     ? Math.max(...points.map((point) => point.p))
     : 0;
-  const firstVisible = focusCycle
-    ? allNodes.findIndex((node) => node.p >= lowCycleP / 2)
-    : 0;
-  const firstBeyond = focusCycle
-    ? allNodes.findIndex((node) => node.p > highCycleP * 1.5)
-    : -1;
-  const nodes = focusCycle
-    ? allNodes.slice(
-        Math.max(0, firstVisible - 1),
-        firstBeyond < 0
-          ? undefined
-          : Math.min(allNodes.length, firstBeyond + 1),
-      )
-    : allNodes;
+  const nodes = allNodes;
   const selectedIsolines = diagram.isolines.filter(
     (line) => visibleKinds[line.kind],
   );
   const isolinePoints = focusCycle
     ? []
     : selectedIsolines.flatMap((line) => line.segments.flat());
-  const allH = [
-    ...nodes.flatMap((node) => [node.liquid, node.vapour]),
-    ...points.map((point) => point.h),
-    ...isolinePoints.map((point) => point[1]),
-  ];
+  const allH = focusCycle
+    ? points.map((point) => point.h)
+    : [
+        ...nodes.flatMap((node) => [node.liquid, node.vapour]),
+        ...points.map((point) => point.h),
+        ...isolinePoints.map((point) => point[1]),
+      ];
   const lowH = Math.min(...allH);
   const highH = Math.max(...allH);
   const hPad = Math.max((highH - lowH) * 0.09, 5);
-  const xMin = lowH - hPad;
-  const xMax = highH + hPad;
-  const logP = [...nodes, ...points].map((node) => Math.log(node.p));
+  const cycleBounds = focusCycle
+    ? cycleChartBounds(points.map((point) => [point.p, point.h] as const))
+    : null;
+  const xMin = cycleBounds?.xMin ?? lowH - hPad;
+  const xMax = cycleBounds?.xMax ?? highH + hPad;
+  const logP = (focusCycle ? points : [...nodes, ...points]).map((node) =>
+    Math.log(node.p),
+  );
   const logMin = Math.min(...logP);
   const logMax = Math.max(...logP);
   const logPad = Math.max((logMax - logMin) * 0.08, 0.05);
-  const pMin = logMin - logPad;
-  const pMax = logMax + logPad;
-  const box = {
-    left: 74,
-    right: 26,
-    top: 30,
-    bottom: 60,
-    width: 720,
-    height: 420,
-  };
+  const pMin = cycleBounds?.pMin ?? logMin - logPad;
+  const pMax = cycleBounds?.pMax ?? logMax + logPad;
+  const compact = containerWidth < 560;
+  const box = compact
+    ? {
+        left: 54,
+        right: 16,
+        top: 24,
+        bottom: 54,
+        width: Math.max(300, containerWidth),
+        height: 360,
+      }
+    : { left: 74, right: 26, top: 30, bottom: 60, width: 720, height: 420 };
   const width = box.width - box.left - box.right;
   const height = box.height - box.top - box.bottom;
   const x = (h: number) => box.left + ((h - xMin) / (xMax - xMin)) * width;
@@ -175,7 +185,7 @@ function PHChart({
           `${index ? "L" : "M"} ${x(node[side]).toFixed(2)} ${y(node.p).toFixed(2)}`,
       )
       .join(" ");
-  const rawStep = (xMax - xMin) / 6;
+  const rawStep = (xMax - xMin) / Math.max(3, Math.floor(width / 95));
   const magnitude = 10 ** Math.floor(Math.log10(rawStep));
   const hStep =
     ([1, 2, 5, 10].find((step) => step * magnitude >= rawStep) ?? 10) *
@@ -213,14 +223,7 @@ function PHChart({
     ["4", "1"],
   ] as const;
   return (
-    <div
-      className="ph-chart-scroll"
-      tabIndex={0}
-      role="region"
-      aria-label={
-        fi ? "Vieritettävä log(p)–h-kaavio" : "Scrollable log(p)–h chart"
-      }
-    >
+    <div ref={containerRef} className="ph-chart-scroll">
       <svg
         className="ph-chart"
         viewBox={`0 0 ${box.width} ${box.height}`}
@@ -312,9 +315,41 @@ function PHChart({
               />
             )),
           )}
+          {selectedIsolines.flatMap((line, lineIndex) =>
+            line.segments.map((segment, segmentIndex) => {
+              const visible = segment.filter(
+                ([p, h]) =>
+                  Math.log(p) >= pMin &&
+                  Math.log(p) <= pMax &&
+                  h >= xMin &&
+                  h <= xMax,
+              );
+              if (visible.length < 3) return null;
+              const [p, h] = visible[Math.floor(visible.length / 2)]!;
+              const value = new Intl.NumberFormat(fi ? "fi-FI" : "en-GB", {
+                maximumSignificantDigits: 3,
+              }).format(line.level);
+              return (
+                <text
+                  key={`label-${lineIndex}-${segmentIndex}`}
+                  className="ph-isoline-label"
+                  x={x(h)}
+                  y={y(p) - 6}
+                  textAnchor="middle"
+                >
+                  {line.kind === "temperature"
+                    ? "T"
+                    : line.kind === "entropy"
+                      ? "s"
+                      : "v"}
+                  ={value}
+                </text>
+              );
+            }),
+          )}
+          <path className="ph-boundary ph-bubble" d={boundary("liquid")} />
+          <path className="ph-boundary ph-dew" d={boundary("vapour")} />
         </g>
-        <path className="ph-boundary ph-bubble" d={boundary("liquid")} />
-        <path className="ph-boundary ph-dew" d={boundary("vapour")} />
         {result &&
           [lowCycleP, highCycleP].map((pressure) => (
             <line
@@ -451,29 +486,20 @@ export function PHDiagramPanel({
           <h2 id="ph-diagram-title">
             {l("log(p)–h-kaavio", "log(p)–h diagram")}
           </h2>
-          <div
+          <ExclusiveChoices
             className="ph-view-controls"
-            role="group"
-            aria-label={l("Kaavion näkymä", "Chart view")}
-          >
-            <button
-              type="button"
-              className="secondary-button"
-              aria-pressed={!fitCycle || !result}
-              onClick={() => setFitCycle(false)}
-            >
-              {l("Koko alue", "Full range")}
-            </button>
-            <button
-              type="button"
-              className="secondary-button"
-              aria-pressed={fitCycle && !!result}
-              disabled={!result}
-              onClick={() => setFitCycle(true)}
-            >
-              {l("Sovita kiertoon", "Fit cycle")}
-            </button>
-          </div>
+            label={l("Kaavion näkymä", "Chart view")}
+            value={fitCycle && result ? "cycle" : "full"}
+            options={[
+              { value: "full", label: l("Koko alue", "Full range") },
+              {
+                value: "cycle",
+                label: l("Sovita kiertoon", "Fit cycle"),
+                disabled: !result,
+              },
+            ]}
+            onChange={(value) => setFitCycle(value === "cycle")}
+          />
           {diagram.isolines.length > 0 && (
             <div
               className="ph-isoline-controls"
@@ -498,7 +524,7 @@ export function PHDiagramPanel({
                   <button
                     type="button"
                     key={kind}
-                    className={`secondary-button ph-isoline-toggle ph-isoline-toggle-${kind}`}
+                    className={`ph-isoline-toggle ph-isoline-toggle-${kind}`}
                     aria-pressed={visibleKinds[kind] && available}
                     disabled={!available}
                     onClick={() =>
@@ -539,17 +565,20 @@ export function PHDiagramPanel({
               {diagram.isolines.length > 0 && " "}
               {diagram.isolines.length > 0 &&
                 l(
-                  "Apukäyrät näyttävät vain CoolPropista lasketut, tarkistetut yksifaasisen alueen osat. Puuttuvia alueita ei yhdistetä.",
-                  "Guide curves show only checked single-phase segments calculated from CoolProp. Missing regions remain gaps.",
-                )}
+                  "Apukäyriä on vain muutamalla tasolla. Ne näyttävät CoolPropista lasketut, tarkistetut yksifaasisen alueen osat; puuttuvia alueita ei yhdistetä.",
+                  "Guide curves cover only a few levels. They show checked single-phase segments calculated from CoolProp; missing regions remain gaps.",
+                )}{" "}
+              {result
+                ? l(
+                    "Kaavio sovittuu näytön leveyteen; tarkat pistearvot näkyvät alla taulukossa.",
+                    "The chart fits the screen width; exact point values appear in the table below.",
+                  )
+                : l(
+                    "Kaavio sovittuu näytön leveyteen.",
+                    "The chart fits the screen width.",
+                  )}
             </figcaption>
           </figure>
-          <p className="ph-scroll-hint caption secondary">
-            {l(
-              "Pienellä näytöllä vieritä kaaviota vaakasuunnassa.",
-              "On a small screen, scroll horizontally to see the full chart.",
-            )}
-          </p>
           <div className="ph-legend caption">
             <span className="ph-legend-bubble">
               {l("Kuplapisteraja", "Bubble boundary")}

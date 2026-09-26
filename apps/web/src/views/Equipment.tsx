@@ -3,6 +3,8 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Plus, Save, Trash2, X } from "lucide-react";
 import { formatDate } from "../../../../packages/i18n/src";
+import { reportSummary } from "../report-summary";
+import { savedReportPath } from "../saved-report-route";
 import type { EquipmentRecord } from "../storage";
 import { useApp } from "../context";
 import "./reports.css";
@@ -92,8 +94,8 @@ export function Equipment() {
     if (
       !window.confirm(
         t(
-          `Poistetaanko laite “${item.name}”? Tallennetut laskelmat ja niiden laitenimi säilyvät.`,
-          `Delete “${item.name}”? Saved calculations and their recorded equipment name will remain.`,
+          `Poistetaanko laite “${item.name}”? Tallennetut laskelmat säilyvät, mutta niiden linkki laitteeseen poistuu. Alkuperäinen laitenimi säilyy.`,
+          `Delete “${item.name}”? Saved calculations remain, but their link to this equipment is removed. The original equipment name is kept.`,
         ),
       )
     )
@@ -101,6 +103,17 @@ export function Equipment() {
     setData((current) => ({
       ...current,
       equipment: current.equipment.filter((row) => row.id !== item.id),
+      toolRecords: current.toolRecords.map((record) =>
+        record.equipmentId === item.id
+          ? {
+              ...record,
+              equipmentId: undefined,
+              ...(!record.equipmentName
+                ? { lastLinkedEquipmentName: item.name }
+                : {}),
+            }
+          : record,
+      ),
     }));
   };
 
@@ -116,17 +129,16 @@ export function Equipment() {
             )}
           </p>
         </div>
-        {editingId === null && (
-          <button
-            className="secondary-button"
-            type="button"
-            onClick={beginCreate}
-          >
-            <Plus size={18} />
-            {t("Lisää laite", "Add equipment")}
-          </button>
-        )}
       </header>
+      {editingId === null && (
+        <button
+          className="secondary-button equipment-add"
+          type="button"
+          onClick={beginCreate}
+        >
+          <Plus size={18} /> {t("Lisää laite", "Add equipment")}
+        </button>
+      )}
       {editingId !== null && (
         <form
           className="equipment-form"
@@ -197,12 +209,15 @@ export function Equipment() {
         </form>
       )}
       {data.equipment.length === 0 && editingId === null ? (
-        <p className="empty">
-          {t(
-            "Laitteita ei ole vielä lisätty.",
-            "No equipment has been added yet.",
-          )}
-        </p>
+        <div className="empty equipment-empty">
+          <h2>{t("Laitteita ei ole vielä lisätty", "No equipment yet")}</h2>
+          <p>
+            {t(
+              "Lisää ensimmäinen laite tai kohde, jotta voit liittää tallennetut laskelmat siihen.",
+              "Add a device or site to organise saved calculations around it.",
+            )}
+          </p>
+        </div>
       ) : (
         <div className="equipment-list">
           {data.equipment.map((item) => {
@@ -243,20 +258,20 @@ export function Equipment() {
                     <span className="secondary">({reports.length})</span>
                   </h3>
                   {reports.length ? (
-                    <ul>
+                    <ul className="equipment-record-list">
                       {reports.map((record) => (
                         <li key={record.id}>
-                          <strong>{record.title}</strong>
-                          <span className="secondary">
-                            {" "}
-                            · {formatDate(record.createdAt, data.locale)}
-                          </span>
                           <button
-                            className="text-button inline-link"
+                            className="equipment-record-link"
                             type="button"
-                            onClick={() => go("/saved")}
+                            onClick={() => go(savedReportPath(record.id))}
                           >
-                            {t("Avaa tallennetut", "Open saved")}
+                            <strong>
+                              {reportSummary(record, data.locale)}
+                            </strong>
+                            <span className="secondary">
+                              {formatDate(record.createdAt, data.locale)}
+                            </span>
                           </button>
                         </li>
                       ))}

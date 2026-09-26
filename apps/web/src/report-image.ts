@@ -1,6 +1,8 @@
 import type { ToolRecord } from "./storage";
+import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
   formatReportRow,
+  isCyclePrimaryOutput,
   reportHasRoundedValues,
   reportName,
 } from "./report-summary";
@@ -62,23 +64,62 @@ export function planReportImage(
   );
   if (record.equipmentName)
     add(
-      `${label("Laite / kohde", "Equipment / site")}: ${record.equipmentName}`,
+      `${label("Alkuperäinen laitenimi", "Equipment name when saved")}: ${record.equipmentName}`,
       27,
       600,
       TEXT,
       22,
     );
+  else if (record.lastLinkedEquipmentName)
+    add(
+      `${label("Aiempi laitelinkki (nimi poistettaessa)", "Former equipment link (name at removal)")}: ${record.lastLinkedEquipmentName}`,
+      24,
+      600,
+      TEXT,
+      20,
+    );
 
-  const rows = (title: string, values: ToolRecord["inputs"]) => {
+  const rows = (
+    title: string,
+    values: ToolRecord["inputs"],
+    primary = false,
+  ) => {
     if (!values.length) return;
     heading(title);
+    if (primary)
+      for (const row of values.filter(isCyclePrimaryOutput)) {
+        add(row.label[locale], 23, 600, MUTED, 22);
+        add(formatReportRow(row, locale), 43, 700, TEXT, 2);
+      }
     for (const row of values) {
-      add(row.label[locale], 22, 600, MUTED, 17);
-      add(formatReportRow(row, locale), 29, 400);
+      if (primary && isCyclePrimaryOutput(row)) continue;
+      add(
+        `${row.label[locale]}: ${formatReportRow(row, locale)}`,
+        24,
+        400,
+        TEXT,
+        11,
+      );
     }
   };
   rows(label("Lähtötiedot", "Inputs"), record.inputs);
-  rows(label("Tulokset", "Results"), record.outputs);
+  rows(label("Tulokset", "Results"), record.outputs, record.tool === "cycle");
+  let chartTop: number | undefined;
+  if (record.chartSnapshot) {
+    heading(label("Kylmäkierron kaavio", "Cycle diagram"));
+    chartTop = y + 20;
+    y += 641;
+    add(
+      label(
+        "Rajattu CoolProp HEOS -malli. Suorat viivat kuvaavat kierron järjestystä, eivät prosessireittiä.",
+        "Bounded CoolProp HEOS model. Straight lines show cycle order, not the process path.",
+      ),
+      19,
+      400,
+      MUTED,
+      8,
+    );
+  }
   if (reportHasRoundedValues(record))
     add(
       label(
@@ -98,33 +139,32 @@ export function planReportImage(
   if (record.dataVersion)
     add(
       `${label("Aineistoversio", "Data version")}: ${record.dataVersion}`,
-      24,
+      21,
     );
   if (!record.sources.length)
     add(
       label("Lähteitä ei kirjattu.", "No sources recorded."),
-      24,
+      21,
       400,
       MUTED,
       14,
     );
   for (const source of record.sources) {
-    add(source.title, 25, 600, TEXT, 19);
-    add(`ID: ${source.id}`, 22, 400, MUTED);
+    add(`${source.title} · ID: ${source.id}`, 21, 600, TEXT, 12);
     if (source.version)
-      add(`${label("Versio", "Version")}: ${source.version}`, 22, 400, MUTED);
+      add(`${label("Versio", "Version")}: ${source.version}`, 20, 400, MUTED);
     if (source.checkedAt)
       add(
         `${label("Tarkistettu", "Checked")}: ${source.checkedAt}`,
-        22,
+        20,
         400,
         MUTED,
       );
     if (source.license)
-      add(`${label("Lisenssi", "Licence")}: ${source.license}`, 22, 400, MUTED);
+      add(`${label("Lisenssi", "Licence")}: ${source.license}`, 20, 400, MUTED);
     if (source.note)
-      add(`${label("Huomautus", "Note")}: ${source.note}`, 22, 400, MUTED);
-    add(`${label("Lähdeosoite", "Source URL")}: ${source.url}`, 22, 400, MUTED);
+      add(`${label("Huomautus", "Note")}: ${source.note}`, 20, 400, MUTED);
+    add(`${label("Lähdeosoite", "Source URL")}: ${source.url}`, 20, 400, MUTED);
   }
   add(
     label(
@@ -137,7 +177,12 @@ export function planReportImage(
     38,
   );
   const height = y + 80;
-  return { lines, height, tooLarge: height > REPORT_IMAGE_MAX_HEIGHT };
+  return {
+    lines,
+    chartTop,
+    height,
+    tooLarge: height > REPORT_IMAGE_MAX_HEIGHT,
+  };
 }
 
 /** Word wrapping also splits long unbroken values and URLs without clipping. */
@@ -197,6 +242,16 @@ export async function downloadToolRecordImage(
       context.font = font(line.size, line.weight);
       context.fillStyle = line.color;
       context.fillText(line.text, line.x, line.y);
+    }
+    if (record.chartSnapshot && plan.chartTop !== undefined) {
+      const chart = new Image();
+      const loaded = new Promise<void>((resolve, reject) => {
+        chart.onload = () => resolve();
+        chart.onerror = () => reject(new Error("Chart image failed to load"));
+      });
+      chart.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderCycleChartSvg(record.chartSnapshot, locale))}`;
+      await loaded;
+      context.drawImage(chart, LEFT, plan.chartTop, RIGHT - LEFT, 616);
     }
     const blob = await new Promise<Blob | null>((resolve) =>
       canvas.toBlob(resolve, "image/png"),

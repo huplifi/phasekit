@@ -1,3 +1,4 @@
+import { ExclusiveChoices } from "../components/ExclusiveChoices";
 import { useDraftGuard } from "../useDraftGuard";
 import { useState, type ReactNode } from "react";
 import { Download, Plus, Printer, Trash2 } from "lucide-react";
@@ -318,7 +319,8 @@ export function ThermalPowerCalculator() {
           aria-label={l("Lämpötehon tulos", "Thermal power result")}
           aria-live="polite"
         >
-          <h2>{number(result.powerKW)} kW</h2>
+          <h2>{l("Lämpöteho", "Thermal power")}</h2>
+          <p className="field-result-value">{number(result.powerKW)} kW</p>
           <p>
             {l("Lämpötilan muutos", "Temperature change")}:{" "}
             {number(result.differenceK)} K · {l("Massavirta", "Mass flow")}:{" "}
@@ -504,9 +506,8 @@ export function ElectricalCalculator() {
           aria-label={l("Sähkölaskennan tulos", "Electrical result")}
           aria-live="polite"
         >
-          <h2>
-            {l("Pätöteho", "Real power")}: {number(result.powerW)} W
-          </h2>
+          <h2>{l("Pätöteho", "Real power")}</h2>
+          <p className="field-result-value">{number(result.powerW)} W</p>
           {result.apparentVA && (
             <p>
               {l("Näennäisteho", "Apparent power")}: {number(result.apparentVA)}{" "}
@@ -665,29 +666,23 @@ export function PipeCalculator() {
   };
   return (
     <Layout title={l("Putkilaskurit", "Pipe calculators")}>
-      <div
+      <ExclusiveChoices
         className="field-pipe-modes"
-        role="group"
-        aria-label={l("Putkilaskurin tila", "Pipe calculator mode")}
-      >
-        {(
-          [
-            ["geometry", l("Tilavuus ja virtaus", "Volume and flow")],
-            ["expansion", l("Lämpölaajeneminen", "Thermal expansion")],
-            ["loss", l("Painehäviö", "Pressure loss")],
-          ] as const
-        ).map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            className="secondary-button"
-            aria-pressed={mode === value}
-            onClick={() => setMode(value)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+        label={l("Putkilaskurin tila", "Pipe calculator mode")}
+        value={mode}
+        options={[
+          {
+            value: "geometry",
+            label: l("Tilavuus ja virtaus", "Volume and flow"),
+          },
+          {
+            value: "expansion",
+            label: l("Lämpölaajeneminen", "Thermal expansion"),
+          },
+          { value: "loss", label: l("Painehäviö", "Pressure loss") },
+        ]}
+        onChange={setMode}
+      />
       <section hidden={mode !== "geometry"}>
         <p>
           {l(
@@ -740,7 +735,10 @@ export function PipeCalculator() {
             aria-label={l("Putkilaskennan tulos", "Pipe result")}
             aria-live="polite"
           >
-            <h2>{number(result.volumeLitres)} l</h2>
+            <h2>{l("Sisätilavuus", "Internal volume")}</h2>
+            <p className="field-result-value">
+              {number(result.volumeLitres)} l
+            </p>
             <p>
               {l("Keskimääräinen virtausnopeus", "Mean flow velocity")}:{" "}
               {number(result.velocityMS)} m/s
@@ -870,7 +868,7 @@ export function PipeCalculator() {
             <h3>
               {l("Suoran putken painehäviö", "Straight-pipe pressure loss")}
             </h3>
-            <p className="mono">
+            <p className="field-result-value">
               {number(String(Number(lossResult.pressureLossPa) / 1000))} kPa
             </p>
             <p>
@@ -969,10 +967,10 @@ export function PipeCalculator() {
             }}
           />
         )}
-        <p className="small muted">
+        <p className="supporting-copy">
           {l(
-            "Arvio käyttää Darcy–Weisbachin yhtälöä: laminaarinen Re < 2 000, turbulentti Re > 4 000. Siirtymäalue estetään. Ei sisällä kaksifaasivirtausta, kaasun merkittävää kokoonpuristumista, liittimiä, korkeuseroa, öljynpalautumista eikä putkikoon valintaa.",
-            "Darcy–Weisbach estimate: laminar Re < 2,000, turbulent Re > 4,000. The transition range is blocked. It excludes two-phase flow, significant gas compressibility, fittings, elevation, oil return and pipe-size selection.",
+            "Vain suoran putken yksifaasivirtaus. Ei putkikoon mitoitukseen; tarkemmat rajaukset laskentaperusteissa.",
+            "Single-phase flow in a straight pipe only. Not for pipe sizing; see calculation basis for detailed limits.",
           )}
         </p>
       </section>
@@ -1031,7 +1029,7 @@ export function PipeCalculator() {
               onChange={(value) => changeExpansion("finalC", value)}
             />
           </div>
-          <p className="small muted">
+          <p className="supporting-copy mono">
             α = {number(selectedMaterial.coefficientPerK)} /K ·{" "}
             {l("lähdealue", "source range")}: {selectedMaterial.minC}–
             {selectedMaterial.maxC} °C
@@ -1047,15 +1045,22 @@ export function PipeCalculator() {
             aria-live="polite"
           >
             <h3>{l("Pituuden muutos", "Length change")}</h3>
-            <p className="mono">
+            <p className="field-result-value">
               {Number(expansionResult.changeMm) > 0 ? "+" : ""}
               {number(expansionResult.changeMm)} mm
+            </p>
+            <p>
+              {Number(expansionResult.changeMm) > 0
+                ? l("Putki pitenee", "The pipe expands")
+                : Number(expansionResult.changeMm) < 0
+                  ? l("Putki lyhenee", "The pipe contracts")
+                  : l("Pituus ei muutu", "No length change")}
             </p>
             <p>
               {l("Loppupituus", "Final length")}:{" "}
               {number(expansionResult.finalLengthM)} m
             </p>
-            <p className="small muted">
+            <p className="supporting-copy">
               {l("Lämpötilaero", "Temperature difference")}:{" "}
               {number(expansionResult.differenceK)} K
             </p>
@@ -1123,7 +1128,7 @@ export function PipeCalculator() {
             }}
           />
         )}
-        <p className="small muted">
+        <p className="supporting-copy">
           {l(
             "Arvio ei mitoita kiinnikkeitä, jännityksiä eikä paisuntalenkkejä. Lähdearvoa ei sovelleta 20–100 °C alueen ulkopuolelle.",
             "This estimate does not design supports, stress or expansion loops. The source coefficient is not applied outside 20–100 °C.",
@@ -1153,9 +1158,15 @@ export function PipeCalculator() {
         )}
         {mode === "loss" && (
           <>
-            <p>
+            <p className="mono">
               Δp = f · (L/D) · ρv²/2; Re = ρvD/μ; f = 64/Re (Re &lt; 2,000) or
               Swamee–Jain (Re &gt; 4,000).
+            </p>
+            <p>
+              {l(
+                "Darcy–Weisbachin yhtälö. Siirtymäalue 2 000–4 000 estetään. Ei sisällä kaksifaasivirtausta, kaasun merkittävää kokoonpuristumista, liittimiä, korkeuseroa, öljynpalautumista eikä putkikoon valintaa.",
+                "Darcy–Weisbach equation. The transition range 2,000–4,000 is blocked. It excludes two-phase flow, significant gas compressibility, fittings, elevation, oil return and pipe-size selection.",
+              )}
             </p>
             <p>
               <a href={pipeLossSource.url} target="_blank" rel="noreferrer">
@@ -1292,19 +1303,21 @@ export function WorkChecklists() {
       {draft && definition && (
         <section className="checklist-record">
           <h2>{definition.name[locale]}</h2>
-          <p className="field-checklist-save-state small" role="status">
-            {persistenceStatus === "saving"
-              ? l("Tallennetaan tälle laitteelle…", "Saving on this device…")
-              : persistenceStatus === "error"
-                ? l(
-                    "Tallennus epäonnistui. Tarkista tallennustilan virheilmoitus ennen sulkemista.",
-                    "Save failed. Check the storage error message before closing.",
-                  )
-                : l(
-                    "Tallennettu tälle laitteelle. Avaa uudelleen Omat listat -valikosta; sisältyy asetusten varmuuskopioon.",
-                    "Saved on this device. Reopen from Your checklists; included in Settings backups.",
-                  )}
-          </p>
+          <div className="field-checklist-save-state">
+            <p className="caption" role="status" aria-live="polite">
+              {persistenceStatus === "saving"
+                ? l("Tallennetaan…", "Saving…")
+                : persistenceStatus === "error"
+                  ? l("Tallennus epäonnistui", "Save failed")
+                  : l("Tallennettu tälle laitteelle", "Saved on this device")}
+            </p>
+            <p className="supporting-copy">
+              {l(
+                "Avaa uudelleen Omat listat -valikosta. Listat säilyvät tässä selaimessa ja sisältyvät asetusten varmuuskopioon.",
+                "Reopen from Your checklists. Lists stay in this browser and are included in Settings backups.",
+              )}
+            </p>
+          </div>
           <label>
             {l("Kohteen nimi", "Site name")}
             <input
@@ -1378,7 +1391,7 @@ export function WorkChecklists() {
           </label>
           <div className="field-actions">
             <button
-              className="secondary-button field-checklist-print"
+              className="secondary-button"
               onClick={() => setPrintError(!printChecklistDraft(draft, locale))}
             >
               <Printer size={18} />

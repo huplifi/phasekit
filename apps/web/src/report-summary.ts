@@ -130,13 +130,22 @@ export function formatReportValue(value: string, locale: Locale): string {
     return value;
   const numeric = new Decimal(raw);
   if (!numeric.isFinite()) return value;
-  const rounded = numeric.toSignificantDigits(8);
+  const rounded = numeric.toSignificantDigits(6);
   const exponent = rounded.isZero() ? 0 : rounded.e;
   const readable =
     exponent >= 9 || exponent <= -5
       ? rounded.toExponential()
       : rounded.toFixed();
   return `${rounded.eq(numeric) ? "" : "≈"}${formatDecimal(readable, locale)}`;
+}
+
+export function isCyclePrimaryOutput(row: ReportRow): boolean {
+  return (
+    row.label.fi === "Tulistus" ||
+    row.label.fi === "Alijäähdytys" ||
+    row.label.en === "Superheat" ||
+    row.label.en === "Subcooling"
+  );
 }
 
 export function reportHasRoundedValues(

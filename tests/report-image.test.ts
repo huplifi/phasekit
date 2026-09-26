@@ -83,10 +83,37 @@ describe("saved report image plan", () => {
     const text = planReportImage(longer, "fi", measure)
       .lines.map((line) => line.text)
       .join("\n");
-    expect(text).toContain("≈3,1415927 kW");
+    expect(text).toContain("≈3,14159 kW");
     expect(text.replaceAll("\n", " ")).toContain(
       "JSON-vienti säilyttää tarkat tallennetut luvut",
     );
     expect(longer.outputs[0].value).toBe(raw);
+  });
+
+  it("reserves a printable area for a frozen cycle chart", () => {
+    const withChart: ToolRecord = {
+      ...record,
+      tool: "cycle",
+      chartSnapshot: {
+        kind: "ph-cycle-v1",
+        dataVersion: "heos-1",
+        dome: [
+          [1, 100, 200],
+          [10, 120, 220],
+        ],
+        points: [
+          [2, 210],
+          [9, 240],
+          [9, 110],
+          [2, 110],
+        ],
+      },
+    };
+    const plan = planReportImage(withChart, "en", measure);
+    expect(plan.chartTop).toBeGreaterThan(0);
+    expect(plan.height).toBeGreaterThan(plan.chartTop! + 616);
+    expect(plan.lines.map((line) => line.text).join(" ")).toContain(
+      "Straight lines show cycle order",
+    );
   });
 });

@@ -1,9 +1,12 @@
+import { ExclusiveChoices } from "../components/ExclusiveChoices";
 import {
   calculatePHCycle,
   getPHAvailability,
+  getPHDiagram,
   type PHCycleResult,
 } from "../../../../packages/core/src/ph";
 import { PHDiagramPanel, phErrorText } from "./PHCalculator";
+import { createCycleChartSnapshot } from "../ph-chart-snapshot";
 import { ArrowLeftRight } from "lucide-react";
 import { CO2eBreakdown } from "../components/CO2eBreakdown";
 import { InfoHelp } from "../components/InfoHelp";
@@ -568,6 +571,9 @@ export function Calculator({
       outputs: outputRows,
       dataVersion: dataset.version,
       sources: dataset.sources.filter((source) => sourceIds.has(source.id)),
+      ...(cycle && getPHDiagram(id)
+        ? { chartSnapshot: createCycleChartSnapshot(getPHDiagram(id)!, cycle) }
+        : {}),
     };
   }
   return (
@@ -657,27 +663,22 @@ export function Calculator({
               <label htmlFor="co2e-quantity">
                 {direction ? "t CO₂e" : l("Massa (kg)", "Mass (kg)")}
               </label>
-              <div
-                className="quantity-unit-toggle"
-                role="group"
-                aria-label={l("Syötettävä yksikkö", "Input unit")}
-              >
-                {[false, true].map((inverse) => (
-                  <button
-                    key={String(inverse)}
-                    type="button"
-                    aria-pressed={direction === inverse}
-                    onClick={() => {
-                      if (direction === inverse) return;
-                      setDirection(inverse);
-                      setValue("");
-                      changed();
-                    }}
-                  >
-                    {inverse ? "t CO₂e" : "kg"}
-                  </button>
-                ))}
-              </div>
+              <ExclusiveChoices
+                className="quantity-choices"
+                label={l("Syötettävä yksikkö", "Input unit")}
+                value={direction ? "co2e" : "mass"}
+                options={[
+                  { value: "mass", label: "kg" },
+                  { value: "co2e", label: "t CO₂e" },
+                ]}
+                onChange={(next) => {
+                  const inverse = next === "co2e";
+                  if (direction === inverse) return;
+                  setDirection(inverse);
+                  setValue("");
+                  changed();
+                }}
+              />
             </div>
             <input
               id="co2e-quantity"
@@ -979,9 +980,11 @@ export function Calculator({
           </section>
         ))}
       </div>
-      {report && <ReportSave key={JSON.stringify(report)} content={report} />}
       {tool === "co2e" && r && output?.[0].kg !== undefined && (
         <CO2eBreakdown refrigerant={r} kg={output[0].kg} gwpKey={gwpKey} />
+      )}
+      {tool === "co2e" && report && (
+        <ReportSave key={JSON.stringify(report)} content={report} />
       )}
       {tool === "shsc" && (
         <PHDiagramPanel
@@ -990,6 +993,9 @@ export function Calculator({
           message={diagramMessage}
           fi={fi}
         />
+      )}
+      {tool === "shsc" && report && (
+        <ReportSave key={JSON.stringify(report)} content={report} />
       )}
       {r &&
         tool === "shsc" &&

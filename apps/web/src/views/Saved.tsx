@@ -1,4 +1,5 @@
 import { Download, ImageDown, Printer, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useApp } from "../context";
 import { formatDate } from "../../../../packages/i18n/src";
 import { CheckResultView } from "./Check";
@@ -10,10 +11,13 @@ import {
 } from "../report-export";
 import {
   formatReportRow,
+  isCyclePrimaryOutput,
   reportHasRoundedValues,
   reportSummary,
 } from "../report-summary";
 import { downloadToolRecordImage } from "../report-image";
+import { renderCycleChartSvg } from "../ph-chart-snapshot";
+import { selectedSavedReportId } from "../saved-report-route";
 import type { ToolRecord } from "../storage";
 import "./reports.css";
 
@@ -22,6 +26,15 @@ const l = (locale: "fi" | "en", fi: string, en: string) =>
 
 export function Saved() {
   const { t, data, setData, go, notify } = useApp();
+  const selectedId = selectedSavedReportId(window.location.hash);
+  useEffect(() => {
+    if (selectedId)
+      requestAnimationFrame(() =>
+        document
+          .getElementById(`report-${selectedId}`)
+          ?.scrollIntoView({ block: "start" }),
+      );
+  }, [selectedId]);
   const removeSnapshot = (id: string) => {
     if (
       !window.confirm(
@@ -88,6 +101,7 @@ export function Saved() {
                   record={record}
                   onDelete={() => removeReport(record.id)}
                   onEquipment={() => go("/equipment")}
+                  selected={record.id === selectedId}
                 />
               ))}
             </section>
@@ -171,16 +185,27 @@ function ToolReport({
   record,
   onDelete,
   onEquipment,
+  selected,
 }: {
   record: ToolRecord;
   onDelete: () => void;
   onEquipment: () => void;
+  selected: boolean;
 }) {
-  const { data, notify } = useApp();
+  const { data, setData, notify } = useApp();
+  const [editingNotes, setEditingNotes] = useState(false);
+  const [draftNotes, setDraftNotes] = useState(record.notes);
   const lcl = (fi: string, en: string) => l(data.locale, fi, en);
   const sources = record.sources;
+  const linkedEquipment = data.equipment.find(
+    (item) => item.id === record.equipmentId,
+  );
   return (
-    <details className="saved-entry report-entry">
+    <details
+      className="saved-entry report-entry"
+      id={`report-${record.id}`}
+      open={selected || undefined}
+    >
       <summary>
         <span>
           <strong className="report-summary">
@@ -188,19 +213,96 @@ function ToolReport({
           </strong>
           <span className="secondary">
             {formatDate(record.createdAt, data.locale)}
-            {record.equipmentName && ` · ${record.equipmentName}`}
+            {` · ${linkedEquipment ? `${lcl("Nykyinen laite", "Current equipment")}: ${linkedEquipment.name}` : lcl("Ei liitetty", "Unlinked")}`}
           </span>
         </span>
       </summary>
       <div className="report-detail">
         {record.equipmentName && (
           <p>
-            <strong>{lcl("Laite / kohde", "Equipment / site")}:</strong>{" "}
+            <strong>
+              {lcl("Alkuperäinen laitenimi", "Equipment name when saved")}:
+            </strong>{" "}
             {record.equipmentName}
           </p>
         )}
+        {!record.equipmentName && record.lastLinkedEquipmentName && (
+          <p>
+            <strong>
+              {lcl(
+                "Aiempi laitelinkki (nimi poistettaessa)",
+                "Former equipment link (name at removal)",
+              )}
+              :
+            </strong>{" "}
+            {record.lastLinkedEquipmentName}
+          </p>
+        )}
+        <label className="report-linkage">
+          {lcl("Nykyinen laitelinkki", "Current equipment link")}
+          <select
+            value={
+              data.equipment.some((item) => item.id === record.equipmentId)
+                ? record.equipmentId
+                : ""
+            }
+            onChange={(event) =>
+              setData((current) => ({
+                ...current,
+                toolRecords: current.toolRecords.map((item) =>
+                  item.id === record.id
+                    ? {
+                        ...item,
+                        equipmentId: event.target.value || undefined,
+                        lastLinkedEquipmentName: event.target.value
+                          ? undefined
+                          : !item.equipmentName && item.equipmentId
+                            ? (current.equipment.find(
+                                (equipment) =>
+                                  equipment.id === item.equipmentId,
+                              )?.name ?? item.lastLinkedEquipmentName)
+                            : item.lastLinkedEquipmentName,
+                      }
+                    : item,
+                ),
+              }))
+            }
+          >
+            <option value="">{lcl("Ei liitetty", "Unlinked")}</option>
+            {data.equipment.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="caption secondary">
+          {lcl(
+            "Laitelinkin muuttaminen ei muuta alkuperäisiä laskentatietoja.",
+            "Changing the link leaves the original calculation unchanged.",
+          )}
+        </p>
         <ReportRows title={lcl("Lähtötiedot", "Inputs")} rows={record.inputs} />
-        <ReportRows title={lcl("Tulokset", "Results")} rows={record.outputs} />
+        <ReportRows
+          title={lcl("Tulokset", "Results")}
+          rows={record.outputs}
+          primary={record.tool === "cycle"}
+        />
+        {record.chartSnapshot && (
+          <section className="report-chart">
+            <h3>{lcl("Kylmäkierron kaavio", "Cycle diagram")}</h3>
+            <img
+              alt={lcl("Tallennettu log(p)–h-kaavio", "Saved log(p)–h diagram")}
+              src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderCycleChartSvg(record.chartSnapshot, data.locale))}`}
+            />
+            <p className="caption secondary">
+              {lcl(
+                "Rajattu CoolProp HEOS -malli. Suorat viivat kuvaavat kierron järjestystä, eivät prosessireittiä.",
+                "Bounded CoolProp HEOS model. Straight lines show cycle order, not the process path.",
+              )}
+            </p>
+          </section>
+        )}
         {reportHasRoundedValues(record) && (
           <p className="caption secondary">
             {lcl(
@@ -209,10 +311,50 @@ function ToolReport({
             )}
           </p>
         )}
-        {record.notes && (
+        {(record.notes || editingNotes) && (
           <section>
             <h3>{lcl("Muistiinpanot", "Notes")}</h3>
-            <p className="report-notes">{record.notes}</p>
+            {editingNotes ? (
+              <div className="report-note-editor">
+                <textarea
+                  value={draftNotes}
+                  maxLength={10000}
+                  rows={4}
+                  onChange={(event) => setDraftNotes(event.target.value)}
+                />
+                <div className="button-group">
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => {
+                      setData((current) => ({
+                        ...current,
+                        toolRecords: current.toolRecords.map((item) =>
+                          item.id === record.id
+                            ? { ...item, notes: draftNotes }
+                            : item,
+                        ),
+                      }));
+                      setEditingNotes(false);
+                    }}
+                  >
+                    {lcl("Tallenna muistiinpanot", "Save notes")}
+                  </button>
+                  <button
+                    type="button"
+                    className="text-button"
+                    onClick={() => {
+                      setDraftNotes(record.notes);
+                      setEditingNotes(false);
+                    }}
+                  >
+                    {lcl("Peruuta", "Cancel")}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="report-notes">{record.notes}</p>
+            )}
           </section>
         )}
         <section className="report-provenance">
@@ -262,6 +404,18 @@ function ToolReport({
         </section>
       </div>
       <div className="button-group report-actions">
+        {!editingNotes && (
+          <button
+            className="text-button"
+            type="button"
+            onClick={() => {
+              setDraftNotes(record.notes);
+              setEditingNotes(true);
+            }}
+          >
+            {lcl("Muokkaa muistiinpanoja", "Edit notes")}
+          </button>
+        )}
         <button
           className="text-button"
           type="button"
@@ -333,9 +487,11 @@ function ToolReport({
 function ReportRows({
   title,
   rows,
+  primary = false,
 }: {
   title: string;
   rows: ToolRecord["inputs"];
+  primary?: boolean;
 }) {
   const { data } = useApp();
   const label = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
@@ -343,9 +499,22 @@ function ReportRows({
   return (
     <section className="report-rows">
       <h3>{title}</h3>
+      {primary && (
+        <div className="report-key-results">
+          {rows.filter(isCyclePrimaryOutput).map((row) => (
+            <div className="report-key-result" key={row.label.en}>
+              <span>{label(row.label.fi, row.label.en)}</span>
+              <strong>{formatReportRow(row, data.locale)}</strong>
+            </div>
+          ))}
+        </div>
+      )}
       <dl>
         {rows.map((row, index) => (
-          <div className="report-row" key={`${row.label.fi}-${index}`}>
+          <div
+            className={`report-row${primary && isCyclePrimaryOutput(row) ? " report-row-key" : ""}`}
+            key={`${row.label.fi}-${index}`}
+          >
             <dt>{label(row.label.fi, row.label.en)}</dt>
             <dd>{formatReportRow(row, data.locale)}</dd>
           </div>

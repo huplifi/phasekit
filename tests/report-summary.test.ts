@@ -46,9 +46,9 @@ describe("saved report summaries", () => {
       inputs: [row("Sisähalkaisija", "Internal diameter", "20", "mm")],
       outputs: [row("Virtausnopeus", "Velocity", raw, "m/s")],
     } as Pick<ToolRecord, "tool" | "title" | "inputs" | "outputs">;
-    expect(formatReportRow(report.outputs[0], "fi")).toBe("≈1,5915494 m/s");
+    expect(formatReportRow(report.outputs[0], "fi")).toBe("≈1,59155 m/s");
     expect(reportSummary(report, "en")).toBe(
-      "Pipe volume and flow · 20 mm → ≈1.5915494 m/s",
+      "Pipe volume and flow · 20 mm → ≈1.59155 m/s",
     );
     expect(reportHasRoundedValues(report)).toBe(true);
     expect(report.outputs[0].value).toBe(raw);

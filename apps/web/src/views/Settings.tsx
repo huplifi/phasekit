@@ -1,4 +1,4 @@
-import { version } from "../../../../package.json";
+import { appVersion, buildRevision, isBeta } from "../release";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
 import { Download, Upload, Trash2 } from "lucide-react";
@@ -165,7 +165,15 @@ export function Settings() {
           </div>
           <div>
             <dt>{l("Sovellusversio", "App version")}</dt>
-            <dd className="mono">{version}</dd>
+            <dd className="mono">{appVersion}</dd>
+          </div>
+          <div>
+            <dt>{l("Julkaisukanava", "Release channel")}</dt>
+            <dd>{isBeta ? "Beta" : l("Vakaa", "Stable")}</dd>
+          </div>
+          <div>
+            <dt>{l("Build-tunniste", "Build revision")}</dt>
+            <dd className="mono">{buildRevision}</dd>
           </div>
           <div>
             <dt>{l("Verkkosivusto", "Website")}</dt>
