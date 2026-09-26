@@ -1,3 +1,4 @@
+import releases from "../../../../data/releases.json";
 import { appVersion, buildRevision, isBeta } from "../release";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
@@ -9,6 +10,9 @@ import { formatDate } from "../../../../packages/i18n/src";
 import type { Locale } from "../../../../packages/i18n/src";
 export function Settings() {
   const { t, data, setData, notify } = useApp();
+  const currentRelease = releases.find(
+    (release) => release.version === appVersion,
+  );
   const [confirm, setConfirm] = useState(false);
   const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   return (
@@ -168,6 +172,16 @@ export function Settings() {
             <dd className="mono">{appVersion}</dd>
           </div>
           <div>
+            <dt>{l("Version päivämäärä", "Version date")}</dt>
+            <dd>
+              {currentRelease && (
+                <time dateTime={currentRelease.date}>
+                  {formatDate(currentRelease.date, data.locale)}
+                </time>
+              )}
+            </dd>
+          </div>
+          <div>
             <dt>{l("Julkaisukanava", "Release channel")}</dt>
             <dd>{isBeta ? "Beta" : l("Vakaa", "Stable")}</dd>
           </div>
@@ -208,6 +222,9 @@ export function Settings() {
             </dd>
           </div>
         </dl>
+        <a className="text-button" href="#/releases">
+          {l("Versiohistoria ja uutta", "Release history and what’s new")}
+        </a>
         <p className="caption secondary">
           {l(
             "MIT-lisenssi koskee PhaseKitin omaa koodia ja dokumentaatiota. Lähdeaineistoilla, fonteilla ja muilla ulkopuolisilla osilla on omat käyttöehtonsa.",

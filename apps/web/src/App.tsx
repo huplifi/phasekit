@@ -23,6 +23,7 @@ import { Check } from "./views/Check";
 import { Calculator } from "./views/Calculator";
 import { PTCalculator } from "./views/PTCalculator";
 import { Tools } from "./views/Tools";
+import { ReleaseHistory } from "./views/ReleaseHistory";
 import { Settings } from "./views/Settings";
 import { Saved } from "./views/Saved";
 import { Equipment } from "./views/Equipment";
@@ -324,7 +325,7 @@ export function App() {
     ? "tools"
     : section === "saved" || section === "equipment"
       ? "saved"
-      : section === "settings"
+      : section === "settings" || section === "releases"
         ? "settings"
         : "refrigerants";
   return (
@@ -468,6 +469,8 @@ export function App() {
             <Equipment />
           ) : section === "saved" ? (
             <Saved />
+          ) : section === "releases" ? (
+            <ReleaseHistory />
           ) : section === "settings" ? (
             <Settings />
           ) : (

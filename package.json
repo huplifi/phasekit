@@ -1,12 +1,12 @@
 {
   "name": "phasekit",
-  "version": "0.2.0-beta.1",
+  "version": "0.2.0-beta.2",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.19.0",
   "scripts": {
     "dev": "vite --config apps/web/vite.config.ts --host 127.0.0.1",
-    "build": "pnpm data:build && pnpm tokens:build && tsc --noEmit && vite build --config apps/web/vite.config.ts",
+    "build": "pnpm data:build && pnpm tokens:build && pnpm release:build && tsc --noEmit && vite build --config apps/web/vite.config.ts",
     "preview": "vite preview --config apps/web/vite.config.ts --host 127.0.0.1",
     "lint": "eslint apps packages scripts tests --max-warnings 0",
     "typecheck": "tsc --noEmit",
@@ -20,7 +20,8 @@
     "build:sites": "pnpm build && node scripts/sites-static.mjs",
     "native:sync": "pnpm build && cap sync",
     "native:ios": "cap open ios",
-    "native:android": "cap open android"
+    "native:android": "cap open android",
+    "release:build": "node --import tsx scripts/releases.ts"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",

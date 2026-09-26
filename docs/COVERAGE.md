@@ -28,6 +28,7 @@ Identity coverage means the refrigerant designation and pure/blend record type h
 | Safety | 228 verified | 21 partial |
 | EU/FI regulatory class | 208 verified | 41 partial or unsupported |
 | P–T curves (CoolProp 7.2.0) | 124 model-based | 125 unsupported |
+| P–h diagrams (CoolProp HEOS) | 113 bundled | 136 unsupported |
 
 ## Known gaps
 
