@@ -1101,7 +1101,7 @@ input[aria-invalid="true"] {
 }
 
 /* iOS date controls otherwise retain an intrinsic width beyond their parent. */
-.field-group > input[type="date"] {
+input[type="date"] {
   display: block;
   min-width: 0;
   width: 100%;
@@ -1110,9 +1110,13 @@ input[aria-invalid="true"] {
   -webkit-appearance: none;
   appearance: none;
 }
-.field-group > input[type="date"]::-webkit-date-and-time-value {
+input[type="date"]::-webkit-date-and-time-value {
   min-width: 0;
   text-align: left;
+}
+input[type="date"]::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
 }
 
 .about-section {
@@ -1314,4 +1318,43 @@ pre.share-text {
   text-decoration: underline;
   text-underline-offset: 3px;
   font-size: 0.875rem;
+}
+
+.check-due-card > strong {
+  display: block;
+  font-family: var(--font-data), monospace;
+  font-size: 1.125rem;
+}
+.check-due-card .caption {
+  margin: 12px 0 0;
+}
+.check-overdue-label {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid currentColor;
+}
+.check-overdue-label > strong {
+  font-size: 1.25rem;
+}
+.check-overdue-label > span {
+  font-size: 0.8125rem;
+}
+
+.share-explanation[open] {
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  padding: 16px;
+}
+.share-explanation .button-group {
+  margin-block: 12px;
+}
+.share-explanation .supporting-copy {
+  margin-bottom: 0;
+}
+.share-explanation pre.share-text {
+  margin-bottom: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
 }

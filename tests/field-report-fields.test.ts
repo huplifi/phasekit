@@ -3,6 +3,8 @@ import {
   checklistDefinitions,
   checklistReportFields,
   checklistText,
+  commissioningMissingFields,
+  updateCommissioningFields,
   type ChecklistDraft,
 } from "../packages/core/src/field-tools";
 
@@ -43,7 +45,6 @@ describe("structured field reports", () => {
       expect.arrayContaining([
         "performedOn",
         "technician",
-        "signatureName",
         "achievedPressure",
         "evacuationMinutes",
         "holdStartPressure",
@@ -71,6 +72,43 @@ describe("structured field reports", () => {
     );
     expect(fields.filter((field) => field.legacy)).toEqual([]);
   });
+  it("hides the signature name on new forms but preserves historical names", () => {
+    expect(
+      checklistReportFields(draft("commissioning")).some(
+        (field) => field.id === "signatureName",
+      ),
+    ).toBe(false);
+    const old = draft("commissioning", { signatureName: "Original signer" });
+    expect(
+      checklistReportFields(old).find((field) => field.id === "signatureName")
+        ?.legacy,
+    ).toBe(true);
+    expect(checklistText(old, "en")).toContain("Original signer");
+  });
+  it("shares optional evacuation readings with commissioning without merging old free text", () => {
+    const record = draft("commissioning", {
+      vacuum: "1 mbar after 30 minutes",
+      holdStartPressure: "1",
+      holdEndPressure: "2.3",
+      holdMinutes: "15",
+      vacuumUnit: "mbar",
+    });
+    const fields = checklistReportFields(record).filter(
+      (field) => field.group === "evacuation",
+    );
+    expect(fields.map((field) => field.id)).toEqual(
+      expect.arrayContaining([
+        "vacuum",
+        "vacuumUnit",
+        "achievedPressure",
+        "holdStartPressure",
+        "holdEndPressure",
+        "holdMinutes",
+      ]),
+    );
+    expect(record.fields.achievedPressure).toBeUndefined();
+    expect(checklistText(record, "en")).toContain("1 mbar after 30 minutes");
+  });
   it("exports every recording template bilingually without duplicate fields", () => {
     for (const kind of Object.keys(
       checklistDefinitions,
@@ -85,5 +123,151 @@ describe("structured field reports", () => {
         checklistDefinitions[kind].name.en,
       );
     }
+  });
+  it("requires explicit commissioning certificate records without treating readings as protocol approval", () => {
+    const complete = {
+      equipment: "SN-123",
+      technician: "Installer",
+      installerCompany: "Test Company",
+      installerQualificationNumber: "INST-1",
+      responsiblePerson: "Responsible person",
+      responsibleQualificationNumber: "RESP-1",
+      refrigerantId: "r134a",
+      refrigerantSafetyClass: "A1",
+      refrigerantGwp: "1430",
+      refrigerantGwpBasis: "EU 2024/573",
+      refrigerantSourceNote: "Source record",
+      chargeKg: "2",
+      leakCheckInterval: "Assessed interval and basis",
+      tightnessTestReportReference: "Annex T-1",
+      testRunReportReference: "Annex R-1",
+      evacuationReportReference: "Annex V-1",
+      operatorDeclaration: "confirmed",
+      pressureTestRequired: "no",
+      pressureTestExemptionReason: "Documented equipment assessment",
+    };
+    expect(commissioningMissingFields(complete)).toEqual([]);
+    expect(
+      commissioningMissingFields({
+        ...complete,
+        pressureTestRequired: "not_assessed",
+      }).map((field) => field.id),
+    ).toContain("pressureTestRequired");
+    expect(
+      commissioningMissingFields({
+        ...complete,
+        pressureTestRequired: "yes",
+      }).map((field) => field.id),
+    ).toContain("pressureTestReportReference");
+    expect(
+      commissioningMissingFields({
+        ...complete,
+        pressureTestExemptionReason: "",
+      }).map((field) => field.id),
+    ).toContain("pressureTestExemptionReason");
+    expect(
+      commissioningMissingFields({
+        ...complete,
+        operatorDeclaration: "looks good",
+      }).map((field) => field.id),
+    ).toContain("operatorDeclaration");
+    expect(
+      commissioningMissingFields({ ...complete, chargeKg: "-2" }).map(
+        (field) => field.id,
+      ),
+    ).toContain("chargeKg");
+    expect(
+      commissioningMissingFields({
+        ...complete,
+        testRunReportReference: "",
+        lp: "3",
+        hp: "10",
+        suctionC: "10",
+        dischargeC: "60",
+        liquidC: "20",
+      }).map((field) => field.id),
+    ).toContain("testRunReportReference");
+    const inline = {
+      ...complete,
+      evacuationReportReference: "",
+      achievedPressure: "1",
+      holdStartPressure: "1",
+      holdEndPressure: "1.2",
+      holdMinutes: "15",
+      vacuumUnit: "mbar",
+    };
+    expect(
+      commissioningMissingFields(inline).map((field) => field.id),
+    ).toContain("evacuationReportReference");
+    expect(
+      commissioningMissingFields({
+        ...inline,
+        criterion: "Equipment instruction limits",
+        instrumentName: "Gauge 1",
+        measurementLocation: "Service port",
+        evacuationFinding: "Results compared to instruction",
+      }),
+    ).toEqual([]);
+  });
+  it.each([
+    ["refrigerantGwp", "2088"],
+    ["refrigerantGwpBasis", "Updated regulatory basis"],
+  ])("requires a fresh leak interval when %s changes", (field, value) => {
+    const before = {
+      refrigerantId: "r134a",
+      refrigerantGwp: "1430",
+      refrigerantGwpBasis: "EU-2024/573-Annex-I-AR4",
+      chargeKg: "2",
+      leakCheckInterval: "12 months",
+      pressureTestRequired: "no",
+      operatorDeclaration: "confirmed",
+    };
+    const updated = updateCommissioningFields(before, { [field]: value });
+    expect(updated).toMatchObject({
+      [field]: value,
+      leakCheckInterval: "",
+      operatorDeclaration: "",
+      pressureTestRequired: "no",
+    });
+    const reconfirmed = updateCommissioningFields(updated, {
+      operatorDeclaration: "confirmed",
+    });
+    expect(commissioningMissingFields(reconfirmed).map((item) => item.id))
+      .toContain("leakCheckInterval");
+  });
+  it("requires renewed declaration and dependent assessments after substantive changes", () => {
+    const before = {
+      refrigerantId: "r134a",
+      chargeKg: "2",
+      leakCheckInterval: "12 months",
+      pressureTestRequired: "no",
+      pressureTestReportReference: "Retained protocol",
+      operatorDeclaration: "confirmed",
+    };
+    expect(
+      updateCommissioningFields(before, { ...before, refrigerantId: "r290" }),
+    ).toMatchObject({
+      operatorDeclaration: "",
+      leakCheckInterval: "",
+      pressureTestRequired: "not_assessed",
+      pressureTestReportReference: "Retained protocol",
+    });
+    expect(
+      updateCommissioningFields(before, { ...before, chargeKg: "3" }),
+    ).toMatchObject({
+      operatorDeclaration: "",
+      leakCheckInterval: "",
+      pressureTestRequired: "no",
+    });
+    expect(
+      updateCommissioningFields(before, { ...before, lp: "3" })
+        .operatorDeclaration,
+    ).toBe("");
+    expect(
+      updateCommissioningFields(before, {
+        ...before,
+        operatorDeclaration: "confirmed",
+      }).operatorDeclaration,
+    ).toBe("confirmed");
   });
 });

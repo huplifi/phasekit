@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { CheckResult } from "../packages/core/src/contracts";
-import { leakCheckPrintSchedule } from "../apps/web/src/report-export";
+import {
+  leakCheckPrintOverdue,
+  leakCheckPrintSchedule,
+} from "../apps/web/src/report-export";
 import { primaryReportOutputs } from "../apps/web/src/report-summary";
 import { planReportImage } from "../apps/web/src/report-image";
 import type { ToolRecord } from "../apps/web/src/storage";
@@ -36,6 +39,22 @@ describe("round-three print schedule", () => {
     expect(leakCheckPrintSchedule(assessment, "2026-09-27")).toEqual({
       status: "invalid",
     });
+  });
+
+  it("marks only due dates before the frozen assessment day as overdue", () => {
+    const sixMonths = { ...assessment, months: 6 };
+    const overdue = leakCheckPrintSchedule(sixMonths, "2025-11-01");
+    expect(overdue.due).toBe("2026-05-01");
+    expect(leakCheckPrintOverdue(overdue, assessment.input.asOf)).toBe(true);
+    const dueToday = leakCheckPrintSchedule(sixMonths, "2026-03-26");
+    expect(dueToday.due).toBe("2026-09-26");
+    expect(leakCheckPrintOverdue(dueToday, assessment.input.asOf)).toBe(false);
+    expect(
+      leakCheckPrintOverdue(
+        leakCheckPrintSchedule(sixMonths, "2026-09-27"),
+        assessment.input.asOf,
+      ),
+    ).toBe(false);
   });
 });
 

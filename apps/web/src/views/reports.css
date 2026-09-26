@@ -342,3 +342,64 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* One catalogue, one creation action; supporting storage information stays quiet. */
+.reports-header h1 {
+  margin-bottom: 20px;
+}
+.reports-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.reports-header > .supporting-copy {
+  margin-block: 16px 24px;
+  max-width: 60ch;
+}
+.report-list-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.report-list-heading h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+.report-filters label {
+  min-width: 0;
+  margin: 0;
+}
+.report-filters input,
+.report-filters select {
+  min-width: 0;
+  margin-top: 0;
+}
+.report-timeline > .saved-entry,
+.report-timeline > .field-report-link {
+  margin: 0;
+  border-top: 0;
+  border-bottom: 1px solid var(--divider);
+}
+.report-timeline > .saved-entry > summary {
+  padding-block: 20px;
+}
+.equipment-empty {
+  padding: 24px;
+}
+.equipment-empty p {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 55ch;
+}
+@media (max-width: 560px) {
+  .report-filters {
+    gap: 12px;
+  }
+  .reports-actions > button {
+    flex: 1 1 auto;
+  }
+}

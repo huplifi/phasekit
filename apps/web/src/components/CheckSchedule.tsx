@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Copy, Share2 } from "lucide-react";
 import type {
   CheckResult,
@@ -14,11 +14,13 @@ export function CheckSchedule({
   completed,
   designation,
   sources,
+  actions,
 }: {
   result: CheckResult;
   completed?: string;
   designation: string;
   sources: Source[];
+  actions?: ReactNode;
 }) {
   const { data } = useApp();
   const [notice, setNotice] = useState("");
@@ -32,6 +34,7 @@ export function CheckSchedule({
       invalid = true;
     }
   }
+  const overdue = Boolean(due && due < result.input.asOf);
   const text = checkSummary(
     result,
     designation,
@@ -76,7 +79,16 @@ export function CheckSchedule({
         </p>
       )}
       {due && (
-        <div className="notice">
+        <div className={`notice check-due-card ${overdue ? "error" : ""}`}>
+          {overdue && (
+            <p className="check-overdue-label">
+              <strong>{l("Tarkastus myöhässä", "Inspection overdue")}</strong>
+              <span>
+                {l("Arviointipäivänä", "As assessed on")}{" "}
+                {formatDate(result.input.asOf, data.locale)}
+              </span>
+            </p>
+          )}
           <strong>
             {l("Seuraava määräpäivä", "Next due date")}:{" "}
             {formatDate(due, data.locale)}
@@ -89,14 +101,6 @@ export function CheckSchedule({
               "Same equipment, charge and detection system. Reassess if conditions or rules change.",
             )}
           </p>
-          {due < result.input.asOf && (
-            <p>
-              {l(
-                "Määräpäivä on ennen arviointipäivää.",
-                "The due date precedes the assessment date.",
-              )}
-            </p>
-          )}
         </div>
       )}
       {result.state === "required" && !completed && (
@@ -107,33 +111,38 @@ export function CheckSchedule({
           )}
         </p>
       )}
-      <div className="button-group">
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => void copy()}
-        >
-          <Copy size={18} />
-          {l("Kopioi selite", "Copy explanation")}
-        </button>
-        {typeof navigator.share === "function" && (
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={() => void share()}
-          >
-            <Share2 size={18} />
-            {l("Jaa selite", "Share explanation")}
-          </button>
-        )}
-      </div>
+      {actions}
       <details className="share-explanation">
         <summary>
           {l("Näytä jaettava selite", "Show shareable explanation")}
         </summary>
-        <p className="caption secondary">
-          {l("Seliteteksti", "Explanation text")}
+        <p className="supporting-copy">
+          {l(
+            "Kopioi yhteenveto esimerkiksi viestiin tai työmääräykseen.",
+            "Copy a summary into a message or work order.",
+          )}
         </p>
+        <div className="button-group">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={() => void copy()}
+          >
+            <Copy size={18} />
+            {l("Kopioi selite", "Copy explanation")}
+          </button>
+          {typeof navigator.share === "function" && (
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => void share()}
+            >
+              <Share2 size={18} />
+              {l("Jaa selite", "Share explanation")}
+            </button>
+          )}
+        </div>
+
         <pre
           className="share-text"
           tabIndex={0}
@@ -141,10 +150,12 @@ export function CheckSchedule({
         >
           {text}
         </pre>
+        {notice && (
+          <p role="status" className="caption">
+            {notice}
+          </p>
+        )}
       </details>
-      <p role="status" className="caption">
-        {notice}
-      </p>
     </div>
   );
 }

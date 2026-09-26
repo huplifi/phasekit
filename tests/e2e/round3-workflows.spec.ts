@@ -26,13 +26,16 @@ test("leak result keeps input context, readable explanation and adjacent save/pr
   await expect(
     actions.getByRole("button", { name: "Tulosta / tallenna PDF" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Kopioi selite" }),
+  ).toBeHidden();
   await page.getByText("Näytä jaettava selite", { exact: true }).click();
   const text = page.locator(".share-text");
   await expect(text).toBeVisible();
   await expect(text).toContainText("Täytös: 120 kg");
   expect((await text.boundingBox())!.height).toBeGreaterThan(100);
   await page.getByRole("button", { name: "Kopioi selite" }).click();
-  await expect(page.locator(".check-schedule > [role=status]")).toBeVisible();
+  await expect(page.locator(".share-explanation [role=status]")).toBeVisible();
   expect(
     await page.evaluate(() => (window as unknown as { copied: string }).copied),
   ).toBe(await text.textContent());

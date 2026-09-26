@@ -79,7 +79,7 @@ test("equipment history opens reports and preserves final field records through 
   await page.goto("/#/checklists");
   await page
     .getByRole("combobox", { name: "Raporttipohja", exact: true })
-    .selectOption("commissioning");
+    .selectOption("evacuation");
   await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   await page
     .getByRole("combobox", { name: "Liitä laitteeseen", exact: true })
@@ -124,7 +124,7 @@ test("equipment history opens reports and preserves final field records through 
   await page.goto("/#/equipment");
   const card = page.locator(".equipment-card");
   const link = card.locator(".equipment-field-report-link");
-  await expect(link).toContainText("Käyttöönotto");
+  await expect(link).toContainText("Tyhjiöinti");
   await expect(link).toContainText("Työsali / KEUDA");
   await expect(link).toContainText("26.9.2026");
   await expect(link).toContainText("Valmis");
@@ -150,7 +150,7 @@ test("equipment history opens reports and preserves final field records through 
     "Työsali / KEUDA",
   );
   await expect(page.locator(".field-report-editor")).toContainText(
-    "Valmis raportti",
+    "Tämä raportti on viimeistelty",
   );
   expect(await readReports()).toEqual(frozen);
 });

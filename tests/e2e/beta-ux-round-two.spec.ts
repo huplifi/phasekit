@@ -36,10 +36,8 @@ test("checklist editing keeps scroll and focus stable during automatic saves", a
   await expect(notes).toHaveValue("Mittaus");
   await page.reload();
   await expect(notes).toHaveValue("Mittaus");
-  await page.goto("/#/checklists");
-  await page
-    .getByRole("combobox", { name: "Aiemmat raportit", exact: true })
-    .selectOption({ index: 1 });
+  await page.goto("/#/reports");
+  await page.locator(".field-report-link").first().click();
   await expect(
     page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
   ).toHaveValue("Mittaus");

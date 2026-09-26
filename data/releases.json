@@ -1,5 +1,30 @@
 [
   {
+    "version": "0.2.0-beta.5",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät raportit ja asennustodistuksen tiedot",
+      "en": "Clearer reports and installation-document preparation"
+    },
+    "changes": {
+      "fi": [
+        "Raportit ja tallennetut laskelmat löytyvät yhdestä aikajärjestyksessä olevasta listasta. Haku, uuden raportin luonti ja laitteiden hallinta on selkeytetty.",
+        "Käyttöönottoraporttiin on lisätty asennustodistuksen tietoja VNa 1063/2025 §9:n pohjalta: vastuuhenkilö, lupanumerot, koepöytäkirjojen viitteet ja tyhjiöintimittaukset. Kenttien täyttäminen ei korvaa liitteitä, teknistä hyväksyntää tai vastuuhenkilön allekirjoitusta.",
+        "Tulosteiden mittaukset, taulukot ja lähdetiedot on tiivistetty. Allekirjoitus ja nimenselvennys täytetään paperille.",
+        "Myöhässä oleva vuototarkastus erottuu arviointipäivän perusteella punaisena. Selitteen kopiointi ja jakaminen on koottu avattavan seliteosion sisälle.",
+        "Päivämääräkenttien leveyskorjaus koskee nyt myös raporttilomakkeita. Laitteiden tyhjän tilan reunukset ja tukitekstien välit on korjattu."
+      ],
+      "en": [
+        "Reports and saved calculations share one chronological catalogue with clearer search, report creation and equipment management.",
+        "Commissioning records now support installation-document preparation under Finnish Decree 1063/2025 §9: responsible person, licence numbers, test-report references and evacuation readings. Completing fields does not replace attachments, technical acceptance or the responsible person’s signature.",
+        "Printed measurements, tables and provenance are more compact. Signature and printed-name lines are completed on paper.",
+        "Overdue leak checks are highlighted in red against the assessment date. Copy and share actions are inside the explanation disclosure.",
+        "The date-input width fix now covers report forms. Equipment empty-state padding and supporting-copy spacing are corrected."
+      ]
+    }
+  },
+  {
     "version": "0.2.0-beta.4",
     "date": "2026-09-26",
     "channel": "beta",
