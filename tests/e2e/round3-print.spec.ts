@@ -67,9 +67,9 @@ test("commissioning print keeps marked steps, blank steps and written measuremen
 }, info) => {
   await page.goto("/#/checklists");
   await page
-    .getByRole("combobox", { name: "Uusi lista", exact: true })
+    .getByRole("combobox", { name: "Raporttipohja", exact: true })
     .selectOption("commissioning");
-  await page.getByRole("button", { name: "Luo lista", exact: true }).click();
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   await page.getByLabel("Kohteen nimi", { exact: true }).fill("Konehuone A");
   await page.getByLabel("Laite / tunniste", { exact: true }).fill("PK-17");
   const longNotes =

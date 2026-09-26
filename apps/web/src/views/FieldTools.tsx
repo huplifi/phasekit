@@ -1,10 +1,10 @@
 import { ExclusiveChoices } from "../components/ExclusiveChoices";
 import { useDraftGuard } from "../useDraftGuard";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Download, Plus, Printer, Trash2 } from "lucide-react";
 import { useApp } from "../context";
 import { ReportSave } from "../components/ReportSave";
-import type { ReportRow } from "../storage";
+import type { FieldReport, ReportRow } from "../storage";
 import type { Source } from "../../../../packages/core/src/contracts";
 import { Back } from "../components/Common";
 import { InfoHelp } from "../components/InfoHelp";
@@ -22,10 +22,20 @@ import {
   type ElectricalMode,
   type FlowUnit,
   type ChecklistKind,
-  type ChecklistDraft,
+  type ChecklistField,
+  checklistReportFields,
   type PipeExpansionMaterial,
 } from "../../../../packages/core/src/field-tools";
 import "./field-tools.css";
+import "./field-reports.css";
+import { appVersion } from "../release";
+import { byId } from "../data";
+import { RefrigerantPicker } from "../components/RefrigerantPicker";
+import {
+  buildCommissioningCycle,
+  commissioningCycleErrorText,
+} from "../commissioning-cycle";
+import { renderCycleChartSvg } from "../ph-chart-snapshot";
 
 const reportRow = (
   fi: string,
@@ -138,10 +148,18 @@ function FlowSelect({
     </label>
   );
 }
-function Layout({ title, children }: { title: string; children: ReactNode }) {
+function Layout({
+  title,
+  children,
+  backTo = "/",
+}: {
+  title: string;
+  children: ReactNode;
+  backTo?: string;
+}) {
   return (
     <div className="field-tools">
-      <Back />
+      <Back to={backTo} />
       <h1>{title}</h1>
       {children}
     </div>
@@ -1192,41 +1210,146 @@ export function PipeCalculator() {
   );
 }
 export function WorkChecklists() {
-  const { data, setData, persistenceStatus } = useApp();
+  const { data, setData, persistenceStatus, go } = useApp();
   const { l, locale } = useLabels();
+  const routeId = () => {
+    const id = window.location.hash.replace(/^#\/checklists\/?/, "");
+    try {
+      return id === "new" ? "" : decodeURIComponent(id);
+    } catch {
+      return id;
+    }
+  };
   const [kind, setKind] = useState<ChecklistKind>("tightness");
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(routeId);
   const [deletePending, setDeletePending] = useState(false);
   const [printError, setPrintError] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [cycleError, setCycleError] = useState("");
+  useEffect(() => {
+    const sync = () => {
+      setSelected(routeId());
+      setDeletePending(false);
+      setFormError("");
+      setCycleError("");
+    };
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
   const draft = data.checklistDrafts.find((d) => d.id === selected);
   const definition = draft ? checklistDefinitions[draft.kind] : null;
-  const update = (patch: Partial<ChecklistDraft>) => {
+  const final = draft?.status === "final";
+  const update = (patch: Partial<FieldReport>) => {
+    if (!draft || final) return;
+    setFormError("");
+    setCycleError("");
     setData((current) => ({
       ...current,
       checklistDrafts: current.checklistDrafts.map((d) =>
-        d.id === selected
-          ? { ...d, ...patch, updatedAt: new Date().toISOString() }
+        d.id === selected && d.status !== "final"
+          ? {
+              ...d,
+              ...patch,
+              ...(!("cycleReport" in patch) &&
+              patch.fields &&
+              [
+                "refrigerantId",
+                "lp",
+                "hp",
+                "pressureUnit",
+                "pressureReference",
+                "atmosphericReference",
+                "suctionC",
+                "dischargeC",
+                "liquidC",
+              ].some((key) => patch.fields?.[key] !== d.fields[key])
+                ? { cycleReport: undefined }
+                : {}),
+              updatedAt: new Date().toISOString(),
+            }
           : d,
       ),
     }));
   };
+  const open = (id: string) => {
+    setSelected(id);
+    setDeletePending(false);
+    go(`/checklists/${encodeURIComponent(id)}`);
+  };
   const create = () => {
     if (data.checklistDrafts.length >= 1000) return;
-    const record: ChecklistDraft = {
+    const record: FieldReport = {
       id: crypto.randomUUID(),
       kind,
       title: "",
       updatedAt: new Date().toISOString(),
       checkedIds: [],
-      fields: {},
+      fields:
+        kind === "commissioning"
+          ? {
+              pressureUnit: "bar",
+              pressureReference: "gauge",
+              atmosphericReference: "1.01325",
+            }
+          : kind === "evacuation"
+            ? { vacuumUnit: "mbar" }
+            : {},
       notes: "",
+      status: "draft",
+      revision: 1,
+      appVersion,
     };
     setData((current) => ({
       ...current,
       checklistDrafts: [...current.checklistDrafts, record],
     }));
-    setSelected(record.id);
-    setDeletePending(false);
+    open(record.id);
+  };
+  const finalise = () => {
+    if (!draft || final) return;
+    if (
+      !draft.title.trim() ||
+      !draft.fields.performedOn ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(draft.fields.performedOn) ||
+      !Number.isFinite(Date.parse(`${draft.fields.performedOn}T12:00:00Z`)) ||
+      new Date(`${draft.fields.performedOn}T12:00:00Z`)
+        .toISOString()
+        .slice(0, 10) !== draft.fields.performedOn ||
+      !draft.fields.technician?.trim()
+    ) {
+      setFormError(
+        l(
+          "Täytä kohteen nimi, suorituspäivä ja tekijä ennen raportin viimeistelyä. Luonnos tallentuu silti.",
+          "Enter site name, work date and technician before finalising. Your draft is still saved.",
+        ),
+      );
+      return;
+    }
+    update({
+      status: "final",
+      cycleReport: draft.cycleReport,
+      finalizedAt: new Date().toISOString(),
+      appVersion,
+      revision: draft.revision ?? 1,
+    });
+  };
+  const revise = () => {
+    if (!draft || data.checklistDrafts.length >= 1000) return;
+    const revision: FieldReport = {
+      ...draft,
+      id: crypto.randomUUID(),
+      status: "draft",
+      revision: (draft.revision ?? 1) + 1,
+      previousRevisionId: draft.id,
+      finalizedAt: undefined,
+      appVersion,
+      updatedAt: new Date().toISOString(),
+    };
+    setData((current) => ({
+      ...current,
+      checklistDrafts: [...current.checklistDrafts, revision],
+    }));
+    open(revision.id);
   };
   const download = () => {
     if (!draft) return;
@@ -1241,155 +1364,370 @@ export function WorkChecklists() {
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
+  const saveState = () => (
+    <p className="field-report-save-state caption" role="status">
+      {persistenceStatus === "saving"
+        ? l("Tallennetaan…", "Saving…")
+        : persistenceStatus === "error"
+          ? l(
+              "Tallennus epäonnistui — pidä sivu auki ja vie kirjaus talteen.",
+              "Save failed — keep this page open and export your record.",
+            )
+          : l(
+              "Tallennettu automaattisesti tähän selaimeen",
+              "Saved automatically in this browser",
+            )}
+    </p>
+  );
+  const renderField = (field: ChecklistField) => {
+    if (!draft) return null;
+    if (
+      field.id === "atmosphericReference" &&
+      draft.fields.pressureReference !== "gauge"
+    )
+      return null;
+    const change = (value: string) =>
+      update({
+        fields: {
+          ...draft.fields,
+          [field.id]: value,
+          ...(field.id === "refrigerantId"
+            ? { refrigerantDesignation: byId.get(value)?.designation ?? value }
+            : {}),
+        },
+      });
+    const name = `${field.label[locale]}${field.legacy ? l(" · aiempi vapaateksti", " · original free text") : ""}`;
+    return (
+      <div
+        key={field.id}
+        className={`field-report-field ${field.type === "decimal" ? "field-report-numeric" : ""} ${["pressureUnit", "pressureReference"].includes(field.id) ? "field-report-choice" : ""} ${field.legacy ? "field-report-legacy" : ""} ${["atmosphericReference", "equipment", "chargeKg", "evacuationMinutes"].includes(field.id) ? "field-report-full" : ""}`}
+      >
+        {field.type === "refrigerant" ? (
+          final ? (
+            <label>
+              {name}
+              <input
+                readOnly
+                value={
+                  draft.fields.refrigerantDesignation ??
+                  draft.fields[field.id] ??
+                  ""
+                }
+              />
+            </label>
+          ) : (
+            <RefrigerantPicker
+              label={name}
+              value={draft.fields[field.id]}
+              onChange={change}
+            />
+          )
+        ) : (
+          <label>
+            {name}
+            {field.type === "select" ? (
+              <select
+                value={draft.fields[field.id] ?? ""}
+                onChange={(e) => change(e.target.value)}
+              >
+                <option value="">{l("Valitse", "Choose")}</option>
+                {field.options?.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label[locale]}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type={field.type === "date" ? "date" : "text"}
+                inputMode={field.type === "decimal" ? "decimal" : undefined}
+                value={draft.fields[field.id] ?? ""}
+                maxLength={2000}
+                onChange={(e) => change(e.target.value)}
+              />
+            )}
+          </label>
+        )}
+        {field.help && <p className="supporting-copy">{field.help[locale]}</p>}
+      </div>
+    );
+  };
   return (
-    <Layout title={l("Tarkistuslistat", "Work checklists")}>
-      <p>
+    <Layout
+      backTo="/reports"
+      title={
+        draft && definition
+          ? definition.name[locale]
+          : l("Uusi raportti", "New report")
+      }
+    >
+      <p className="supporting-copy">
         {l(
-          "Kirjaa kohteen työvaiheet ja mittaukset. Määritä tavoitearvot valmistajan ohjeesta. Merkinnät eivät ole kokeen hyväksyntä tai määräystenmukaisuustodistus.",
-          "Record work steps and measurements for your equipment. Use manufacturer instructions for target values. Checkmarks are not test acceptance or certification of compliance.",
+          "Kirjaa työvaiheet ja mittaukset valmistajan ohjeen mukaan. Raportin valmistuminen tai rastit eivät tarkoita kokeen teknistä hyväksyntää.",
+          "Record work and measurements using the manufacturer instructions. A finalised report or checked steps do not imply technical test acceptance.",
         )}
       </p>
-      <div className="field-tool-grid checklist-create field-checklist-controls">
-        <label>
-          {l("Uusi lista", "New checklist")}
-          <select
-            value={kind}
-            onChange={(e) => setKind(e.target.value as ChecklistKind)}
-          >
-            {Object.entries(checklistDefinitions).map(([key, item]) => (
-              <option key={key} value={key}>
-                {item.name[locale]}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          className="secondary-button"
-          disabled={data.checklistDrafts.length >= 1000}
-          onClick={create}
-        >
-          <Plus size={18} />
-          {l("Luo lista", "Create checklist")}
-        </button>
-      </div>
+      <a className="field-report-back" href="#/reports">
+        {l("Kaikki raportit ja tallennetut", "All reports and saved items")} →
+      </a>
+      {!draft && (
+        <>
+          <div className="field-tool-grid checklist-create field-checklist-controls">
+            <label>
+              {l("Raporttipohja", "Report template")}
+              <select
+                value={kind}
+                onChange={(e) => setKind(e.target.value as ChecklistKind)}
+              >
+                {Object.entries(checklistDefinitions).map(([key, item]) => (
+                  <option key={key} value={key}>
+                    {item.name[locale]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              className="secondary-button"
+              disabled={data.checklistDrafts.length >= 1000}
+              onClick={create}
+            >
+              <Plus size={18} />
+              {l("Luo raportti", "Create report")}
+            </button>
+          </div>
+          {selected && (
+            <p role="status">
+              {l(
+                "Raporttia ei löytynyt tästä selaimesta.",
+                "Report not found in this browser.",
+              )}
+            </p>
+          )}
+          {data.checklistDrafts.length > 0 && (
+            <label>
+              {l("Aiemmat raportit", "Previous reports")}
+              <select value="" onChange={(e) => open(e.target.value)}>
+                <option value="">
+                  {l("Valitse raportti", "Choose a report")}
+                </option>
+                {data.checklistDrafts.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {checklistDefinitions[d.kind].name[locale]} ·{" "}
+                    {d.title || l("Nimetön", "Untitled")} ·{" "}
+                    {new Date(d.updatedAt).toLocaleDateString(locale)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+        </>
+      )}
       {data.checklistDrafts.length >= 1000 && (
         <p role="status">
           {l(
-            "Enintään 1 000 listaa. Vie ja poista vanhoja listoja ennen uuden luontia.",
-            "Limit of 1,000 checklists. Export and remove old records before creating another.",
+            "Enintään 1 000 raporttia. Vie ja poista vanhoja raportteja ennen uuden luontia.",
+            "Limit of 1,000 reports. Export and remove old records before creating another.",
           )}
         </p>
       )}
-      {data.checklistDrafts.length > 0 && (
-        <label>
-          {l("Omat listat", "Your checklists")}
-          <select
-            value={selected}
-            onChange={(e) => {
-              setSelected(e.target.value);
-              setDeletePending(false);
-            }}
-          >
-            <option value="">{l("Valitse lista", "Choose a checklist")}</option>
-            {data.checklistDrafts.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.title || checklistDefinitions[d.kind].name[locale]} ·{" "}
-                {new Date(d.updatedAt).toLocaleDateString(locale)}
-              </option>
-            ))}
-          </select>
-        </label>
-      )}
       {draft && definition && (
-        <section className="checklist-record">
-          <h2>{definition.name[locale]}</h2>
+        <section className="checklist-record field-report-editor">
           <div className="field-checklist-save-state">
-            <p className="caption" role="status" aria-live="polite">
-              {persistenceStatus === "saving"
-                ? l("Tallennetaan…", "Saving…")
-                : persistenceStatus === "error"
-                  ? l("Tallennus epäonnistui", "Save failed")
-                  : l("Tallennettu tälle laitteelle", "Saved on this device")}
-            </p>
+            {saveState()}
             <p className="supporting-copy">
               {l(
-                "Avaa uudelleen Omat listat -valikosta. Listat säilyvät tässä selaimessa ja sisältyvät asetusten varmuuskopioon.",
-                "Reopen from Your checklists. Lists stay in this browser and are included in Settings backups.",
-              )}
+                "Löydät kirjauksen Raportit-näkymästä. Kirjaukset sisältyvät asetusten varmuuskopioon.",
+                "Find this record in Reports. Records are included in Settings backups.",
+              )}{" "}
+              ·{" "}
+              {final
+                ? l("Valmis raportti", "Final report")
+                : l("Luonnos", "Draft")}{" "}
+              · {l("Versio", "Revision")} {draft.revision ?? 1}
             </p>
           </div>
-          <label>
-            {l("Kohteen nimi", "Site name")}
-            <input
-              value={draft.title}
-              maxLength={2000}
-              onChange={(e) => update({ title: e.target.value })}
-            />
-          </label>
-          <div className="field-tool-grid">
-            {commonChecklistFields.map((f) => (
-              <label key={f.id}>
-                {f.label[locale]}
+          {final && (
+            <div className="field-report-final-note">
+              <p>
+                {l(
+                  "Tämä raportti on viimeistelty. Muutokset tehdään uutena versiona, alkuperäinen säilyy.",
+                  "This report is finalised. Changes create a new revision while preserving the original.",
+                )}
+              </p>
+              <button
+                className="secondary-button"
+                onClick={revise}
+                disabled={data.checklistDrafts.length >= 1000}
+              >
+                {l("Luo uusi versio", "Create new revision")}
+              </button>
+            </div>
+          )}
+          <fieldset disabled={final} className="field-report-fields">
+            <legend className="sr-only">
+              {l("Raportin tiedot", "Report details")}
+            </legend>
+            {!final && data.equipment.length > 0 && (
+              <label>
+                {l("Liitä laitteeseen", "Link to equipment")}
+                <select
+                  value={draft.equipmentId ?? ""}
+                  onChange={(e) => {
+                    const equipment = data.equipment.find(
+                      (item) => item.id === e.target.value,
+                    );
+                    update({
+                      equipmentId: equipment?.id,
+                      ...(equipment
+                        ? {
+                            title: equipment.location || equipment.name,
+                            fields: {
+                              ...draft.fields,
+                              equipment: equipment.name,
+                            },
+                          }
+                        : {}),
+                    });
+                  }}
+                >
+                  <option value="">{l("Ei liitetty", "Unlinked")}</option>
+                  {data.equipment.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <label>
+              {l("Kohteen nimi", "Site name")}
+              <input
+                value={draft.title}
+                maxLength={300}
+                onChange={(e) => update({ title: e.target.value })}
+              />
+            </label>
+            <div className="field-report-grid">
+              {checklistReportFields(draft)
+                .filter((field) =>
+                  commonChecklistFields.some(
+                    (common) => common.id === field.id,
+                  ),
+                )
+                .map(renderField)}
+            </div>
+            <h3>
+              {l("Mittaukset ja havainnot", "Measurements and observations")}
+            </h3>
+            <div className="field-report-grid field-report-measurements">
+              {checklistReportFields(draft)
+                .filter(
+                  (field) =>
+                    !commonChecklistFields.some(
+                      (common) => common.id === field.id,
+                    ),
+                )
+                .map(renderField)}
+            </div>
+            {draft.kind === "commissioning" && !final && (
+              <div className="field-report-cycle-action">
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={() => {
+                    const result = buildCommissioningCycle(draft.fields);
+                    if (result.report) {
+                      update({ cycleReport: result.report });
+                      if (result.error) setCycleError(result.error);
+                    } else setCycleError(result.error ?? "invalid_input");
+                  }}
+                >
+                  {l("Muodosta log(p)–h-kaavio", "Generate log(p)–h chart")}
+                </button>
+                <p className="supporting-copy">
+                  {l(
+                    "Valinnainen kaavio tarvitsee tuetun kylmäaineen ja kelvolliset mittaukset. Mittausten muuttaminen poistaa aiemman kaavion.",
+                    "The optional chart requires a supported refrigerant and valid measurements. Editing the cycle measurements removes the previous chart.",
+                  )}
+                </p>
+              </div>
+            )}
+            <h3>{l("Työvaiheet", "Work steps")}</h3>
+            <p className="small">
+              {
+                draft.checkedIds.filter((id) =>
+                  definition.steps.some((step) => step.id === id),
+                ).length
+              }{" "}
+              / {definition.steps.length} {l("merkitty", "marked")}
+            </p>
+            {definition.steps.map((step) => (
+              <label className="checkbox field-checklist-choice" key={step.id}>
                 <input
-                  value={draft.fields[f.id] ?? ""}
-                  maxLength={2000}
+                  type="checkbox"
+                  checked={draft.checkedIds.includes(step.id)}
                   onChange={(e) =>
                     update({
-                      fields: { ...draft.fields, [f.id]: e.target.value },
+                      checkedIds: e.target.checked
+                        ? [...draft.checkedIds, step.id]
+                        : draft.checkedIds.filter((id) => id !== step.id),
                     })
                   }
                 />
+                {step.label[locale]}
               </label>
             ))}
-          </div>
-          <h3>{l("Työvaiheet", "Work steps")}</h3>
-          <p className="small" role="status">
-            {draft.checkedIds.length} / {definition.steps.length}{" "}
-            {l("merkitty", "marked")}
-          </p>
-          {definition.steps.map((s) => (
-            <label className="checkbox field-checklist-choice" key={s.id}>
-              <input
-                type="checkbox"
-                checked={draft.checkedIds.includes(s.id)}
-                onChange={(e) =>
-                  update({
-                    checkedIds: e.target.checked
-                      ? [...draft.checkedIds, s.id]
-                      : draft.checkedIds.filter((id) => id !== s.id),
-                  })
-                }
-              />
-              {s.label[locale]}
-            </label>
-          ))}
-          <h3>
-            {l("Mittaukset ja havainnot", "Measurements and observations")}
-          </h3>
-          {definition.fields.map((f) => (
-            <label key={f.id}>
-              {f.label[locale]}
-              <input
-                value={draft.fields[f.id] ?? ""}
-                maxLength={2000}
-                onChange={(e) =>
-                  update({
-                    fields: { ...draft.fields, [f.id]: e.target.value },
-                  })
-                }
+            <label>
+              {l("Muistiinpanot", "Notes")}
+              <textarea
+                rows={4}
+                value={draft.notes}
+                maxLength={10000}
+                onChange={(e) => update({ notes: e.target.value })}
               />
             </label>
-          ))}
-          <label>
-            {l("Muistiinpanot", "Notes")}
-            <textarea
-              rows={4}
-              value={draft.notes}
-              maxLength={10000}
-              onChange={(e) => update({ notes: e.target.value })}
-            />
-          </label>
+          </fieldset>
+          {cycleError && (
+            <p role="alert">
+              {commissioningCycleErrorText(cycleError, locale)}
+            </p>
+          )}
+          {draft.cycleReport && (
+            <section className="field-report-cycle">
+              <h3>{l("Tallennettava kiertokaavio", "Recorded cycle chart")}</h3>
+              {draft.cycleReport.chartSnapshot && (
+                <img
+                  alt={l(
+                    "Kylmäkierron log(p)–h-kaavio",
+                    "Refrigeration log(p)–h chart",
+                  )}
+                  src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(renderCycleChartSvg(draft.cycleReport.chartSnapshot, locale))}`}
+                />
+              )}
+              <div className="field-report-grid">
+                {draft.cycleReport.outputs.map((row, index) => (
+                  <p key={index}>
+                    {row.label[locale]}:{" "}
+                    <strong>
+                      {row.value} {row.unit}
+                    </strong>
+                  </p>
+                ))}
+              </div>
+            </section>
+          )}
+          {saveState()}
+          {formError && <p role="alert">{formError}</p>}
           <div className="field-actions">
+            {!final && (
+              <button
+                className="primary"
+                onClick={finalise}
+                disabled={persistenceStatus !== "saved"}
+              >
+                {l("Merkitse raportti valmiiksi", "Finalise report")}
+              </button>
+            )}
             <button
               className="secondary-button"
               onClick={() => setPrintError(!printChecklistDraft(draft, locale))}
@@ -1406,7 +1744,7 @@ export function WorkChecklists() {
               onClick={() => setDeletePending(true)}
             >
               <Trash2 size={18} />
-              {l("Poista lista", "Delete checklist")}
+              {l("Poista raportti", "Delete report")}
             </button>
           </div>
           {printError && (
@@ -1421,8 +1759,8 @@ export function WorkChecklists() {
             <div className="field-confirm">
               <p>
                 {l(
-                  "Poistetaanko tämä lista? Poistoa ei voi perua.",
-                  "Delete this checklist? This cannot be undone.",
+                  "Poistetaanko tämä raportti? Poistoa ei voi perua.",
+                  "Delete this report? This cannot be undone.",
                 )}
               </p>
               <button
@@ -1440,8 +1778,7 @@ export function WorkChecklists() {
                       (d) => d.id !== selected,
                     ),
                   }));
-                  setSelected("");
-                  setDeletePending(false);
+                  go("/reports");
                 }}
               >
                 {l("Vahvista poisto", "Confirm deletion")}
@@ -1453,7 +1790,7 @@ export function WorkChecklists() {
       <Sources>
         <p>
           {l(
-            "Listat ovat PhaseKitin yleisiä kirjauspohjia. Kohteen valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Poikkeavat tai soveltumattomat kohdat kirjataan muistiinpanoihin.",
+            "Raportit ovat PhaseKitin yleisiä kirjauspohjia. Kohteen valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Poikkeavat tai soveltumattomat kohdat kirjataan muistiinpanoihin.",
             "These are generic PhaseKit recording templates. Equipment manufacturer instructions determine sequence, media, limits and acceptance. Record exceptions or non-applicable steps in Notes.",
           )}
         </p>

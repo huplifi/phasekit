@@ -220,7 +220,7 @@ test("saved cycle retains its vector chart across reload and prints the stored c
     save.getByRole("button", { name: "Tallennettu" }),
   ).toBeDisabled();
 
-  await page.goto("/#/saved");
+  await page.goto("/#/reports");
   const report = page.locator(".report-entry");
   await expect(report).toHaveCount(1);
   await report.locator(":scope > summary").click();

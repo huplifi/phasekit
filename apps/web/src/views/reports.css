@@ -299,3 +299,46 @@
 .report-actions {
   padding-block: 12px 20px;
 }
+
+.report-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1rem;
+  margin-block: 1.5rem;
+}
+.report-filters label {
+  display: grid;
+  gap: 0.5rem;
+}
+.field-report-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.25rem 0;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--divider);
+  border-radius: 0;
+}
+.field-report-link > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.field-report-link .secondary {
+  display: block;
+  margin-top: 0.35rem;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+.field-report-link svg {
+  flex: 0 0 auto;
+}
+@media (max-width: 560px) {
+  .report-filters {
+    grid-template-columns: 1fr;
+  }
+}

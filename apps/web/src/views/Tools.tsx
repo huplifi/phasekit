@@ -16,8 +16,8 @@ export function Tools() {
       <h1>{t("tools")}</h1>
       <p className="secondary">
         {data.locale === "fi"
-          ? "Valitse laskuri tai työmaan tarkistuslista."
-          : "Choose a calculator or a field-work checklist."}
+          ? "Valitse laskuri. Työmaakirjaukset löydät Raportit-osiosta."
+          : "Choose a calculator. Field records are in Reports."}
       </p>
       <ToolMenu />
       <section className="section">
@@ -53,9 +53,9 @@ export function Tools() {
               icon: Ruler,
             },
             {
-              path: "checklists",
-              fi: "Tarkistuslistat",
-              en: "Work checklists",
+              path: "reports",
+              fi: "Työmaaraportit",
+              en: "Field reports",
               icon: ListChecks,
             },
           ].map(({ path, fi, en, icon: Icon }) => (

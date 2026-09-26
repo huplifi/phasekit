@@ -306,7 +306,7 @@ export function App() {
   const nav = [
     { key: "refrigerants", path: "/", icon: Snowflake },
     { key: "tools", path: "/tools", icon: Wrench },
-    { key: "saved", path: "/saved", icon: Bookmark },
+    { key: "saved", path: "/reports", icon: Bookmark },
     { key: "settings", path: "/settings", icon: SettingsIcon },
   ] as const;
   const activeNav = [
@@ -321,10 +321,9 @@ export function App() {
     "thermal-power",
     "electrical",
     "pipe",
-    "checklists",
   ].includes(section)
     ? "tools"
-    : section === "saved" || section === "equipment"
+    : ["saved", "reports", "equipment", "checklists"].includes(section)
       ? "saved"
       : section === "settings" || section === "releases"
         ? "settings"
@@ -477,7 +476,7 @@ export function App() {
             <WorkChecklists />
           ) : section === "equipment" ? (
             <Equipment />
-          ) : section === "saved" ? (
+          ) : section === "saved" || section === "reports" ? (
             <Saved />
           ) : section === "releases" ? (
             <ReleaseHistory />
@@ -510,7 +509,13 @@ export function App() {
               aria-current={activeNav === key ? "page" : undefined}
             >
               <Icon size={24} />
-              <span>{t(key)}</span>
+              <span>
+                {key === "saved"
+                  ? data.locale === "fi"
+                    ? "Raportit"
+                    : "Reports"
+                  : t(key)}
+              </span>
             </a>
           ))}
         </nav>

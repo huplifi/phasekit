@@ -29,7 +29,7 @@ test("saved calculation keeps its original identity while its equipment link cha
     .selectOption({ label: "Unit A" });
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
 
-  await page.goto("/#/saved");
+  await page.goto("/#/reports");
   const report = page.locator(".report-entry").first();
   await expect(report.locator(":scope > summary")).toContainText(
     "Laite: Unit A",
@@ -54,7 +54,7 @@ test("saved calculation keeps its original identity while its equipment link cha
   const unitB = page.locator(".equipment-card", { hasText: "Unit B" });
   await expect(unitB.locator(".equipment-record-link")).toHaveCount(1);
   await unitB.locator(".equipment-record-link").click();
-  await expect(page).toHaveURL(/#\/saved\//);
+  await expect(page).toHaveURL(/#\/reports\//);
   await expect(page.locator(".report-entry[open]")).toContainText("20 mm");
 
   await page

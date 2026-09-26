@@ -1,6 +1,14 @@
-import { Download, ImageDown, Printer, Trash2 } from "lucide-react";
+import {
+  Download,
+  ImageDown,
+  Printer,
+  Trash2,
+  Plus,
+  ChevronRight,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useApp } from "../context";
+import { checklistDefinitions } from "../../../../packages/core/src/field-tools";
 import { formatDate } from "../../../../packages/i18n/src";
 import { CheckResultView } from "./Check";
 import { downloadJSON } from "../storage";
@@ -26,6 +34,49 @@ const l = (locale: "fi" | "en", fi: string, en: string) =>
 
 export function Saved() {
   const { t, data, setData, go, notify } = useApp();
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState("all");
+  const matches = (...values: (string | undefined)[]) =>
+    values
+      .join(" ")
+      .toLocaleLowerCase(data.locale)
+      .includes(query.trim().toLocaleLowerCase(data.locale));
+  const fieldReports = data.checklistDrafts
+    .filter(
+      (record) =>
+        (filter === "all" ||
+          filter === "field" ||
+          filter === record.kind ||
+          (filter === "draft" && record.status !== "final") ||
+          (filter === "final" && record.status === "final")) &&
+        matches(
+          record.title,
+          record.fields.equipment,
+          record.fields.technician,
+          data.equipment.find((item) => item.id === record.equipmentId)?.name,
+          data.equipment.find((item) => item.id === record.equipmentId)
+            ?.location,
+          checklistDefinitions[record.kind].name[data.locale],
+        ),
+    )
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+  const toolReports = data.toolRecords.filter(
+    (record) =>
+      (filter === "all" || filter === "calculation") &&
+      matches(
+        reportSummary(record, data.locale),
+        record.equipmentName,
+        data.equipment.find((item) => item.id === record.equipmentId)?.name,
+      ),
+  );
+  const snapshots = data.snapshots.filter(
+    (record) =>
+      (filter === "all" || filter === "check") &&
+      matches(
+        record.refrigerant.designation,
+        l(data.locale, "Vuototarkastus", "Leak check"),
+      ),
+  );
   const selectedId = selectedSavedReportId(window.location.hash);
   useEffect(() => {
     if (selectedId)
@@ -70,7 +121,7 @@ export function Saved() {
   return (
     <>
       <div className="saved-heading-actions">
-        <h1>{t("saved")}</h1>
+        <h1>{l(data.locale, "Raportit", "Reports")}</h1>
         <button
           className="secondary-button"
           type="button"
@@ -79,11 +130,106 @@ export function Saved() {
           {l(data.locale, "Hallitse laitteita", "Manage equipment")}
         </button>
       </div>
-      {data.snapshots.length === 0 && data.toolRecords.length === 0 ? (
-        <p className="empty">{t("emptySaved")}</p>
+      <p className="secondary">
+        {l(
+          data.locale,
+          "Työmaakirjaukset ja tallennetut laskelmat tässä selaimessa. Luonnokset tallentuvat automaattisesti.",
+          "Field records and saved calculations in this browser. Drafts save automatically.",
+        )}
+      </p>
+      <button className="primary" onClick={() => go("/checklists/new")}>
+        <Plus size={18} />
+        {l(data.locale, "Uusi raportti", "New report")}
+      </button>
+      <div className="report-filters">
+        <label>
+          {l(
+            data.locale,
+            "Hae raporttia, kohdetta tai laitetta",
+            "Search report, site or equipment",
+          )}
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </label>
+        <label>
+          {l(data.locale, "Näytä", "Show")}
+          <select
+            value={filter}
+            onChange={(event) => setFilter(event.target.value)}
+          >
+            {[
+              ["all", "Kaikki", "All"],
+              ["draft", "Luonnokset", "Drafts"],
+              ["final", "Viimeistellyt", "Finalised"],
+              ["field", "Työmaaraportit", "Field reports"],
+              ["calculation", "Laskelmat", "Calculations"],
+              ["check", "Vuototarkastukset", "Leak checks"],
+              ...Object.entries(checklistDefinitions).map(
+                ([key, definition]) => [
+                  key,
+                  definition.name.fi,
+                  definition.name.en,
+                ],
+              ),
+            ].map(([value, fi, en]) => (
+              <option value={value} key={value}>
+                {l(data.locale, fi, en)}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+      {fieldReports.length > 0 && (
+        <section
+          className="report-list"
+          aria-label={l(data.locale, "Työmaaraportit", "Field reports")}
+        >
+          <h2>{l(data.locale, "Työmaaraportit", "Field reports")}</h2>
+          {fieldReports.map((record) => (
+            <button
+              key={record.id}
+              className="field-report-link"
+              onClick={() => go(`/checklists/${encodeURIComponent(record.id)}`)}
+            >
+              <span>
+                <strong className="report-summary">
+                  {checklistDefinitions[record.kind].name[data.locale]} ·{" "}
+                  {record.title ||
+                    l(data.locale, "Nimetön kohde", "Untitled site")}
+                </strong>
+                <span className="secondary">
+                  {record.status === "final"
+                    ? l(data.locale, "Viimeistelty", "Finalised")
+                    : l(data.locale, "Luonnos", "Draft")}{" "}
+                  · {formatDate(record.updatedAt, data.locale)}
+                  {record.fields.equipment
+                    ? ` · ${record.fields.equipment}`
+                    : ""}{" "}
+                  · {l(data.locale, "Versio", "Revision")}{" "}
+                  {record.revision ?? 1}
+                </span>
+              </span>
+              <ChevronRight size={20} aria-hidden="true" />
+            </button>
+          ))}
+        </section>
+      )}
+      {snapshots.length === 0 &&
+      toolReports.length === 0 &&
+      fieldReports.length === 0 ? (
+        <p className="empty">
+          {l(
+            data.locale,
+            "Ei raportteja näillä valinnoilla. Luo uusi raportti tai muuta hakua.",
+            "No reports match. Create a report or change your search.",
+          )}
+        </p>
       ) : (
         <>
-          {data.toolRecords.length > 0 && (
+          {toolReports.length > 0 && (
             <section
               className="report-list"
               aria-label={l(
@@ -95,7 +241,7 @@ export function Saved() {
               <h2>
                 {l(data.locale, "Tallennetut laskelmat", "Saved calculations")}
               </h2>
-              {data.toolRecords.map((record) => (
+              {toolReports.map((record) => (
                 <ToolReport
                   key={record.id}
                   record={record}
@@ -106,11 +252,17 @@ export function Saved() {
               ))}
             </section>
           )}
-          {data.snapshots.map((s) => (
+          {snapshots.map((s) => (
             <details className="saved-entry" key={s.id}>
               <summary>
                 <span>
-                  <strong className="mono">{s.refrigerant.designation}</strong>
+                  <strong className="report-summary">
+                    {s.refrigerant.designation} ·{" "}
+                    {l(data.locale, "Vuototarkastus", "Leak check")} ·{" "}
+                    {s.result.months !== null
+                      ? t("months", { count: s.result.months })
+                      : t(s.result.state)}
+                  </strong>
                   <span className="secondary">
                     {formatDate(s.createdAt, data.locale)} ·{" "}
                     {s.result.input.charge} {s.result.input.unit}

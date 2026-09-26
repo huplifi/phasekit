@@ -22,7 +22,7 @@ export default defineConfig({
     {
       name: "desktop-webkit",
       testMatch:
-        /round3-.*spec.ts|release-history.spec.ts|beta-.*round-two.spec.ts|beta-feedback.spec.ts|mobile-layout.spec.ts|shsc-pair.spec.ts|field-tools.spec.ts|check-schedule.spec.ts|converters-preview.spec.ts|reports-preview.spec.ts|search-filters.spec.ts/,
+        /field-report-.*spec.ts|reports-catalogue.spec.ts|round3-.*spec.ts|release-history.spec.ts|beta-.*round-two.spec.ts|beta-feedback.spec.ts|mobile-layout.spec.ts|shsc-pair.spec.ts|field-tools.spec.ts|check-schedule.spec.ts|converters-preview.spec.ts|reports-preview.spec.ts|search-filters.spec.ts/,
       use: {
         browserName: "webkit",
         viewport: { width: 1440, height: 900 },
@@ -32,7 +32,7 @@ export default defineConfig({
     {
       name: "mobile-webkit",
       testMatch:
-        /round3-.*spec.ts|release-history.spec.ts|beta-.*round-two.spec.ts|beta-feedback.spec.ts|mobile-layout.spec.ts|shsc-pair.spec.ts|field-tools.spec.ts|check-schedule.spec.ts|converters-preview.spec.ts|reports-preview.spec.ts|search-filters.spec.ts/,
+        /field-report-.*spec.ts|reports-catalogue.spec.ts|round3-.*spec.ts|release-history.spec.ts|beta-.*round-two.spec.ts|beta-feedback.spec.ts|mobile-layout.spec.ts|shsc-pair.spec.ts|field-tools.spec.ts|check-schedule.spec.ts|converters-preview.spec.ts|reports-preview.spec.ts|search-filters.spec.ts/,
       use: {
         browserName: "webkit",
         viewport: { width: 390, height: 844 },

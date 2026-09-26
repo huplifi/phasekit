@@ -55,7 +55,7 @@ test("the supplied R134a paper example plots with gauge pressures", async ({
   await expect(
     page.getByRole("button", { name: "Tallennettu", exact: true }),
   ).toBeDisabled();
-  await page.goto("/#/saved");
+  await page.goto("/#/reports");
   const report = page.locator(".report-entry");
   await report.locator(":scope > summary").click();
   await expect(report).toContainText("1,91 bar(g)");

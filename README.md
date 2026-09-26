@@ -10,11 +10,11 @@ The stable `main` release remains **0.1.0**. The separate public beta contains t
 - kg ↔ t CO₂e conversion using a visible, source-backed GWP basis and source-gated component breakdown.
 - EU/Finland periodic leak-check assessment, contextual restrictions and effective dates, completed-inspection-based next due date and shareable explanation.
 - Search with regulation/model/oil filters, favourites and comparison.
-- General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity, material thermal expansion, bounded single-phase straight-pipe pressure loss and local work checklists.
-- Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and consistent result-first print-to-PDF reports. Commissioning and other work checklists retain both marked and unmarked steps and written observations.
+- General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity, material thermal expansion, bounded single-phase straight-pipe pressure loss and local field reports.
+- Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and consistent result-first print-to-PDF reports. Reports collects drafts, finalised field reports, leak checks and calculations. Commissioning, evacuation, tightness, service and refrigerant records retain observations and marked/unmarked steps. Date, technician and signature name are separate; finalising freezes the record and editing creates a new revision. Supported commissioning measurements can attach a frozen cycle chart.
 - Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
 
-[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://beta.phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-UX-ROUND-THREE.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
+[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://beta.phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-FIELD-REPORTS.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
 ## Development
 
@@ -62,7 +62,7 @@ For the production configuration, import [huplifi/phasekit](https://github.com/h
 
 No runtime secrets or backend services are required. Add `phasekit.app` as a custom domain in Netlify and follow the DNS records supplied for that project. See [deployment instructions](docs/DEPLOYMENT.md).
 
-Browser storage belongs to an origin. Export a backup from the old site before moving to the new domain, then import it in Settings. Favourites and saved calculations do not migrate automatically.
+Browser storage belongs to an origin. Export a backup from the old site before moving to the new domain, then import it in Settings. Favourites, calculations and field reports do not migrate automatically. Reports are local to this browser, not cloud-synchronised. Export a Settings backup for safekeeping; PDF/text exports are readable documents, while the JSON backup preserves editable records.
 
 ## Repository layout
 
@@ -100,3 +100,5 @@ The EU/Finland rule engine is a proof of concept requiring qualified regulatory 
 ## Licence
 
 PhaseKit's original code and documentation are available under the [MIT licence](LICENSE). Bundled fonts, dependencies and source-derived refrigerant material retain their own terms and attribution; see [third-party notices](THIRD_PARTY_NOTICES.md). The project licence does not relicense external source publications.
+
+The current beta field-report workflow and acceptance criteria are documented in [Beta field reports](docs/BETA-FIELD-REPORTS.md).

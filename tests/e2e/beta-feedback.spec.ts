@@ -29,12 +29,14 @@ for (const theme of ["light", "dark"] as const) {
       style: ".main-nav { visibility: hidden; }",
     });
     await page.goto("/#/checklists");
-    await page.getByRole("button", { name: "Luo lista", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Luo raportti", exact: true })
+      .click();
     const checkbox = page.getByRole("checkbox").first();
     await checkbox.check();
     await expect(
-      page.getByRole("status").filter({ hasText: "Tallennettu" }),
-    ).toBeVisible();
+      page.locator(".field-checklist-save-state > [role=status]"),
+    ).toHaveText("Tallennettu automaattisesti tähän selaimeen");
     expect(
       await checkbox.evaluate((el) => getComputedStyle(el).appearance),
     ).toBe("none");

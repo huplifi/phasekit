@@ -18,7 +18,8 @@ test("preview tools remain reachable in English offline, with narrow-screen labe
     ["thermal-power", "Liquid thermal power"],
     ["electrical", "Electrical calculator"],
     ["pipe", "Pipe calculators"],
-    ["checklists", "Work checklists"],
+    ["checklists", "New report"],
+    ["reports", "Reports"],
     ["equipment", "Equipment and sites"],
   ] as const;
   for (const [route, title] of routes) {
