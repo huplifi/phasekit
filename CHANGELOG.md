@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.1 — 2026-09-27 · Beta
+
+Start of the next update cycle
+
+- The new beta cycle starts from stable 0.2.0. This version introduces no new calculation features.
+- Upcoming changes will be tested in the separate beta first. The BETA icon and PhaseKit Beta installation name distinguish it from the stable app.
+
 ## 0.2.0 — 2026-09-27 · Stable
 
 Field reports and expanded refrigeration tools
