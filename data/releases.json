@@ -1,5 +1,30 @@
 [
   {
+    "version": "0.2.0",
+    "date": "2026-09-27",
+    "channel": "stable",
+    "title": {
+      "fi": "Työmaaraportit ja laajennetut kylmäalan työkalut",
+      "en": "Field reports and expanded refrigeration tools"
+    },
+    "changes": {
+      "fi": [
+        "Betassa testatut raportit, laskurit ja käyttöliittymäparannukset ovat nyt vakaassa versiossa.",
+        "Raportit kokoaa työmaakirjaukset, luonnokset ja tallennetut laskelmat. Käyttöönotto-, tyhjiöinti-, tiiviys-, huolto- ja kylmäainekirjaukset voi liittää laitteeseen, viimeistellä ja tulostaa.",
+        "Tulosteissa korostuvat mittaukset ja tulokset. Kylmäkierron kaaviot säilyttävät valitut apukäyrät, vertailu sisältää öljytyypit, ja tulostusnäkymästä pääsee takaisin sovellukseen.",
+        "Mukana ovat yksikkömuunnokset, lämpöteho-, sähkö- ja rajatut putkilaskurit sekä selkeämmät vuototarkastusten määräpäivät ja CO₂e-erittelyt.",
+        "Vanhan vakaan version tallennukset säilyvät. Beta ja vakaa versio käyttävät edelleen erillisiä paikallisia tallennuksia; siirto onnistuu asetusten JSON-varmuuskopiolla."
+      ],
+      "en": [
+        "Reports, calculators and interface improvements tested in beta are now available in the stable release.",
+        "Reports brings together field records, drafts and saved calculations. Commissioning, evacuation, tightness, service and refrigerant records can be linked to equipment, finalised and printed.",
+        "Printouts emphasise measurements and results. Cycle charts retain selected guide curves, comparisons include oil types, and print previews provide a return to the app.",
+        "Includes unit conversion, thermal power, electrical and bounded pipe calculators, clearer leak-check due dates and component CO₂e breakdowns.",
+        "Existing stable-version records are retained. Beta and stable still use separate local storage; transfer records through the JSON backup in Settings."
+      ]
+    }
+  },
+  {
     "version": "0.2.0-beta.6",
     "date": "2026-09-26",
     "channel": "beta",

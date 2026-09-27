@@ -17,7 +17,7 @@ describe("release publication contract", () => {
       /Duplicate/,
     );
     expect(() =>
-      validateReleases([{ ...releases[0], channel: "stable" }], version),
+      validateReleases([{ ...releases[0], channel: releases[0].channel === "beta" ? "stable" : "beta" }], version),
     ).toThrow(/channel/);
     expect(() =>
       validateReleases(

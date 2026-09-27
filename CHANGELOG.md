@@ -4,6 +4,16 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.2.0 — 2026-09-27 · Stable
+
+Field reports and expanded refrigeration tools
+
+- Reports, calculators and interface improvements tested in beta are now available in the stable release.
+- Reports brings together field records, drafts and saved calculations. Commissioning, evacuation, tightness, service and refrigerant records can be linked to equipment, finalised and printed.
+- Printouts emphasise measurements and results. Cycle charts retain selected guide curves, comparisons include oil types, and print previews provide a return to the app.
+- Includes unit conversion, thermal power, electrical and bounded pipe calculators, clearer leak-check due dates and component CO₂e breakdowns.
+- Existing stable-version records are retained. Beta and stable still use separate local storage; transfer records through the JSON backup in Settings.
+
 ## 0.2.0-beta.6 — 2026-09-26 · Beta
 
 Print navigation, charts and comparisons

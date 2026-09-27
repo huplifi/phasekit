@@ -2,7 +2,7 @@
 
 A source-attributed refrigerant reference and calculation app for refrigeration work. Built with React, strict TypeScript and Vite, with local IndexedDB storage and an installable offline PWA. The interface supports Finnish and English; project documentation is maintained in English.
 
-The stable `main` release remains **0.1.0**. The separate public beta contains the expanded field tools, refrigeration cycle and P–h chart, saved reports, and equipment-linked history. Beta features and data are isolated from stable production until an explicitly authorised release.
+The stable release **0.2.0** includes the expanded field tools, refrigeration cycle and P–h chart, saved reports and equipment-linked history. The separate public beta is the testing channel for subsequent updates. Beta and stable retain independent browser storage.
 
 - **249 refrigerant records**, including legacy, ODS, natural and newer blends. Coverage is explicit: this is not a complete inventory of every refrigerant or property.
 - Bidirectional pressure–temperature conversion for **124 refrigerants**.
@@ -14,7 +14,7 @@ The stable `main` release remains **0.1.0**. The separate public beta contains t
 - Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and consistent result-first print-to-PDF reports. Reports collects drafts, finalised field reports, leak-check assessments and calculations in one searchable chronological catalogue. Commissioning, evacuation, tightness, service and refrigerant records retain observations and marked/unmarked steps. Work date and technician are separate; signature and printed name are written on the printed document; finalising freezes the record and editing creates a new revision. Supported commissioning measurements can attach a frozen cycle chart. Commissioning records include evacuation readings and installation-document preparation fields based on VNa 1063/2025 §9; external test protocols and the responsible person’s paper signature remain necessary. See [the requirements matrix](docs/COMMISSIONING-REQUIREMENTS.md).
 - Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
 
-[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://beta.phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-PRINT-AND-COMPARISON.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
+[Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-PRINT-AND-COMPARISON.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
 ## Development
 
@@ -49,7 +49,7 @@ Chromium covers mobile and desktop workflows; targeted WebKit projects cover for
 
 ## Netlify deployment
 
-**This expansion is a separate public beta.** `beta` deploys to the `phasekit-beta` Netlify project; `main` still deploys the stable app. Feature PRs should target `beta`. A beta-to-main release PR requires the owner’s explicit stable-release decision. Beta and preview storage are separate from production. See the [release workflow](docs/BETA-RELEASE-WORKFLOW.md).
+`beta` deploys the public testing channel to the `phasekit-beta` Netlify project; `main` deploys the stable app. Feature PRs should target `beta`. A beta-to-main release PR requires the owner’s explicit stable-release decision. Beta and preview storage are separate from production. See the [release workflow](docs/BETA-RELEASE-WORKFLOW.md).
 
 For the production configuration, import [huplifi/phasekit](https://github.com/huplifi/phasekit) into Netlify and deploy `main`. The repository's `netlify.toml` specifies the build command, publish directory and Node version:
 

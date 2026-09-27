@@ -32,7 +32,7 @@ Once the CNAME resolves, use [the beta domain panel](https://app.netlify.com/pro
 4. Merge reviewed work into `beta`. That updates the public beta automatically. The stable site does not change.
 5. For release, open a PR from `beta` into `main`, review the aggregate changes and source/model versions, and obtain the owner's explicit stable-release decision.
 6. Set the root `package.json` version to the intended stable version (remove the prerelease suffix), add its matching stable history entry, verify the channel in Settings and rerun checks. The root version is the single source for the displayed application version; the build revision comes from Netlify `COMMIT_REF`. Merge only after checks pass. The existing stable Netlify project deploys `main` automatically.
-7. Record the stable Git commit/deploy URL. Verify the actual stable site and retain the previous published deploy as the rollback target.
+7. Record the stable Git commit/deploy URL. Verify the actual stable site and retain the previous published deploy as a reference. Before any rollback, confirm storage compatibility: 0.1.0 drops the newer report/equipment collections when it writes its older schema. After 0.2.0 records exist, prefer a corrective release retaining the 0.2.0 storage model rather than rolling back to 0.1.0.
 
 Do not force-push shared branches, auto-merge beta into main, or use a production deployment command on the stable project for testing. GitHub branch protection can additionally enforce the `verify` check, but no protection rule is claimed configured by this document.
 

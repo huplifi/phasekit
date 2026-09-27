@@ -95,12 +95,14 @@ test("checklist control pairs and footer actions align", async ({
   expect(Math.abs(print!.height - download!.height)).toBeLessThan(2);
 });
 
-test("beta version and shared choices expose their state", async ({ page }) => {
+test("release version and shared choices expose their state", async ({ page }) => {
   await page.goto("/#/settings");
   await expect(page.locator(".about-details")).toContainText(
     packageInfo.version,
   );
-  await expect(page.locator(".about-details")).toContainText("Beta");
+  await expect(page.locator(".about-details")).toContainText(
+    (await page.locator(".beta-banner").count()) ? "Beta" : "Vakaa",
+  );
   await page.goto("/#/pipe");
   const group = page.getByRole("group", { name: "Putkilaskurin tila" });
   const geometry = group.getByRole("button", { name: "Tilavuus ja virtaus" });
