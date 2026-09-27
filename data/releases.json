@@ -1,0 +1,198 @@
+[
+  {
+    "version": "0.2.0",
+    "date": "2026-09-27",
+    "channel": "stable",
+    "title": {
+      "fi": "Työmaaraportit ja laajennetut kylmäalan työkalut",
+      "en": "Field reports and expanded refrigeration tools"
+    },
+    "changes": {
+      "fi": [
+        "Betassa testatut raportit, laskurit ja käyttöliittymäparannukset ovat nyt vakaassa versiossa.",
+        "Raportit kokoaa työmaakirjaukset, luonnokset ja tallennetut laskelmat. Käyttöönotto-, tyhjiöinti-, tiiviys-, huolto- ja kylmäainekirjaukset voi liittää laitteeseen, viimeistellä ja tulostaa.",
+        "Tulosteissa korostuvat mittaukset ja tulokset. Kylmäkierron kaaviot säilyttävät valitut apukäyrät, vertailu sisältää öljytyypit, ja tulostusnäkymästä pääsee takaisin sovellukseen.",
+        "Mukana ovat yksikkömuunnokset, lämpöteho-, sähkö- ja rajatut putkilaskurit sekä selkeämmät vuototarkastusten määräpäivät ja CO₂e-erittelyt.",
+        "Vanhan vakaan version tallennukset säilyvät. Beta ja vakaa versio käyttävät edelleen erillisiä paikallisia tallennuksia; siirto onnistuu asetusten JSON-varmuuskopiolla."
+      ],
+      "en": [
+        "Reports, calculators and interface improvements tested in beta are now available in the stable release.",
+        "Reports brings together field records, drafts and saved calculations. Commissioning, evacuation, tightness, service and refrigerant records can be linked to equipment, finalised and printed.",
+        "Printouts emphasise measurements and results. Cycle charts retain selected guide curves, comparisons include oil types, and print previews provide a return to the app.",
+        "Includes unit conversion, thermal power, electrical and bounded pipe calculators, clearer leak-check due dates and component CO₂e breakdowns.",
+        "Existing stable-version records are retained. Beta and stable still use separate local storage; transfer records through the JSON backup in Settings."
+      ]
+    }
+  },
+  {
+    "version": "0.2.0-beta.6",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Tulostuksen paluu, kaaviot ja vertailut",
+      "en": "Print navigation, charts and comparisons"
+    },
+    "changes": {
+      "fi": [
+        "Tulostusnäkymässä on oma paluulinkki ja Tulosta / PDF -painike. Toiminnot eivät näy paperilla.",
+        "Kylmäkierron tulosteessa on tarkempi ruudukko sekä valitut lämpötila-, entropia- ja ominaistilavuuskäyrät. Näkymävalinnat säilyvät uuden tallennetun laskelman mukana.",
+        "Kylmäainevertailun voi tulostaa. Vertailussa näkyvät myös aineistoon perustuvat öljytyypit ja niiden rajaukset.",
+        "Raporttilistan riveillä on yhtenäinen asettelu, tyyppitunnisteet ja erilliset luonnos- ja viimeistelty-tilat."
+      ],
+      "en": [
+        "Print previews have a back link and a manual Print / PDF button. Controls stay off paper.",
+        "Cycle printouts include a finer grid and the selected temperature, entropy and specific-volume guides. New saved calculations retain their chart view.",
+        "Refrigerant comparisons can be printed and now include sourced oil types and their limitations.",
+        "Report list rows share a consistent layout, type tags and separate draft/final status labels."
+      ]
+    }
+  },
+  {
+    "version": "0.2.0-beta.5",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät raportit ja asennustodistuksen tiedot",
+      "en": "Clearer reports and installation-document preparation"
+    },
+    "changes": {
+      "fi": [
+        "Raportit ja tallennetut laskelmat löytyvät yhdestä aikajärjestyksessä olevasta listasta. Haku, uuden raportin luonti ja laitteiden hallinta on selkeytetty.",
+        "Käyttöönottoraporttiin on lisätty asennustodistuksen tietoja VNa 1063/2025 §9:n pohjalta: vastuuhenkilö, lupanumerot, koepöytäkirjojen viitteet ja tyhjiöintimittaukset. Kenttien täyttäminen ei korvaa liitteitä, teknistä hyväksyntää tai vastuuhenkilön allekirjoitusta.",
+        "Tulosteiden mittaukset, taulukot ja lähdetiedot on tiivistetty. Allekirjoitus ja nimenselvennys täytetään paperille.",
+        "Myöhässä oleva vuototarkastus erottuu arviointipäivän perusteella punaisena. Selitteen kopiointi ja jakaminen on koottu avattavan seliteosion sisälle.",
+        "Päivämääräkenttien leveyskorjaus koskee nyt myös raporttilomakkeita. Laitteiden tyhjän tilan reunukset ja tukitekstien välit on korjattu."
+      ],
+      "en": [
+        "Reports and saved calculations share one chronological catalogue with clearer search, report creation and equipment management.",
+        "Commissioning records now support installation-document preparation under Finnish Decree 1063/2025 §9: responsible person, licence numbers, test-report references and evacuation readings. Completing fields does not replace attachments, technical acceptance or the responsible person’s signature.",
+        "Printed measurements, tables and provenance are more compact. Signature and printed-name lines are completed on paper.",
+        "Overdue leak checks are highlighted in red against the assessment date. Copy and share actions are inside the explanation disclosure.",
+        "The date-input width fix now covers report forms. Equipment empty-state padding and supporting-copy spacing are corrected."
+      ]
+    }
+  },
+  {
+    "version": "0.2.0-beta.4",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Työmaaraportit mukaan työpäivään",
+      "en": "Field reports for everyday work"
+    },
+    "changes": {
+      "fi": [
+        "Raportit kokoaa työmaakirjaukset, luonnokset ja tallennetut laskelmat. Raportteja voi hakea kohteen tai laitteen nimellä ja suodattaa tyypin mukaan.",
+        "Automaattinen tallennus näkyy myös lomakkeen lopussa. Viimeistellyn raportin muokkaus luo uuden version ja säilyttää alkuperäisen.",
+        "Päivä, tekijä ja allekirjoituksen nimenselvennys ovat erillisiä kenttiä. Tyhjiöinnin ja pitokokeen mittaukset sekä käyttöönoton käyntiarvot kirjataan erikseen.",
+        "Käyttöönoton tuetuista mittausarvoista voi muodostaa tulistus- ja alijäähdytyslaskelman sekä log(p)–h-kaavion raporttiin. Aineisto ja kaavio säilyvät tallenteen mukana.",
+        "Tulosteissa näkyvät raportin tyyppi, keskeiset mittaukset, versiotiedot ja allekirjoituskohta. Mukana ovat myös huolto- ja kylmäainekirjauspohjat.",
+        "Tarkistuslistojen rastit ovat siniset. Tallennettujen vuototarkastusten otsikot ja fontit yhtenäistetty. Aiemmat kirjaukset ja niiden vapaatekstit säilyvät."
+      ],
+      "en": [
+        "Reports brings together field records, drafts and saved calculations, with site/equipment search and type filters.",
+        "Automatic save feedback also appears beside the final actions. Editing a finalised report creates a new revision and preserves the original.",
+        "Work date, technician and printed signature name have separate fields. Evacuation and standing-test measurements and commissioning readings are recorded individually.",
+        "Supported commissioning measurements can generate frozen superheat/subcooling results and a log(p)–h diagram, retaining sources and chart data with the record.",
+        "Printouts show report type, key measurements, version information and a signature line. Service and refrigerant movement templates are included.",
+        "Checklist ticks are blue and saved leak-check summaries share consistent titles and typography. Existing records and original free text remain available."
+      ]
+    }
+  },
+  {
+    "version": "0.2.0-beta.3",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät tulokset ja työmaan tulosteet",
+      "en": "Clearer results and field reports"
+    },
+    "changes": {
+      "fi": [
+        "Tallennetut laskelmat näyttävät päätuloksen ensin. Laitekytkentä, erittely ja lähteet löytyvät omista osioistaan.",
+        "Yhtenäiset tulosteet laskelmille ja tarkistuslistoille. Vuototarkastuksen tulosteessa näkyvät kylmäaine, täyttömäärä sekä edellinen ja seuraava tarkastuspäivä, kun ne ovat saatavilla.",
+        "Paine–lämpötilalaskurin tuloskortti seuraa viimeksi muokattua arvoa. Vuototarkastuksen selite sekä tallennus- ja tulostustoiminnot ovat selkeämmin esillä.",
+        "Kaavion sovitus yhdellä kytkimellä ja apukäyrien arvot ilman päällekkäisiä tekstejä. Kaikki valitut arvot löytyvät myös erillisestä luettelosta.",
+        "Kylmäainevalitsimen välit ja vieritysvihje selkeytetty. Suosikin merkitseminen ei siirrä riviä kesken selaamisen.",
+        "Versiohistorian linkki ja saatavilla olevan päivityksen ilmoitus erottuvat selvemmin."
+      ],
+      "en": [
+        "Saved calculations lead with their main result. Equipment association, breakdown and sources have their own sections.",
+        "Consistent print layouts for calculations and work checklists. Leak-check reports show refrigerant, charge, and previous and next inspection dates when available.",
+        "The pressure–temperature result card follows the last edited value. Leak-check explanations and save/print actions are easier to find.",
+        "A single switch fits the chart to the cycle. Guide labels avoid overlap, with all selected values also available in a separate list.",
+        "Improved picker spacing and a continuation cue. Marking a favourite keeps the row in place while browsing.",
+        "Clearer release-history link and available-update notice."
+      ]
+    }
+  },
+  {
+    "version": "0.2.0-beta.2",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Versiohistoria näkyviin",
+      "en": "Visible release history"
+    },
+    "changes": {
+      "fi": [
+        "Asetuksissa on nyt versiohistoria: julkaisupäivä, kanava ja olennaiset muutokset suomeksi ja englanniksi. Historia on käytettävissä myös offline-tilassa.",
+        "Sovelluksen versiohistoria ja GitHubin muutosloki tuotetaan samoista julkaisutiedoista.",
+        "README ja kattavuusraportit päivitetty. Raportin yhteenvedossa näkyy myös log(p)–h-tuen kattavuus."
+      ],
+      "en": [
+        "Settings now links to release history with dates, channels and key changes in Finnish and English, also available offline.",
+        "The app history and GitHub changelog share one source of release notes.",
+        "Updated README and coverage reports, including log(p)–h support in the coverage summary."
+      ]
+    }
+  },
+  {
+    "version": "0.2.0-beta.1",
+    "date": "2026-09-26",
+    "channel": "beta",
+    "title": {
+      "fi": "Työmaan työkalut ja selkeämpi beta",
+      "en": "Field tools and a clearer beta"
+    },
+    "changes": {
+      "fi": [
+        "Yleinen yksikkömuunnin, lämpöteho- ja sähkölaskurit sekä putken tilavuus-, virtaus-, lämpölaajenemis- ja painehäviölaskurit.",
+        "Tallentuvat tarkistuslistat, laitteisiin liitettävät laskelmat ja tulosteet. Tallenteen laitetta voi vaihtaa tai laitekytkennän poistaa.",
+        "Kylmäkierron tallenteisiin jää kuvaaja: tarkka SVG-kuva PDF-tulosteessa sekä PNG-vienti. Kuvaajan keskitys ja apukäyrien valinnat selkeytetty.",
+        "Kylmäainevalitsin pysyy paikallaan haettaessa. Välilehdet, painikkeet, selitteet ja tulosalueet yhtenäistetty; tarkistuslistan kirjoittamisen aiheuttama pomppiminen korjattu.",
+        "Laajemmat hakusuodattimet, CO₂e-komponenttierittely ja vuototarkastuksen seuraava määräpäivä. Lähteistettyjä kylmäainetietoja täydennetty.",
+        "Erillinen beta.phasekit.app, oma beta-versionumero ja build-tunniste. Vakaa sivusto säilyy erillään."
+      ],
+      "en": [
+        "General unit conversion, thermal and electrical power calculators, and pipe volume, flow, thermal expansion and pressure-loss tools.",
+        "Persistent checklists, equipment-linked calculations and reports. Saved records can be reassigned or unlinked from equipment.",
+        "Saved refrigeration cycles include a frozen chart: vector SVG in PDF reports and PNG export. Improved chart fitting and guide-curve controls.",
+        "The refrigerant picker stays in place during searches. Consistent tabs, buttons, helper text and result panels; fixed checklist scrolling while typing.",
+        "Broader search filters, CO₂e component breakdown and the next leak-check due date. Expanded source-attributed refrigerant data.",
+        "Separate beta.phasekit.app deployment with a beta version and build revision. The stable site remains separate."
+      ]
+    }
+  },
+  {
+    "version": "0.1.0",
+    "date": "2026-09-26",
+    "channel": "stable",
+    "title": {
+      "fi": "Vakaa perusversio",
+      "en": "Stable baseline"
+    },
+    "changes": {
+      "fi": [
+        "Kylmäainehaku, suosikit ja vertailu sekä P–T-, kylmäkierto-, CO₂e- ja vuototarkastustyökalut.",
+        "Lähdeviitteet, aineiston kattavuustiedot, paikalliset tallennukset, suomi ja englanti sekä offline-käyttö.",
+        "Tämä yhteenveto kuvaa 26.9.2026 vakaalla sivustolla ollutta versiota. Aiemmat samalla versionumerolla tehdyt päivitykset eivät ole erillisiä historiarivejä."
+      ],
+      "en": [
+        "Refrigerant search, favourites and comparison, with P–T, refrigeration-cycle, CO₂e and leak-check tools.",
+        "Source attribution, data-coverage information, local records, Finnish and English, and offline use.",
+        "This summary describes the stable version present on 26 September 2026. Earlier updates using the same version number are not listed separately."
+      ]
+    }
+  }
+]

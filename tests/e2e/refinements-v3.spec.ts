@@ -70,7 +70,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   });
 });
 
-test("modal refrigerant selection filters favourites and restores calculator focus", async ({
+test("modal shows full list, keeps favourites first and restores calculator focus", async ({
   page,
 }, info) => {
   await page.goto("/#/pt/r134a");
@@ -78,15 +78,20 @@ test("modal refrigerant selection filters favourites and restores calculator foc
   const trigger = page.getByRole("button", { name: /Vaihda kylmäainetta/ });
   await trigger.click();
   const dialog = page.getByRole("dialog");
-  await dialog.getByRole("button", { name: "Suosikit", exact: true }).click();
-  await expect(dialog).toContainText("Ei suosikkeja vielä");
-  await dialog.getByRole("button", { name: "Kaikki", exact: true }).click();
+  await expect(
+    dialog.getByRole("button", { name: "Suosikit", exact: true }),
+  ).toHaveCount(0);
+  await expect(dialog.locator(".picker-result")).toHaveCount(249);
+  await expect(
+    dialog.getByRole("button", { name: /Näytä.*lisää/ }),
+  ).toHaveCount(0);
   await dialog.getByRole("searchbox").fill("R134a");
   await dialog
     .getByRole("button", { name: "Lisää R134a suosikkeihin", exact: true })
     .click();
-  await dialog.getByRole("button", { name: "Suosikit", exact: true }).click();
   await expect(dialog.locator(".picker-result")).toHaveCount(1);
+  await dialog.getByRole("searchbox").fill("");
+  await expect(dialog.locator(".picker-result").first()).toContainText("R134a");
   await expect(
     dialog.getByRole("button", { name: "Poista R134a suosikeista" }),
   ).toBeVisible();
@@ -130,7 +135,9 @@ test("R142b uses sourced name, ODS GWP and one environmental provenance block", 
   await expect(environment).toContainText("2 300");
   await expect(page.locator(".data-footer")).toHaveCount(0);
   await page.screenshot({
-    path: test.info().outputPath(`phasekit-v3-${info.project.name}-properties.png`),
+    path: test
+      .info()
+      .outputPath(`phasekit-v3-${info.project.name}-properties.png`),
     fullPage: true,
   });
 });

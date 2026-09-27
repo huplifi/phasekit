@@ -396,17 +396,22 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
             <Group title="identity" ids={r.sourceIds}>
               <dl className="facts">
                 <FactRow label={t("chemicalName")}>
-                  {chemicalName ?? (
-                    <span className="missing">
-                      {refinementText(data.locale, "chemicalNameUnavailable")}
-                    </span>
-                  )}
+                  {r.kind === "blend"
+                    ? refinementText(data.locale, "chemicalNameBlend")
+                    : (chemicalName ?? (
+                        <span className="missing">
+                          {refinementText(
+                            data.locale,
+                            "chemicalNameUnavailable",
+                          )}
+                        </span>
+                      ))}
                 </FactRow>
                 <FactRow label={t("formula")}>
                   {r.formula ? (
                     <ChemicalFormula formula={r.formula} />
                   ) : (
-                    t("unknown")
+                    t(r.kind === "blend" ? "notApplicable" : "unknown")
                   )}
                 </FactRow>
                 <FactRow label="CAS">

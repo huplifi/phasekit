@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Decimal from "decimal.js";
 import ptCurves from "../../core/generated/pt-curves.json";
+import phGrids from "../../core/generated/ph-grids.json";
 import { z } from "zod";
 import { parse } from "csv-parse/sync";
 import type {
@@ -236,9 +237,12 @@ export function validateCanonical(rows = readCanonicalRows()): CanonicalRows {
       if (!row[key]) continue;
       const codes = row[key].split(";");
       if (
-        codes.some((code) => !["MO", "AB", "POE", "PVE", "PAO", "PAG"].includes(code)) ||
+        codes.some(
+          (code) => !["MO", "AB", "POE", "PVE", "PAO", "PAG"].includes(code),
+        ) ||
         new Set(codes).size !== codes.length
-      ) throw new Error(`Invalid ${key} oil codes: ${row.id}`);
+      )
+        throw new Error(`Invalid ${key} oil codes: ${row.id}`);
     }
     if (row.eu_annex && !["I", "II-1", "ODS-I", "none"].includes(row.eu_annex))
       throw new Error(`Invalid EU annex ${row.id}`);
@@ -600,16 +604,8 @@ export function buildDataset(rows = validateCanonical()): Dataset {
           row.oil_notes_en,
           row.oil_notes_en ? safeSources : [],
         ),
-        oil_typical: fact(
-          "oil_typical",
-          row.oil_typical,
-          safeSources,
-        ),
-        oil_possible: fact(
-          "oil_possible",
-          row.oil_possible,
-          safeSources,
-        ),
+        oil_typical: fact("oil_typical", row.oil_typical, safeSources),
+        oil_possible: fact("oil_possible", row.oil_possible, safeSources),
       };
       for (const [key, conditions] of Object.entries(parseConditions(row))) {
         if (!facts[key])
@@ -822,6 +818,9 @@ function escapeHtml(value: string): string {
 
 function coverageText(dataset: Dataset): { markdown: string; html: string } {
   const total = dataset.refrigerants.length;
+  const supportedPH = dataset.refrigerants.filter((r) =>
+    Object.hasOwn(phGrids.grids, r.id),
+  ).length;
   const count = (key: keyof Refrigerant["coverage"], val: string) =>
     dataset.refrigerants.filter((r) => r.coverage[key] === val).length;
   const sourced = new Map(dataset.sources.map((source) => [source.id, source]));
@@ -872,14 +871,25 @@ function coverageText(dataset: Dataset): { markdown: string; html: string } {
       return `| ${label} | ${s?.version ?? "not available"} | ${denominator} |`;
     })
     .join("\n");
-  const markdown = `# Refrigerant inventory coverage\n\nGenerated: ${dataset.checkedAt}. Dataset version: \`${dataset.version}\`; SHA-256: \`${dataset.sha256}\`.\n\n## What the denominator means\n\nThe shipped dataset contains **${total} unique R- and RE-designated records** after deduplication across the pinned CoolProp, EPA, UNEP Secretariat and TEAP sources below. This is an explicit source-union denominator, not a claim that every refrigerant in ASHRAE Standard 34 or every historical/trade designation is known. The ASHRAE designation table was not bulk imported because its terms prohibit AI ingestion and derivative works without permission.\n\n| Source scope | Version checked | Source denominator |\n| --- | --- | ---: |\n${sourceRows}\n\nEPA staging reports a source-level union of 71 designations: 44 blend rows + 27 additional EPA GWP-table identities after 10 overlaps. The UNEP/TEAP v3 review adds 41 distinct blends and three pure ingredients. CoolProp contributes a pinned, open MIT corpus. The current record total is the exact deduplicated runtime denominator.\n\n## Coverage by record\n\n| Coverage dimension | Verified / not applicable | Partial or unsupported |\n| --- | ---: | ---: |\n| Identity | ${count("identity", "verified")} verified | ${count("identity", "partial")} partial |\n| Composition | ${count("composition", "verified") + count("composition", "not_applicable")} verified or not applicable | ${count("composition", "partial")} partial |\n| Safety | ${count("safety", "verified")} verified | ${count("safety", "partial")} partial |\n| EU/FI regulatory class | ${count("regulatory_eu_fi", "verified")} verified | ${count("regulatory_eu_fi", "partial") + count("regulatory_eu_fi", "unsupported")} partial or unsupported |\n| P–T curves (CoolProp 7.2.0) | ${count("pt", "estimated")} model-based | ${count("pt", "unsupported")} unsupported |\n\n## Known gaps\n\nComposition rows derived by converting CoolProp mole recipes are retained for discoverability but marked **partial**; they must not be used for legal thresholds or leak-check calculations. Verified blend rows are limited to mass fractions explicitly published in EPA SNAP or another named primary source.\n\nBlends without verified mass fractions: ${pending.length ? "\n\n" + pending.join("\n") : " none in the current imported set."}\n\nEU legal classes and GWP values are populated only when mapped to a cited EU legal source. Pure substances without a verified legal class: ${noLegalClass.length ? noLegalClass.join(", ") : "none"}. A blend's regulatory coverage is derived from its verified component recipe and component legal facts; the blend itself is not assigned a single Annex class. R13I1 and R40 have separate 2024/590 Annex II evidence, but ODS-II needs a distinct legal rule and remains unsupported here. R485A's safety class is withheld because TEAP reports an application-dependent classification in one source. Blank property fields are unknown, not zero. Safety, PED, oil compatibility, and pressure–temperature envelope coverage remain incomplete.\n\nThe coverage report is reproducible via \`pnpm data:coverage\`. Sources, reuse notes, and import limits are documented in [DATA-ARCHITECTURE.md](DATA-ARCHITECTURE.md), [DATA-CONTRIBUTING.md](DATA-CONTRIBUTING.md), and [ASHRAE-IMPORT.md](ASHRAE-IMPORT.md).\n`;
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>PhaseKit data coverage</title><style>body{font:16px/1.55 system-ui,sans-serif;max-width:900px;margin:3rem auto;padding:0 1rem;color:#183039}h1,h2{line-height:1.2}table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border-bottom:1px solid #cbd5d1;padding:.6rem;text-align:left}code{overflow-wrap:anywhere}.warning{padding:1rem;background:#fff3d9;border-left:4px solid #b37326}</style></head><body><h1>Refrigerant inventory coverage</h1><p>Generated ${escapeHtml(dataset.checkedAt)} · version <code>${escapeHtml(dataset.version)}</code></p><p class="warning">${total} unique R- and RE-designated records across the pinned CoolProp, EPA and UNEP source union. This is not an exhaustive ASHRAE Standard 34 inventory.</p><h2>Coverage</h2><table><thead><tr><th>Dimension</th><th>Verified / N/A</th><th>Incomplete</th></tr></thead><tbody><tr><td>Identity</td><td>${count("identity", "verified")}</td><td>${count("identity", "partial")}</td></tr><tr><td>Composition</td><td>${count("composition", "verified") + count("composition", "not_applicable")}</td><td>${count("composition", "partial")}</td></tr><tr><td>Safety</td><td>${count("safety", "verified")}</td><td>${count("safety", "partial")}</td></tr><tr><td>EU/FI legal class</td><td>${count("regulatory_eu_fi", "verified")}</td><td>${count("regulatory_eu_fi", "partial") + count("regulatory_eu_fi", "unsupported")}</td></tr><tr><td>P–T data</td><td>${count("pt", "estimated")} model-based</td><td>${count("pt", "unsupported")} unsupported</td></tr></tbody></table><h2>Gaps</h2><p>CoolProp mole recipes are display-only and marked partial. Legal classes and GWP are populated only where a cited EU legal source verifies them. Blank means unknown, not zero. The ASHRAE bulk table was not imported because its terms restrict AI ingestion.</p><p>Dataset SHA-256: <code>${dataset.sha256}</code></p></body></html>`;
+  const markdown = `# Refrigerant inventory coverage\n\nGenerated: ${dataset.checkedAt}. Dataset version: \`${dataset.version}\`; SHA-256: \`${dataset.sha256}\`.\n\n## What the denominator means\n\nThe shipped dataset contains **${total} unique R- and RE-designated records** after deduplication across the pinned CoolProp, EPA, UNEP Secretariat and TEAP sources below. This is an explicit source-union denominator, not a claim that every refrigerant in ASHRAE Standard 34 or every historical/trade designation is known. The ASHRAE designation table was not bulk imported because its terms prohibit AI ingestion and derivative works without permission.\n\n| Source scope | Version checked | Source denominator |\n| --- | --- | ---: |\n${sourceRows}\n\nEPA staging reports a source-level union of 71 designations: 44 blend rows + 27 additional EPA GWP-table identities after 10 overlaps. The UNEP/TEAP v3 review adds 41 distinct blends and three pure ingredients. CoolProp contributes a pinned, open MIT corpus. The current record total is the exact deduplicated runtime denominator.\n\nIdentity coverage means the refrigerant designation and pure/blend record type have a source; it does not mean every identity field applies or is populated. A blend has no single molecular formula or CAS number. Blank applicable fields are unknown, not zero. P–T status distinguishes model-based curves from unsupported calculations.\n\n## Coverage by record\n\n| Coverage dimension | Verified / not applicable | Partial or unsupported |\n| --- | ---: | ---: |\n| Identity | ${count("identity", "verified")} verified | ${count("identity", "partial")} partial |\n| Composition | ${count("composition", "verified") + count("composition", "not_applicable")} verified or not applicable | ${count("composition", "partial")} partial |\n| Safety | ${count("safety", "verified")} verified | ${count("safety", "partial")} partial |\n| EU/FI regulatory class | ${count("regulatory_eu_fi", "verified")} verified | ${count("regulatory_eu_fi", "partial") + count("regulatory_eu_fi", "unsupported")} partial or unsupported |\n| P–T curves (CoolProp 7.2.0) | ${count("pt", "estimated")} model-based | ${count("pt", "unsupported")} unsupported |\n| P–h diagrams (CoolProp HEOS) | ${supportedPH} bundled | ${total - supportedPH} unsupported |\n\n## Known gaps\n\nComposition rows derived by converting CoolProp mole recipes are retained for discoverability but marked **partial**; they must not be used for legal thresholds or leak-check calculations. Verified blend rows are limited to mass fractions explicitly published in EPA SNAP or another named primary source.\n\nBlends without verified mass fractions: ${pending.length ? "\n\n" + pending.join("\n") : " none in the current imported set."}\n\nEU legal classes and GWP values are populated only when mapped to a cited EU legal source. Pure substances without a verified legal class: ${noLegalClass.length ? noLegalClass.join(", ") : "none"}. A blend's regulatory coverage is derived from its verified component recipe and component legal facts; the blend itself is not assigned a single Annex class. R13I1 and R40 have separate 2024/590 Annex II evidence, but ODS-II needs a distinct legal rule and remains unsupported here. R485A's safety class is withheld because TEAP reports an application-dependent classification in one source. Blank property fields are unknown, not zero. Safety, PED, oil compatibility, and pressure–temperature envelope coverage remain incomplete.\n\nThe coverage report is reproducible via \`pnpm data:coverage\`. Sources, reuse notes, and import limits are documented in [DATA-ARCHITECTURE.md](DATA-ARCHITECTURE.md), [DATA-CONTRIBUTING.md](DATA-CONTRIBUTING.md), and [ASHRAE-IMPORT.md](ASHRAE-IMPORT.md).\n`;
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>PhaseKit data coverage</title><style>body{font:16px/1.55 system-ui,sans-serif;max-width:900px;margin:3rem auto;padding:0 1rem;color:#183039}h1,h2{line-height:1.2}table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border-bottom:1px solid #cbd5d1;padding:.6rem;text-align:left}code{overflow-wrap:anywhere}.warning{padding:1rem;background:#fff3d9;border-left:4px solid #b37326}</style></head><body><h1>Refrigerant inventory coverage</h1><p>Generated ${escapeHtml(dataset.checkedAt)} · version <code>${escapeHtml(dataset.version)}</code></p><p class="warning">${total} unique R- and RE-designated records across the pinned CoolProp, EPA and UNEP source union. This is not an exhaustive ASHRAE Standard 34 inventory.</p><h2>Coverage</h2><table><thead><tr><th>Dimension</th><th>Verified / N/A</th><th>Incomplete</th></tr></thead><tbody><tr><td>Identity</td><td>${count("identity", "verified")}</td><td>${count("identity", "partial")}</td></tr><tr><td>Composition</td><td>${count("composition", "verified") + count("composition", "not_applicable")}</td><td>${count("composition", "partial")}</td></tr><tr><td>Safety</td><td>${count("safety", "verified")}</td><td>${count("safety", "partial")}</td></tr><tr><td>EU/FI legal class</td><td>${count("regulatory_eu_fi", "verified")}</td><td>${count("regulatory_eu_fi", "partial") + count("regulatory_eu_fi", "unsupported")}</td></tr><tr><td>P–T data</td><td>${count("pt", "estimated")} model-based</td><td>${count("pt", "unsupported")} unsupported</td></tr><tr><td>P–h diagrams</td><td>${supportedPH} bundled</td><td>${total - supportedPH} unsupported</td></tr></tbody></table><h2>Gaps</h2><p>CoolProp mole recipes are display-only and marked partial. Legal classes and GWP are populated only where a cited EU legal source verifies them. Blank means unknown, not zero. The ASHRAE bulk table was not imported because its terms restrict AI ingestion.</p><p>Dataset SHA-256: <code>${dataset.sha256}</code></p></body></html>`;
   const detailed = dataset.refrigerants.map((r) => ({
     designation: r.designation,
     coverage: r.coverage,
-    unknown: Object.entries(r.facts)
-      .filter(([, f]) => f.state === "unknown")
-      .map(([k]) => k),
+    unknown: [
+      ...Object.entries(r.facts)
+        .filter(([, f]) => f.state === "unknown")
+        .map(([k]) => k),
+      ...(r.kind === "pure" && (!r.name.en || r.name.en === r.designation)
+        ? ["chemical_name"]
+        : []),
+      ...(r.kind === "pure" && !r.formula ? ["formula"] : []),
+      ...(r.kind === "pure" && !r.cas ? ["cas"] : []),
+    ],
+    notApplicable:
+      r.kind === "blend"
+        ? ["single_chemical_name", "molecular_formula", "cas"]
+        : [],
   }));
   const detailsHtml = `<h2>Per-record coverage and unknown fields</h2>${detailed
     .map(
@@ -888,7 +898,7 @@ function coverageText(dataset: Dataset): { markdown: string; html: string } {
           Object.entries(r.coverage)
             .map(([k, v]) => `${k}: ${v}`)
             .join("; "),
-        )}</summary><p>Unknown: ${escapeHtml(r.unknown.join(", ") || "none")}</p></details>`,
+        )}</summary><p>Unknown applicable fields: ${escapeHtml(r.unknown.join(", ") || "none")}</p><p>Not applicable: ${escapeHtml(r.notApplicable.join(", ") || "none")}</p></details>`,
     )
     .join("")}`;
   return {
@@ -896,7 +906,10 @@ function coverageText(dataset: Dataset): { markdown: string; html: string } {
       markdown +
       "\n## Per-record unknown fields\n\n" +
       detailed
-        .map((r) => `- **${r.designation}**: ${r.unknown.join(", ") || "none"}`)
+        .map(
+          (r) =>
+            `- **${r.designation}**: unknown applicable fields: ${r.unknown.join(", ") || "none"}; not applicable: ${r.notApplicable.join(", ") || "none"}`,
+        )
         .join("\n") +
       "\n",
     html: html.replace("</body>", detailsHtml + "</body>"),

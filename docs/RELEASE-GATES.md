@@ -4,6 +4,8 @@ PhaseKit is a working web app, not a certified refrigeration instrument. Complet
 
 ## Qualified refrigeration and regulatory review
 
+Use the [review packet](REGULATORY-REVIEW.md) to record independent cases, source citations, findings and an explicit scoped decision. The packet is preparation, not evidence that review has occurred.
+
 - Confirm EU 2024/573 Annex I CO₂e and Annex II-1 mass treatment for mixed refrigerants, including multiple HFC and multiple HFO components.
 - Confirm hermetic `or` interpretation for mixed cases; the engine blocks conflicting cases instead of claiming exemption.
 - Review ODS rules, restrictions on adding refrigerant, and the distinction between continued operation, servicing and placing new equipment on the market.
@@ -13,6 +15,8 @@ PhaseKit is a working web app, not a certified refrigeration instrument. Complet
 - Approve source/reuse terms and coverage denominator before making a comprehensive ASHRAE coverage claim.
 
 ## Product validation outside automated browser tests
+
+Use the [field pilot guide](PILOT-TESTING.md) to observe and record 3–5 actual users on the beta. Its blank templates are not completed pilot evidence.
 
 - Install on an actual iOS and Android phone; force-close, enter flight mode, restart from the Home Screen and use search, cards, favourites, comparison and saved calculations.
 - Test VoiceOver and TalkBack announcements and focus, increased platform text size, small display and one-handed touch use. Automated axe results alone do not establish WCAG conformance.

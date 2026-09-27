@@ -13,7 +13,7 @@ import {
   parseBackup,
   saveData,
 } from "../apps/web/src/storage";
-import type { Snapshot, UserData } from "../apps/web/src/storage";
+import type { Snapshot, ToolRecord, UserData } from "../apps/web/src/storage";
 
 const source: Source = {
   id: "eu-regulation",
@@ -233,4 +233,102 @@ it("keeps optional missing-data diagnostics in backup and local snapshots", asyn
   expect((await loadData()).snapshots[0].componentDesignations).toEqual({
     r1130e: "R1130(E)",
   });
+});
+
+it("keeps old reports readable and validates frozen chart vectors in backups", () => {
+  const report: ToolRecord = {
+    id: "cycle-1",
+    createdAt: "2026-09-26T09:00:00.000Z",
+    tool: "cycle",
+    title: "Cycle",
+    notes: "",
+    inputs: [],
+    outputs: [],
+    sources: [],
+    equipmentName: "Original unit",
+  };
+  const legacy = parseBackup(
+    JSON.stringify({ ...emptyData(), toolRecords: [report] }),
+  );
+  expect(legacy.toolRecords[0].chartSnapshot).toBeUndefined();
+  expect(
+    parseBackup(
+      JSON.stringify({
+        ...emptyData(),
+        toolRecords: [
+          {
+            ...report,
+            equipmentName: undefined,
+            lastLinkedEquipmentName: "Name at deletion",
+          },
+        ],
+      }),
+    ).toolRecords[0].lastLinkedEquipmentName,
+  ).toBe("Name at deletion");
+  const chartSnapshot = {
+    kind: "ph-cycle-v1" as const,
+    dataVersion: "heos-1",
+    dome: [
+      [1, 100, 200],
+      [10, 120, 220],
+    ],
+    points: [
+      [2, 210],
+      [9, 240],
+      [9, 110],
+      [2, 110],
+    ],
+  };
+  const withChart = {
+    ...emptyData(),
+    toolRecords: [{ ...report, chartSnapshot }],
+  };
+  expect(
+    parseBackup(JSON.stringify(withChart)).toolRecords[0].chartSnapshot,
+  ).toEqual(chartSnapshot);
+  const withGuides = {
+    ...chartSnapshot,
+    view: {
+      fitCycle: false,
+      visibleKinds: { temperature: true, entropy: false, volume: true },
+    },
+    isolineDataVersion: "isolines-frozen-1",
+    isolines: [
+      {
+        kind: "temperature",
+        phase: "vapour",
+        level: 20,
+        segments: [
+          [
+            [1, 220],
+            [2, 230],
+          ],
+          [
+            [8, 245],
+            [9, 250],
+          ],
+        ],
+      },
+    ],
+  };
+  const guidesBackup = {
+    ...emptyData(),
+    toolRecords: [{ ...report, chartSnapshot: withGuides }],
+  };
+  expect(
+    parseBackup(JSON.stringify(guidesBackup)).toolRecords[0].chartSnapshot,
+  ).toEqual(withGuides);
+  const badGuide = structuredClone(guidesBackup);
+  badGuide.toolRecords[0].chartSnapshot.isolines[0].segments[0][0][0] = 0;
+  expect(() => parseBackup(JSON.stringify(badGuide))).toThrow();
+  expect(() =>
+    parseBackup(
+      JSON.stringify({
+        ...emptyData(),
+        toolRecords: [
+          { ...report, chartSnapshot: { ...chartSnapshot, points: [[0, 1]] } },
+        ],
+      }),
+    ),
+  ).toThrow();
 });

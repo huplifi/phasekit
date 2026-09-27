@@ -1,0 +1,49 @@
+.pt-live-result {
+  min-block-size: 10rem;
+  margin: 16px 0 24px;
+  overflow-wrap: anywhere;
+}
+
+.pt-live-result .result-label {
+  margin: 0;
+}
+
+.pt-live-result .result-number {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25em 0.45em;
+  margin: 12px 0 16px;
+  font-size: clamp(2rem, 9vw, 3rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.pt-result-unit {
+  font-family: var(--font-body);
+  font-size: 0.58em;
+  font-weight: 600;
+}
+
+.pt-result-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin: 0;
+  color: var(--status-info-foreground);
+  font-size: 0.875rem;
+}
+
+.pt-result-context strong {
+  font-size: 1rem;
+}
+
+.pt-result-phase {
+  margin: 12px 0 0;
+}
+
+.pt-live-result .pt-gauge-reference {
+  margin: 10px 0 0;
+  font-size: 0.8125rem;
+}

@@ -1,0 +1,161 @@
+.field-report-fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.field-report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-block: 16px 24px;
+  align-items: start;
+}
+.field-report-field {
+  min-width: 0;
+}
+.field-report-field label {
+  margin-bottom: 0;
+}
+.field-report-field .supporting-copy {
+  margin-top: 8px;
+}
+.field-report-legacy {
+  border-left: 2px solid var(--border);
+  padding-left: 12px;
+}
+.field-report-save-state {
+  margin-block: 12px;
+}
+.field-report-final-note {
+  padding: 16px;
+  background: var(--surface-alt, #e1faff);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+.field-report-editor .field-checklist-choice input[type="checkbox"]:checked {
+  background-color: #123449;
+  border-color: #123449;
+  accent-color: #123449;
+}
+.field-report-editor
+  .field-checklist-choice
+  input[type="checkbox"]:checked::after {
+  border-color: #fff;
+}
+.field-report-editor fieldset:disabled input,
+.field-report-editor fieldset:disabled select,
+.field-report-editor fieldset:disabled textarea {
+  opacity: 1;
+  color: inherit;
+  -webkit-text-fill-color: currentColor;
+}
+.field-report-cycle img {
+  max-width: 100%;
+  height: auto;
+}
+.field-report-cycle-action {
+  margin-block: 24px;
+}
+@media (max-width: 420px) {
+  .field-report-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.field-report-fields > legend.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.field-report-full,
+.field-report-legacy {
+  grid-column: 1 / -1;
+}
+.field-report-measurements
+  > .field-report-field:not(.field-report-numeric):not(.field-report-choice) {
+  grid-column: 1 / -1;
+}
+@media (max-width: 420px) {
+  .field-report-measurements {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 12px;
+  }
+  .field-report-measurements .field-report-numeric label,
+  .field-report-measurements .field-report-choice label {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 104px;
+  }
+  .field-report-measurements input,
+  .field-report-measurements select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.field-checklist-save-state {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+.field-checklist-save-state .field-report-save-state,
+.field-checklist-save-state .field-report-status {
+  margin-block: 4px;
+}
+.field-report-optional {
+  margin-block: 24px;
+  border-block: 1px solid var(--control-border);
+  padding-block: 12px;
+}
+.field-report-optional > summary {
+  cursor: pointer;
+}
+.field-report-optional > summary .caption {
+  font-weight: 400;
+  margin-left: 8px;
+}
+.field-report-requirements {
+  margin-block: 24px;
+  padding: 16px;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+}
+.field-report-requirements summary {
+  cursor: pointer;
+}
+.field-report-declaration-title {
+  font-weight: 700;
+  margin-top: 0;
+}
+/* Autosave changes text while typing. Reserve its normal two-line mobile
+   footprint in both locations so neither the form nor the page end moves. */
+@media (max-width: 600px) {
+  .field-checklist-save-state {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 4px;
+    align-items: start;
+  }
+  .field-report-save-state {
+    line-height: 1.5;
+    min-block-size: 3em;
+  }
+  .field-checklist-save-state .field-report-save-state,
+  .field-checklist-save-state .field-report-status {
+    margin-block: 0;
+  }
+  .field-checklist-save-state .field-report-status {
+    line-height: 1.5;
+    min-block-size: 1.5em;
+  }
+}

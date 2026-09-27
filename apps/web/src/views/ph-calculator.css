@@ -121,19 +121,122 @@
 }
 
 .ph-view-controls {
+  margin-bottom: 16px;
+}
+
+.ph-view-controls .switch-label input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ph-view-controls .caption {
+  margin: 2px 0 0 56px;
+}
+
+.ph-guide-list {
+  margin: 12px 0 0;
+  max-width: 68ch;
+}
+
+.ph-guide-list summary {
+  cursor: pointer;
+  min-height: 32px;
+}
+
+.ph-guide-list p {
+  margin: 5px 0;
+}
+
+.ph-guide-group {
+  margin-block: 10px;
+}
+
+.ph-guide-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.ph-guide-value {
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 6px 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ph-guide-value[aria-pressed="true"] {
+  border-color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text);
+}
+
+.ph-guide-value:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.ph-guide-selection {
+  font-weight: 600;
+}
+
+.ph-isoline-toggle:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.ph-isoline-controls {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 12px;
+  margin: 0 0 12px;
 }
 
-.ph-view-controls [aria-pressed="true"] {
+.ph-isoline-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 7px 11px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.ph-isoline-toggle[aria-pressed="true"] {
+  border-color: var(--text);
   background: var(--text);
   color: var(--background);
-  border-color: var(--text);
 }
 
-.ph-chart-scroll,
+.ph-isoline-toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ph-isoline-key {
+  width: 22px;
+  border-top: 2px solid currentColor;
+}
+
+.ph-isoline-key-entropy {
+  border-top-style: dashed;
+}
+.ph-isoline-key-volume {
+  border-top-style: dotted;
+}
+
+.ph-chart-scroll {
+  width: 100%;
+  min-width: 0;
+}
+
 .ph-table-scroll {
   max-width: 100%;
   overflow-x: auto;
@@ -142,7 +245,6 @@
 .ph-chart {
   display: block;
   width: 100%;
-  min-width: 560px;
   max-width: 780px;
   height: auto;
   background: var(--surface);
@@ -178,6 +280,36 @@
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 6 4;
+}
+
+.ph-isoline {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.1;
+  stroke-opacity: 0.38;
+  vector-effect: non-scaling-stroke;
+}
+
+.ph-isoline-label {
+  fill: var(--text);
+  font-family: var(--font-data);
+  font-size: 12px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 3px;
+}
+
+.ph-isoline-highlighted {
+  stroke-opacity: 1;
+  stroke-width: 2.4;
+}
+
+.ph-isoline-entropy {
+  stroke-dasharray: 5 4;
+}
+.ph-isoline-volume {
+  stroke-dasharray: 2 4;
 }
 
 .ph-bubble {
@@ -230,10 +362,6 @@
 .ph-figure figcaption {
   max-width: 68ch;
   margin-top: 9px;
-}
-
-.ph-scroll-hint {
-  margin: 8px 0 0;
 }
 
 .ph-legend {
@@ -335,4 +463,8 @@
   font-weight: 400;
 }
 
-.ph-temperature-grid label { display: flex; flex-direction: column; justify-content: space-between; }
+.ph-temperature-grid label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}

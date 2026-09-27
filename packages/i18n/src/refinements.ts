@@ -32,6 +32,7 @@ export type RefinementKey =
   | "gwpIpccAr4"
   | "gwpUnavailable"
   | "chemicalNameUnavailable"
+  | "chemicalNameBlend"
   | "oilTypical"
   | "oilPossible"
   | "oilGuidanceUnavailable"
@@ -71,6 +72,7 @@ const copy: Record<Locale, Record<RefinementKey, string>> = {
     gwpIpccAr4: "IPCC AR4 · GWP 100 v",
     gwpUnavailable: "EU-säädöksen GWP-arvoa ei ole tässä tietoaineistossa.",
     chemicalNameUnavailable: "Kemiallista nimeä ei ole tietoaineistossa.",
+    chemicalNameBlend: "Kylmäaineseos; ei yhtä kemiallista nimeä.",
     oilTypical: "Tyypillinen öljytyyppi",
     oilPossible: "Muut mahdolliset öljytyypit",
     oilGuidanceUnavailable: "Varmennettua öljytietoa ei ole tietoaineistossa.",
@@ -112,6 +114,7 @@ const copy: Record<Locale, Record<RefinementKey, string>> = {
     gwpIpccAr4: "IPCC AR4 · GWP 100 yr",
     gwpUnavailable: "No EU regulatory GWP value is available in this dataset.",
     chemicalNameUnavailable: "Chemical name is not available in this dataset.",
+    chemicalNameBlend: "Refrigerant blend; no single chemical name applies.",
     oilTypical: "Typical oil type",
     oilPossible: "Other possible oil types",
     oilGuidanceUnavailable:

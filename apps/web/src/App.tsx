@@ -6,6 +6,7 @@ import {
   Bookmark,
   Settings as SettingsIcon,
   WifiOff,
+  RefreshCw,
   ArrowRight,
   X,
 } from "lucide-react";
@@ -13,7 +14,7 @@ import { useRegisterSW } from "virtual:pwa-register/react";
 import { AppContext } from "./context";
 import { byId } from "./data";
 import { createDurableWriter, emptyData, loadData, saveData } from "./storage";
-import type { Snapshot, UserData } from "./storage";
+import type { Snapshot, UserData, ToolRecord } from "./storage";
 import { translate } from "../../../packages/i18n/src";
 import type { MessageKey } from "../../../packages/i18n/src";
 import { Home } from "./views/Home";
@@ -23,13 +24,27 @@ import { Check } from "./views/Check";
 import { Calculator } from "./views/Calculator";
 import { PTCalculator } from "./views/PTCalculator";
 import { Tools } from "./views/Tools";
+import { ReleaseHistory } from "./views/ReleaseHistory";
 import { Settings } from "./views/Settings";
 import { Saved } from "./views/Saved";
+import { Equipment } from "./views/Equipment";
+import { UnitConverter } from "./views/UnitConverter";
+import {
+  ThermalPowerCalculator,
+  ElectricalCalculator,
+  WorkChecklists,
+  PipeCalculator,
+} from "./views/FieldTools";
+import { appVersion, isBeta, buildRevision as buildVersion } from "./release";
 const pathNow = () => window.location.hash.replace(/^#/, "") || "/";
 export function App() {
   const [data, setRenderedData] = useState(emptyData);
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
+  const [persistenceStatus, setPersistenceStatus] = useState<
+    "saving" | "saved" | "error"
+  >("saved");
+  const writeRevision = useRef(0);
   const [path, setPath] = useState(pathNow);
   const [online, setOnline] = useState(navigator.onLine);
   const [message, setMessage] = useState("");
@@ -53,13 +68,19 @@ export function App() {
     if (!dirty) setShowUpdateDraft(false);
   }, []);
   const enqueue = useCallback((next: UserData) => {
+    const revision = ++writeRevision.current;
+    setPersistenceStatus("saving");
     const attempt = writer.current.enqueue(next);
     void attempt.then(
       () => {
+        if (revision !== writeRevision.current) return;
+        setPersistenceStatus("saved");
         storageErrorRef.current = false;
         setStorageError(false);
       },
       () => {
+        if (revision !== writeRevision.current) return;
+        setPersistenceStatus("error");
         storageErrorRef.current = true;
         setStorageError(true);
       },
@@ -108,6 +129,36 @@ export function App() {
     },
     [enqueue],
   );
+  const persistToolRecord = useCallback(
+    async (record: ToolRecord) => {
+      if (!writable.current) throw new Error("Storage not ready");
+      const next = {
+        ...dataRef.current,
+        toolRecords: [record, ...dataRef.current.toolRecords],
+      };
+      dataRef.current = next;
+      setRenderedData(next);
+      try {
+        await enqueue(next);
+      } catch (error) {
+        const rollback = {
+          ...dataRef.current,
+          toolRecords: dataRef.current.toolRecords.filter(
+            (item) => item.id !== record.id,
+          ),
+        };
+        dataRef.current = rollback;
+        setRenderedData(rollback);
+        try {
+          await enqueue(rollback);
+        } catch {
+          /* Keep failure banner visible. */
+        }
+        throw error;
+      }
+    },
+    [enqueue],
+  );
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
@@ -131,6 +182,7 @@ export function App() {
       })
       .catch(() => {
         if (active) {
+          setPersistenceStatus("error");
           storageErrorRef.current = true;
           setStorageError(true);
         }
@@ -254,7 +306,7 @@ export function App() {
   const nav = [
     { key: "refrigerants", path: "/", icon: Snowflake },
     { key: "tools", path: "/tools", icon: Wrench },
-    { key: "saved", path: "/saved", icon: Bookmark },
+    { key: "saved", path: "/reports", icon: Bookmark },
     { key: "settings", path: "/settings", icon: SettingsIcon },
   ] as const;
   const activeNav = [
@@ -265,11 +317,15 @@ export function App() {
     "shsc",
     "co2e",
     "compare",
+    "convert",
+    "thermal-power",
+    "electrical",
+    "pipe",
   ].includes(section)
     ? "tools"
-    : section === "saved"
+    : ["saved", "reports", "equipment", "checklists"].includes(section)
       ? "saved"
-      : section === "settings"
+      : section === "settings" || section === "releases"
         ? "settings"
         : "refrigerants";
   return (
@@ -277,7 +333,9 @@ export function App() {
       value={{
         data,
         setData,
+        persistenceStatus,
         persistSnapshot,
+        persistToolRecord,
         setDraftDirty,
         t,
         go,
@@ -319,18 +377,43 @@ export function App() {
             </span>
           )}
         </header>
+        {isBeta && (
+          <p className="beta-banner caption">
+            <strong>
+              Beta {appVersion} · {buildVersion}
+            </strong>
+            {" · "}
+            {data.locale === "fi"
+              ? "Testiversio. Tallennukset säilyvät vain tässä selaimessa ja osoitteessa."
+              : "Test version. Records stay in this browser and site."}{" "}
+            <a href="https://phasekit.app">
+              {data.locale === "fi"
+                ? "Avaa vakaa versio"
+                : "Open stable version"}
+            </a>
+          </p>
+        )}
         {storageError && (
           <p role="alert" className="notice error">
             {t("storageError")}
           </p>
         )}
         {needRefresh && (
-          <aside className="notice">
-            <p>
-              {t("updateReady")} {t("updateNote")}
-            </p>
+          <aside
+            className="notice update-notice"
+            aria-label={
+              data.locale === "fi" ? "Sovelluspäivitys" : "Application update"
+            }
+          >
+            <strong className="update-notice-heading">
+              <RefreshCw size={20} aria-hidden="true" />
+              {data.locale === "fi"
+                ? "Päivitys saatavilla"
+                : "Update available"}
+            </strong>
+            <p className="caption secondary">{t("updateNote")}</p>
             <button
-              className="text-button"
+              className="secondary-button"
               disabled={updating}
               onClick={() => void applyUpdate()}
             >
@@ -381,8 +464,22 @@ export function App() {
             <Compare />
           ) : section === "tools" ? (
             <Tools />
-          ) : section === "saved" ? (
+          ) : section === "convert" ? (
+            <UnitConverter />
+          ) : section === "thermal-power" ? (
+            <ThermalPowerCalculator />
+          ) : section === "electrical" ? (
+            <ElectricalCalculator />
+          ) : section === "pipe" ? (
+            <PipeCalculator />
+          ) : section === "checklists" ? (
+            <WorkChecklists />
+          ) : section === "equipment" ? (
+            <Equipment />
+          ) : section === "saved" || section === "reports" ? (
             <Saved />
+          ) : section === "releases" ? (
+            <ReleaseHistory />
           ) : section === "settings" ? (
             <Settings />
           ) : (
@@ -412,7 +509,13 @@ export function App() {
               aria-current={activeNav === key ? "page" : undefined}
             >
               <Icon size={24} />
-              <span>{t(key)}</span>
+              <span>
+                {key === "saved"
+                  ? data.locale === "fi"
+                    ? "Raportit"
+                    : "Reports"
+                  : t(key)}
+              </span>
             </a>
           ))}
         </nav>

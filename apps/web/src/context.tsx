@@ -2,11 +2,14 @@ import { createContext, useContext } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import type { UserData } from "./storage";
 import type { Snapshot } from "./storage";
+import type { ToolRecord } from "./storage";
 import type { MessageKey } from "../../../packages/i18n/src";
 export interface AppContextValue {
   data: UserData;
+  persistenceStatus: "saving" | "saved" | "error";
   setData: Dispatch<SetStateAction<UserData>>;
   persistSnapshot: (snapshot: Snapshot) => Promise<void>;
+  persistToolRecord: (record: ToolRecord) => Promise<void>;
   setDraftDirty: (dirty: boolean) => void;
   t: (key: MessageKey, values?: Record<string, string | number>) => string;
   go: (path: string) => void;

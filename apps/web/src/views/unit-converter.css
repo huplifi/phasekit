@@ -1,0 +1,43 @@
+.unit-converter {
+  max-width: 680px;
+  display: grid;
+  gap: 24px;
+}
+.unit-converter-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+  gap: 8px;
+  align-items: end;
+}
+.unit-converter-pair label,
+.unit-converter-references label {
+  min-width: 0;
+}
+.unit-converter-swap {
+  width: 44px;
+  height: 50px;
+  padding: 8px;
+}
+.unit-converter-references {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.unit-converter .caption {
+  display: block;
+  margin-top: 8px;
+}
+.unit-converter output {
+  overflow-wrap: anywhere;
+  display: block;
+}
+
+.unit-converter label {
+  margin-bottom: 0;
+}
+.unit-converter-swap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.125rem;
+}

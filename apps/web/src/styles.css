@@ -172,6 +172,28 @@ strong.mono {
 .brand-header img {
   border-radius: 8px;
 }
+.beta-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin: -16px 0 24px;
+  padding: 10px 12px;
+  border-inline-start: 3px solid var(--link);
+  border-radius: 0 6px 6px 0;
+  background: var(
+    --surface,
+    color-mix(in srgb, var(--link) 7%, var(--background))
+  );
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+.beta-banner strong {
+  color: var(--text);
+}
+.beta-banner a {
+  font-weight: 600;
+}
 .offline-indicator {
   display: flex;
   align-items: center;
@@ -606,7 +628,8 @@ select {
 .result-section > .caption {
   margin-top: 16px;
 }
-.calculation-details {
+.calculation-details,
+.share-explanation {
   margin-top: 24px;
 }
 .component-calculation {
@@ -979,7 +1002,18 @@ input[aria-invalid="true"] {
 }
 .picker-dialog {
   width: min(38rem, calc(100vw - 32px));
-  max-height: calc(100dvh - 32px);
+  height: min(44rem, calc(var(--picker-viewport-height, 100dvh) - 32px));
+  max-height: calc(var(--picker-viewport-height, 100dvh) - 32px);
+  position: fixed;
+  left: 50%;
+  top: calc(
+    var(--picker-offset-top, 0px) + var(--picker-viewport-height, 100dvh) / 2
+  );
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  overflow: hidden;
   padding: 0;
   border: 1px solid var(--control-border);
   border-radius: 12px;
@@ -990,6 +1024,10 @@ input[aria-invalid="true"] {
   background: rgb(0 0 0 / 45%);
 }
 .picker-dialog-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
   padding: 20px;
 }
 .picker-dialog-heading {
@@ -1004,24 +1042,11 @@ input[aria-invalid="true"] {
   font-size: 1.125rem;
 }
 .picker-dialog .picker-results {
-  max-height: min(55dvh, 32rem);
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-.picker-scope {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--divider);
-  margin-top: 16px;
-}
-.picker-scope button {
-  min-height: 44px;
-  border-radius: 0;
-  padding: 8px;
-  border-bottom: 3px solid transparent;
-}
-.picker-scope button[aria-pressed="true"] {
-  border-bottom-color: var(--text);
+  scrollbar-gutter: stable;
 }
 .switch-label {
   display: inline-flex;
@@ -1076,7 +1101,7 @@ input[aria-invalid="true"] {
 }
 
 /* iOS date controls otherwise retain an intrinsic width beyond their parent. */
-.field-group > input[type="date"] {
+input[type="date"] {
   display: block;
   min-width: 0;
   width: 100%;
@@ -1085,9 +1110,13 @@ input[aria-invalid="true"] {
   -webkit-appearance: none;
   appearance: none;
 }
-.field-group > input[type="date"]::-webkit-date-and-time-value {
+input[type="date"]::-webkit-date-and-time-value {
   min-width: 0;
   text-align: left;
+}
+input[type="date"]::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
 }
 
 .about-section {
@@ -1114,4 +1143,218 @@ input[aria-invalid="true"] {
 .about-section > .text-button {
   justify-content: flex-start;
   text-align: left;
+}
+
+/* Shared editable notes and report text keep the same field geometry. */
+label textarea,
+.share-text {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: 8px;
+  padding: 12px;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  resize: vertical;
+  font:
+    400 1rem/1.5 var(--font-body),
+    sans-serif;
+}
+.check-schedule .notice p {
+  margin: 8px 0 0;
+}
+.report-save {
+  margin: 24px 0;
+}
+.report-save > summary {
+  padding: 12px 0;
+}
+.report-save .caption {
+  margin-top: 12px;
+}
+
+/* Shared exclusive choices: the same underlined language as detail tabs. */
+.choice-tabs {
+  margin: 16px 0 24px;
+  gap: 16px;
+  justify-content: flex-start;
+  scrollbar-width: thin;
+}
+.choice-tabs button {
+  flex: 1 0 auto;
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 0;
+  line-height: 1.4;
+  padding: 12px 8px;
+  min-height: 48px;
+}
+.choice-tabs button[aria-pressed="true"] {
+  color: var(--text);
+  font-weight: 700;
+}
+.choice-tabs button[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 3px;
+  background: var(--link);
+}
+.choice-tabs button:disabled {
+  opacity: 0.5;
+}
+.quantity-choices {
+  margin: 0;
+  gap: 12px;
+}
+.quantity-choices button {
+  flex: 0 0 auto;
+  min-width: 64px;
+}
+@media (max-width: 480px) {
+  .field-pipe-modes {
+    gap: 4px;
+  }
+  .field-pipe-modes button {
+    padding-inline: 0;
+  }
+}
+.supporting-copy {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-block: 16px;
+  overflow-wrap: anywhere;
+}
+.picker-dialog-heading,
+.picker-search-row,
+.picker-result-count {
+  flex: 0 0 auto;
+}
+.primary,
+.secondary-button {
+  line-height: 1.4;
+}
+
+.release-installed {
+  margin-block: 24px 12px;
+  overflow-wrap: anywhere;
+}
+.release-history {
+  margin-top: 32px;
+}
+.release-entry {
+  padding-block: 24px 32px;
+  border-top: 1px solid var(--divider);
+}
+.release-entry header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.release-entry h2 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.release-current {
+  font-weight: 700;
+}
+.release-entry ul {
+  padding-inline-start: 24px;
+}
+.release-entry li + li {
+  margin-top: 12px;
+}
+
+/* Round-three: clear result actions and stable, readable secondary content. */
+.check-options,
+.conditional-options {
+  display: grid;
+  gap: 12px;
+  margin-block: 16px 24px;
+}
+.check-options .switch-label {
+  width: fit-content;
+  max-width: 100%;
+}
+.check-result-context {
+  margin-top: 0;
+}
+.check-result-actions {
+  margin-block: 20px;
+}
+.share-explanation {
+  margin-block: 24px;
+}
+pre.share-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 24rem;
+  overflow: auto;
+  min-height: 12rem;
+  user-select: text;
+}
+.update-notice-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.update-notice-heading svg {
+  flex: 0 0 auto;
+}
+.update-notice p {
+  margin-top: 8px;
+}
+
+.release-history-link {
+  display: block;
+  width: fit-content;
+  padding-block: 10px;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 0.875rem;
+}
+
+.check-due-card > strong {
+  display: block;
+  font-family: var(--font-data), monospace;
+  font-size: 1.125rem;
+}
+.check-due-card .caption {
+  margin: 12px 0 0;
+}
+.check-overdue-label {
+  display: grid;
+  gap: 4px;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid currentColor;
+}
+.check-overdue-label > strong {
+  font-size: 1.25rem;
+}
+.check-overdue-label > span {
+  font-size: 0.8125rem;
+}
+
+.share-explanation[open] {
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  padding: 16px;
+}
+.share-explanation .button-group {
+  margin-block: 12px;
+}
+.share-explanation .supporting-copy {
+  margin-bottom: 0;
+}
+.share-explanation pre.share-text {
+  margin-bottom: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
 }

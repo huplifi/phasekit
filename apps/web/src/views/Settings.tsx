@@ -1,4 +1,5 @@
-import { version } from "../../../../package.json";
+import releases from "../../../../data/releases.json";
+import { appVersion, buildRevision, isBeta } from "../release";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
 import { Download, Upload, Trash2 } from "lucide-react";
@@ -9,6 +10,9 @@ import { formatDate } from "../../../../packages/i18n/src";
 import type { Locale } from "../../../../packages/i18n/src";
 export function Settings() {
   const { t, data, setData, notify } = useApp();
+  const currentRelease = releases.find(
+    (release) => release.version === appVersion,
+  );
   const [confirm, setConfirm] = useState(false);
   const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   return (
@@ -165,7 +169,31 @@ export function Settings() {
           </div>
           <div>
             <dt>{l("Sovellusversio", "App version")}</dt>
-            <dd className="mono">{version}</dd>
+            <dd>
+              <span className="mono">{appVersion}</span>
+              <a className="release-history-link" href="#/releases">
+                {l("Versiohistoria ja uutta", "Release history and what’s new")}{" "}
+                <span aria-hidden="true">→</span>
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>{l("Version päivämäärä", "Version date")}</dt>
+            <dd>
+              {currentRelease && (
+                <time dateTime={currentRelease.date}>
+                  {formatDate(currentRelease.date, data.locale)}
+                </time>
+              )}
+            </dd>
+          </div>
+          <div>
+            <dt>{l("Julkaisukanava", "Release channel")}</dt>
+            <dd>{isBeta ? "Beta" : l("Vakaa", "Stable")}</dd>
+          </div>
+          <div>
+            <dt>{l("Build-tunniste", "Build revision")}</dt>
+            <dd className="mono">{buildRevision}</dd>
           </div>
           <div>
             <dt>{l("Verkkosivusto", "Website")}</dt>

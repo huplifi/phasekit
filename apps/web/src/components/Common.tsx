@@ -6,6 +6,7 @@ import {
   Check,
   Gauge,
   ChartNoAxesCombined,
+  GitCompareArrows,
   Plus,
   Scale,
   Star,
@@ -135,7 +136,13 @@ export function Back({ to = "/" }: { to?: string }) {
     </button>
   );
 }
-export function StarButton({ r }: { r: Refrigerant }) {
+export function StarButton({
+  r,
+  onToggled,
+}: {
+  r: Refrigerant;
+  onToggled?: (added: boolean) => void;
+}) {
   const { data, t, toggleFavourite } = useApp();
   const active = data.favourites.includes(r.id);
   return (
@@ -145,7 +152,10 @@ export function StarButton({ r }: { r: Refrigerant }) {
         name: r.designation,
       })}
       aria-pressed={active}
-      onClick={() => toggleFavourite(r.id)}
+      onClick={() => {
+        toggleFavourite(r.id);
+        onToggled?.(!active);
+      }}
     >
       <Star size={22} fill={active ? "currentColor" : "none"} />
     </button>
@@ -188,7 +198,7 @@ const toolItems = [
   { key: "pt", label: "pt", icon: Gauge },
   { key: "ph", label: "shsc", icon: ChartNoAxesCombined },
   { key: "co2e", label: "kgCO2", icon: Scale },
-  { key: "compare", label: "compare", icon: ArrowLeftRight },
+  { key: "compare", label: "compare", icon: GitCompareArrows },
 ] as const;
 
 export function ToolMenu({ refrigerant }: { refrigerant?: Refrigerant }) {
@@ -204,7 +214,15 @@ export function ToolMenu({ refrigerant }: { refrigerant?: Refrigerant }) {
           }
         >
           <Icon size={22} aria-hidden="true" />
-          <span>{t(label)}</span>
+          <span className={key === "co2e" ? "tool-row-co2e-label" : undefined}>
+            {key === "co2e" ? (
+              <>
+                kg <ArrowLeftRight size={16} aria-hidden="true" /> CO₂e
+              </>
+            ) : (
+              t(label)
+            )}
+          </span>
           <ChevronRight size={20} aria-hidden="true" />
         </button>
       ))}

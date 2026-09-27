@@ -1,0 +1,67 @@
+.search-filter-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.filter-panel .form-grid > label:not(.switch-label),
+.filter-panel .form-grid > div:not(.search-filter-pair) {
+  display: grid;
+  grid-template-rows: minmax(44px, auto) auto;
+  align-content: start;
+  min-width: 0;
+}
+
+.filter-panel .form-grid label {
+  margin-bottom: 0;
+}
+
+.filter-panel .form-grid {
+  row-gap: 20px;
+}
+
+.filter-panel .form-grid > label > select,
+.filter-panel .form-grid > div > select {
+  align-self: start;
+}
+
+.filter-panel .form-grid .help-heading {
+  min-height: 44px;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-panel .form-grid .help-heading label {
+  margin: 0;
+}
+
+.filter-panel .form-grid > .switch-label {
+  align-self: end;
+  min-height: 50px;
+}
+
+.filter-panel .form-grid > .text-button {
+  align-self: end;
+  min-height: 50px;
+}
+
+.search-filter-pair > label {
+  display: grid;
+  grid-template-rows: minmax(44px, auto) auto;
+  align-content: start;
+}
+
+.search-filter-pair label,
+.search-filter-pair select,
+#annex-filter,
+#oil-filter {
+  min-width: 0;
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .filter-panel .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}

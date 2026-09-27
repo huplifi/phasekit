@@ -29,8 +29,10 @@ describe("canonical bank validation and reproducibility", () => {
   });
   it("requires exact unity for a verified nominal recipe", () => {
     const r = rows();
-    r.components.find((c) => c.refrigerant_id === "r422d" && c.component_refrigerant_id === "r125")!
-      .mass_fraction = "0.6509999999999999";
+    r.components.find(
+      (c) =>
+        c.refrigerant_id === "r422d" && c.component_refrigerant_id === "r125",
+    )!.mass_fraction = "0.6509999999999999";
     expect(() => validateCanonical(r)).toThrow(/expected exactly 1/);
   });
   it("rejects dangerous source links", () => {
@@ -98,20 +100,26 @@ it("retains the distinct legal and product evidence for R514A", () => {
   const data = buildDataset(validateCanonical(rows()));
   const blend = data.refrigerants.find((r) => r.id === "r514a")!;
   expect(blend.coverage.composition).toBe("verified");
-  expect(blend.components.map((c) => [c.refrigerantId, c.massPercent])).toEqual([
-    ["r1130e", "25.3"],
-    ["r1336mzzz", "74.7"],
-  ]);
+  expect(blend.components.map((c) => [c.refrigerantId, c.massPercent])).toEqual(
+    [
+      ["r1130e", "25.3"],
+      ["r1336mzzz", "74.7"],
+    ],
+  );
   expect(blend.facts.odp.value).toBe("0.00006");
   expect(blend.facts.odp.sourceIds).toEqual(["epa-chiller-snap-r514a"]);
-  expect(blend.facts.normal_boiling_c.sourceIds).toEqual(["chemours-xp30-tech"]);
+  expect(blend.facts.normal_boiling_c.sourceIds).toEqual([
+    "chemours-xp30-tech",
+  ]);
   expect(blend.facts.gwp_eu_2024_573_100yr).toMatchObject({
     state: "verified",
     value: "1.55376",
     basis: "EU-2024/573-Annex-VI-mass-weighted",
   });
-  expect(data.refrigerants.find((r) => r.id === "r1130e")!.facts.gwp_eu_2024_573_100yr)
-    .toMatchObject({ value: "0", basis: "EU-2024/573-Annex-VI" });
+  expect(
+    data.refrigerants.find((r) => r.id === "r1130e")!.facts
+      .gwp_eu_2024_573_100yr,
+  ).toMatchObject({ value: "0", basis: "EU-2024/573-Annex-VI" });
 });
 
 it("keeps conditional physical and nonflammability facts explicit", () => {
@@ -126,31 +134,58 @@ it("keeps conditional physical and nonflammability facts explicit", () => {
       phase: "two_phase",
     },
   });
-  expect(data.refrigerants.find((r) => r.id === "r744")!.facts.normal_boiling_c.state).toBe("unknown");
-  expect(data.refrigerants.find((r) => r.id === "r515b")!.facts.lower_flammability_limit_vol_pct)
-    .toMatchObject({ state: "not_applicable", sourceIds: ["honeywell-r515b-tds"] });
+  expect(
+    data.refrigerants.find((r) => r.id === "r744")!.facts.normal_boiling_c
+      .state,
+  ).toBe("unknown");
+  expect(
+    data.refrigerants.find((r) => r.id === "r515b")!.facts
+      .lower_flammability_limit_vol_pct,
+  ).toMatchObject({
+    state: "not_applicable",
+    sourceIds: ["honeywell-r515b-tds"],
+  });
 });
 
 it("keeps common-fluid ignition limits tied to their measured or published conditions", () => {
   const data = buildDataset(validateCanonical(rows()));
   const get = (id: string) => data.refrigerants.find((r) => r.id === id)!.facts;
   expect(get("r32").lower_flammability_limit_vol_pct).toMatchObject({
-    state: "verified", value: "13.8", sourceIds: ["daikin-r32-sds-2023"],
+    state: "verified",
+    value: "13.8",
+    sourceIds: ["daikin-r32-sds-2023"],
     conditions: { phase: "gas_in_air" },
   });
   expect(get("r32").autoignition_c.state).toBe("unknown");
   expect(get("r1234yf").lower_flammability_limit_vol_pct).toMatchObject({
-    state: "verified", value: "6.2", sourceIds: ["chemours-yf-bulletin"],
+    state: "verified",
+    value: "6.2",
+    sourceIds: ["chemours-yf-bulletin"],
     conditions: { temperatureC: 21, method: "ASTM E681-04" },
   });
   expect(get("r1234yf").autoignition_c).toMatchObject({
-    state: "verified", value: "405", sourceIds: ["chemours-yf-bulletin"],
+    state: "verified",
+    value: "405",
+    sourceIds: ["chemours-yf-bulletin"],
   });
   expect(get("r152a").lower_flammability_limit_vol_pct).toMatchObject({
-    state: "verified", value: "3.9", sourceIds: ["chemours-a2l-charge-guidance"],
+    state: "verified",
+    value: "3.9",
+    sourceIds: ["chemours-a2l-charge-guidance"],
   });
-  expect(get("r717").autoignition_c.state).toBe("unknown");
-  expect(get("r1234zee").lower_flammability_limit_vol_pct.state).toBe("unknown");
+  expect(get("r717").lower_flammability_limit_vol_pct).toMatchObject({
+    state: "verified",
+    value: "15.4",
+    sourceIds: ["linde-r717-sds-2020"],
+  });
+  expect(get("r717").autoignition_c).toMatchObject({
+    state: "verified",
+    value: "651",
+    sourceIds: ["linde-r717-sds-2020"],
+  });
+  expect(get("r1234zee").lower_flammability_limit_vol_pct.state).toBe(
+    "unknown",
+  );
 });
 
 it("rejects a per-fact source mapping to an unknown source", () => {
@@ -171,20 +206,36 @@ it("maps the five Annex I HFCs omitted from the legal supplement", () => {
   ]);
   for (const [id, gwp] of expected) {
     const fluid = data.refrigerants.find((r) => r.id === id)!;
-    expect(fluid.facts.euAnnex).toMatchObject({ state: "verified", value: "I", sourceIds: ["eu-2024-573"] });
+    expect(fluid.facts.euAnnex).toMatchObject({
+      state: "verified",
+      value: "I",
+      sourceIds: ["eu-2024-573"],
+    });
     expect(fluid.facts.gwp_eu_2024_573_100yr).toMatchObject({
-      state: "verified", value: gwp, basis: "EU-2024/573-Annex-I-AR4", sourceIds: ["eu-2024-573"],
+      state: "verified",
+      value: gwp,
+      basis: "EU-2024/573-Annex-I-AR4",
+      sourceIds: ["eu-2024-573"],
     });
   }
 });
 
 it("preserves reviewed mass composition coverage", () => {
   const r = rows();
-  expect(r.refrigerants.filter((x) => x.kind === "blend" && x.composition_status === "verified")).toHaveLength(183);
-  expect(r.refrigerants.filter((x) => x.ashrae_safety_group)).toHaveLength(167);
+  expect(
+    r.refrigerants.filter(
+      (x) => x.kind === "blend" && x.composition_status === "verified",
+    ),
+  ).toHaveLength(183);
+  expect(r.refrigerants.filter((x) => x.ashrae_safety_group)).toHaveLength(228);
   const built = buildDataset(validateCanonical(r));
-  for (const blend of built.refrigerants.filter((x) => x.kind === "blend" && x.coverage.composition === "verified")) {
-    const total = blend.components.reduce((sum, component) => sum.plus(component.massPercent), new Decimal(0));
+  for (const blend of built.refrigerants.filter(
+    (x) => x.kind === "blend" && x.coverage.composition === "verified",
+  )) {
+    const total = blend.components.reduce(
+      (sum, component) => sum.plus(component.massPercent),
+      new Decimal(0),
+    );
     expect(total.eq(100), blend.designation).toBe(true);
   }
 });
@@ -194,7 +245,11 @@ it("keeps source-specific names and structured oil facts", () => {
   const pure = r.refrigerants.filter((x) => x.kind === "pure");
   expect(pure).toHaveLength(66);
   expect(pure.every((x) => x.chemical_name !== x.designation)).toBe(true);
-  expect(pure.every((x) => Array.isArray(JSON.parse(x.fact_source_ids_json).chemical_name))).toBe(true);
+  expect(
+    pure.every((x) =>
+      Array.isArray(JSON.parse(x.fact_source_ids_json).chemical_name),
+    ),
+  ).toBe(true);
   expect(r.refrigerants.filter((x) => x.oil_typical)).toHaveLength(121);
   const data = buildDataset(validateCanonical(r));
   const r142b = data.refrigerants.find((x) => x.id === "r142b")!;
@@ -204,9 +259,20 @@ it("keeps source-specific names and structured oil facts", () => {
   expect(re143a.name.en).toBe("Methyl trifluoromethyl ether");
   expect(re143a.sourceIds).toContain("nist-refprop-identities");
   const r513a = data.refrigerants.find((x) => x.id === "r513a")!;
-  expect(r513a.facts.oil_typical).toMatchObject({ state: "verified", value: "POE", sourceIds: ["chemours-replacement-guide"] });
-  expect(r513a.facts.oil_possible).toMatchObject({ state: "verified", value: "PVE", sourceIds: ["bitzer-refreport-table"] });
-  expect(data.refrigerants.find((x) => x.id === "r485a")!.facts.ashrae_safety_group.state).toBe("unknown");
+  expect(r513a.facts.oil_typical).toMatchObject({
+    state: "verified",
+    value: "POE",
+    sourceIds: ["chemours-replacement-guide"],
+  });
+  expect(r513a.facts.oil_possible).toMatchObject({
+    state: "verified",
+    value: "PVE",
+    sourceIds: ["bitzer-refreport-table"],
+  });
+  expect(
+    data.refrigerants.find((x) => x.id === "r485a")!.facts.ashrae_safety_group
+      .state,
+  ).toBe("unknown");
 });
 
 it("rejects unsupported oil codes and name source references", () => {
@@ -214,18 +280,35 @@ it("rejects unsupported oil codes and name source references", () => {
   oil.refrigerants.find((x) => x.id === "r513a")!.oil_typical = "P0E";
   expect(() => validateCanonical(oil)).toThrow(/Invalid oil_typical/);
   const name = rows();
-  name.refrigerants.find((x) => x.id === "r142b")!.fact_source_ids_json = JSON.stringify({ chemical_name: ["missing-name-source"] });
+  name.refrigerants.find((x) => x.id === "r142b")!.fact_source_ids_json =
+    JSON.stringify({ chemical_name: ["missing-name-source"] });
   expect(() => validateCanonical(name)).toThrow(/references unknown source/);
 });
 
 it("maps new R31 and RC318 component facts to the correct EU annex and assessment basis", () => {
   const data = buildDataset(validateCanonical(rows()));
   const get = (id: string) => data.refrigerants.find((x) => x.id === id)!;
-  expect(get("r31").facts.euAnnex).toMatchObject({ value: "ODS-I", sourceIds: ["eu-2024-590"] });
-  expect(get("r31").facts.odp).toMatchObject({ value: "0.020", sourceIds: ["eu-2024-590"] });
-  expect(get("r31").facts.gwp_eu_2024_590_100yr).toMatchObject({ value: "79.4", basis: "EU-2024/590-Annex-I-GWP100" });
-  expect(get("rc318").facts.euAnnex).toMatchObject({ value: "I", sourceIds: ["eu-2024-573"] });
-  expect(get("rc318").facts.gwp_eu_2024_573_100yr).toMatchObject({ value: "10200", basis: "EU-2024/573-Annex-I-AR6" });
-  for (const id of ["r405a", "r505", "r506"]) expect(get(id).coverage.regulatory_eu_fi).toBe("verified");
+  expect(get("r31").facts.euAnnex).toMatchObject({
+    value: "ODS-I",
+    sourceIds: ["eu-2024-590"],
+  });
+  expect(get("r31").facts.odp).toMatchObject({
+    value: "0.020",
+    sourceIds: ["eu-2024-590"],
+  });
+  expect(get("r31").facts.gwp_eu_2024_590_100yr).toMatchObject({
+    value: "79.4",
+    basis: "EU-2024/590-Annex-I-GWP100",
+  });
+  expect(get("rc318").facts.euAnnex).toMatchObject({
+    value: "I",
+    sourceIds: ["eu-2024-573"],
+  });
+  expect(get("rc318").facts.gwp_eu_2024_573_100yr).toMatchObject({
+    value: "10200",
+    basis: "EU-2024/573-Annex-I-AR6",
+  });
+  for (const id of ["r405a", "r505", "r506"])
+    expect(get(id).coverage.regulatory_eu_fi).toBe("verified");
   expect(get("r13i1").coverage.regulatory_eu_fi).toBe("unsupported");
 });

@@ -1,0 +1,30 @@
+.co2e-breakdown {
+  margin-top: 32px;
+  max-width: 680px;
+}
+.co2e-breakdown ul {
+  padding: 0;
+  list-style: none;
+}
+.co2e-breakdown li {
+  padding: 16px 0;
+  border-top: 1px solid var(--divider);
+}
+.co2e-breakdown dl {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+.co2e-breakdown dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: 12px;
+}
+.co2e-breakdown dd {
+  margin: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.co2e-breakdown .caption {
+  overflow-wrap: anywhere;
+}

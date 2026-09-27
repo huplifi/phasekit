@@ -20,6 +20,27 @@ describe('offline P–h provider', () => {
     expect(diagram?.provider.dataVersion).toBe(phMetadata.dataVersion);
     expect(diagram?.provider.sourceIds).toEqual(['coolprop-ph-7.2.0', 'coolprop-pt-7.2.0']);
     expect(diagram?.provider.ptDataVersion).toBe(offlinePTProvider.metadata.dataVersion);
+    expect(diagram?.provider.isolineDataVersion).toMatch(/^ph-isolines-2026-09-26\./);
+  });
+
+  it.each(['r134a', 'r290'])('ships only bounded single-phase guide segments for %s', (id) => {
+    const diagram = getPHDiagram(id)!;
+    const minimum = Number(diagram.availability.minimumPressureBarAbsolute);
+    const maximum = Number(diagram.availability.maximumPressureBarAbsolute);
+    expect(new Set(diagram.isolines.map((line) => line.kind))).toEqual(new Set(['temperature', 'entropy', 'volume']));
+    for (const line of diagram.isolines) {
+      expect(line.segments.length).toBeGreaterThan(0);
+      for (const segment of line.segments) {
+        expect(segment.length).toBeGreaterThanOrEqual(3);
+        for (const [pressure, enthalpy] of segment) {
+          expect(pressure).toBeGreaterThanOrEqual(minimum);
+          expect(pressure).toBeLessThanOrEqual(maximum);
+          expect(Number.isFinite(enthalpy)).toBe(true);
+        }
+        for (let index = 1; index < segment.length; index++)
+          expect(segment[index]![0]).toBeGreaterThan(segment[index - 1]![0]);
+      }
+    }
   });
 
   it('matches independent CoolProp R134a Hmass(P,T) vectors within bounded interpolation error', () => {
