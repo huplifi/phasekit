@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.3.0-beta.1",
+    "date": "2026-09-27",
+    "channel": "beta",
+    "title": {
+      "fi": "Seuraavan päivityskierroksen aloitus",
+      "en": "Start of the next update cycle"
+    },
+    "changes": {
+      "fi": [
+        "Uuden betakierroksen lähtökohtana on vakaa 0.2.0. Tässä versiossa ei vielä ole uusia laskentatoimintoja.",
+        "Tulevat muutokset testataan ensin erillisessä betassa. BETA-kuvake ja PhaseKit Beta -asennusnimi erottavat sen vakaasta sovelluksesta."
+      ],
+      "en": [
+        "The new beta cycle starts from stable 0.2.0. This version introduces no new calculation features.",
+        "Upcoming changes will be tested in the separate beta first. The BETA icon and PhaseKit Beta installation name distinguish it from the stable app."
+      ]
+    }
+  },
+  {
     "version": "0.2.0",
     "date": "2026-09-27",
     "channel": "stable",
