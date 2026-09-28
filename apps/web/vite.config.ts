@@ -7,7 +7,7 @@ const isBetaBuild =
   packageInfo.version.includes("-beta.") ||
   process.env.VITE_RELEASE_CHANNEL === "beta";
 const appName = isBetaBuild ? "PhaseKit Beta" : "PhaseKit";
-const iconPrefix = isBetaBuild ? "/icons/icon-beta" : "/icons/icon";
+const iconPrefix = isBetaBuild ? "/icons/icon-beta-v2" : "/icons/icon-v2";
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
   define: {
@@ -22,7 +22,7 @@ export default defineConfig({
       transformIndexHtml(html) {
         if (!isBetaBuild) return html;
         return html
-          .replace("/icons/icon-192.png", "/icons/icon-beta-180.png")
+          .replace("/icons/icon-v2-192.png", "/icons/icon-beta-v2-180.png")
           .replace(
             "</head>",
             '<meta name="apple-mobile-web-app-title" content="PhaseKit Beta"/></head>',
