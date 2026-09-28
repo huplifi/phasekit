@@ -42,8 +42,4 @@ Later candidates: psychrometric/dew-point calculations, pressure-test temperatur
 
 ## Heat quantity calculator — material request, 28 September 2026
 
-The heat quantity/heating-time calculator includes **Kiisseli** (Finnish fruit pudding) in the material picker as a small nod to the user's course homework. Beta.2 implements six solve modes and sourced common-material reference values; see [heat quantity](HEAT-QUANTITY.md). Kiisseli is a named user-property option, not a fabricated data preset.
-
-- Keep the Finnish name **Kiisseli** visible; English can use **Kiisseli (fruit pudding)**.
-- Let the user enter the specific heat capacity given in their exercise. Do not invent a universal value or silently substitute water's value.
-- Require an explicit density only if converting a supplied volume to mass. Saved and printed results must retain the entered properties and identify them as user-supplied.
+Beta.2 introduced six solve modes and sourced reference materials; see [heat quantity](HEAT-QUANTITY.md). The user subsequently requested a ready-to-use **Kiisseli** estimate rather than a blank exercise value. Beta.4 adds 3.9 kJ/(kg·K), based on an explicitly assumed 90 mass-% water / 10 mass-% carbohydrate mixture, while retaining manual editing. It is labelled as an estimate, not a measured recipe property. Density remains user-supplied for volume calculations. Saved and printed results retain the actual used value, its basis and sources.

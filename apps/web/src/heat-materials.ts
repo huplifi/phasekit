@@ -12,11 +12,24 @@ export const heatFormulaSource: Source = {
   note: "Representative constant-property estimates, not temperature-dependent property models. Q = m c ΔT; no phase change.",
 };
 
+export const foodHeatSource: Source = {
+  id: "ashrae-food-heat-mixture",
+  title: "ASHRAE Handbook — Thermal Properties of Foods",
+  url: "https://handbook.ashrae.org/Handbooks/R18/SI/r18_ch19/r18_ch19_si.aspx",
+  version:
+    "2018 Refrigeration, chapter 19, Table 1 and section 7; checked 2026-09-28",
+  checkedAt: "2026-09-28",
+  license:
+    "Selected factual coefficients with attribution; original source terms apply",
+  note: "Carbohydrate heat-capacity model and mass-weighted mixture method. The assumed kiisseli composition is a PhaseKit example, not a measured recipe from this source.",
+};
+
 export interface HeatMaterial {
   id: string;
   name: { fi: string; en: string };
   specificHeatKJkgK: string;
   densityKgM3: string;
+  estimated?: boolean;
   reference: { fi: string; en: string };
   sources: Source[];
 }
@@ -69,13 +82,14 @@ export const heatMaterials: HeatMaterial[] = [
   {
     id: "kiisseli",
     name: { fi: "Kiisseli", en: "Kiisseli (fruit pudding)" },
-    specificHeatKJkgK: "",
+    specificHeatKJkgK: "3.9",
     densityKgM3: "",
+    estimated: true,
     reference: {
-      fi: "Kotitehtävistä tuttu. Syötä tehtävän ominaislämpöarvo — kiisselillä ei ole tässä valmista taulukkoarvoa. Tilavuutta käytettäessä syötä myös tiheys.",
-      en: "A familiar homework ingredient. Enter the specific heat from your exercise — no preset value is assumed for kiisseli. Enter density too when using volume.",
+      fi: "Arvio 3,9 kJ/(kg·K): oletuksena 90 mass-% vettä ja 10 mass-% hiilihydraatteja. Suuntaa-antava vakioarvo jäätymättömälle kiisselille, ei mitattu reseptiarvo. Voit muuttaa arvoa.",
+      en: "Estimate 3.9 kJ/(kg·K): assumed 90% water and 10% carbohydrate by mass. An approximate constant for unfrozen kiisseli, not a measured recipe value. You can change it.",
     },
-    sources: [],
+    sources: [heatFormulaSource, foodHeatSource],
   },
   {
     id: "custom",
