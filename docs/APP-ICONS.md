@@ -3,7 +3,9 @@
 The v3 install artwork restores the original three-wave geometry from
 `apps/web/public/phasekit-logo.svg`. Beta and stable artwork share exactly the
 same wave paths, snowflake/wrench geometry, scale and placement. Beta adds only
-its outlined BETA badge. There are no baked reflections, shadows or rounded
+its larger BETA badge, using outlined Ioskeley Mono ExtraBold glyphs from the
+bundled application font. The shared logo is centred at (1000, 1000) on the
+2000 px canvas; the badge overlays its lower portion without shifting it. There are no baked reflections, shadows or rounded
 outer corners: the operating system applies its own mask.
 
 The palette separates the dark blue mark (#245873), muted blue waves (#B8DCE8)
