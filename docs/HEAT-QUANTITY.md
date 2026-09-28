@@ -38,3 +38,16 @@ At the user’s request, kiisseli has a ready-to-use, editable **3.9 kJ/(kg·K)*
 [ASHRAE Handbook 2018 Refrigeration, chapter 19, Table 1 and §7](https://handbook.ashrae.org/Handbooks/R18/SI/r18_ch19/r18_ch19_si.aspx), checked 28 September 2026, provides the carbohydrate model and mass-weighted mixture method. At 20 °C the carbohydrate model `1.5488 + 0.0019625 T − 0.0000059399 T²` gives 1.58567404 kJ/(kg·K). Using the existing water reference 4.186 gives `0.9 × 4.186 + 0.1 × 1.58567404 = 3.925967404`, rounded to **3.9**. The water reference temperature remains 15 °C; this mixed-reference approximation is deliberately coarse, not an exact 20 °C property model.
 
 The UI and frozen report mark the preset as a composition estimate and retain the assumption and both source references. Changing the value marks it user-supplied. Density is not inferred; a volume input still needs an explicit value. The model applies to unfrozen kiisseli without phase change.
+
+## Duration presentation
+
+Calculated minutes remain exact decimal strings in storage and JSON. The UI, saved
+summary and print renderer share a display-only duration formatter. Below one day,
+times round to the nearest second (positive sub-second values show `< 1 s`).
+Long durations use at most three adjacent scales: days/hours/minutes,
+months/days/hours or years/months/days. Zero components are omitted; finer
+components beyond these three scales are omitted and marked approximate.
+`≈` marks rounding and all calendar-sized durations. Since no start date is known,
+1 year means 365 days and 1 month means one twelfth of that year; a visible note
+explains this convention in the result, saved details and printout.
+The calculation formula retains decimal minutes so its arithmetic stays traceable.

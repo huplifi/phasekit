@@ -125,7 +125,7 @@ describe("saved sensible-heat reports", () => {
     )!;
     expect(duration.value.length).toBeGreaterThan(200);
     expect(Number(duration.value)).toBeCloseTo(40 / 3, 14);
-    expect(formatReportRow(duration, "fi")).toBe("≈13,3333 min");
+    expect(formatReportRow(duration, "fi")).toBe("≈13 min 20 s");
     expect(duration.value).toBe(
       original.outputs.find((item) => item.label.en === "Duration")!.value,
     );
@@ -156,7 +156,7 @@ describe("saved sensible-heat reports", () => {
 
   it.each([
     ["energy", "Energy", "kWh", "≈0,444444 kWh"],
-    ["time", "Duration", "min", "≈13,3333 min"],
+    ["time", "Duration", "min", "≈13 min 20 s"],
     ["power", "Thermal power", "kW", "≈1,33333 kW"],
     ["mass", "Mass", "kg", "10 kg"],
     ["temperature", "Final temperature", "°C", "70 °C"],

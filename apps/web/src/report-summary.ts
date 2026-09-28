@@ -1,5 +1,6 @@
 import type { ReportRow, ToolRecord } from "./storage";
 import Decimal from "decimal.js";
+import { durationPresentation, durationCalendarNote } from "./duration";
 import { formatDecimal } from "../../../packages/i18n/src";
 
 type Locale = "fi" | "en";
@@ -137,6 +138,10 @@ export function formatReportRow(
   locale: Locale,
 ): string {
   if (!row?.value?.trim()) return "";
+  if (row.unit === "min" && row.label.en === "Duration") {
+    const duration = durationPresentation(row.value, locale);
+    if (duration) return duration.text;
+  }
   const enums: Record<string, Record<string, [string, string]>> = {
     "Breakdown status": {
       reconciled: [
@@ -236,7 +241,7 @@ export function reportHasRoundedValues(
   report: Pick<ToolRecord, "inputs" | "outputs">,
 ): boolean {
   return [...report.inputs, ...report.outputs].some((row) =>
-    formatReportValue(row.value, "en").startsWith("≈"),
+    formatReportRow(row, "en").startsWith("≈"),
   );
 }
 
@@ -331,4 +336,18 @@ export function primaryReportOutputs(
   return rows.length
     ? rows
     : report.outputs.filter((row) => row.unit).slice(0, 1);
+}
+
+export function reportDurationNote(
+  report: Pick<ToolRecord, "inputs" | "outputs">,
+  locale: Locale,
+): string | null {
+  return [...report.inputs, ...report.outputs].some(
+    (row) =>
+      row.unit === "min" &&
+      row.label.en === "Duration" &&
+      durationPresentation(row.value, locale)?.calendar,
+  )
+    ? durationCalendarNote(locale)
+    : null;
 }

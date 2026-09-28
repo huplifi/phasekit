@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.6 — 2026-09-28 · Beta
+
+Readable heating durations
+
+- Heat-calculation durations use hours, minutes and seconds. Long durations also use days and explicitly explained approximate months and years.
+- The result card, saved calculations and printouts share this presentation. Exact minute values remain unchanged in storage and JSON exports.
+
 ## 0.3.0-beta.5 — 2026-09-28 · Beta
 
 Clearer app icons

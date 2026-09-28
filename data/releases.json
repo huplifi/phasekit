@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.3.0-beta.6",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Lämmitysaika luettavana kestona",
+      "en": "Readable heating durations"
+    },
+    "changes": {
+      "fi": [
+        "Lämpölaskurin aika näkyy tunteina, minuutteina ja sekunteina. Pitkissä kestoissa käytetään myös vuorokausia sekä erikseen selitettyjä likimääräisiä kuukausia ja vuosia.",
+        "Sama esitystapa toimii tuloskortissa, tallennetuissa laskelmissa ja tulosteissa. Tarkat minuuttiarvot säilyvät tallennuksessa ja JSON-viennissä."
+      ],
+      "en": [
+        "Heat-calculation durations use hours, minutes and seconds. Long durations also use days and explicitly explained approximate months and years.",
+        "The result card, saved calculations and printouts share this presentation. Exact minute values remain unchanged in storage and JSON exports."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.5",
     "date": "2026-09-28",
     "channel": "beta",

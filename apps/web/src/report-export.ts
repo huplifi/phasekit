@@ -16,6 +16,7 @@ import {
   isCyclePrimaryOutput,
   primaryReportOutputs,
   reportHasRoundedValues,
+  reportDurationNote,
   reportName,
 } from "./report-summary";
 import type { CheckResult, Source } from "../../../packages/core/src/contracts";
@@ -280,6 +281,8 @@ export function printToolRecord(
     record.inputs,
     locale,
   );
+  const durationNote = reportDurationNote(record, locale);
+  if (durationNote) appendText(body, "p", durationNote);
   if (reportHasRoundedValues(record)) {
     const roundingNote = doc.createElement("p");
     roundingNote.className = "muted";
