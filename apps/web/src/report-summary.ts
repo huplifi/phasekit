@@ -148,6 +148,22 @@ export function formatReportRow(
         "Component sum differs from the total",
       ],
     },
+    Calculation: {
+      dc: ["Tasavirta", "DC"],
+      single_phase: ["1-vaihe", "Single phase"],
+      three_phase: ["3-vaihe", "Three phase"],
+      ohm: ["Ohmin laki · tasavirta", "Ohm’s law · DC"],
+    },
+    Assumption: {
+      "Sinusoidal load; RMS quantities": [
+        "Sinimuotoinen kuorma; RMS-arvot",
+        "Sinusoidal load; RMS quantities",
+      ],
+      "Balanced sinusoidal three-phase load; RMS line quantities": [
+        "Tasapainoinen sinimuotoinen 3-vaihekuorma; pääjännite ja johdinvirta RMS-arvoina",
+        "Balanced sinusoidal three-phase load; RMS line quantities",
+      ],
+    },
     "Electrical solve for": {
       power: ["Pätöteho", "Real power"],
       current: ["Virta", "Current"],
