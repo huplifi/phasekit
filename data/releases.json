@@ -4,7 +4,7 @@
     "date": "2026-09-28",
     "channel": "beta",
     "title": {
-      "fi": "Kiisselille lämpöarvo ja työkaluille omat kuvakkeet",
+      "fi": "Kiisselille ominaislämpöarvio ja työkaluille omat kuvakkeet",
       "en": "A heat-capacity estimate for kiisseli and distinct tool icons"
     },
     "changes": {

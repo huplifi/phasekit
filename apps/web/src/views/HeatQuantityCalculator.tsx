@@ -388,7 +388,7 @@ export function HeatQuantityCalculator() {
         {materialId === "kiisseli" && (
           <p className="supporting-copy heat-material-note">
             {l(
-              "Kotitehtävistä tuttu kiisseli — nyt myös lämpöarvolla. Voit muuttaa arviota tehtävän mukaan.",
+              "Kotitehtävistä tuttu kiisseli. Voit muuttaa ominaislämpöarviota tehtävän mukaan.",
               "The homework favourite, now with a heat-capacity estimate. Adjust it to match your assignment.",
             )}
           </p>
