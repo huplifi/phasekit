@@ -1,6 +1,6 @@
 # PhaseKit roadmap
 
-Status: 26 September 2026, beta.4. This is the maintained English roadmap. Field tools, calculation reports and the unified Reports workflow belong to the separate beta. Stable phasekit.app remains at 0.1.0. See [verification](PREVIEW-VERIFICATION.md) for evidence and [release gates](RELEASE-GATES.md) for external approval work.
+Status: 28 September 2026. The current stable release recorded in the repository is 0.2.1. Field tools, calculation reports and the unified Reports workflow entered stable in 0.2.0. The milestone details below retain the 26 September beta planning terminology; “preview” refers to that earlier stage. See [verification](PREVIEW-VERIFICATION.md) for historical evidence and [release gates](RELEASE-GATES.md) for outstanding external review work.
 
 | Milestone                    | Current position                                                                                                                                                                                                                                                                                                     | Remaining work                                                                                                                                                                                            |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -24,13 +24,13 @@ Status: 26 September 2026, beta.4. This is the maintained English roadmap. Field
 - Saved calculation records keep input/output values, source records and model/data versions. They can be linked to equipment, exported as JSON and printed to PDF. Deleting equipment preserves its frozen name on past reports.
 - Backups include new collections and accept earlier schema-v1 files with those collections absent. Data remains local to the browser origin; the production site and preview have separate storage.
 
-## Boundaries for the next release
+## Release boundaries
 
-This preview must not be merged or promoted automatically. Production remains on its existing release until the owner tests and explicitly authorises release. Do not treat automated checks as qualified regulatory approval, source completeness, physical-device validation or an app-store release. Maintain unresolved items above instead of marking the entire roadmap complete.
+The beta work was promoted to stable in 0.2.0 after the owner's release decision. Future beta-to-main promotions still require an explicit owner decision. Do not treat automated checks as qualified regulatory approval, source completeness, physical-device validation or an app-store release. Maintain unresolved items above instead of marking the entire roadmap complete.
 
 ## Public beta iteration
 
-The latest [feedback batch](FEEDBACK-2026-09-26.md) is implemented on the development branch: aligned controls, full scrollable picker, distinct SVG icons, practical refrigeration/vacuum/length conversions, clearer checklist persistence, direct printable reports, saved-report PNG export and descriptive summaries. The guide-curve layer adds optional T/s/v lines to all 113 existing P–h models, without expanding the cycle solver's domain.
+The 26 September [feedback batch](FEEDBACK-2026-09-26.md) was implemented in beta and promoted to stable in 0.2.0: aligned controls, full scrollable picker, distinct SVG icons, practical refrigeration/vacuum/length conversions, clearer checklist persistence, direct printable reports, saved-report PNG export and descriptive summaries. The guide-curve layer adds optional T/s/v lines to all 113 existing P–h models, without expanding the cycle solver's domain.
 
 See [beta implementation](BETA-IMPLEMENTATION.md) for final verification status and [beta/release workflow](BETA-RELEASE-WORKFLOW.md) for separate hosting. Physical-device and qualified-review requirements remain open. [Pilot instructions](PILOT-TESTING.md) and [regulatory review forms](REGULATORY-REVIEW.md) are prepared; creating these documents does not complete those reviews.
 
