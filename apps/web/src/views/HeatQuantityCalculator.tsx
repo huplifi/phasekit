@@ -184,7 +184,9 @@ export function HeatQuantityCalculator() {
   const target = modes.find((mode) => mode.id === input.mode)!;
   const sourceLabel = (preset: boolean) =>
     preset
-      ? l("Taulukkoarvo", "Reference value")
+      ? material.estimated
+        ? l("Koostumuksesta arvioitu", "Composition estimate")
+        : l("Taulukkoarvo", "Reference value")
       : l("Käyttäjän syöttämä", "User-supplied");
   const assumptions = l(
     "Q = m · c · (T₂ − T₁). Vakio-ominaisuudet, ei olomuodon muutosta. Lämpöhäviöitä tai astian lämpenemistä ei huomioida. Teho tarkoittaa aineeseen siirtyvää tai siitä poistuvaa lämpötehoa, ei laitteen sähkötehoa.",
@@ -386,8 +388,8 @@ export function HeatQuantityCalculator() {
         {materialId === "kiisseli" && (
           <p className="supporting-copy heat-material-note">
             {l(
-              "Kotitehtävistä tuttu. Syötä tehtävän ominaislämpöarvo.",
-              "A familiar homework favourite. Enter the specific heat given in your assignment.",
+              "Kotitehtävistä tuttu kiisseli — nyt myös lämpöarvolla. Voit muuttaa arviota tehtävän mukaan.",
+              "The homework favourite, now with a heat-capacity estimate. Adjust it to match your assignment.",
             )}
           </p>
         )}

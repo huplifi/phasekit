@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.3.0-beta.4",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Kiisselille lämpöarvo ja työkaluille omat kuvakkeet",
+      "en": "A heat-capacity estimate for kiisseli and distinct tool icons"
+    },
+    "changes": {
+      "fi": [
+        "Kiisselillä on nyt muokattava ominaislämpökapasiteetin arvio 3,9 kJ/(kg·K). Arvio olettaa 90 mass-% vettä ja 10 mass-% hiilihydraatteja; koostumusoletus ja lähteet säilyvät tallenteessa ja tulosteessa.",
+        "Lämpöteholaskurin virtausta kuvaava kuvake erottaa sen lämpömäärälaskurista."
+      ],
+      "en": [
+        "Kiisseli now has an editable specific-heat estimate of 3.9 kJ/(kg·K), assuming 90% water and 10% carbohydrate by mass. The composition assumption and sources are retained in saved and printed results.",
+        "The thermal-power tool now uses a flow icon to distinguish it from the heat-quantity calculator."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.3",
     "date": "2026-09-28",
     "channel": "beta",

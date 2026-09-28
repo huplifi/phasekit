@@ -2,6 +2,7 @@ import {
   ArrowRightLeft,
   ChevronRight,
   Thermometer,
+  Waves,
   Zap,
   Ruler,
   ListChecks,
@@ -44,7 +45,7 @@ export function Tools() {
               path: "thermal-power",
               fi: "Lämpöteho",
               en: "Thermal power",
-              icon: Thermometer,
+              icon: Waves,
             },
             {
               path: "electrical",

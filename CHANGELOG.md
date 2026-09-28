@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.4 — 2026-09-28 · Beta
+
+A heat-capacity estimate for kiisseli and distinct tool icons
+
+- Kiisseli now has an editable specific-heat estimate of 3.9 kJ/(kg·K), assuming 90% water and 10% carbohydrate by mass. The composition assumption and sources are retained in saved and printed results.
+- The thermal-power tool now uses a flow icon to distinguish it from the heat-quantity calculator.
+
 ## 0.3.0-beta.3 — 2026-09-28 · Beta
 
 Electrical calculations in either direction
