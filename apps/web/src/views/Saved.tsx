@@ -17,6 +17,7 @@ import {
   formatReportRow,
   primaryReportOutputs,
   reportHasRoundedValues,
+  reportDurationNote,
   reportSummary,
 } from "../report-summary";
 import { downloadToolRecordImage } from "../report-image";
@@ -462,6 +463,11 @@ function ToolReport({
               )}
             </p>
           </section>
+        )}
+        {reportDurationNote(record, data.locale) && (
+          <p className="caption secondary">
+            {reportDurationNote(record, data.locale)}
+          </p>
         )}
         {reportHasRoundedValues(record) && (
           <p className="caption secondary">

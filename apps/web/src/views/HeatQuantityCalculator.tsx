@@ -11,6 +11,11 @@ import { Back } from "../components/Common";
 import { ReportSave } from "../components/ReportSave";
 import type { ReportRow } from "../storage";
 import { heatMaterials, heatFormulaSource } from "../heat-materials";
+import {
+  durationPresentation,
+  formatDurationMinutes,
+  durationCalendarNote,
+} from "../duration";
 import "./field-tools.css";
 import "./heat-quantity.css";
 
@@ -547,7 +552,9 @@ export function HeatQuantityCalculator() {
                 : l(target.fi, target.en)}
             </h2>
             <p className="field-result-value">
-              {number(primary[0])} {primary[1]}
+              {input.mode === "time"
+                ? formatDurationMinutes(primary[0], data.locale)
+                : `${number(primary[0])} ${primary[1]}`}
             </p>
             <p>
               {material.name[data.locale]} · {number(result.massKg)} kg ·{" "}
@@ -567,7 +574,9 @@ export function HeatQuantityCalculator() {
               {result.durationMinutes !== null && (
                 <div>
                   <dt>{l("Ideaalinen aika", "Ideal duration")}</dt>
-                  <dd>{number(result.durationMinutes)} min</dd>
+                  <dd>
+                    {formatDurationMinutes(result.durationMinutes, data.locale)}
+                  </dd>
                 </div>
               )}
               {result.powerKW !== null && (
@@ -577,6 +586,13 @@ export function HeatQuantityCalculator() {
                 </div>
               )}
             </dl>
+            {result.durationMinutes !== null &&
+              durationPresentation(result.durationMinutes, data.locale)
+                ?.calendar && (
+                <p className="supporting-copy">
+                  {durationCalendarNote(data.locale)}
+                </p>
+              )}
             <p className="supporting-copy">
               {l(
                 "Positiivinen lämpömäärä lämmittää, negatiivinen jäähdyttää. Aika ja teho ovat ideaalinen arvio ilman lämpöhäviöitä ja astian lämpenemistä. Teho tarkoittaa aineeseen siirtyvää tai siitä poistuvaa lämpötehoa, ei sähkötehoa.",

@@ -34,7 +34,7 @@ test("water energy and ideal duration use entered properties; invalid edits remo
   await expect(result).toHaveCount(0);
   await page.getByLabel("Lämpöteho · kW", { exact: true }).fill("2");
   await calculate(page);
-  await expect(result.locator(".field-result-value")).toHaveText("175 min");
+  await expect(result.locator(".field-result-value")).toHaveText("2 h 55 min");
   await expect(result).toContainText("ei sähkötehoa");
   await noOverflow(page);
   const accessibility = await new AxeBuilder({ page }).analyze();
@@ -277,7 +277,7 @@ test("Kiisseli composition estimate calculates energy and time and freezes its b
     .selectOption("time");
   await page.getByLabel("Lämpöteho · kW", { exact: true }).fill("1");
   await calculate(page);
-  await expect(result.locator(".field-result-value")).toHaveText("3,9 min");
+  await expect(result.locator(".field-result-value")).toHaveText("3 min 54 s");
   await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
@@ -329,7 +329,7 @@ test("Kiisseli composition estimate calculates energy and time and freezes its b
     .click();
   const printed = await popup;
   await expect(printed.locator(".result-card").first()).toContainText(
-    "3,9 min",
+    "3 min 54 s",
   );
   await expect(printed.locator("body")).toContainText(
     "Koostumuksesta arvioitu",
@@ -348,5 +348,117 @@ test("Kiisseli composition estimate calculates energy and time and freezes its b
     "",
   );
   await expect(result).toHaveCount(0);
+  await noOverflow(page);
+});
+
+test("rounded heating duration stays human-readable in calculation, saved report and print", async ({
+  page,
+}) => {
+  await page.goto("/#/heat-quantity");
+  await page
+    .getByRole("combobox", { name: "Aine", exact: true })
+    .selectOption("kiisseli");
+  await page
+    .getByRole("combobox", { name: "Ratkaise", exact: true })
+    .selectOption("time");
+  await page.getByLabel("Määrä", { exact: true }).fill("1");
+  await page.getByLabel("Alkulämpötila · °C", { exact: true }).fill("21");
+  await page.getByLabel("Loppulämpötila · °C", { exact: true }).fill("100");
+  await page.getByLabel("Lämpöteho · kW", { exact: true }).fill("1");
+  await calculate(page);
+  const headline = page
+    .getByRole("region", { name: "Lämpölaskennan tulos" })
+    .locator(".field-result-value");
+  await expect(headline).toHaveText(/^≈\s*5 min 8 s$/);
+  const displayedDuration = (await headline.innerText()).trim();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Tallennettu", exact: true }),
+  ).toBeDisabled();
+  await page.goto("/#/reports");
+  await page.reload();
+  const saved = page.locator(".saved-entry").filter({ hasText: "Kiisseli" });
+  await expect(saved.locator(".report-summary")).toContainText(
+    displayedDuration,
+  );
+  await saved.locator(":scope > summary").click();
+  await expect(
+    saved
+      .getByRole("region", { name: "Päätulos", exact: true })
+      .locator(".result-number"),
+  ).toHaveText(displayedDuration);
+  const popup = page.waitForEvent("popup");
+  await saved
+    .getByRole("button", { name: "Tulosta / tallenna PDF", exact: true })
+    .click();
+  const printed = await popup;
+  await expect(
+    printed.locator(".result-card").first().locator("dd"),
+  ).toHaveText(displayedDuration);
+  await printed.close();
+  const duration = await page.evaluate(async () => {
+    const db = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open("phasekit");
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const state = await new Promise<{
+      toolRecords: {
+        tool: string;
+        outputs: { label: { en: string }; value: string; unit?: string }[];
+      }[];
+    }>((resolve, reject) => {
+      const request = db.transaction("user").objectStore("user").get("state");
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    db.close();
+    return state.toolRecords
+      .find((record) => record.tool === "heat-quantity")
+      ?.outputs.find((row) => row.label.en === "Duration");
+  });
+  expect(duration?.value).toBe("5.135");
+  expect(duration?.unit).toBe("min");
+});
+
+test("long ideal durations use compact calendar units without narrow-screen overflow", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto("/#/heat-quantity");
+  await page
+    .getByRole("combobox", { name: "Aine", exact: true })
+    .selectOption("kiisseli");
+  await page
+    .getByRole("combobox", { name: "Ratkaise", exact: true })
+    .selectOption("time");
+  await page.getByLabel("Määrä", { exact: true }).fill("1");
+  await page.getByLabel("Alkulämpötila · °C", { exact: true }).fill("0");
+  await page.getByLabel("Loppulämpötila · °C", { exact: true }).fill("60");
+  await page.getByLabel("Lämpöteho · kW", { exact: true }).fill("0.000001");
+  await calculate(page);
+  const result = page.getByRole("region", { name: "Lämpölaskennan tulos" });
+  await expect(result.locator(".field-result-value")).toHaveText(/7 v\s+5 kk/);
+  await expect(result.locator(".field-result-value")).not.toContainText("min");
+  await noOverflow(page);
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Tallennettu", exact: true }),
+  ).toBeDisabled();
+  await page.goto("/#/settings");
+  await page
+    .getByRole("combobox", { name: "Kieli", exact: true })
+    .selectOption("en");
+  await page.goto("/#/reports");
+  const saved = page.locator(".saved-entry").filter({ hasText: "Kiisseli" });
+  await expect(saved.locator(".report-summary")).toContainText(
+    /≈\s*7 yr\s+5 mo/,
+  );
+  await saved.locator(":scope > summary").click();
+  await expect(
+    saved.getByRole("region", { name: "Main result", exact: true }),
+  ).toContainText(/7 yr\s+5 mo/);
   await noOverflow(page);
 });
