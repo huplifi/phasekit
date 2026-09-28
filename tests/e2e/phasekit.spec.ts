@@ -264,10 +264,10 @@ test('serves the app shell offline after first online load and exposes PWA metad
  },manifestHref);
  expect(manifest.status).toBe(200);
  const beta=await page.locator('.beta-banner').count()>0;
- const iconPrefix=beta?'/icons/icon-beta-v2':'/icons/icon-v2';
+ const iconPrefix=beta?'/icons/icon-beta-v3':'/icons/icon-v3';
  expect(manifest.body.name).toBe(beta?'PhaseKit Beta':'PhaseKit');
  expect(manifest.body.short_name).toBe(beta?'PhaseKit Beta':'PhaseKit');
- await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href',beta?'/icons/icon-beta-v2-180.png':'/icons/icon-v2-192.png');
+ await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href',beta?'/icons/icon-beta-v3-180.png':'/icons/icon-v3-192.png');
  if(beta)await expect(page.locator('meta[name="apple-mobile-web-app-title"]')).toHaveAttribute('content','PhaseKit Beta');
  expect(manifest.body.display).toBe('standalone');
  expect(manifest.body.scope).toBe('/');

@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.8 — 2026-09-28 · Beta
+
+A consistent app icon
+
+- The beta app icon restores the original waves with clearer tonal separation between the mark and background.
+- Matching artwork is prepared for beta and stable, with only a BETA badge distinguishing the channels.
+
 ## 0.3.0-beta.7 — 2026-09-28 · Beta
 
 Schematic symbols for field work and study
