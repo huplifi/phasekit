@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.3.0-beta.5",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät sovelluskuvakkeet",
+      "en": "Clearer app icons"
+    },
+    "changes": {
+      "fi": [
+        "Sovelluskuvakkeen tuttu merkki erottuu nyt tummansiniseltä pohjalta ilman koristeaaltoja. Beta-tunniste säilyy luettavana myös harmaasävyisenä.",
+        "Jokaisella työkalulla on oma kuvake. Automaattinen tarkistus estää saman tunnuskuvakkeen käyttämisen kahdella työkalulla."
+      ],
+      "en": [
+        "The familiar app mark now stands out against a navy background without decorative waves. The beta badge remains legible in greyscale.",
+        "Every tool has its own icon. An automated check prevents duplicate tool identity icons."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.4",
     "date": "2026-09-28",
     "channel": "beta",

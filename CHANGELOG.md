@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.5 — 2026-09-28 · Beta
+
+Clearer app icons
+
+- The familiar app mark now stands out against a navy background without decorative waves. The beta badge remains legible in greyscale.
+- Every tool has its own icon. An automated check prevents duplicate tool identity icons.
+
 ## 0.3.0-beta.4 — 2026-09-28 · Beta
 
 A heat-capacity estimate for kiisseli and distinct tool icons

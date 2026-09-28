@@ -8,6 +8,42 @@ async function noOverflow(page: import("@playwright/test").Page) {
     ),
   ).toBe(true);
 }
+test("every tool has a distinct identity icon in the tools catalogue", async ({
+  page,
+}) => {
+  await page.goto("/#/tools");
+  const tools = page.locator(".tool-row");
+  await expect(tools).toHaveCount(11);
+  // Only the leading SVG identifies a tool. Trailing chevrons, inline unit
+  // arrows and bottom-navigation icons serve other purposes.
+  const identities = await tools.evaluateAll((rows) =>
+    rows.map((row) => {
+      const icon = row.querySelector(":scope > svg:first-child");
+      return {
+        label: row.textContent?.trim() ?? "",
+        geometry: icon?.innerHTML ?? "",
+        hidden: icon?.getAttribute("aria-hidden"),
+      };
+    }),
+  );
+  for (const identity of identities) {
+    expect(
+      identity.geometry,
+      `${identity.label} needs an identity icon`,
+    ).not.toBe("");
+    expect(
+      identity.hidden,
+      `${identity.label} icon should not repeat its label`,
+    ).toBe("true");
+    const sameIcon = identities.filter(
+      (other) => other.geometry === identity.geometry,
+    );
+    expect(
+      sameIcon.map((other) => other.label),
+      `Shared tool icon: ${identity.label}`,
+    ).toEqual([identity.label]);
+  }
+});
 test("thermal power retains cooling sign, uses explicit properties and clears stale output", async ({
   page,
 }) => {
