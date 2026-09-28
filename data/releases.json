@@ -1,5 +1,28 @@
 [
   {
+    "version": "0.3.0-beta.2",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Lämpömäärä, lämmitysaika ja kiisseli",
+      "en": "Heat quantity, heating time and kiisseli"
+    },
+    "changes": {
+      "fi": [
+        "Uusi lämpömäärälaskuri ratkaisee energian, lämmitys- tai jäähdytysajan, tarvittavan lämpötehon, massan, loppulämpötilan tai ominaislämpökapasiteetin.",
+        "Ainevalinnassa on lähteistetyt veden, kuivan ilman, kuparin ja alumiinin taulukkoarvot sekä omat arvot. Kotitehtävistä tuttu kiisseli pyytää käyttäjän oman ominaislämpöarvon.",
+        "Tulokset voi tallentaa laitteeseen liitettäviksi laskelmiksi ja tulostaa. Käytetyt ominaisuudet, lähteet ja laskennan oletukset säilyvät raportissa.",
+        "Nesteen lämpöteholaskuri käyttää samaa veden taulukkoarvoa. Laskenta olettaa vakio-ominaisuudet ja saman olomuodon; lämmitysaika perustuu aineeseen siirtyvään lämpötehoon ilman häviöitä."
+      ],
+      "en": [
+        "A new heat calculator solves energy, heating/cooling time, required thermal power, mass, final temperature or specific heat capacity.",
+        "Material selection includes sourced reference properties for water, dry air, copper and aluminium, plus custom properties. The homework-inspired kiisseli option asks for the user’s own specific heat value.",
+        "Results can be saved as equipment-linked calculations and printed. Reports retain the properties used, sources and calculation assumptions.",
+        "The liquid thermal-power calculator shares the water reference properties. Calculations assume constant properties without phase change; heating time uses heat transferred to the material and excludes losses."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.1",
     "date": "2026-09-27",
     "channel": "beta",

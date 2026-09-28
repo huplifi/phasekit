@@ -1,3 +1,4 @@
+import { heatMaterials, heatFormulaSource } from "../heat-materials";
 import { ExclusiveChoices } from "../components/ExclusiveChoices";
 import { useDraftGuard } from "../useDraftGuard";
 import { useEffect, useState, type ReactNode } from "react";
@@ -170,6 +171,10 @@ function Layout({
 function ErrorMessage({ error }: { error: string }) {
   const { l } = useLabels();
   const messages: Record<string, [string, string]> = {
+    liquid_water_required: [
+      "Vesivalinnan molempien lämpötilojen tulee olla yli 0 ja alle 100 °C. Laskenta ei sisällä jäätymistä tai kiehumista.",
+      "The water preset requires both temperatures above 0 and below 100 °C. Freezing and boiling are not included.",
+    ],
     negative_flow: [
       "Virtaama ei voi olla negatiivinen.",
       "Flow cannot be negative.",
@@ -241,6 +246,8 @@ function Sources({ children }: { children: ReactNode }) {
   );
 }
 export function ThermalPowerCalculator() {
+  const [materialId, setMaterialId] = useState("custom");
+  const material = heatMaterials.find((item) => item.id === materialId)!;
   const setDraftDirty = useDraftGuard();
   const { l, number } = useLabels();
   const [input, setInput] = useState({
@@ -273,7 +280,16 @@ export function ThermalPowerCalculator() {
         onSubmit={(e) => {
           e.preventDefault();
           try {
-            setResult(calculateThermalPower(input));
+            const calculated = calculateThermalPower(input);
+            if (
+              materialId === "water" &&
+              [input.inletC, input.outletC].some((value) => {
+                const temperature = Number(value.replace(",", "."));
+                return temperature <= 0 || temperature >= 100;
+              })
+            )
+              throw new Error("liquid_water_required");
+            setResult(calculated);
             setError("");
           } catch (err) {
             setResult(null);
@@ -313,6 +329,40 @@ export function ThermalPowerCalculator() {
             )}
           </InfoHelp>
         </div>
+        <label>
+          {l("Nesteen taulukkoarvot", "Liquid reference properties")}
+          <select
+            value={materialId}
+            onChange={(event) => {
+              const selected = heatMaterials.find(
+                (item) => item.id === event.target.value,
+              )!;
+              setMaterialId(selected.id);
+              setInput((previous) => ({
+                ...previous,
+                densityKgM3: selected.densityKgM3,
+                specificHeatKJkgK: selected.specificHeatKJkgK,
+              }));
+              setResult(null);
+              setError("");
+            }}
+          >
+            <option value="custom">
+              {l("Omat arvot", "Custom properties")}
+            </option>
+            <option value="water">
+              {l(
+                "Vesi — oppikirjan likiarvot",
+                "Water — textbook approximations",
+              )}
+            </option>
+          </select>
+        </label>
+        {materialId === "water" && (
+          <p className="caption secondary">
+            {l(material.reference.fi, material.reference.en)}
+          </p>
+        )}
         <div className="field-tool-grid">
           <Numeric
             label={l("Tiheys · kg/m³", "Density · kg/m³")}
@@ -362,6 +412,23 @@ export function ThermalPowerCalculator() {
             title: l("Nesteen lämpöteho", "Liquid thermal power"),
             inputs: [
               reportRow(
+                "Aine",
+                "Material",
+                l(material.name.fi, material.name.en),
+              ),
+              reportRow(
+                "Arvojen peruste",
+                "Property basis",
+                materialId === "water" &&
+                  input.specificHeatKJkgK === material.specificHeatKJkgK &&
+                  input.densityKgM3 === material.densityKgM3
+                  ? l(material.reference.fi, material.reference.en)
+                  : l(
+                      "Käyttäjän syöttämät ominaisuudet",
+                      "User-supplied properties",
+                    ),
+              ),
+              reportRow(
                 "Tilavuusvirta",
                 "Volume flow",
                 input.flow,
@@ -392,11 +459,29 @@ export function ThermalPowerCalculator() {
               ),
               reportRow("Massavirta", "Mass flow", result.massFlowKgS, "kg/s"),
             ],
-            sources: [thermalSource],
+            sources:
+              materialId === "water"
+                ? [thermalSource, heatFormulaSource]
+                : [thermalSource],
           }}
         />
       )}
+      <p className="caption">
+        <a href="#/heat-quantity">
+          {l(
+            "Laske erillisen massan lämpömäärä tai lämmitysaika →",
+            "Calculate heat quantity or heating time for a fixed mass →",
+          )}
+        </a>
+      </p>
       <Sources>
+        {materialId === "water" && (
+          <p>
+            <a href={heatFormulaSource.url} target="_blank" rel="noreferrer">
+              {heatFormulaSource.title}
+            </a>
+          </p>
+        )}
         <p className="mono">P = ρ · qᵥ · cₚ · (Tᵤₗₒₛ − Tₛᵢₛääₙ)</p>
         <p>
           {l(

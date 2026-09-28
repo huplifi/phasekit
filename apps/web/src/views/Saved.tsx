@@ -42,6 +42,7 @@ const toolKindLabels: Record<ToolRecord["tool"], { fi: string; en: string }> = {
   co2e: { fi: "CO₂e", en: "CO₂e" },
   convert: { fi: "Yksikkömuunnos", en: "Unit conversion" },
   "thermal-power": { fi: "Lämpöteho", en: "Thermal power" },
+  "heat-quantity": { fi: "Lämpömäärä", en: "Heat quantity" },
   electrical: { fi: "Sähkölaskuri", en: "Electrical calculation" },
   pipe: { fi: "Putkilaskelma", en: "Pipe calculation" },
 };
