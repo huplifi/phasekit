@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Katkaisija, yleismerkki">
+  <title>Katkaisija, yleismerkki</title>
+  <desc>Katkaisijan toiminto. Merkki ei yksin kerro laukaisutapaa tai suojauksen arvoja.</desc>
+  <path d="M32 8V24M32 40V56M32 40L20 24"/><path d="M28 20L36 28M28 28L36 20"/>
+</svg>

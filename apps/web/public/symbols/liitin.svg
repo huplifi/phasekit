@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Liitin">
+  <title>Liitin</title>
+  <desc>Avoin ympyrä osoittaa liittimen. Lisätyt johdinpäät ovat kirjaston liitäntäpaikat.</desc>
+  <path d="M8 32H28M36 32H56"/><circle cx="32" cy="32" r="4"/>
+</svg>

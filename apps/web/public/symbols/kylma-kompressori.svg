@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Kompressori, kylmäkierron merkki">
+  <title>Kompressori, kylmäkierron merkki</title>
+  <desc>Nostaa kylmäainehöyryn painetta ja ylläpitää kiertoa. Imu alhaalta, painepuoli ylhäällä. Ei ota kantaa kompressorityyppiin tai sähköliitäntään; sähköinen moottoriesitys on kompressori.svg.</desc>
+  <circle cx="32" cy="32" r="16"/>
+  <path d="M32 8V16M32 48V56M20 42.58L26 17.17M44 42.58L38 17.17M28 12L32 8L36 12"/>
+</svg>

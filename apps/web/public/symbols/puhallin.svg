@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Puhallin, johdotettu esitys">
+  <title>Puhallin, johdotettu esitys</title>
+  <desc>Puhallin laitelohkona ja sähköisenä liitäntänä; ei roottorin lapapiirros. Lähteessä puhaltimen merkki on laiterajauksen sisällä. Yksi viiva on yleisyhteys, ei napaluku.</desc>
+  <rect x="20" y="12" width="36" height="40"/><path d="M8 32H20"/><circle cx="38" cy="32" r="10"/><path d="M35 22C34 27 29 34 29 36M41 22C42 27 47 34 47 36"/>
+</svg>

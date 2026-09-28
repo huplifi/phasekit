@@ -1,3 +1,4 @@
+import { Symbols } from "./views/Symbols";
 import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
@@ -321,6 +322,7 @@ export function App() {
     "convert",
     "thermal-power",
     "heat-quantity",
+    "symbols",
     "electrical",
     "pipe",
   ].includes(section)
@@ -468,6 +470,8 @@ export function App() {
             <Tools />
           ) : section === "convert" ? (
             <UnitConverter />
+          ) : section === "symbols" ? (
+            <Symbols />
           ) : section === "heat-quantity" ? (
             <HeatQuantityCalculator />
           ) : section === "thermal-power" ? (

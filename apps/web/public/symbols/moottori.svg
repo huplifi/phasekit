@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Moottori, yleisesitys">
+  <title>Moottori, yleisesitys</title>
+  <desc>Moottoriksi nimetty pyörivä sähkökone; ei määritä vaiheita, liittimiä tai käyttökohdetta. Sivun 31 koneen yleismerkki ja sivun 33 M-kirjaintunnus. Tunnus on käsin piirretty vektoripolku.</desc>
+  <circle cx="32" cy="32" r="20"/><path d="M24 40V24L32 34L40 24V40"/>
+</svg>

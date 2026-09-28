@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Pääkytkin, kuormanerotuskytkimen esitys">
+  <title>Pääkytkin, kuormanerotuskytkimen esitys</title>
+  <desc>Pääkytkimen käyttötarkoitus kuormanerotuskytkimen yleismerkillä. Pääkytkin on käyttötarkoitus. PDF ei nimeä erillistä pääkytkinsymbolia. Esitys ei määritä napalukua.</desc>
+  <path d="M32 8V20M32 40V56M32 40L20 24"/><path d="M26 20H38"/><circle cx="32" cy="24" r="4"/>
+</svg>

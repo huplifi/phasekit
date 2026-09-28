@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Lämmitysvastus">
+  <title>Lämmitysvastus</title>
+  <desc>Sähköinen lämmitin, esimerkiksi sulatusvastus tai kampikammion lämmitin.</desc>
+  <path d="M8 32H16M48 32H56M24 24V40M32 24V40M40 24V40"/><rect x="16" y="24" width="32" height="16"/>
+</svg>

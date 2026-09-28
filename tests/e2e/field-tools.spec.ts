@@ -13,7 +13,7 @@ test("every tool has a distinct identity icon in the tools catalogue", async ({
 }) => {
   await page.goto("/#/tools");
   const tools = page.locator(".tool-row");
-  await expect(tools).toHaveCount(11);
+  await expect(tools).toHaveCount(12);
   // Only the leading SVG identifies a tool. Trailing chevrons, inline unit
   // arrows and bottom-navigation icons serve other purposes.
   const identities = await tools.evaluateAll((rows) =>

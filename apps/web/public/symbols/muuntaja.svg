@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Kaksikäämimuuntaja, yksiviivainen">
+  <title>Kaksikäämimuuntaja, yksiviivainen</title>
+  <desc>Kaksikäämimuuntajan yleisesitys; yksi viiva kummallakin puolella edustaa käämipiiriä.</desc>
+  <circle cx="32" cy="24" r="12"/><circle cx="32" cy="40" r="12"/><path d="M32 8V12M32 52V56"/>
+</svg>

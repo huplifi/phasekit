@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Korkeapainekytkin PSH">
+  <title>Korkeapainekytkin PSH</title>
+  <desc>Korkeapaineen kytkintoiminnon merkintä kylmäkaaviossa. Paineyhteys alhaalla. Tämä ei ole sähköinen kosketinmerkki eikä kerro laukaisuarvoa, kuittaustapaa tai turvaluokitusta.</desc>
+  <ellipse cx="32" cy="28" rx="22" ry="14"/>
+  <g transform="translate(18.5 22)">
+  <path d="M0 12V0H4C8 0 8 7 4 7H0"/>
+  </g>
+  <g transform="translate(28.5 22)">
+  <path d="M7 1C0 -2 -2 6 3.5 6S9 14 0 11"/>
+  </g>
+  <g transform="translate(38.5 22)">
+  <path d="M0 0V12M7 0V12M0 6H7"/>
+  </g>
+  <path d="M32 42V56"/>
+</svg>

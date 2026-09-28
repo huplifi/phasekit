@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Kolminapainen kontaktori">
+  <title>Kolminapainen kontaktori</title>
+  <desc>Kolme mekaanisesti yhteen kytkettyä sulkeutuvaa pääkosketinta. Koottu pääkosketinmerkistä ja mekaanisesta yhteydestä; katkoviiva ei ole johdin.</desc>
+  <path d="M16 8V24M16 40V56M16 40L8 24M16 16A4 4 0 0 0 16 24Z"/><path d="M32 8V24M32 40V56M32 40L24 24M32 16A4 4 0 0 0 32 24Z"/><path d="M48 8V24M48 40V56M48 40L40 24M48 16A4 4 0 0 0 48 24Z"/><path d="M12 32H44" stroke-dasharray="3 3"/>
+</svg>

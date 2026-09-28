@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.3.0-beta.7",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Kaaviosymbolit avuksi työmaalle ja opiskeluun",
+      "en": "Schematic symbols for field work and study"
+    },
+    "changes": {
+      "fi": [
+        "Uusi Kaaviosymbolit-työkalu: omat Kylmä- ja Sähkö-välilehdet, kuvallinen selaus ja nimihaku.",
+        "77 symbolin merkitykset, esitystavat ja lähdetiedot ovat käytettävissä myös ilman verkkoyhteyttä."
+      ],
+      "en": [
+        "New Schematic symbols reference with separate Refrigeration and Electrical tabs, visual browsing and name search.",
+        "77 symbols with meanings, representation types and source notes are available offline."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.6",
     "date": "2026-09-28",
     "channel": "beta",

@@ -1,0 +1,220 @@
+.schematic-symbols {
+  max-width: 900px;
+}
+.schematic-symbol-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: end;
+  margin-top: 24px;
+}
+.schematic-symbol-filters > :only-child {
+  grid-column: 1 / -1;
+}
+.schematic-symbol-filters label {
+  min-width: 0;
+  margin: 0;
+}
+.schematic-symbol-search-label .search-field {
+  margin-top: 8px;
+}
+.schematic-symbol-search-label input {
+  min-width: 0;
+}
+.schematic-symbol-count {
+  margin: 14px 0;
+}
+.schematic-symbol-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.schematic-symbol-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  min-width: 0;
+  width: 100%;
+  min-height: 190px;
+  margin: 0;
+  padding: 16px 12px;
+  border: 1px solid var(--divider);
+  border-radius: 10px;
+  color: var(--text);
+  background: var(--background);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.schematic-symbol-card:hover {
+  border-color: var(--control-border);
+  background: var(--surface);
+}
+.schematic-symbol-card strong {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+.schematic-symbol-image {
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  height: 90px;
+  margin-bottom: 5px;
+  background-color: currentColor;
+  -webkit-mask: var(--schematic-symbol-url) center / contain no-repeat;
+  mask: var(--schematic-symbol-url) center / contain no-repeat;
+}
+.schematic-symbol-meta {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.schematic-symbol-status {
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  font-weight: 600;
+  padding: 3px 6px;
+  border: 1px solid var(--divider);
+  border-radius: 4px;
+}
+.schematic-symbol-dialog {
+  width: min(600px, calc(100vw - 24px));
+  max-width: 600px;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--background);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.schematic-symbol-dialog::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+.schematic-symbol-detail {
+  padding: 22px;
+}
+.schematic-symbol-dialog-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.schematic-symbol-dialog-heading h2 {
+  margin: 0;
+  font-size: 1.375rem;
+  overflow-wrap: anywhere;
+}
+.schematic-symbol-dialog-heading button {
+  flex-shrink: 0;
+  margin: -8px -8px 0 0;
+}
+.schematic-symbol-preview {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  margin: 20px 0;
+  background: var(--surface);
+  border-radius: 8px;
+}
+.schematic-symbol-image-large {
+  width: 100%;
+  max-width: 320px;
+  height: 180px;
+  margin: 0;
+}
+.schematic-symbol-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  margin: 18px 0;
+}
+.schematic-symbol-facts > div {
+  min-width: 0;
+}
+.schematic-symbol-facts dt {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.schematic-symbol-facts dd {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+.schematic-symbol-detail h3 {
+  margin: 20px 0 8px;
+  font-size: 0.9375rem;
+}
+.schematic-symbol-detail section p,
+.schematic-symbol-detail li {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.schematic-symbol-detail section p {
+  margin: 0;
+}
+.schematic-symbol-detail ul {
+  padding-inline-start: 20px;
+}
+.schematic-symbol-sources {
+  margin-top: 22px;
+  border-top: 1px solid var(--divider);
+  padding-top: 14px;
+  overflow-wrap: anywhere;
+}
+.schematic-symbol-sources summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.schematic-symbol-sources li {
+  margin-bottom: 16px;
+}
+.schematic-symbol-sources p {
+  margin: 5px 0;
+}
+@media (max-width: 600px) {
+  .schematic-symbol-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .schematic-symbol-filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .schematic-symbol-card {
+    min-height: 178px;
+    padding: 12px 10px;
+  }
+  .schematic-symbol-image {
+    height: 76px;
+  }
+  .schematic-symbol-image-large {
+    height: 150px;
+  }
+  .schematic-symbol-detail {
+    padding: 18px;
+  }
+  .schematic-symbol-dialog-heading h2 {
+    font-size: 1.25rem;
+  }
+}
+
+/* The shared label/input defaults must not add a second border to search. */
+.schematic-symbol-filters .search-field input[type="search"] {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 8px 0;
+  outline: none;
+}
+.schematic-symbol-card strong {
+  hyphens: auto;
+}
