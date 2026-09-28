@@ -1,6 +1,6 @@
 # PhaseKit roadmap
 
-Status: 26 September 2026, beta.4. This is the maintained English roadmap. Field tools, calculation reports and the unified Reports workflow belong to the separate beta. Stable phasekit.app remains at 0.1.0. See [verification](PREVIEW-VERIFICATION.md) for evidence and [release gates](RELEASE-GATES.md) for external approval work.
+Status: 28 September 2026. Stable phasekit.app is 0.2.0; subsequent work targets the separate 0.3.0 beta. Field tools, calculation reports and the unified Reports workflow are in stable. Historical preview milestones below describe their original scope. See [verification](PREVIEW-VERIFICATION.md) for evidence and [release gates](RELEASE-GATES.md) for external approval work.
 
 | Milestone                    | Current position                                                                                                                                                                                                                                                                                                     | Remaining work                                                                                                                                                                                            |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -39,3 +39,11 @@ See [beta implementation](BETA-IMPLEMENTATION.md) for final verification status 
 [Beta.4 scope and acceptance](BETA-FIELD-REPORTS.md) covers Reports navigation, discoverable autosaved drafts, immutable final revisions, structured evacuation/commissioning measurements, frozen supported cycle diagrams and result-first printable documents. Existing records remain compatible. The smaller feedback fixes are part of this milestone.
 
 Later candidates: psychrometric/dew-point calculations, pressure-test temperature compensation, and measured power/efficiency tools after source/model requirements are defined. Photos, cloud synchronisation, work orders and instrument connections remain separate product decisions.
+
+## Heat quantity calculator — material request, 28 September 2026
+
+The heat quantity/heating-time calculator includes **Kiisseli** (Finnish fruit pudding) in the material picker as a small nod to the user's course homework. Beta.2 implements six solve modes and sourced common-material reference values; see [heat quantity](HEAT-QUANTITY.md). Kiisseli is a named user-property option, not a fabricated data preset.
+
+- Keep the Finnish name **Kiisseli** visible; English can use **Kiisseli (fruit pudding)**.
+- Let the user enter the specific heat capacity given in their exercise. Do not invent a universal value or silently substitute water's value.
+- Require an explicit density only if converting a supplied volume to mass. Saved and printed results must retain the entered properties and identify them as user-supplied.

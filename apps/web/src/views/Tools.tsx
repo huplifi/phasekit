@@ -35,6 +35,12 @@ export function Tools() {
               icon: ArrowRightLeft,
             },
             {
+              path: "heat-quantity",
+              fi: "Lämpömäärä ja lämmitysaika",
+              en: "Heat quantity and heating time",
+              icon: Thermometer,
+            },
+            {
               path: "thermal-power",
               fi: "Lämpöteho",
               en: "Thermal power",

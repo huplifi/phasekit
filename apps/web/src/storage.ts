@@ -29,6 +29,7 @@ export interface ToolRecord {
     | "co2e"
     | "convert"
     | "thermal-power"
+    | "heat-quantity"
     | "electrical"
     | "pipe";
   title: string;
@@ -277,6 +278,7 @@ const toolRecord = z.object({
     "co2e",
     "convert",
     "thermal-power",
+    "heat-quantity",
     "electrical",
     "pipe",
   ]),

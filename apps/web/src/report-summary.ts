@@ -11,6 +11,7 @@ const names: Record<ToolRecord["tool"], [string, string]> = {
   co2e: ["CO₂e", "CO₂e"],
   convert: ["Yksikkömuunnos", "Unit conversion"],
   "thermal-power": ["Lämpöteho", "Thermal power"],
+  "heat-quantity": ["Lämpömäärä", "Heat quantity"],
   electrical: ["Sähkölaskuri", "Electrical calculator"],
   pipe: ["Putken tilavuus ja virtaus", "Pipe volume and flow"],
 };
@@ -40,6 +41,13 @@ export function reportName(report: Report, locale: Locale): string {
 
 export function reportSummary(report: Report, locale: Locale): string {
   const name = reportName(report, locale);
+  if (report.tool === "heat-quantity") {
+    const material = findRow(report.inputs, "Aine", "Material");
+    const primary = primaryReportOutputs(report)[0];
+    return [name, material?.value, formatReportRow(primary, locale)]
+      .filter(Boolean)
+      .join(" · ");
+  }
   if (report.tool === "convert") {
     const quantity = findRow(report.inputs, "Suure", "Quantity")?.value;
     const localizedQuantity = quantity?.split(" / ")[locale === "fi" ? 0 : 1];
@@ -131,6 +139,14 @@ export function formatReportRow(
         "Component sum differs from the total",
       ],
     },
+    "Solve for": {
+      energy: ["Lämpömäärä", "Heat quantity"],
+      time: ["Aika", "Time"],
+      power: ["Lämpöteho", "Thermal power"],
+      mass: ["Massa", "Mass"],
+      temperature: ["Loppulämpötila", "Final temperature"],
+      "specific-heat": ["Ominaislämpökapasiteetti", "Specific heat capacity"],
+    },
     "Entered quantity": {
       pressure: ["Paine", "Pressure"],
       temperature: ["Lämpötila", "Temperature"],
@@ -218,6 +234,24 @@ function firstValue(
 export function primaryReportOutputs(
   report: Pick<ToolRecord, "tool" | "inputs" | "outputs">,
 ): ReportRow[] {
+  if (report.tool === "heat-quantity") {
+    const mode = findRow(
+      report.inputs,
+      "Ratkaistava suure",
+      "Solve for",
+    )?.value;
+    const labels: Record<string, string> = {
+      energy: "Energy",
+      time: "Duration",
+      power: "Thermal power",
+      mass: "Mass",
+      temperature: "Final temperature",
+      "specific-heat": "Specific heat capacity",
+    };
+    return report.outputs.filter(
+      (row) => row.label.en === (labels[mode ?? ""] ?? "Energy"),
+    );
+  }
   if (report.tool === "cycle")
     return report.outputs.filter(isCyclePrimaryOutput);
   if (report.tool === "pt") {

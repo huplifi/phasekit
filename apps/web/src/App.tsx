@@ -1,3 +1,4 @@
+import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
@@ -319,6 +320,7 @@ export function App() {
     "compare",
     "convert",
     "thermal-power",
+    "heat-quantity",
     "electrical",
     "pipe",
   ].includes(section)
@@ -378,7 +380,7 @@ export function App() {
           )}
         </header>
         {isBeta && (
-          <p className="beta-banner caption">
+          <aside className="beta-banner caption" aria-label="Beta">
             <strong>
               Beta {appVersion} · {buildVersion}
             </strong>
@@ -391,7 +393,7 @@ export function App() {
                 ? "Avaa vakaa versio"
                 : "Open stable version"}
             </a>
-          </p>
+          </aside>
         )}
         {storageError && (
           <p role="alert" className="notice error">
@@ -466,6 +468,8 @@ export function App() {
             <Tools />
           ) : section === "convert" ? (
             <UnitConverter />
+          ) : section === "heat-quantity" ? (
+            <HeatQuantityCalculator />
           ) : section === "thermal-power" ? (
             <ThermalPowerCalculator />
           ) : section === "electrical" ? (

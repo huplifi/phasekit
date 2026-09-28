@@ -1,0 +1,31 @@
+# Heat quantity and heating time
+
+Beta route: `#/heat-quantity`. Introduced in 0.3.0-beta.2. This is a constant-property sensible-heat calculator, not a phase-change or heat-loss model.
+
+## Contract
+
+`Q = m c (T_final − T_initial)`. Solve for signed energy, positive mass, final temperature or positive specific heat. Energy can be entered in kJ or kWh (`1 kWh = 3600 kJ`). A volume input in litres is converted to kg using explicitly supplied density; density is irrelevant for a mass input. Inverse mass/specific-heat calculations reject zero temperature difference and inconsistent energy direction.
+
+Time uses `t_minutes = |Q_kJ| / (60 P_kW)`; required power uses the same relationship solved for P. Power is the constant heat-transfer magnitude into/out of the material, not appliance electrical input. Time and power exclude container heat capacity, heat losses, heat-transfer-rate variation and phase change. Cooling energy is negative while cooling duration and power magnitude are non-negative.
+
+Fields not required for the chosen unknown are not parsed. Editing an input, material or mode clears the previous result and save control. Absolute temperatures below −273.15 °C are invalid. The water preset is conservatively restricted to temperatures strictly between 0 and 100 °C at ordinary atmospheric conditions, including a calculated final temperature. Other materials still require the user to retain the same phase; custom values do not add a phase-change model.
+
+## Reference properties
+
+Source: [OpenStax College Physics 2e, §14.2, Table 14.1 and Example 14.1](https://openstax.org/books/college-physics-2e/pages/14-2-temperature-change-and-heat-capacity), checked 28 September 2026. Factual values are converted from J/(kg·K) to kJ/(kg·K); no temperature interpolation is implied.
+
+| Material          |  c, kJ/(kg·K) | Source basis                                                  | Density preset                                                   |
+| ----------------- | ------------: | ------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Liquid water      |         4.186 | Table reference 15 °C                                         | 1000 kg/m³, textbook approximation from Example 14.1             |
+| Dry air           |         1.015 | cₚ, 20 °C, constant pressure 1 atm; not cᵥ for a rigid vessel | None; actual-condition density must be supplied for volume input |
+| Solid copper      |         0.387 | Table reference 25 °C                                         | None                                                             |
+| Solid aluminium   |         0.900 | Table reference 25 °C                                         | None                                                             |
+| Kiisseli / custom | User supplied | Exercise or other user-provided property                      | User supplied if needed                                          |
+
+These are explicitly labelled representative constant values, not a temperature-dependent material database. Selecting kiisseli/custom clears inherited properties. Editing a preset marks the used property as user-supplied. Solving c records it as a calculated result, not a looked-up property. The liquid thermal-power calculator shares the water reference but continues to start with custom properties.
+
+## Records and verification
+
+The additive `heat-quantity` tool kind uses the existing report persistence, equipment linking, backup and print paths. Records freeze the selected material, relevant entered properties, property basis, solve mode, assumptions, exact result strings and source metadata. The chosen unknown is the report's main result. Old backups remain readable; older app versions do not understand the new tool kind, so moving a beta backup to stable requires a compatible stable version.
+
+Unit tests cover six modes, independent water/time examples, heating/cooling signs, inverse round trips, volume conversion, irrelevant inputs and invalid boundaries. Storage/report tests cover exact backup round trips and correct headline selection. Browser checks cover material changes, kiisseli, stale results, reports/printing, bilingual mobile layout and the shared liquid-water preset.

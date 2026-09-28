@@ -1,0 +1,56 @@
+.heat-quantity .heat-material-note {
+  margin-block: -8px 20px;
+}
+.heat-quantity .heat-properties {
+  border: 0;
+  padding: 0;
+  margin: 24px 0;
+  min-width: 0;
+}
+.heat-properties legend {
+  font-weight: 700;
+  padding: 0;
+}
+.heat-properties .field-tool-grid {
+  margin: 12px 0;
+}
+.heat-properties label {
+  display: block;
+}
+.heat-properties .caption {
+  margin-block: 6px 0;
+}
+.heat-result-details {
+  margin-block: 16px;
+  display: grid;
+  gap: 12px;
+}
+.heat-result-details > div {
+  min-width: 0;
+}
+.heat-result-details dt {
+  font-size: 0.8125rem;
+}
+.heat-result-details dd {
+  margin: 2px 0 0;
+  font-family: var(--font-data);
+  overflow-wrap: anywhere;
+}
+.heat-formula {
+  margin-block: 20px;
+  overflow-wrap: anywhere;
+}
+.heat-formula summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 600;
+}
+.heat-quantity .field-result-value {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 500px) {
+  .heat-quantity .heat-choices,
+  .heat-properties .field-tool-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
