@@ -117,7 +117,13 @@ describe("electrical power", () => {
     ).toBeCloseTo(5542.562584, 5);
     expect(
       calculateElectrical({ mode: "ohm", voltageV: "24", resistanceOhm: "12" }),
-    ).toEqual({ currentA: "2", powerW: "48", apparentVA: null });
+    ).toEqual({
+      voltageV: "24",
+      currentA: "2",
+      powerW: "48",
+      apparentVA: null,
+      resistanceOhm: "12",
+    });
   });
   it("supports zero load/PF, and rejects undefined or invalid inputs", () => {
     expect(

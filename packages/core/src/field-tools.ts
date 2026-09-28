@@ -32,40 +32,110 @@ export function calculateThermalPower(input: {
   };
 }
 export type ElectricalMode = "dc" | "single_phase" | "three_phase" | "ohm";
-/** AC inputs are RMS; three-phase assumes a balanced sinusoidal load. */
-export function calculateElectrical(input: {
+export type ElectricalSolveFor = "power" | "current" | "voltage" | "resistance";
+export interface ElectricalInput {
   mode: ElectricalMode;
-  voltageV: string;
+  solveFor?: ElectricalSolveFor;
+  voltageV?: string;
   currentA?: string;
+  powerW?: string;
   resistanceOhm?: string;
   powerFactor?: string;
-}) {
-  const voltage = parseDecimal(input.voltageV);
-  if (voltage.lt(0)) throw new Error("negative_electrical_quantity");
+}
+/** AC inputs are RMS; three-phase assumes a balanced sinusoidal load. */
+export function calculateElectrical(input: ElectricalInput) {
   if (!["dc", "single_phase", "three_phase", "ohm"].includes(input.mode))
     throw new Error("invalid_mode");
+  const target =
+    input.solveFor === undefined
+      ? input.mode === "ohm"
+        ? "current"
+        : "power"
+      : input.solveFor;
+  const allowed =
+    input.mode === "ohm"
+      ? ["current", "voltage", "resistance"]
+      : ["power", "current", "voltage"];
+  if (!allowed.includes(target)) throw new Error("invalid_electrical_target");
+  const quantity = (value: string | undefined) => {
+    const parsed = parseDecimal(value ?? "");
+    if (parsed.lt(0)) throw new Error("negative_electrical_quantity");
+    return parsed;
+  };
+  const positive = (value: ReturnType<typeof parseDecimal>, error: string) => {
+    if (value.lte(0)) throw new Error(error);
+    return value;
+  };
+  let voltage: ReturnType<typeof parseDecimal>;
+  let current: ReturnType<typeof parseDecimal>;
+  let power: ReturnType<typeof parseDecimal>;
+  let apparent: ReturnType<typeof parseDecimal> | null = null;
+  let resistance: ReturnType<typeof parseDecimal> | null = null;
+
   if (input.mode === "ohm") {
-    const resistance = parseDecimal(input.resistanceOhm ?? "");
-    if (resistance.lte(0)) throw new Error("positive_resistance_required");
-    const current = voltage.div(resistance);
-    return {
-      currentA: current.toString(),
-      powerW: voltage.mul(current).toString(),
-      apparentVA: null,
-    };
+    if (target === "resistance") {
+      voltage = positive(quantity(input.voltageV), "positive_voltage_required");
+      current = positive(quantity(input.currentA), "positive_current_required");
+      resistance = voltage.div(current);
+    } else {
+      resistance = positive(
+        parseDecimal(input.resistanceOhm ?? ""),
+        "positive_resistance_required",
+      );
+      if (target === "voltage") {
+        current = quantity(input.currentA);
+        voltage = current.mul(resistance);
+      } else {
+        voltage = quantity(input.voltageV);
+        current = voltage.div(resistance);
+      }
+    }
+    power = voltage.mul(current);
+  } else {
+    const ac = input.mode !== "dc";
+    const pf = parseDecimal(ac ? (input.powerFactor ?? "") : "1");
+    if (pf.lt(0) || pf.gt(1)) throw new Error("invalid_power_factor");
+    const factor =
+      input.mode === "three_phase"
+        ? parseDecimal("3").sqrt()
+        : parseDecimal("1");
+    if (target === "power") {
+      voltage = quantity(input.voltageV);
+      current = quantity(input.currentA);
+      const voltAmperes = voltage.mul(current).mul(factor);
+      power = voltAmperes.mul(pf);
+      apparent = ac ? voltAmperes : null;
+    } else {
+      power = quantity(input.powerW);
+      positive(pf, "positive_power_factor_required");
+      if (target === "current") {
+        voltage = positive(
+          quantity(input.voltageV),
+          "positive_voltage_required",
+        );
+        current = power.div(factor.mul(voltage).mul(pf));
+      } else {
+        current = positive(
+          quantity(input.currentA),
+          "positive_current_required",
+        );
+        voltage = power.div(factor.mul(current).mul(pf));
+      }
+      apparent = ac ? power.div(pf) : null;
+    }
   }
-  const current = parseDecimal(input.currentA ?? "");
-  if (current.lt(0)) throw new Error("negative_electrical_quantity");
-  const ac = input.mode !== "dc";
-  const pf = parseDecimal(ac ? (input.powerFactor ?? "") : "1");
-  if (pf.lt(0) || pf.gt(1)) throw new Error("invalid_power_factor");
-  const apparent = voltage
-    .mul(current)
-    .mul(input.mode === "three_phase" ? parseDecimal("3").sqrt() : 1);
+  if (
+    [voltage, current, power, apparent, resistance].some(
+      (value) => value !== null && !value.isFinite(),
+    )
+  )
+    throw new Error("nonfinite_result");
   return {
+    voltageV: voltage.toString(),
     currentA: current.toString(),
-    powerW: apparent.mul(pf).toString(),
-    apparentVA: ac ? apparent.toString() : null,
+    powerW: power.toString(),
+    apparentVA: apparent?.toString() ?? null,
+    resistanceOhm: resistance?.toString() ?? null,
   };
 }
 

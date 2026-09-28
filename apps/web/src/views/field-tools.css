@@ -191,3 +191,9 @@
 .field-formula {
   font-family: var(--font-data);
 }
+
+@media (max-width: 500px) {
+  .field-tools .field-electrical-choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

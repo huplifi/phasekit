@@ -41,6 +41,15 @@ export function reportName(report: Report, locale: Locale): string {
 
 export function reportSummary(report: Report, locale: Locale): string {
   const name = reportName(report, locale);
+  if (
+    report.tool === "electrical" &&
+    findRow(report.inputs, "Ratkaistava suure", "Electrical solve for")
+  ) {
+    const primary = primaryReportOutputs(report)[0];
+    return [name, primary?.label[locale], formatReportRow(primary, locale)]
+      .filter(Boolean)
+      .join(" · ");
+  }
   if (report.tool === "heat-quantity") {
     const material = findRow(report.inputs, "Aine", "Material");
     const primary = primaryReportOutputs(report)[0];
@@ -139,6 +148,12 @@ export function formatReportRow(
         "Component sum differs from the total",
       ],
     },
+    "Electrical solve for": {
+      power: ["Pätöteho", "Real power"],
+      current: ["Virta", "Current"],
+      voltage: ["Jännite", "Voltage"],
+      resistance: ["Resistanssi", "Resistance"],
+    },
     "Solve for": {
       energy: ["Lämpömäärä", "Heat quantity"],
       time: ["Aika", "Time"],
@@ -234,6 +249,22 @@ function firstValue(
 export function primaryReportOutputs(
   report: Pick<ToolRecord, "tool" | "inputs" | "outputs">,
 ): ReportRow[] {
+  if (report.tool === "electrical") {
+    const target = findRow(
+      report.inputs,
+      "Ratkaistava suure",
+      "Electrical solve for",
+    )?.value;
+    const label = (
+      {
+        power: "Real power",
+        current: "Current",
+        voltage: "Voltage",
+        resistance: "Resistance",
+      } as Record<string, string>
+    )[target ?? ""];
+    if (label) return report.outputs.filter((row) => row.label.en === label);
+  }
   if (report.tool === "heat-quantity") {
     const mode = findRow(
       report.inputs,

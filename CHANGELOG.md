@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.3 — 2026-09-28 · Beta
+
+Electrical calculations in either direction
+
+- The electrical calculator can solve power, current or voltage from known values. Single- and three-phase AC calculations use the entered power factor.
+- Ohm’s law can solve current, voltage or resistance. The form shows only the inputs needed for the selected calculation.
+- The selected quantity becomes the main result on screen, in saved calculations and in print. Existing electrical records remain readable.
+
 ## 0.3.0-beta.2 — 2026-09-28 · Beta
 
 Heat quantity, heating time and kiisseli
