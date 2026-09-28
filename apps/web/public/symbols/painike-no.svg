@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Sulkeutuva palautuva painike">
+  <title>Sulkeutuva palautuva painike</title>
+  <desc>Painettaessa sulkeutuva ja vapautettaessa palautuva kosketin.</desc>
+  <path d="M32 8V24M32 40V56M32 40L20 24"/><path d="M14 26H8V38H14M8 32H12"/><path d="M16 32H24" stroke-dasharray="3 3"/>
+</svg>

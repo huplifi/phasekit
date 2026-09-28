@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Tasasuuntaaja">
+  <title>Tasasuuntaaja</title>
+  <desc>Vaihtosähkön muuntaminen tasasähköksi, yksiviivainen toimintoesitys.</desc>
+  <rect x="12" y="12" width="40" height="40"/><path d="M12 52L52 12M8 32H12M52 32H56"/><path d="M18 24C22 16 26 32 30 24"/><path d="M34 40H46M34 45H37M40 45H43M46 45H48"/>
+</svg>

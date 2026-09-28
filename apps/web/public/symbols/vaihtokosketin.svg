@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Vaihtokosketin">
+  <title>Vaihtokosketin</title>
+  <desc>Yhteinen kosketin vaihtaa kahden lähdön välillä; katkaisee ennen sulkemista.</desc>
+  <path d="M16 8V24H28M40 8V24M40 40V56M40 40L24 20"/>
+</svg>

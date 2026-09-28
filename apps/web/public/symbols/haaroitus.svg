@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="T-haaroitus">
+  <title>T-haaroitus</title>
+  <desc>Täytetty piste osoittaa kolmen johdinhaaran sähköisen liitoksen.</desc>
+  <path d="M8 32H56"/><path d="M32 32V56"/><circle cx="32" cy="32" r="3" fill="currentColor" stroke="none"/>
+</svg>

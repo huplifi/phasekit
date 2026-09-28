@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Painemittauspiste P">
+  <title>Painemittauspiste P</title>
+  <desc>Paineen mittauskohta, esimerkiksi painemittarin liitäntä. P on lähteen mittauspisteen tunnus. Merkki ei määritä mittarityyppiä, mitta-aluetta tai sähköistä lähtöä.</desc>
+  <circle cx="32" cy="28" r="16"/>
+  <g transform="translate(28.5 22)">
+  <path d="M0 12V0H4C8 0 8 7 4 7H0"/>
+  </g>
+  <path d="M32 44V56"/>
+</svg>
