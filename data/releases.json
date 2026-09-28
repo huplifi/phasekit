@@ -1,5 +1,26 @@
 [
   {
+    "version": "0.3.0-beta.3",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Sähkölaskuri myös käänteisiin laskuihin",
+      "en": "Electrical calculations in either direction"
+    },
+    "changes": {
+      "fi": [
+        "Sähkölaskurissa voi ratkaista tehon, virran tai jännitteen tunnetuista arvoista. Yksi- ja kolmivaiheiset vaihtovirtalaskut huomioivat syötetyn tehokertoimen.",
+        "Ohmin laissa voi ratkaista virran, jännitteen tai resistanssin. Lomake näyttää vain valittuun laskuun tarvittavat lähtötiedot.",
+        "Valittu suure nousee tuloskortin, tallennetun laskelman ja tulosteen päätulokseksi. Aiemmat sähkölaskelmat säilyvät luettavina."
+      ],
+      "en": [
+        "The electrical calculator can solve power, current or voltage from known values. Single- and three-phase AC calculations use the entered power factor.",
+        "Ohm’s law can solve current, voltage or resistance. The form shows only the inputs needed for the selected calculation.",
+        "The selected quantity becomes the main result on screen, in saved calculations and in print. Existing electrical records remain readable."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.2",
     "date": "2026-09-28",
     "channel": "beta",

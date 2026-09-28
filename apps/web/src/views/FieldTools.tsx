@@ -70,7 +70,11 @@ const electricalSources = [
     "Fluke — Ohm's law",
     "https://www.fluke.com/en-sg/learn/blog/electrical/what-is-ohms-law",
   ),
-];
+].map((source) => ({
+  ...source,
+  checkedAt: "2026-09-28",
+  version: "Web reference checked 2026-09-28",
+}));
 const pipeSources = [
   formulaSource(
     "wolfram-cylinder",
@@ -505,27 +509,123 @@ export function ElectricalCalculator() {
   const { l, number } = useLabels();
   const [input, setInput] = useState({
     mode: "single_phase" as ElectricalMode,
+    solveFor: "power" as "power" | "current" | "voltage" | "resistance",
     voltageV: "",
     currentA: "",
     resistanceOhm: "",
     powerFactor: "",
+    powerW: "",
   });
   const [result, setResult] = useState<ReturnType<
     typeof calculateElectrical
   > | null>(null);
   const [error, setError] = useState("");
   const change = (key: keyof typeof input, value: string) => {
-    setInput((v) => ({ ...v, [key]: value }));
+    setInput((previous) => ({
+      ...previous,
+      [key]: value,
+      ...(key === "mode"
+        ? {
+            solveFor:
+              value === "ohm" ? ("current" as const) : ("power" as const),
+          }
+        : {}),
+    }));
     setResult(null);
     setError("");
   };
   const ac = input.mode === "single_phase" || input.mode === "three_phase";
+  const ohm = input.mode === "ohm";
+  const voltageLabel =
+    input.mode === "three_phase"
+      ? l("Pääjännite", "Line-to-line voltage")
+      : l("Jännite", "Voltage");
+  const quantities = {
+    power: {
+      label: l("Pätöteho", "Real power"),
+      unit: "W",
+      value: result?.powerW,
+    },
+    current: {
+      label: l("Virta", "Current"),
+      unit: "A",
+      value: result?.currentA,
+    },
+    voltage: { label: voltageLabel, unit: "V", value: result?.voltageV },
+    resistance: {
+      label: l("Resistanssi", "Resistance"),
+      unit: "Ω",
+      value: result?.resistanceOhm,
+    },
+  };
+  const primary = quantities[input.solveFor];
+  const inverseErrors: Record<string, [string, string]> = {
+    positive_voltage_required: [
+      "Tässä laskennassa jännitteen on oltava nollaa suurempi.",
+      "Voltage must be greater than zero in this calculation.",
+    ],
+    positive_current_required: [
+      "Jännitteen tai resistanssin ratkaisemiseen virran on oltava nollaa suurempi.",
+      "Current must be greater than zero to solve for voltage or resistance.",
+    ],
+    positive_power_factor_required: [
+      "Virran tai jännitteen ratkaisemiseen tehokertoimen on oltava yli 0 ja enintään 1.",
+      "Power factor must be above 0 and at most 1 to solve for current or voltage.",
+    ],
+    negative_electrical_quantity: [
+      "Syötä jännite, virta ja teho nollana tai positiivisena.",
+      "Enter non-negative voltage, current and power.",
+    ],
+    nonfinite_result: [
+      "Laskennan arvot ovat liian suuria. Tarkista luvut ja yksiköt.",
+      "The calculation values are too large. Check numbers and units.",
+    ],
+    invalid_electrical_target: [
+      "Valitse tähän laskentaan sopiva ratkaistava suure.",
+      "Select a valid quantity to solve for in this calculation.",
+    ],
+  };
+  const inputRows = [
+    reportRow("Laskenta", "Calculation", input.mode),
+    reportRow("Ratkaistava suure", "Electrical solve for", input.solveFor),
+    ...(input.solveFor !== "voltage"
+      ? [
+          reportRow(
+            input.mode === "three_phase" ? "Pääjännite" : "Jännite",
+            input.mode === "three_phase" ? "Line-to-line voltage" : "Voltage",
+            input.voltageV,
+            "V",
+          ),
+        ]
+      : []),
+    ...(!ohm && input.solveFor !== "power"
+      ? [reportRow("Pätöteho", "Real power", input.powerW, "W")]
+      : []),
+    ...(input.solveFor !== "current"
+      ? [reportRow("Virta", "Current", input.currentA, "A")]
+      : []),
+    ...(ohm && input.solveFor !== "resistance"
+      ? [reportRow("Resistanssi", "Resistance", input.resistanceOhm, "Ω")]
+      : []),
+    ...(ac
+      ? [
+          reportRow("Tehokerroin", "Power factor", input.powerFactor),
+          reportRow(
+            "Oletus",
+            "Assumption",
+            input.mode === "three_phase"
+              ? "Balanced sinusoidal three-phase load; RMS line quantities"
+              : "Sinusoidal load; RMS quantities",
+          ),
+        ]
+      : []),
+  ];
   return (
     <Layout title={l("Sähkölaskuri", "Electrical calculator")}>
       <form
         onChangeCapture={() => setDraftDirty(true)}
-        onSubmit={(e) => {
-          e.preventDefault();
+        onSubmit={(event) => {
+          event.preventDefault();
           try {
             setResult(calculateElectrical(input));
             setError("");
@@ -535,34 +635,50 @@ export function ElectricalCalculator() {
           }
         }}
       >
-        <label>
-          {l("Laskenta", "Calculation")}
-          <select
-            value={input.mode}
-            onChange={(e) => change("mode", e.target.value)}
-          >
-            <option value="dc">{l("Tasavirta · teho", "DC · power")}</option>
-            <option value="single_phase">
-              {l("1-vaihe · teho", "Single phase · power")}
-            </option>
-            <option value="three_phase">
-              {l("3-vaihe · teho", "Three phase · power")}
-            </option>
-            <option value="ohm">
-              {l("Ohmin laki · tasavirta", "Ohm’s law · DC")}
-            </option>
-          </select>
-        </label>
+        <div className="field-tool-grid field-electrical-choices">
+          <label>
+            {l("Laskenta", "Calculation")}
+            <select
+              value={input.mode}
+              onChange={(event) => change("mode", event.target.value)}
+            >
+              <option value="dc">{l("Tasavirta", "DC")}</option>
+              <option value="single_phase">
+                {l("1-vaihe", "Single phase")}
+              </option>
+              <option value="three_phase">{l("3-vaihe", "Three phase")}</option>
+              <option value="ohm">
+                {l("Ohmin laki · tasavirta", "Ohm’s law · DC")}
+              </option>
+            </select>
+          </label>
+          <label>
+            {l("Ratkaise", "Solve for")}
+            <select
+              value={input.solveFor}
+              onChange={(event) => change("solveFor", event.target.value)}
+            >
+              {(!ohm
+                ? (["power", "current", "voltage"] as const)
+                : (["current", "voltage", "resistance"] as const)
+              ).map((target) => (
+                <option key={target} value={target}>
+                  {quantities[target].label} · {quantities[target].unit}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
         <p>
           {input.mode === "three_phase"
             ? l(
-                "Tasapainoinen 3-vaihekuorma: syötä pääjännite (vaiheiden väli) ja yhden johtimen virta. Käytä RMS-arvoja.",
-                "Balanced three-phase load: enter line-to-line voltage and current in one line. Use RMS values.",
+                "Tasapainoinen 3-vaihekuorma: jännite tarkoittaa pääjännitettä (vaiheiden väli), virta yhden johtimen virtaa. Käytä RMS-arvoja.",
+                "Balanced three-phase load: voltage is line-to-line and current is current in one line. Use RMS values.",
               )
             : ac
               ? l(
-                  "1-vaihekuorma: syötä kuorman yli mitattu jännite ja virta RMS-arvoina.",
-                  "Single-phase load: enter RMS voltage across the load and RMS current.",
+                  "1-vaihekuorma: kuorman yli mitattu jännite ja virta RMS-arvoina.",
+                  "Single-phase load: RMS voltage across the load and RMS current.",
                 )
               : l(
                   "Tasavirran jännite- ja virta-arvot. Ohmin laki olettaa resistiivisen kuorman.",
@@ -570,40 +686,52 @@ export function ElectricalCalculator() {
                 )}
         </p>
         <div className="field-tool-grid">
-          <Numeric
-            label={
-              input.mode === "three_phase"
-                ? l("Pääjännite · V", "Line-to-line voltage · V")
-                : l("Jännite · V", "Voltage · V")
-            }
-            value={input.voltageV}
-            onChange={(v) => change("voltageV", v)}
-          />
-          {input.mode === "ohm" ? (
+          {input.solveFor !== "voltage" && (
             <Numeric
-              label={l("Resistanssi · Ω", "Resistance · Ω")}
-              value={input.resistanceOhm}
-              onChange={(v) => change("resistanceOhm", v)}
+              label={`${voltageLabel} · V`}
+              value={input.voltageV}
+              onChange={(value) => change("voltageV", value)}
             />
-          ) : (
+          )}
+          {!ohm && input.solveFor !== "power" && (
+            <Numeric
+              label={l("Pätöteho · W", "Real power · W")}
+              value={input.powerW}
+              onChange={(value) => change("powerW", value)}
+            />
+          )}
+          {input.solveFor !== "current" && (
             <Numeric
               label={l("Virta · A", "Current · A")}
               value={input.currentA}
-              onChange={(v) => change("currentA", v)}
+              onChange={(value) => change("currentA", value)}
+            />
+          )}
+          {ohm && input.solveFor !== "resistance" && (
+            <Numeric
+              label={l("Resistanssi · Ω", "Resistance · Ω")}
+              value={input.resistanceOhm}
+              onChange={(value) => change("resistanceOhm", value)}
             />
           )}
           {ac && (
             <Numeric
               label={l("Tehokerroin · 0–1", "Power factor · 0–1")}
               value={input.powerFactor}
-              onChange={(v) => change("powerFactor", v)}
+              onChange={(value) => change("powerFactor", value)}
             />
           )}
         </div>
         <button className="primary" type="submit">
           {l("Laske", "Calculate")}
         </button>
-        <ErrorMessage error={error} />
+        {inverseErrors[error] ? (
+          <p className="field-error" role="alert">
+            {l(...inverseErrors[error])}
+          </p>
+        ) : (
+          <ErrorMessage error={error} />
+        )}
       </form>
       {result && (
         <section
@@ -611,17 +739,29 @@ export function ElectricalCalculator() {
           aria-label={l("Sähkölaskennan tulos", "Electrical result")}
           aria-live="polite"
         >
-          <h2>{l("Pätöteho", "Real power")}</h2>
-          <p className="field-result-value">{number(result.powerW)} W</p>
-          {result.apparentVA && (
+          <h2>{primary.label}</h2>
+          <p className="field-result-value">
+            {number(primary.value!)} {primary.unit}
+          </p>
+          {(
+            [
+              "power",
+              "current",
+              "voltage",
+              ...(ohm ? ["resistance" as const] : []),
+            ] as const
+          )
+            .filter((target) => target !== input.solveFor)
+            .map((target) => (
+              <p key={target}>
+                {quantities[target].label}: {number(quantities[target].value!)}{" "}
+                {quantities[target].unit}
+              </p>
+            ))}
+          {result.apparentVA !== null && (
             <p>
               {l("Näennäisteho", "Apparent power")}: {number(result.apparentVA)}{" "}
               VA
-            </p>
-          )}
-          {input.mode === "ohm" && (
-            <p>
-              {l("Virta", "Current")}: {number(result.currentA)} A
             </p>
           )}
         </section>
@@ -632,42 +772,26 @@ export function ElectricalCalculator() {
           content={{
             tool: "electrical",
             title: l("Sähkölaskuri", "Electrical calculator"),
-            inputs: [
-              reportRow("Laskenta", "Calculation", input.mode),
+            inputs: inputRows,
+            outputs: [
+              reportRow("Pätöteho", "Real power", result.powerW, "W"),
+              reportRow("Virta", "Current", result.currentA, "A"),
               reportRow(
                 input.mode === "three_phase" ? "Pääjännite" : "Jännite",
-                input.mode === "three_phase"
-                  ? "Line-to-line voltage"
-                  : "Voltage",
-                input.voltageV,
+                "Voltage",
+                result.voltageV,
                 "V",
               ),
-              ...(input.mode === "ohm"
+              ...(ohm && result.resistanceOhm !== null
                 ? [
                     reportRow(
                       "Resistanssi",
                       "Resistance",
-                      input.resistanceOhm,
+                      result.resistanceOhm,
                       "Ω",
                     ),
                   ]
-                : [reportRow("Virta", "Current", input.currentA, "A")]),
-              ...(ac
-                ? [
-                    reportRow("Tehokerroin", "Power factor", input.powerFactor),
-                    reportRow(
-                      "Oletus",
-                      "Assumption",
-                      input.mode === "three_phase"
-                        ? "Balanced sinusoidal three-phase load; RMS line quantities"
-                        : "Sinusoidal load; RMS quantities",
-                    ),
-                  ]
                 : []),
-            ],
-            outputs: [
-              reportRow("Pätöteho", "Real power", result.powerW, "W"),
-              reportRow("Virta", "Current", result.currentA, "A"),
               ...(result.apparentVA !== null
                 ? [
                     reportRow(
@@ -685,15 +809,24 @@ export function ElectricalCalculator() {
       )}
       <Sources>
         <p className="mono">
-          DC: P = U · I · · · I = U / R<br />
-          1~: P = U · I · PF
+          DC: P = U · I; I = P / U; U = P / I<br />
+          1~: P = U · I · PF; I = P / (U · PF); U = P / (I · PF)
           <br />
-          3~: P = √3 · Uₗₗ · Iₗ · PF
+          3~: P = √3 · Uₗₗ · Iₗ · PF; Iₗ = P / (√3 · Uₗₗ · PF); Uₗₗ = P / (√3 ·
+          Iₗ · PF)
+          <br />
+          {l("Ohmin laki", "Ohm’s law")}: I = U / R; U = R · I; R = U / I
         </p>
         <p>
           {l(
-            "Vaihtovirtalaskenta olettaa sinimuotoisen kuorman (PF = cos φ), kolmivaihelaskenta myös tasapainoiset vaiheet. Tulos on sähköinen ottoteho; hyötysuhdetta tai moottorin akselitehoa ei lasketa. Laskuri ei mitoita suojalaitteita tai kaapeleita.",
-            "AC calculation assumes sinusoidal conditions (PF = cos φ); three-phase also assumes a balanced load. Result is electrical input power; efficiency and motor shaft power are not calculated. This tool does not size protective devices or cables.",
+            "Vaihtovirtalaskenta olettaa sinimuotoisen kuorman (PF = cos φ), kolmivaihelaskenta myös tasapainoiset vaiheet. Teho on sähköinen ottoteho; hyötysuhdetta tai moottorin akselitehoa ei lasketa. Laskuri ei mitoita suojalaitteita tai kaapeleita.",
+            "AC calculation assumes sinusoidal conditions (PF = cos φ); three-phase also assumes a balanced load. Power is electrical input power; efficiency and motor shaft power are not calculated. This tool does not size protective devices or cables.",
+          )}
+        </p>
+        <p>
+          {l(
+            "Virran ja jännitteen ratkaisemisessa jakajan on oltava positiivinen. Vaihtovirralla tämä koskee myös tehokerrointa; pelkkä pätöteho ei määritä virtaa tai jännitettä, jos PF = 0.",
+            "When solving for current or voltage, the divisor must be positive. For AC this includes the power factor; real power alone cannot determine current or voltage when PF = 0.",
           )}
         </p>
         <p>
