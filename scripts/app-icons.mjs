@@ -11,7 +11,7 @@ for (const beta of [false, true]) {
   for (const size of beta ? [180, 192, 512] : [192, 512]) {
     const output = fileURLToPath(
       new URL(
-        `apps/web/public/icons/icon${beta ? "-beta" : ""}-v2-${size}.png`,
+        `apps/web/public/icons/icon${beta ? "-beta" : ""}-v3-${size}.png`,
         root,
       ),
     );

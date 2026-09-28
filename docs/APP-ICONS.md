@@ -1,10 +1,17 @@
 # App icons
 
-The install icon uses the original snowflake/wrench geometry on an opaque navy
-background (#102F40), with an ice foreground (#D6F4FC). There are no decorative
-waves, baked reflections, shadows or rounded outer corners. iOS supplies its own
-mask and appearance treatment. The beta badge uses outlined lettering, so exports
-do not depend on installed fonts. Its contrast survives a greyscale conversion.
+The v3 install artwork restores the original three-wave geometry from
+`apps/web/public/phasekit-logo.svg`. Beta and stable artwork share exactly the
+same wave paths, snowflake/wrench geometry, scale and placement. Beta adds only
+its larger BETA badge, using outlined Ioskeley Mono ExtraBold glyphs from the
+bundled application font. The shared logo is centred at (1000, 1000) on the
+2000 px canvas; the badge overlays its lower portion without shifting it. There are no baked reflections, shadows or rounded
+outer corners: the operating system applies its own mask.
+
+The palette separates the dark blue mark (#245873), muted blue waves (#B8DCE8)
+and ice background (#EAF7FA). The navy badge (#102F40) has near-white lettering
+(#FAFEFF). The opaque base and luminance hierarchy retain readable separation
+in a greyscale preview, rather than relying only on hue differences.
 
 Editable sources: `design/icons/app-icon.svg` and `app-icon-beta.svg`.
 Regenerate the committed PNGs with Sharp 0.35.x:
@@ -13,10 +20,11 @@ Regenerate the committed PNGs with Sharp 0.35.x:
 node scripts/app-icons.mjs /absolute/path/to/node_modules/sharp
 ```
 
-The v2 filenames distinguish the new artwork from cached install metadata. Old
-assets remain available for existing metadata. Beta and stable builds select
+Versioned v3 filenames distinguish the new artwork from cached install metadata.
+Old assets remain available for existing metadata. Beta and stable builds select
 their own manifest and Apple touch icons. Preparing stable artwork in the beta
-branch does not publish it to phasekit.app.
+branch does not publish it to phasekit.app; stable remains on its original icon
+until a separately authorised stable release.
 
 ## Platform limits and verification
 

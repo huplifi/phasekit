@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.3.0-beta.8",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Yhtenäinen sovelluskuvake",
+      "en": "A consistent app icon"
+    },
+    "changes": {
+      "fi": [
+        "Betan sovelluskuvake käyttää jälleen alkuperäisiä aaltoja. Tunnuksen ja taustan sävyerot ovat selkeämmät.",
+        "Beta- ja vakaan version kuvakkeille on valmisteltu sama sommittelu; beta erottuu BETA-merkistä."
+      ],
+      "en": [
+        "The beta app icon restores the original waves with clearer tonal separation between the mark and background.",
+        "Matching artwork is prepared for beta and stable, with only a BETA badge distinguishing the channels."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.7",
     "date": "2026-09-28",
     "channel": "beta",
