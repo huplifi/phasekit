@@ -4,6 +4,15 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.3.0-beta.9 — 2026-09-30 · Beta
+
+Broader refrigerant models and checked calculation ranges
+
+- R410A heat-pump measurements now work at 56 °C. Calculation ranges have been checked for every supported fluid, and out-of-range messages show the supported interval.
+- Pressure–temperature and log(p)–h coverage extends to additional refrigerants, with model, mixture composition and source versions retained.
+- Seven missing critical-temperature or pressure facts have been added from manufacturer sources.
+- Added a research-sourced R1123 boiling point and corrected the R1132(E) physical triple point, keeping it separate from the model lower limit.
+
 ## 0.3.0-beta.8 — 2026-09-28 · Beta
 
 A consistent app icon

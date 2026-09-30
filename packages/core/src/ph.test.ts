@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { calculatePHCycle, getPHAvailability, getPHDiagram, phMetadata, PHPhaseBoundaryError } from './ph';
 import { offlinePTProvider } from './pt';
+import ptData from '../generated/pt-curves.json';
+import phData from '../generated/ph-grids.json';
 
 const example = {
   refrigerantId: 'r134a',
@@ -12,15 +14,51 @@ const example = {
 };
 
 describe('offline P–h provider', () => {
+  it.each(['r1123', 'r1130e', 'r1132a', 'r1132e', 'r1224ydz', 'r1336mzzz', 'r452b', 'r454c', 'r455a', 'r513b'])('includes a bounded diagram for the added %s model', (id) => {
+    const diagram = getPHDiagram(id);
+    expect(diagram?.availability.supported).toBe(true);
+    expect(diagram?.dome.length).toBeGreaterThan(10);
+    expect(diagram?.isolines.length).toBeGreaterThan(0);
+  });
+
   it('keeps model coverage and source version explicit', () => {
     expect(getPHAvailability('r134a').supported).toBe(true);
     expect(getPHAvailability('not-in-catalogue').supported).toBe(false);
     const diagram = getPHDiagram('r134a');
     expect(diagram?.dome.length).toBeGreaterThan(10);
     expect(diagram?.provider.dataVersion).toBe(phMetadata.dataVersion);
-    expect(diagram?.provider.sourceIds).toEqual(['coolprop-ph-7.2.0', 'coolprop-pt-7.2.0']);
+    expect(diagram?.provider.sourceIds).toEqual(['coolprop-ph-7.2.0', 'coolprop-pt-7.2.0', 'coolprop-eos-supplement-afce86f', 'unep-ozone-oewg47-inf3-rev1']);
     expect(diagram?.provider.ptDataVersion).toBe(offlinePTProvider.metadata.dataVersion);
-    expect(diagram?.provider.isolineDataVersion).toMatch(/^ph-isolines-2026-09-26\./);
+    expect(diagram?.provider.isolineDataVersion).toMatch(/^ph-isolines-\d{4}-\d{2}-\d{2}\./);
+  });
+
+  it('keeps every p–h grid within matching P–T model domains', () => {
+    expect(phData.ptDataVersion).toBe(ptData.dataVersion);
+    for (const [id, grid] of Object.entries(phData.grids)) {
+      const curve = ptData.curves[id as keyof typeof ptData.curves];
+      expect(grid.coolPropFluid).toBe(curve.coolPropFluid);
+      for (const plane of grid.planes) {
+        for (const side of ['bubble', 'dew'] as const) {
+          expect(plane.pressureBarAbsolute).toBeGreaterThanOrEqual(curve.sides[side][0]![1]!);
+          expect(plane.pressureBarAbsolute).toBeLessThanOrEqual(curve.sides[side].at(-1)![1]!);
+        }
+      }
+    }
+  });
+
+  it('calculates an R410A heating cycle at 35 bar gauge', () => {
+    const cycle = calculatePHCycle({
+      refrigerantId: 'r410a',
+      lowPressure: { value: '8', unit: 'bar(g)' },
+      highPressure: { value: '35', unit: 'bar(g)' },
+      atmosphere: { value: '1.01325', unit: 'bar(a)' },
+      T1: { value: '15', unit: 'C' },
+      T2: { value: '85', unit: 'C' },
+      T3: { value: '45', unit: 'C' },
+    });
+    expect(Number(cycle.superheatK)).toBeGreaterThan(0);
+    expect(Number(cycle.subcoolingK)).toBeGreaterThan(0);
+    expect(Number(cycle.points['2'].enthalpyKJkg)).toBeGreaterThan(Number(cycle.points['1'].enthalpyKJkg));
   });
 
   it.each(['r134a', 'r290'])('ships only bounded single-phase guide segments for %s', (id) => {
@@ -76,7 +114,7 @@ describe('offline P–h provider', () => {
     expect(Number(cycle.superheatK)).toBeCloseTo(10 - Number(lowDew.temperatureC), 7);
     expect(Number(cycle.subcoolingK)).toBeCloseTo(Number(highBubble.temperatureC) - 25, 7);
     expect(cycle.points['4'].temperatureBoundsC).toEqual([lowBubble.temperatureC, lowDew.temperatureC]);
-    expect(cycle.sourceIds).toEqual(['coolprop-ph-7.2.0', 'coolprop-pt-7.2.0']);
+    expect(cycle.sourceIds).toEqual(['coolprop-ph-7.2.0', 'coolprop-pt-7.2.0', 'coolprop-eos-supplement-afce86f', 'unep-ozone-oewg47-inf3-rev1']);
   });
 
   it('rejects unsupported fluids, reversed pressures, phase boundary and extrapolation', () => {

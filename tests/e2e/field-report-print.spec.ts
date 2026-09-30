@@ -257,6 +257,7 @@ test("finalised commissioning print keeps the frozen cycle chart", async ({
   });
   await expect(finalise).toBeEnabled();
   await finalise.click();
+  await expect(page.locator(".field-report-status")).toContainText("Valmis");
   const popup = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Tulosta / PDF" }).click();
   const printed = await popup;

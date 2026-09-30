@@ -1,16 +1,2700 @@
 {
-  "withheldChecks": 30564,
+  "dataVersion": "pt-2026-09-30.fb555ea6f935452c",
+  "validationMethod": "Held-out fifth points, monotonicity and per-branch model/critical bounds",
+  "withheldChecks": 68028,
   "maximumRelativePressureError": [
-    0.0009605166358354067,
-    "r411b:dew:-155.03746C"
+    0.0012941290098119618,
+    "r431a:bubble:-171.33374C"
   ],
   "maximumInverseTemperatureErrorC": [
-    0.02375018035409937,
-    "r1150:bubble:-66.91100C"
+    0.03650960253888513,
+    "r436a:dew:111.90879C"
   ],
   "failedSourceEvaluations": [],
   "acceptance": {
     "relativePressure": 0.003,
     "inverseTemperatureC": 0.1
-  }
+  },
+  "boundaries": [
+    {
+      "id": "r11",
+      "side": "bubble",
+      "fluid": "R11",
+      "minimumTemperatureC": -109.47,
+      "maximumTemperatureC": 194.9599999986,
+      "modelMinimumTemperatureC": -110.46999999999997,
+      "modelMaximumTemperatureC": 351.85,
+      "modelCriticalTemperatureC": 197.95999999855894
+    },
+    {
+      "id": "r11",
+      "side": "dew",
+      "fluid": "R11",
+      "minimumTemperatureC": -109.47,
+      "maximumTemperatureC": 194.9599999986,
+      "modelMinimumTemperatureC": -110.46999999999997,
+      "modelMaximumTemperatureC": 351.85,
+      "modelCriticalTemperatureC": 197.95999999855894
+    },
+    {
+      "id": "r1123",
+      "side": "bubble",
+      "fluid": "R1123",
+      "minimumTemperatureC": -77.0,
+      "maximumTemperatureC": 55.5799847734,
+      "modelMinimumTemperatureC": -77.99999999999997,
+      "modelMaximumTemperatureC": 206.85000000000002,
+      "modelCriticalTemperatureC": 58.57998477335269
+    },
+    {
+      "id": "r1123",
+      "side": "dew",
+      "fluid": "R1123",
+      "minimumTemperatureC": -77.0,
+      "maximumTemperatureC": 55.5799847734,
+      "modelMinimumTemperatureC": -77.99999999999997,
+      "modelMaximumTemperatureC": 206.85000000000002,
+      "modelCriticalTemperatureC": 58.57998477335269
+    },
+    {
+      "id": "r113",
+      "side": "bubble",
+      "fluid": "R113",
+      "minimumTemperatureC": -35.22,
+      "maximumTemperatureC": 211.0600000167,
+      "modelMinimumTemperatureC": -36.21999999999997,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 214.06000001666092
+    },
+    {
+      "id": "r113",
+      "side": "dew",
+      "fluid": "R113",
+      "minimumTemperatureC": -35.22,
+      "maximumTemperatureC": 211.0600000167,
+      "modelMinimumTemperatureC": -36.21999999999997,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 214.06000001666092
+    },
+    {
+      "id": "r1130e",
+      "side": "bubble",
+      "fluid": "R1130(E)",
+      "minimumTemperatureC": -48.84,
+      "maximumTemperatureC": 239.5399999994,
+      "modelMinimumTemperatureC": -49.839999999999975,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 242.53999999943983
+    },
+    {
+      "id": "r1130e",
+      "side": "dew",
+      "fluid": "R1130(E)",
+      "minimumTemperatureC": -48.84,
+      "maximumTemperatureC": 239.5399999994,
+      "modelMinimumTemperatureC": -49.839999999999975,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 242.53999999943983
+    },
+    {
+      "id": "r1132a",
+      "side": "bubble",
+      "fluid": "R1132a",
+      "minimumTemperatureC": -161.15,
+      "maximumTemperatureC": 26.4699999991,
+      "modelMinimumTemperatureC": -162.14999999999998,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 29.46999999913305
+    },
+    {
+      "id": "r1132a",
+      "side": "dew",
+      "fluid": "R1132a",
+      "minimumTemperatureC": -161.15,
+      "maximumTemperatureC": 26.4699999991,
+      "modelMinimumTemperatureC": -162.14999999999998,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 29.46999999913305
+    },
+    {
+      "id": "r1132e",
+      "side": "bubble",
+      "fluid": "R1132(E)",
+      "minimumTemperatureC": -32.15,
+      "maximumTemperatureC": 72.6699999996,
+      "modelMinimumTemperatureC": -33.14999999999998,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 75.66999999960177
+    },
+    {
+      "id": "r1132e",
+      "side": "dew",
+      "fluid": "R1132(E)",
+      "minimumTemperatureC": -32.15,
+      "maximumTemperatureC": 72.6699999996,
+      "modelMinimumTemperatureC": -33.14999999999998,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 75.66999999960177
+    },
+    {
+      "id": "r114",
+      "side": "bubble",
+      "fluid": "R114",
+      "minimumTemperatureC": 1.0,
+      "maximumTemperatureC": 144.4577250634,
+      "modelMinimumTemperatureC": 5.684341886080802e-14,
+      "modelMaximumTemperatureC": 233.85000000000002,
+      "modelCriticalTemperatureC": 147.45772506336033
+    },
+    {
+      "id": "r114",
+      "side": "dew",
+      "fluid": "R114",
+      "minimumTemperatureC": 1.0,
+      "maximumTemperatureC": 144.4577250634,
+      "modelMinimumTemperatureC": 5.684341886080802e-14,
+      "modelMaximumTemperatureC": 233.85000000000002,
+      "modelCriticalTemperatureC": 147.45772506336033
+    },
+    {
+      "id": "r115",
+      "side": "bubble",
+      "fluid": "R115",
+      "minimumTemperatureC": -98.58,
+      "maximumTemperatureC": 76.9519775387,
+      "modelMinimumTemperatureC": -99.57999999999998,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 79.9519775386571
+    },
+    {
+      "id": "r115",
+      "side": "dew",
+      "fluid": "R115",
+      "minimumTemperatureC": -98.58,
+      "maximumTemperatureC": 76.9519775387,
+      "modelMinimumTemperatureC": -99.57999999999998,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 79.9519775386571
+    },
+    {
+      "id": "r1150",
+      "side": "bubble",
+      "fluid": "R1150",
+      "minimumTemperatureC": -168.161,
+      "maximumTemperatureC": 6.2,
+      "modelMinimumTemperatureC": -169.16099999999997,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 9.20000000000249
+    },
+    {
+      "id": "r1150",
+      "side": "dew",
+      "fluid": "R1150",
+      "minimumTemperatureC": -168.161,
+      "maximumTemperatureC": 6.2,
+      "modelMinimumTemperatureC": -169.16099999999997,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 9.20000000000249
+    },
+    {
+      "id": "r116",
+      "side": "bubble",
+      "fluid": "R116",
+      "minimumTemperatureC": -99.05,
+      "maximumTemperatureC": 16.8797927827,
+      "modelMinimumTemperatureC": -100.04999999999995,
+      "modelMaximumTemperatureC": 151.85000000000002,
+      "modelCriticalTemperatureC": 19.879792782695006
+    },
+    {
+      "id": "r116",
+      "side": "dew",
+      "fluid": "R116",
+      "minimumTemperatureC": -99.05,
+      "maximumTemperatureC": 16.8797927827,
+      "modelMinimumTemperatureC": -100.04999999999995,
+      "modelMaximumTemperatureC": 151.85000000000002,
+      "modelCriticalTemperatureC": 19.879792782695006
+    },
+    {
+      "id": "r12",
+      "side": "bubble",
+      "fluid": "R12",
+      "minimumTemperatureC": -156.051,
+      "maximumTemperatureC": 108.949,
+      "modelMinimumTemperatureC": -157.051,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 111.96999976813441
+    },
+    {
+      "id": "r12",
+      "side": "dew",
+      "fluid": "R12",
+      "minimumTemperatureC": -156.051,
+      "maximumTemperatureC": 108.949,
+      "modelMinimumTemperatureC": -157.051,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 111.96999976813441
+    },
+    {
+      "id": "r1224ydz",
+      "side": "bubble",
+      "fluid": "R1224YDZ",
+      "minimumTemperatureC": -114.35,
+      "maximumTemperatureC": 152.5400000001,
+      "modelMinimumTemperatureC": -115.34999999999997,
+      "modelMaximumTemperatureC": 200.0,
+      "modelCriticalTemperatureC": 155.54000000006272
+    },
+    {
+      "id": "r1224ydz",
+      "side": "dew",
+      "fluid": "R1224YDZ",
+      "minimumTemperatureC": -114.35,
+      "maximumTemperatureC": 152.5400000001,
+      "modelMinimumTemperatureC": -115.34999999999997,
+      "modelMaximumTemperatureC": 200.0,
+      "modelCriticalTemperatureC": 155.54000000006272
+    },
+    {
+      "id": "r123",
+      "side": "bubble",
+      "fluid": "R123",
+      "minimumTemperatureC": -106.15,
+      "maximumTemperatureC": 180.6800258131,
+      "modelMinimumTemperatureC": -107.14999999999998,
+      "modelMaximumTemperatureC": 326.85,
+      "modelCriticalTemperatureC": 183.68002581312982
+    },
+    {
+      "id": "r123",
+      "side": "dew",
+      "fluid": "R123",
+      "minimumTemperatureC": -106.15,
+      "maximumTemperatureC": 180.6800258131,
+      "modelMinimumTemperatureC": -107.14999999999998,
+      "modelMaximumTemperatureC": 326.85,
+      "modelCriticalTemperatureC": 183.68002581312982
+    },
+    {
+      "id": "r1233zde",
+      "side": "bubble",
+      "fluid": "R1233zd(E)",
+      "minimumTemperatureC": -77.0,
+      "maximumTemperatureC": 163.4508330757,
+      "modelMinimumTemperatureC": -77.99999999999997,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 166.45083307567268
+    },
+    {
+      "id": "r1233zde",
+      "side": "dew",
+      "fluid": "R1233zd(E)",
+      "minimumTemperatureC": -77.0,
+      "maximumTemperatureC": 163.4508330757,
+      "modelMinimumTemperatureC": -77.99999999999997,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 166.45083307567268
+    },
+    {
+      "id": "r1234yf",
+      "side": "bubble",
+      "fluid": "R1234yf",
+      "minimumTemperatureC": -52.15,
+      "maximumTemperatureC": 91.6999888234,
+      "modelMinimumTemperatureC": -53.14999999999998,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 94.69998882341457
+    },
+    {
+      "id": "r1234yf",
+      "side": "dew",
+      "fluid": "R1234yf",
+      "minimumTemperatureC": -52.15,
+      "maximumTemperatureC": 91.6999888234,
+      "modelMinimumTemperatureC": -53.14999999999998,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 94.69998882341457
+    },
+    {
+      "id": "r1234zee",
+      "side": "bubble",
+      "fluid": "R1234ze(E)",
+      "minimumTemperatureC": -103.53,
+      "maximumTemperatureC": 106.3630026047,
+      "modelMinimumTemperatureC": -104.52999999999997,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 109.36300260465185
+    },
+    {
+      "id": "r1234zee",
+      "side": "dew",
+      "fluid": "R1234ze(E)",
+      "minimumTemperatureC": -103.53,
+      "maximumTemperatureC": 106.3630026047,
+      "modelMinimumTemperatureC": -104.52999999999997,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 109.36300260465185
+    },
+    {
+      "id": "r1234zez",
+      "side": "bubble",
+      "fluid": "R1234ze(Z)",
+      "minimumTemperatureC": 0.85,
+      "maximumTemperatureC": 147.1203783954,
+      "modelMinimumTemperatureC": -0.14999999999997726,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 150.12037839541892
+    },
+    {
+      "id": "r1234zez",
+      "side": "dew",
+      "fluid": "R1234ze(Z)",
+      "minimumTemperatureC": 0.85,
+      "maximumTemperatureC": 147.1203783954,
+      "modelMinimumTemperatureC": -0.14999999999997726,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 150.12037839541892
+    },
+    {
+      "id": "r124",
+      "side": "bubble",
+      "fluid": "R124",
+      "minimumTemperatureC": -152.15,
+      "maximumTemperatureC": 119.2779607732,
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelMaximumTemperatureC": 196.85000000000002,
+      "modelCriticalTemperatureC": 122.27796077320471
+    },
+    {
+      "id": "r124",
+      "side": "dew",
+      "fluid": "R124",
+      "minimumTemperatureC": -152.15,
+      "maximumTemperatureC": 119.2779607732,
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelMaximumTemperatureC": 196.85000000000002,
+      "modelCriticalTemperatureC": 122.27796077320471
+    },
+    {
+      "id": "r1243zf",
+      "side": "bubble",
+      "fluid": "R1243zf",
+      "minimumTemperatureC": -52.15,
+      "maximumTemperatureC": 100.7800098386,
+      "modelMinimumTemperatureC": -53.14999999999998,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 103.78000983860835
+    },
+    {
+      "id": "r1243zf",
+      "side": "dew",
+      "fluid": "R1243zf",
+      "minimumTemperatureC": -52.15,
+      "maximumTemperatureC": 100.7800098386,
+      "modelMinimumTemperatureC": -53.14999999999998,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 103.78000983860835
+    },
+    {
+      "id": "r125",
+      "side": "bubble",
+      "fluid": "R125",
+      "minimumTemperatureC": -99.63,
+      "maximumTemperatureC": 63.0272824561,
+      "modelMinimumTemperatureC": -100.62999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 66.02728245610484
+    },
+    {
+      "id": "r125",
+      "side": "dew",
+      "fluid": "R125",
+      "minimumTemperatureC": -99.63,
+      "maximumTemperatureC": 63.0272824561,
+      "modelMinimumTemperatureC": -100.62999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 66.02728245610484
+    },
+    {
+      "id": "r1270",
+      "side": "bubble",
+      "fluid": "R1270",
+      "minimumTemperatureC": -184.197,
+      "maximumTemperatureC": 88.0610025913,
+      "modelMinimumTemperatureC": -185.19699999999997,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 91.0610025913478
+    },
+    {
+      "id": "r1270",
+      "side": "dew",
+      "fluid": "R1270",
+      "minimumTemperatureC": -184.197,
+      "maximumTemperatureC": 88.0610025913,
+      "modelMinimumTemperatureC": -185.19699999999997,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 91.0610025913478
+    },
+    {
+      "id": "r13",
+      "side": "bubble",
+      "fluid": "R13",
+      "minimumTemperatureC": -174.0,
+      "maximumTemperatureC": 26.8999056342,
+      "modelMinimumTemperatureC": -174.99999999999997,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 29.899905634213383
+    },
+    {
+      "id": "r13",
+      "side": "dew",
+      "fluid": "R13",
+      "minimumTemperatureC": -174.0,
+      "maximumTemperatureC": 26.8999056342,
+      "modelMinimumTemperatureC": -174.99999999999997,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 29.899905634213383
+    },
+    {
+      "id": "r1336mzze",
+      "side": "bubble",
+      "fluid": "R1336mzz(E)",
+      "minimumTemperatureC": -72.0,
+      "maximumTemperatureC": 127.38,
+      "modelMinimumTemperatureC": -72.99999999999997,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 130.3800000000283
+    },
+    {
+      "id": "r1336mzze",
+      "side": "dew",
+      "fluid": "R1336mzz(E)",
+      "minimumTemperatureC": -72.0,
+      "maximumTemperatureC": 127.38,
+      "modelMinimumTemperatureC": -72.99999999999997,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 130.3800000000283
+    },
+    {
+      "id": "r1336mzzz",
+      "side": "bubble",
+      "fluid": "R1336mzz(Z)",
+      "minimumTemperatureC": -89.5,
+      "maximumTemperatureC": 168.3499910253,
+      "modelMinimumTemperatureC": -90.49999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 171.34999102533664
+    },
+    {
+      "id": "r1336mzzz",
+      "side": "dew",
+      "fluid": "R1336mzz(Z)",
+      "minimumTemperatureC": -89.5,
+      "maximumTemperatureC": 168.3499910253,
+      "modelMinimumTemperatureC": -90.49999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 171.34999102533664
+    },
+    {
+      "id": "r134a",
+      "side": "bubble",
+      "fluid": "R134a",
+      "minimumTemperatureC": -102.3,
+      "maximumTemperatureC": 98.061966585,
+      "modelMinimumTemperatureC": -103.29999999999998,
+      "modelMaximumTemperatureC": 181.85000000000002,
+      "modelCriticalTemperatureC": 101.06196658495134
+    },
+    {
+      "id": "r134a",
+      "side": "dew",
+      "fluid": "R134a",
+      "minimumTemperatureC": -102.3,
+      "maximumTemperatureC": 98.061966585,
+      "modelMinimumTemperatureC": -103.29999999999998,
+      "modelMaximumTemperatureC": 181.85000000000002,
+      "modelCriticalTemperatureC": 101.06196658495134
+    },
+    {
+      "id": "r13i1",
+      "side": "bubble",
+      "fluid": "R13I1",
+      "minimumTemperatureC": -152.15,
+      "maximumTemperatureC": 120.289690446,
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 123.28969044596568
+    },
+    {
+      "id": "r13i1",
+      "side": "dew",
+      "fluid": "R13I1",
+      "minimumTemperatureC": -152.15,
+      "maximumTemperatureC": 120.289690446,
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 123.28969044596568
+    },
+    {
+      "id": "r14",
+      "side": "bubble",
+      "fluid": "R14",
+      "minimumTemperatureC": -152.15,
+      "maximumTemperatureC": -48.7537715251,
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelMaximumTemperatureC": 349.85,
+      "modelCriticalTemperatureC": -45.75377152512965
+    },
+    {
+      "id": "r14",
+      "side": "dew",
+      "fluid": "R14",
+      "minimumTemperatureC": -152.15,
+      "maximumTemperatureC": -48.7537715251,
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelMaximumTemperatureC": 349.85,
+      "modelCriticalTemperatureC": -45.75377152512965
+    },
+    {
+      "id": "r141b",
+      "side": "bubble",
+      "fluid": "R141b",
+      "minimumTemperatureC": -102.47,
+      "maximumTemperatureC": 201.350027706,
+      "modelMinimumTemperatureC": -103.46999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 204.35002770597333
+    },
+    {
+      "id": "r141b",
+      "side": "dew",
+      "fluid": "R141b",
+      "minimumTemperatureC": -102.47,
+      "maximumTemperatureC": 201.350027706,
+      "modelMinimumTemperatureC": -103.46999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 204.35002770597333
+    },
+    {
+      "id": "r142b",
+      "side": "bubble",
+      "fluid": "R142b",
+      "minimumTemperatureC": -129.43,
+      "maximumTemperatureC": 134.1102326521,
+      "modelMinimumTemperatureC": -130.42999999999998,
+      "modelMaximumTemperatureC": 196.85000000000002,
+      "modelCriticalTemperatureC": 137.1102326520994
+    },
+    {
+      "id": "r142b",
+      "side": "dew",
+      "fluid": "R142b",
+      "minimumTemperatureC": -129.43,
+      "maximumTemperatureC": 134.1102326521,
+      "modelMinimumTemperatureC": -130.42999999999998,
+      "modelMaximumTemperatureC": 196.85000000000002,
+      "modelCriticalTemperatureC": 137.1102326520994
+    },
+    {
+      "id": "r143a",
+      "side": "bubble",
+      "fluid": "R143a",
+      "minimumTemperatureC": -110.81,
+      "maximumTemperatureC": 69.7070008679,
+      "modelMinimumTemperatureC": -111.80999999999997,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 72.7070008678619
+    },
+    {
+      "id": "r143a",
+      "side": "dew",
+      "fluid": "R143a",
+      "minimumTemperatureC": -110.81,
+      "maximumTemperatureC": 69.7070008679,
+      "modelMinimumTemperatureC": -111.80999999999997,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 72.7070008678619
+    },
+    {
+      "id": "r152a",
+      "side": "bubble",
+      "fluid": "R152A",
+      "minimumTemperatureC": -117.59,
+      "maximumTemperatureC": 110.2609977772,
+      "modelMinimumTemperatureC": -118.58999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 113.26099777721072
+    },
+    {
+      "id": "r152a",
+      "side": "dew",
+      "fluid": "R152A",
+      "minimumTemperatureC": -117.59,
+      "maximumTemperatureC": 110.2609977772,
+      "modelMinimumTemperatureC": -118.58999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 113.26099777721072
+    },
+    {
+      "id": "r161",
+      "side": "bubble",
+      "fluid": "R161",
+      "minimumTemperatureC": -142.15,
+      "maximumTemperatureC": 99.0999989035,
+      "modelMinimumTemperatureC": -143.14999999999998,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 102.09999890354493
+    },
+    {
+      "id": "r161",
+      "side": "dew",
+      "fluid": "R161",
+      "minimumTemperatureC": -142.15,
+      "maximumTemperatureC": 99.0999989035,
+      "modelMinimumTemperatureC": -143.14999999999998,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 102.09999890354493
+    },
+    {
+      "id": "r170",
+      "side": "bubble",
+      "fluid": "R170",
+      "minimumTemperatureC": -181.782,
+      "maximumTemperatureC": 29.172,
+      "modelMinimumTemperatureC": -182.78199999999998,
+      "modelMaximumTemperatureC": 401.85,
+      "modelCriticalTemperatureC": 32.172000000015544
+    },
+    {
+      "id": "r170",
+      "side": "dew",
+      "fluid": "R170",
+      "minimumTemperatureC": -181.782,
+      "maximumTemperatureC": 29.172,
+      "modelMinimumTemperatureC": -182.78199999999998,
+      "modelMaximumTemperatureC": 401.85,
+      "modelCriticalTemperatureC": 32.172000000015544
+    },
+    {
+      "id": "r21",
+      "side": "bubble",
+      "fluid": "R21",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 176.5701623436,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 199.85000000000002,
+      "modelCriticalTemperatureC": 179.5701623436206
+    },
+    {
+      "id": "r21",
+      "side": "dew",
+      "fluid": "R21",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 176.5701623436,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 199.85000000000002,
+      "modelCriticalTemperatureC": 179.5701623436206
+    },
+    {
+      "id": "r218",
+      "side": "bubble",
+      "fluid": "R218",
+      "minimumTemperatureC": -146.7,
+      "maximumTemperatureC": 68.8699690145,
+      "modelMinimumTemperatureC": -147.7,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 71.86996901445968
+    },
+    {
+      "id": "r218",
+      "side": "dew",
+      "fluid": "R218",
+      "minimumTemperatureC": -146.7,
+      "maximumTemperatureC": 68.8699690145,
+      "modelMinimumTemperatureC": -147.7,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 71.86996901445968
+    },
+    {
+      "id": "r22",
+      "side": "bubble",
+      "fluid": "R22",
+      "minimumTemperatureC": -156.42,
+      "maximumTemperatureC": 93.145000008,
+      "modelMinimumTemperatureC": -157.41999999999996,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 96.14500000802741
+    },
+    {
+      "id": "r22",
+      "side": "dew",
+      "fluid": "R22",
+      "minimumTemperatureC": -156.42,
+      "maximumTemperatureC": 93.145000008,
+      "modelMinimumTemperatureC": -157.41999999999996,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 96.14500000802741
+    },
+    {
+      "id": "r227ea",
+      "side": "bubble",
+      "fluid": "R227EA",
+      "minimumTemperatureC": -125.8,
+      "maximumTemperatureC": 98.7501034453,
+      "modelMinimumTemperatureC": -126.79999999999998,
+      "modelMaximumTemperatureC": 201.85000000000002,
+      "modelCriticalTemperatureC": 101.7501034452502
+    },
+    {
+      "id": "r227ea",
+      "side": "dew",
+      "fluid": "R227EA",
+      "minimumTemperatureC": -125.8,
+      "maximumTemperatureC": 98.7501034453,
+      "modelMinimumTemperatureC": -126.79999999999998,
+      "modelMaximumTemperatureC": 201.85000000000002,
+      "modelCriticalTemperatureC": 101.7501034452502
+    },
+    {
+      "id": "r23",
+      "side": "bubble",
+      "fluid": "R23",
+      "minimumTemperatureC": -154.13,
+      "maximumTemperatureC": 23.1430489717,
+      "modelMinimumTemperatureC": -155.13,
+      "modelMaximumTemperatureC": 201.85000000000002,
+      "modelCriticalTemperatureC": 26.143048971673124
+    },
+    {
+      "id": "r23",
+      "side": "dew",
+      "fluid": "R23",
+      "minimumTemperatureC": -154.13,
+      "maximumTemperatureC": 23.1430489717,
+      "modelMinimumTemperatureC": -155.13,
+      "modelMaximumTemperatureC": 201.85000000000002,
+      "modelCriticalTemperatureC": 26.143048971673124
+    },
+    {
+      "id": "r236ea",
+      "side": "bubble",
+      "fluid": "R236EA",
+      "minimumTemperatureC": -29.15,
+      "maximumTemperatureC": 136.2589900339,
+      "modelMinimumTemperatureC": -30.149999999999977,
+      "modelMaximumTemperatureC": 138.85000000000002,
+      "modelCriticalTemperatureC": 139.25899003386525
+    },
+    {
+      "id": "r236ea",
+      "side": "dew",
+      "fluid": "R236EA",
+      "minimumTemperatureC": -29.15,
+      "maximumTemperatureC": 136.2589900339,
+      "modelMinimumTemperatureC": -30.149999999999977,
+      "modelMaximumTemperatureC": 138.85000000000002,
+      "modelCriticalTemperatureC": 139.25899003386525
+    },
+    {
+      "id": "r236fa",
+      "side": "bubble",
+      "fluid": "R236FA",
+      "minimumTemperatureC": -92.55,
+      "maximumTemperatureC": 121.9200516052,
+      "modelMinimumTemperatureC": -93.54999999999995,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 124.92005160523104
+    },
+    {
+      "id": "r236fa",
+      "side": "dew",
+      "fluid": "R236FA",
+      "minimumTemperatureC": -92.55,
+      "maximumTemperatureC": 121.9200516052,
+      "modelMinimumTemperatureC": -93.54999999999995,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 124.92005160523104
+    },
+    {
+      "id": "r245ca",
+      "side": "bubble",
+      "fluid": "R245ca",
+      "minimumTemperatureC": -76.15,
+      "maximumTemperatureC": 171.419995522,
+      "modelMinimumTemperatureC": -77.14999999999998,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 174.4199955219675
+    },
+    {
+      "id": "r245ca",
+      "side": "dew",
+      "fluid": "R245ca",
+      "minimumTemperatureC": -76.15,
+      "maximumTemperatureC": 171.419995522,
+      "modelMinimumTemperatureC": -77.14999999999998,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 174.4199955219675
+    },
+    {
+      "id": "r245fa",
+      "side": "bubble",
+      "fluid": "R245fa",
+      "minimumTemperatureC": -101.1,
+      "maximumTemperatureC": 150.8599896956,
+      "modelMinimumTemperatureC": -102.09999999999997,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 153.85998969559256
+    },
+    {
+      "id": "r245fa",
+      "side": "dew",
+      "fluid": "R245fa",
+      "minimumTemperatureC": -101.1,
+      "maximumTemperatureC": 150.8599896956,
+      "modelMinimumTemperatureC": -102.09999999999997,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 153.85998969559256
+    },
+    {
+      "id": "r290",
+      "side": "bubble",
+      "fluid": "R290",
+      "minimumTemperatureC": -186.625,
+      "maximumTemperatureC": 93.740008951,
+      "modelMinimumTemperatureC": -187.62499999999997,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 96.74000895096344
+    },
+    {
+      "id": "r290",
+      "side": "dew",
+      "fluid": "R290",
+      "minimumTemperatureC": -186.625,
+      "maximumTemperatureC": 93.740008951,
+      "modelMinimumTemperatureC": -187.62499999999997,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 96.74000895096344
+    },
+    {
+      "id": "r32",
+      "side": "bubble",
+      "fluid": "R32",
+      "minimumTemperatureC": -135.81,
+      "maximumTemperatureC": 75.1050004494,
+      "modelMinimumTemperatureC": -136.80999999999997,
+      "modelMaximumTemperatureC": 161.85000000000002,
+      "modelCriticalTemperatureC": 78.10500044943205
+    },
+    {
+      "id": "r32",
+      "side": "dew",
+      "fluid": "R32",
+      "minimumTemperatureC": -135.81,
+      "maximumTemperatureC": 75.1050004494,
+      "modelMinimumTemperatureC": -136.80999999999997,
+      "modelMaximumTemperatureC": 161.85000000000002,
+      "modelCriticalTemperatureC": 78.10500044943205
+    },
+    {
+      "id": "r365mfc",
+      "side": "bubble",
+      "fluid": "R365MFC",
+      "minimumTemperatureC": -33.15,
+      "maximumTemperatureC": 183.8531716752,
+      "modelMinimumTemperatureC": -34.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 186.8531716751766
+    },
+    {
+      "id": "r365mfc",
+      "side": "dew",
+      "fluid": "R365MFC",
+      "minimumTemperatureC": -33.15,
+      "maximumTemperatureC": 183.8531716752,
+      "modelMinimumTemperatureC": -34.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 186.8531716751766
+    },
+    {
+      "id": "r40",
+      "side": "bubble",
+      "fluid": "R40",
+      "minimumTemperatureC": -42.15,
+      "maximumTemperatureC": 142.4756521059,
+      "modelMinimumTemperatureC": -43.14999999999998,
+      "modelMaximumTemperatureC": 456.85,
+      "modelCriticalTemperatureC": 145.4756521058676
+    },
+    {
+      "id": "r40",
+      "side": "dew",
+      "fluid": "R40",
+      "minimumTemperatureC": -42.15,
+      "maximumTemperatureC": 142.4756521059,
+      "modelMinimumTemperatureC": -43.14999999999998,
+      "modelMaximumTemperatureC": 456.85,
+      "modelCriticalTemperatureC": 145.4756521058676
+    },
+    {
+      "id": "r404a",
+      "side": "bubble",
+      "fluid": "R404A",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 69.12,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 72.12
+    },
+    {
+      "id": "r404a",
+      "side": "dew",
+      "fluid": "R404A",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 69.12,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 72.12
+    },
+    {
+      "id": "r407a",
+      "side": "bubble",
+      "fluid": "R407A.mix",
+      "minimumTemperatureC": -113.1066867955,
+      "maximumTemperatureC": 79.2468669716,
+      "modelMinimumTemperatureC": -114.10668679548493,
+      "modelMaximumTemperatureC": 188.43580275792834,
+      "modelCriticalTemperatureC": 82.24686697162866
+    },
+    {
+      "id": "r407a",
+      "side": "dew",
+      "fluid": "R407A.mix",
+      "minimumTemperatureC": -113.1066867955,
+      "maximumTemperatureC": 76.8933132045,
+      "modelMinimumTemperatureC": -114.10668679548493,
+      "modelMaximumTemperatureC": 188.43580275792834,
+      "modelCriticalTemperatureC": 82.24686697162866
+    },
+    {
+      "id": "r407b",
+      "side": "bubble",
+      "fluid": "R407B.mix",
+      "minimumTemperatureC": -107.3274939396,
+      "maximumTemperatureC": 71.754446426,
+      "modelMinimumTemperatureC": -108.32749393958073,
+      "modelMaximumTemperatureC": 204.9089209386559,
+      "modelCriticalTemperatureC": 74.7544464259687
+    },
+    {
+      "id": "r407b",
+      "side": "dew",
+      "fluid": "R407B.mix",
+      "minimumTemperatureC": -107.3274939396,
+      "maximumTemperatureC": 67.6725060604,
+      "modelMinimumTemperatureC": -108.32749393958073,
+      "modelMaximumTemperatureC": 204.9089209386559,
+      "modelCriticalTemperatureC": 74.7544464259687
+    },
+    {
+      "id": "r407c",
+      "side": "bubble",
+      "fluid": "R407C",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 83.195,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 86.19500000000005
+    },
+    {
+      "id": "r407c",
+      "side": "dew",
+      "fluid": "R407C",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 83.195,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 86.19500000000005
+    },
+    {
+      "id": "r407d",
+      "side": "bubble",
+      "fluid": "R407D.mix",
+      "minimumTemperatureC": -110.7850731992,
+      "maximumTemperatureC": 79.2149268008,
+      "modelMinimumTemperatureC": -111.78507319917921,
+      "modelMaximumTemperatureC": 181.7203140783161,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r407d",
+      "side": "dew",
+      "fluid": "R407D.mix",
+      "minimumTemperatureC": -110.7850731992,
+      "maximumTemperatureC": 89.2149268008,
+      "modelMinimumTemperatureC": -111.78507319917921,
+      "modelMaximumTemperatureC": 181.7203140783161,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r407e",
+      "side": "bubble",
+      "fluid": "R407E.mix",
+      "minimumTemperatureC": -115.5119402075,
+      "maximumTemperatureC": 54.4880597925,
+      "modelMinimumTemperatureC": -116.51194020751487,
+      "modelMaximumTemperatureC": 178.50965814145638,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r407e",
+      "side": "dew",
+      "fluid": "R407E.mix",
+      "minimumTemperatureC": -115.5119402075,
+      "maximumTemperatureC": 84.4880597925,
+      "modelMinimumTemperatureC": -116.51194020751487,
+      "modelMaximumTemperatureC": 178.50965814145638,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r407f",
+      "side": "bubble",
+      "fluid": "R407F.mix",
+      "minimumTemperatureC": -117.6091129264,
+      "maximumTemperatureC": 47.3908870736,
+      "modelMinimumTemperatureC": -118.6091129263784,
+      "modelMaximumTemperatureC": 181.6160154045328,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r407f",
+      "side": "dew",
+      "fluid": "R407F.mix",
+      "minimumTemperatureC": -117.6091129264,
+      "maximumTemperatureC": 77.3908870736,
+      "modelMinimumTemperatureC": -118.6091129263784,
+      "modelMaximumTemperatureC": 181.6160154045328,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r41",
+      "side": "bubble",
+      "fluid": "R41",
+      "minimumTemperatureC": -142.33,
+      "maximumTemperatureC": 41.1290638551,
+      "modelMinimumTemperatureC": -143.32999999999998,
+      "modelMaximumTemperatureC": 151.85000000000002,
+      "modelCriticalTemperatureC": 44.129063855142704
+    },
+    {
+      "id": "r41",
+      "side": "dew",
+      "fluid": "R41",
+      "minimumTemperatureC": -142.33,
+      "maximumTemperatureC": 41.1290638551,
+      "modelMinimumTemperatureC": -143.32999999999998,
+      "modelMaximumTemperatureC": 151.85000000000002,
+      "modelCriticalTemperatureC": 44.129063855142704
+    },
+    {
+      "id": "r410a",
+      "side": "bubble",
+      "fluid": "R410A",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 68.344,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 71.34400000000005
+    },
+    {
+      "id": "r410a",
+      "side": "dew",
+      "fluid": "R410A",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 68.344,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 71.34400000000005
+    },
+    {
+      "id": "r410b",
+      "side": "bubble",
+      "fluid": "R410B.mix",
+      "minimumTemperatureC": -123.280465778,
+      "maximumTemperatureC": 41.719534222,
+      "modelMinimumTemperatureC": -124.28046577804218,
+      "modelMaximumTemperatureC": 184.36021902784017,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r410b",
+      "side": "dew",
+      "fluid": "R410B.mix",
+      "minimumTemperatureC": -123.280465778,
+      "maximumTemperatureC": 41.719534222,
+      "modelMinimumTemperatureC": -124.28046577804218,
+      "modelMaximumTemperatureC": 184.36021902784017,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r411a",
+      "side": "bubble",
+      "fluid": "R411A.mix",
+      "minimumTemperatureC": -131.9092979696,
+      "maximumTemperatureC": 78.0907020304,
+      "modelMinimumTemperatureC": -152.9092979696211,
+      "modelMaximumTemperatureC": 270.7256026329584,
+      "modelCriticalTemperatureC": 99.54751153347104
+    },
+    {
+      "id": "r411a",
+      "side": "dew",
+      "fluid": "R411A.mix",
+      "minimumTemperatureC": -131.9092979696,
+      "maximumTemperatureC": 78.0907020304,
+      "modelMinimumTemperatureC": -152.9092979696211,
+      "modelMaximumTemperatureC": 270.7256026329584,
+      "modelCriticalTemperatureC": 99.54751153347104
+    },
+    {
+      "id": "r411b",
+      "side": "bubble",
+      "fluid": "R411B.mix",
+      "minimumTemperatureC": -121.5999634591,
+      "maximumTemperatureC": 78.4000365409,
+      "modelMinimumTemperatureC": -157.59996345913083,
+      "modelMaximumTemperatureC": 276.4440668697032,
+      "modelCriticalTemperatureC": 96.18096782530574
+    },
+    {
+      "id": "r411b",
+      "side": "dew",
+      "fluid": "R411B.mix",
+      "minimumTemperatureC": -141.5999634591,
+      "maximumTemperatureC": 78.4000365409,
+      "modelMinimumTemperatureC": -157.59996345913083,
+      "modelMaximumTemperatureC": 276.4440668697032,
+      "modelCriticalTemperatureC": 96.18096782530574
+    },
+    {
+      "id": "r415a",
+      "side": "bubble",
+      "fluid": "R415A.mix",
+      "minimumTemperatureC": -147.7523735889,
+      "maximumTemperatureC": 77.2476264111,
+      "modelMinimumTemperatureC": -148.75237358887048,
+      "modelMaximumTemperatureC": 265.68900796918683,
+      "modelCriticalTemperatureC": 102.30239152206951
+    },
+    {
+      "id": "r415a",
+      "side": "dew",
+      "fluid": "R415A.mix",
+      "minimumTemperatureC": -122.7523735889,
+      "maximumTemperatureC": 82.2476264111,
+      "modelMinimumTemperatureC": -148.75237358887048,
+      "modelMaximumTemperatureC": 265.68900796918683,
+      "modelCriticalTemperatureC": 102.30239152206951
+    },
+    {
+      "id": "r415b",
+      "side": "bubble",
+      "fluid": "R415B.mix",
+      "minimumTemperatureC": -115.4705374937,
+      "maximumTemperatureC": 99.5294625063,
+      "modelMinimumTemperatureC": -126.47053749366268,
+      "modelMaximumTemperatureC": 236.9974858275338,
+      "modelCriticalTemperatureC": 111.25935848356664
+    },
+    {
+      "id": "r415b",
+      "side": "dew",
+      "fluid": "R415B.mix",
+      "minimumTemperatureC": -125.4705374937,
+      "maximumTemperatureC": 94.5294625063,
+      "modelMinimumTemperatureC": -126.47053749366268,
+      "modelMaximumTemperatureC": 236.9974858275338,
+      "modelCriticalTemperatureC": 111.25935848356664
+    },
+    {
+      "id": "r417a",
+      "side": "bubble",
+      "fluid": "R417A.mix",
+      "minimumTemperatureC": -103.3761195281,
+      "maximumTemperatureC": 76.6238804719,
+      "modelMinimumTemperatureC": -104.37611952809516,
+      "modelMaximumTemperatureC": 207.99376162172683,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r417a",
+      "side": "dew",
+      "fluid": "R417A.mix",
+      "minimumTemperatureC": -103.3761195281,
+      "maximumTemperatureC": 71.6238804719,
+      "modelMinimumTemperatureC": -104.37611952809516,
+      "modelMaximumTemperatureC": 207.99376162172683,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r417b",
+      "side": "bubble",
+      "fluid": "R417B.mix",
+      "minimumTemperatureC": -102.1488253219,
+      "maximumTemperatureC": 67.8511746781,
+      "modelMinimumTemperatureC": -103.14882532187664,
+      "modelMaximumTemperatureC": 221.66128137279708,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r417b",
+      "side": "dew",
+      "fluid": "R417B.mix",
+      "minimumTemperatureC": -102.1488253219,
+      "maximumTemperatureC": 62.8511746781,
+      "modelMinimumTemperatureC": -103.14882532187664,
+      "modelMaximumTemperatureC": 221.66128137279708,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r417c",
+      "side": "bubble",
+      "fluid": "R417C.mix",
+      "minimumTemperatureC": -102.9105552201,
+      "maximumTemperatureC": 87.0894447799,
+      "modelMinimumTemperatureC": -103.91055522011794,
+      "modelMaximumTemperatureC": 193.07483972854368,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r417c",
+      "side": "dew",
+      "fluid": "R417C.mix",
+      "minimumTemperatureC": -102.9105552201,
+      "maximumTemperatureC": 87.0894447799,
+      "modelMinimumTemperatureC": -103.91055522011794,
+      "modelMaximumTemperatureC": 193.07483972854368,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r419a",
+      "side": "bubble",
+      "fluid": "R419A.mix",
+      "minimumTemperatureC": -104.0526777497,
+      "maximumTemperatureC": 65.9473222503,
+      "modelMinimumTemperatureC": -105.0526777497291,
+      "modelMaximumTemperatureC": 220.0611634931186,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r419a",
+      "side": "dew",
+      "fluid": "R419A.mix",
+      "minimumTemperatureC": -104.0526777497,
+      "maximumTemperatureC": 80.9473222503,
+      "modelMinimumTemperatureC": -105.0526777497291,
+      "modelMaximumTemperatureC": 220.0611634931186,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r419b",
+      "side": "bubble",
+      "fluid": "R419B.mix",
+      "minimumTemperatureC": -104.2174054213,
+      "maximumTemperatureC": 75.7825945787,
+      "modelMinimumTemperatureC": -105.21740542134356,
+      "modelMaximumTemperatureC": 206.57614923331374,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r419b",
+      "side": "dew",
+      "fluid": "R419B.mix",
+      "minimumTemperatureC": -104.2174054213,
+      "maximumTemperatureC": 85.7825945787,
+      "modelMinimumTemperatureC": -105.21740542134356,
+      "modelMaximumTemperatureC": 206.57614923331374,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r420a",
+      "side": "bubble",
+      "fluid": "R420A.mix",
+      "minimumTemperatureC": -105.599335913,
+      "maximumTemperatureC": 94.400664087,
+      "modelMinimumTemperatureC": -106.5993359130477,
+      "modelMaximumTemperatureC": 183.67418130098474,
+      "modelCriticalTemperatureC": 104.48765055081043
+    },
+    {
+      "id": "r420a",
+      "side": "dew",
+      "fluid": "R420A.mix",
+      "minimumTemperatureC": -105.599335913,
+      "maximumTemperatureC": 101.4876505508,
+      "modelMinimumTemperatureC": -106.5993359130477,
+      "modelMaximumTemperatureC": 183.67418130098474,
+      "modelCriticalTemperatureC": 104.48765055081043
+    },
+    {
+      "id": "r421a",
+      "side": "bubble",
+      "fluid": "R421A.mix",
+      "minimumTemperatureC": -100.8581687146,
+      "maximumTemperatureC": 79.7669908022,
+      "modelMinimumTemperatureC": -101.85816871456962,
+      "modelMaximumTemperatureC": 206.15052728253403,
+      "modelCriticalTemperatureC": 82.76699080217918
+    },
+    {
+      "id": "r421a",
+      "side": "dew",
+      "fluid": "R421A.mix",
+      "minimumTemperatureC": -100.8581687146,
+      "maximumTemperatureC": 79.7669908022,
+      "modelMinimumTemperatureC": -101.85816871456962,
+      "modelMaximumTemperatureC": 206.15052728253403,
+      "modelCriticalTemperatureC": 82.76699080217918
+    },
+    {
+      "id": "r421b",
+      "side": "bubble",
+      "fluid": "R421B.mix",
+      "minimumTemperatureC": -100.088974339,
+      "maximumTemperatureC": 69.3822413978,
+      "modelMinimumTemperatureC": -101.08897433897181,
+      "modelMaximumTemperatureC": 219.11447743305888,
+      "modelCriticalTemperatureC": 72.38224139777759
+    },
+    {
+      "id": "r421b",
+      "side": "dew",
+      "fluid": "R421B.mix",
+      "minimumTemperatureC": -100.088974339,
+      "maximumTemperatureC": 69.3822413978,
+      "modelMinimumTemperatureC": -101.08897433897181,
+      "modelMaximumTemperatureC": 219.11447743305888,
+      "modelCriticalTemperatureC": 72.38224139777759
+    },
+    {
+      "id": "r422a",
+      "side": "bubble",
+      "fluid": "R422A.mix",
+      "minimumTemperatureC": -103.8788050388,
+      "maximumTemperatureC": 61.1211949612,
+      "modelMinimumTemperatureC": -104.87880503884182,
+      "modelMaximumTemperatureC": 226.07222991514772,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422a",
+      "side": "dew",
+      "fluid": "R422A.mix",
+      "minimumTemperatureC": -103.8788050388,
+      "maximumTemperatureC": 61.1211949612,
+      "modelMinimumTemperatureC": -104.87880503884182,
+      "modelMaximumTemperatureC": 226.07222991514772,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422b",
+      "side": "bubble",
+      "fluid": "R422B.mix",
+      "minimumTemperatureC": -104.1156475345,
+      "maximumTemperatureC": 75.8843524655,
+      "modelMinimumTemperatureC": -105.11564753449721,
+      "modelMaximumTemperatureC": 210.94939728398288,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422b",
+      "side": "dew",
+      "fluid": "R422B.mix",
+      "minimumTemperatureC": -104.1156475345,
+      "maximumTemperatureC": 70.8843524655,
+      "modelMinimumTemperatureC": -105.11564753449721,
+      "modelMaximumTemperatureC": 210.94939728398288,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422c",
+      "side": "bubble",
+      "fluid": "R422C.mix",
+      "minimumTemperatureC": -103.5161860225,
+      "maximumTemperatureC": 66.4838139775,
+      "modelMinimumTemperatureC": -104.51618602254942,
+      "modelMaximumTemperatureC": 223.73784966427905,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422c",
+      "side": "dew",
+      "fluid": "R422C.mix",
+      "minimumTemperatureC": -103.5161860225,
+      "maximumTemperatureC": 61.4838139775,
+      "modelMinimumTemperatureC": -104.51618602254942,
+      "modelMaximumTemperatureC": 223.73784966427905,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422d",
+      "side": "bubble",
+      "fluid": "R422D.mix",
+      "minimumTemperatureC": -104.3169354111,
+      "maximumTemperatureC": 70.6830645889,
+      "modelMinimumTemperatureC": -105.31693541110914,
+      "modelMaximumTemperatureC": 216.4002352442517,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422d",
+      "side": "dew",
+      "fluid": "R422D.mix",
+      "minimumTemperatureC": -104.3169354111,
+      "maximumTemperatureC": 65.6830645889,
+      "modelMinimumTemperatureC": -105.31693541110914,
+      "modelMaximumTemperatureC": 216.4002352442517,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422e",
+      "side": "bubble",
+      "fluid": "R422E.mix",
+      "minimumTemperatureC": -103.7392362114,
+      "maximumTemperatureC": 76.2607637886,
+      "modelMinimumTemperatureC": -104.73923621142234,
+      "modelMaximumTemperatureC": 211.71266474391507,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r422e",
+      "side": "dew",
+      "fluid": "R422E.mix",
+      "minimumTemperatureC": -103.7392362114,
+      "maximumTemperatureC": 71.2607637886,
+      "modelMinimumTemperatureC": -104.73923621142234,
+      "modelMaximumTemperatureC": 211.71266474391507,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r423a",
+      "side": "bubble",
+      "fluid": "R423A.mix",
+      "minimumTemperatureC": -110.5692898667,
+      "maximumTemperatureC": 79.4307101333,
+      "modelMinimumTemperatureC": -111.56928986672918,
+      "modelMaximumTemperatureC": 188.88769350359934,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r423a",
+      "side": "dew",
+      "fluid": "R423A.mix",
+      "minimumTemperatureC": -110.5692898667,
+      "maximumTemperatureC": 79.4307101333,
+      "modelMinimumTemperatureC": -111.56928986672918,
+      "modelMaximumTemperatureC": 188.88769350359934,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r425a",
+      "side": "bubble",
+      "fluid": "R425A.mix",
+      "minimumTemperatureC": -114.5589868115,
+      "maximumTemperatureC": 80.4410131885,
+      "modelMinimumTemperatureC": -115.55898681146462,
+      "modelMaximumTemperatureC": 176.70200937408276,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r425a",
+      "side": "dew",
+      "fluid": "R425A.mix",
+      "minimumTemperatureC": -114.5589868115,
+      "maximumTemperatureC": 85.4410131885,
+      "modelMinimumTemperatureC": -115.55898681146462,
+      "modelMaximumTemperatureC": 176.70200937408276,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r427a",
+      "side": "bubble",
+      "fluid": "R427A.mix",
+      "minimumTemperatureC": -111.4514287722,
+      "maximumTemperatureC": 78.5485712278,
+      "modelMinimumTemperatureC": -112.45142877224256,
+      "modelMaximumTemperatureC": 206.0977829639877,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r427a",
+      "side": "dew",
+      "fluid": "R427A.mix",
+      "minimumTemperatureC": -111.4514287722,
+      "maximumTemperatureC": 78.5485712278,
+      "modelMinimumTemperatureC": -112.45142877224256,
+      "modelMaximumTemperatureC": 206.0977829639877,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r428a",
+      "side": "bubble",
+      "fluid": "R428A.mix",
+      "minimumTemperatureC": -105.8302126689,
+      "maximumTemperatureC": 54.1697873311,
+      "modelMinimumTemperatureC": -106.83021266889972,
+      "modelMaximumTemperatureC": 270.0649248691276,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r428a",
+      "side": "dew",
+      "fluid": "R428A.mix",
+      "minimumTemperatureC": -105.8302126689,
+      "maximumTemperatureC": 59.1697873311,
+      "modelMinimumTemperatureC": -106.83021266889972,
+      "modelMaximumTemperatureC": 270.0649248691276,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r430a",
+      "side": "bubble",
+      "fluid": "R430A.mix",
+      "minimumTemperatureC": -128.3729363017,
+      "maximumTemperatureC": 91.6270636983,
+      "modelMinimumTemperatureC": -129.37293630172653,
+      "modelMaximumTemperatureC": 246.65701010603698,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r430a",
+      "side": "dew",
+      "fluid": "R430A.mix",
+      "minimumTemperatureC": -128.3729363017,
+      "maximumTemperatureC": 91.6270636983,
+      "modelMinimumTemperatureC": -129.37293630172653,
+      "modelMaximumTemperatureC": 246.65701010603698,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r431a",
+      "side": "bubble",
+      "fluid": "R431A.mix",
+      "minimumTemperatureC": -171.8337357218,
+      "maximumTemperatureC": 73.1662642782,
+      "modelMinimumTemperatureC": -172.8337357218499,
+      "modelMaximumTemperatureC": 344.71137985481994,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r431a",
+      "side": "dew",
+      "fluid": "R431A.mix",
+      "minimumTemperatureC": -76.8337357218,
+      "maximumTemperatureC": 73.1662642782,
+      "modelMinimumTemperatureC": -172.8337357218499,
+      "modelMaximumTemperatureC": 344.71137985481994,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r432a",
+      "side": "bubble",
+      "fluid": "R432A.mix",
+      "minimumTemperatureC": -171.0717481431,
+      "maximumTemperatureC": 78.9282518569,
+      "modelMinimumTemperatureC": -177.07174814314774,
+      "modelMaximumTemperatureC": 292.5548620851898,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r432a",
+      "side": "dew",
+      "fluid": "R432A.mix",
+      "minimumTemperatureC": -161.0717481431,
+      "maximumTemperatureC": 83.9282518569,
+      "modelMinimumTemperatureC": -177.07174814314774,
+      "modelMaximumTemperatureC": 292.5548620851898,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r433a",
+      "side": "bubble",
+      "fluid": "R433A.mix",
+      "minimumTemperatureC": -175.8725196711,
+      "maximumTemperatureC": 69.1274803289,
+      "modelMinimumTemperatureC": -186.87251967111996,
+      "modelMaximumTemperatureC": 353.60616776523875,
+      "modelCriticalTemperatureC": 94.14202523197702
+    },
+    {
+      "id": "r433a",
+      "side": "dew",
+      "fluid": "R433A.mix",
+      "minimumTemperatureC": -175.8725196711,
+      "maximumTemperatureC": 69.1274803289,
+      "modelMinimumTemperatureC": -186.87251967111996,
+      "modelMaximumTemperatureC": 353.60616776523875,
+      "modelCriticalTemperatureC": 94.14202523197702
+    },
+    {
+      "id": "r433b",
+      "side": "bubble",
+      "fluid": "R433B.mix",
+      "minimumTemperatureC": -171.4980881817,
+      "maximumTemperatureC": 73.5019118183,
+      "modelMinimumTemperatureC": -187.49808818167168,
+      "modelMaximumTemperatureC": 372.92974202033554,
+      "modelCriticalTemperatureC": 96.26762086135699
+    },
+    {
+      "id": "r433b",
+      "side": "dew",
+      "fluid": "R433B.mix",
+      "minimumTemperatureC": -176.4980881817,
+      "maximumTemperatureC": 73.5019118183,
+      "modelMinimumTemperatureC": -187.49808818167168,
+      "modelMaximumTemperatureC": 372.92974202033554,
+      "modelCriticalTemperatureC": 96.26762086135699
+    },
+    {
+      "id": "r433c",
+      "side": "bubble",
+      "fluid": "R433C.mix",
+      "minimumTemperatureC": -175.996448816,
+      "maximumTemperatureC": 69.003551184,
+      "modelMinimumTemperatureC": -186.99644881599087,
+      "modelMaximumTemperatureC": 357.434292091976,
+      "modelCriticalTemperatureC": 94.53200060723128
+    },
+    {
+      "id": "r433c",
+      "side": "dew",
+      "fluid": "R433C.mix",
+      "minimumTemperatureC": -175.996448816,
+      "maximumTemperatureC": 69.003551184,
+      "modelMinimumTemperatureC": -186.99644881599087,
+      "modelMaximumTemperatureC": 357.434292091976,
+      "modelCriticalTemperatureC": 94.53200060723128
+    },
+    {
+      "id": "r434a",
+      "side": "bubble",
+      "fluid": "R434A.mix",
+      "minimumTemperatureC": -105.5992912524,
+      "maximumTemperatureC": 69.4007087476,
+      "modelMinimumTemperatureC": -106.59929125243971,
+      "modelMaximumTemperatureC": 257.17925284580645,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r434a",
+      "side": "dew",
+      "fluid": "R434A.mix",
+      "minimumTemperatureC": -105.5992912524,
+      "maximumTemperatureC": 64.4007087476,
+      "modelMinimumTemperatureC": -106.59929125243971,
+      "modelMaximumTemperatureC": 257.17925284580645,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r436a",
+      "side": "bubble",
+      "fluid": "R436A.mix",
+      "minimumTemperatureC": -171.091214709,
+      "maximumTemperatureC": 98.908785291,
+      "modelMinimumTemperatureC": -177.09121470896656,
+      "modelMaximumTemperatureC": 348.83957997420646,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r436a",
+      "side": "dew",
+      "fluid": "R436A.mix",
+      "minimumTemperatureC": -161.091214709,
+      "maximumTemperatureC": 113.908785291,
+      "modelMinimumTemperatureC": -177.09121470896656,
+      "modelMaximumTemperatureC": 348.83957997420646,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r436b",
+      "side": "bubble",
+      "fluid": "R436B.mix",
+      "minimumTemperatureC": -170.0081362393,
+      "maximumTemperatureC": 99.9918637607,
+      "modelMinimumTemperatureC": -176.0081362392542,
+      "modelMaximumTemperatureC": 345.9595627705751,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r436b",
+      "side": "dew",
+      "fluid": "R436B.mix",
+      "minimumTemperatureC": -160.0081362393,
+      "maximumTemperatureC": 114.9918637607,
+      "modelMinimumTemperatureC": -176.0081362392542,
+      "modelMaximumTemperatureC": 345.9595627705751,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r439a",
+      "side": "bubble",
+      "fluid": "R439A.mix",
+      "minimumTemperatureC": -126.5520895255,
+      "maximumTemperatureC": 53.4479104745,
+      "modelMinimumTemperatureC": -127.55208952547574,
+      "modelMaximumTemperatureC": 185.12122650332702,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r439a",
+      "side": "dew",
+      "fluid": "R439A.mix",
+      "minimumTemperatureC": -101.5520895255,
+      "maximumTemperatureC": 53.4479104745,
+      "modelMinimumTemperatureC": -127.55208952547574,
+      "modelMaximumTemperatureC": 185.12122650332702,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r440a",
+      "side": "bubble",
+      "fluid": "R440A.mix",
+      "minimumTemperatureC": -118.0533076859,
+      "maximumTemperatureC": 96.9466923141,
+      "modelMinimumTemperatureC": -119.05330768590835,
+      "modelMaximumTemperatureC": 227.7343652474744,
+      "modelCriticalTemperatureC": 112.65486795909965
+    },
+    {
+      "id": "r440a",
+      "side": "dew",
+      "fluid": "R440A.mix",
+      "minimumTemperatureC": -118.0533076859,
+      "maximumTemperatureC": 96.9466923141,
+      "modelMinimumTemperatureC": -119.05330768590835,
+      "modelMaximumTemperatureC": 227.7343652474744,
+      "modelCriticalTemperatureC": 112.65486795909965
+    },
+    {
+      "id": "r441a",
+      "side": "bubble",
+      "fluid": "R441A.mix",
+      "minimumTemperatureC": -170.1651824189,
+      "maximumTemperatureC": 89.8348175811,
+      "modelMinimumTemperatureC": -171.16518241885086,
+      "modelMaximumTemperatureC": 351.8533092346763,
+      "modelCriticalTemperatureC": 118.46730997143811
+    },
+    {
+      "id": "r441a",
+      "side": "dew",
+      "fluid": "R441A.mix",
+      "minimumTemperatureC": -155.1651824189,
+      "maximumTemperatureC": 109.8348175811,
+      "modelMinimumTemperatureC": -171.16518241885086,
+      "modelMaximumTemperatureC": 351.8533092346763,
+      "modelCriticalTemperatureC": 118.46730997143811
+    },
+    {
+      "id": "r442a",
+      "side": "bubble",
+      "fluid": "R442A.mix",
+      "minimumTemperatureC": -119.1957444875,
+      "maximumTemperatureC": 50.8042555125,
+      "modelMinimumTemperatureC": -120.19574448745797,
+      "modelMaximumTemperatureC": 183.7611426891146,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r442a",
+      "side": "dew",
+      "fluid": "R442A.mix",
+      "minimumTemperatureC": -119.1957444875,
+      "maximumTemperatureC": 75.8042555125,
+      "modelMinimumTemperatureC": -120.19574448745797,
+      "modelMaximumTemperatureC": 183.7611426891146,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r443a",
+      "side": "bubble",
+      "fluid": "R443A.mix",
+      "minimumTemperatureC": -174.190480166,
+      "maximumTemperatureC": 70.809519834,
+      "modelMinimumTemperatureC": -185.19048016602235,
+      "modelMaximumTemperatureC": 331.42757462582733,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r443a",
+      "side": "dew",
+      "fluid": "R443A.mix",
+      "minimumTemperatureC": -164.190480166,
+      "maximumTemperatureC": 75.809519834,
+      "modelMinimumTemperatureC": -185.19048016602235,
+      "modelMaximumTemperatureC": 331.42757462582733,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r444a",
+      "side": "bubble",
+      "fluid": "R444A.mix",
+      "minimumTemperatureC": -111.7589683737,
+      "maximumTemperatureC": 93.2410316263,
+      "modelMinimumTemperatureC": -112.75896837374427,
+      "modelMaximumTemperatureC": 156.05148559386294,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r444a",
+      "side": "dew",
+      "fluid": "R444A.mix",
+      "minimumTemperatureC": -111.7589683737,
+      "maximumTemperatureC": 83.2410316263,
+      "modelMinimumTemperatureC": -112.75896837374427,
+      "modelMaximumTemperatureC": 156.05148559386294,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r444b",
+      "side": "bubble",
+      "fluid": "R444B.mix",
+      "minimumTemperatureC": -123.8144099331,
+      "maximumTemperatureC": 81.1855900669,
+      "modelMinimumTemperatureC": -124.81440993307217,
+      "modelMaximumTemperatureC": 164.36866548251413,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r444b",
+      "side": "dew",
+      "fluid": "R444B.mix",
+      "minimumTemperatureC": -123.8144099331,
+      "maximumTemperatureC": 86.1855900669,
+      "modelMinimumTemperatureC": -124.81440993307217,
+      "modelMaximumTemperatureC": 164.36866548251413,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r449a",
+      "side": "bubble",
+      "fluid": "R449A.mix",
+      "minimumTemperatureC": -105.7685076699,
+      "maximumTemperatureC": 74.2314923301,
+      "modelMinimumTemperatureC": -106.76850766989841,
+      "modelMaximumTemperatureC": 173.07272519055635,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r449a",
+      "side": "dew",
+      "fluid": "R449A.mix",
+      "minimumTemperatureC": -105.7685076699,
+      "maximumTemperatureC": 74.2314923301,
+      "modelMinimumTemperatureC": -106.76850766989841,
+      "modelMaximumTemperatureC": 173.07272519055635,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r449b",
+      "side": "bubble",
+      "fluid": "R449B.mix",
+      "minimumTemperatureC": -107.0407976926,
+      "maximumTemperatureC": 77.9592023074,
+      "modelMinimumTemperatureC": -108.04079769262415,
+      "modelMaximumTemperatureC": 173.44520882929515,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r449b",
+      "side": "dew",
+      "fluid": "R449B.mix",
+      "minimumTemperatureC": -107.0407976926,
+      "maximumTemperatureC": 72.9592023074,
+      "modelMinimumTemperatureC": -108.04079769262415,
+      "modelMaximumTemperatureC": 173.44520882929515,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r451a",
+      "side": "bubble",
+      "fluid": "R451A.mix",
+      "minimumTemperatureC": -57.7995644974,
+      "maximumTemperatureC": 67.2004355026,
+      "modelMinimumTemperatureC": -58.79956449741729,
+      "modelMaximumTemperatureC": 141.9193998481312,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r451a",
+      "side": "dew",
+      "fluid": "R451A.mix",
+      "minimumTemperatureC": -57.7995644974,
+      "maximumTemperatureC": 67.2004355026,
+      "modelMinimumTemperatureC": -58.79956449741729,
+      "modelMaximumTemperatureC": 141.9193998481312,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r451b",
+      "side": "bubble",
+      "fluid": "R451B.mix",
+      "minimumTemperatureC": -58.3462366627,
+      "maximumTemperatureC": 71.6537633373,
+      "modelMinimumTemperatureC": -59.34623666268786,
+      "modelMaximumTemperatureC": 142.40993319682866,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r451b",
+      "side": "dew",
+      "fluid": "R451B.mix",
+      "minimumTemperatureC": -58.3462366627,
+      "maximumTemperatureC": 71.6537633373,
+      "modelMinimumTemperatureC": -59.34623666268786,
+      "modelMaximumTemperatureC": 142.40993319682866,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r452a",
+      "side": "bubble",
+      "fluid": "R452A.mix",
+      "minimumTemperatureC": -94.6198144755,
+      "maximumTemperatureC": 70.3801855245,
+      "modelMinimumTemperatureC": -95.61981447554913,
+      "modelMaximumTemperatureC": 188.1170173503599,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r452a",
+      "side": "dew",
+      "fluid": "R452A.mix",
+      "minimumTemperatureC": -94.6198144755,
+      "maximumTemperatureC": 65.3801855245,
+      "modelMinimumTemperatureC": -95.61981447554913,
+      "modelMaximumTemperatureC": 188.1170173503599,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r452b",
+      "side": "bubble",
+      "fluid": "HEOS::R1234yf[0.14482932042283217]&R125[0.037049791728208929]&R32[0.81812088784895898]",
+      "minimumTemperatureC": -122.3531175887,
+      "maximumTemperatureC": 52.6468824113,
+      "modelMinimumTemperatureC": -123.35311758869923,
+      "modelMaximumTemperatureC": 160.63750345176283,
+      "modelCriticalTemperatureC": 77.10115564265834
+    },
+    {
+      "id": "r452b",
+      "side": "dew",
+      "fluid": "HEOS::R1234yf[0.14482932042283217]&R125[0.037049791728208929]&R32[0.81812088784895898]",
+      "minimumTemperatureC": -122.3531175887,
+      "maximumTemperatureC": 67.6468824113,
+      "modelMinimumTemperatureC": -123.35311758869923,
+      "modelMaximumTemperatureC": 160.63750345176283,
+      "modelCriticalTemperatureC": 77.10115564265834
+    },
+    {
+      "id": "r454a",
+      "side": "bubble",
+      "fluid": "R454A.mix",
+      "minimumTemperatureC": -97.4401769494,
+      "maximumTemperatureC": 72.5598230506,
+      "modelMinimumTemperatureC": -98.44017694940635,
+      "modelMaximumTemperatureC": 150.38399980558404,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r454a",
+      "side": "dew",
+      "fluid": "R454A.mix",
+      "minimumTemperatureC": -97.4401769494,
+      "maximumTemperatureC": 72.5598230506,
+      "modelMinimumTemperatureC": -98.44017694940635,
+      "modelMaximumTemperatureC": 150.38399980558404,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r454b",
+      "side": "bubble",
+      "fluid": "R454B.mix",
+      "minimumTemperatureC": -121.5248803906,
+      "maximumTemperatureC": 53.4751196094,
+      "modelMinimumTemperatureC": -122.52488039062729,
+      "modelMaximumTemperatureC": 157.58119782172702,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r454b",
+      "side": "dew",
+      "fluid": "R454B.mix",
+      "minimumTemperatureC": -121.5248803906,
+      "maximumTemperatureC": 68.4751196094,
+      "modelMinimumTemperatureC": -122.52488039062729,
+      "modelMaximumTemperatureC": 157.58119782172702,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r454c",
+      "side": "bubble",
+      "fluid": "HEOS::R1234yf[0.62485045342523393]&R32[0.37514954657476601]",
+      "minimumTemperatureC": -83.5350110664,
+      "maximumTemperatureC": 76.4649889336,
+      "modelMinimumTemperatureC": -84.53501106644492,
+      "modelMaximumTemperatureC": 146.22873866436913,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r454c",
+      "side": "dew",
+      "fluid": "HEOS::R1234yf[0.62485045342523393]&R32[0.37514954657476601]",
+      "minimumTemperatureC": -83.5350110664,
+      "maximumTemperatureC": 76.4649889336,
+      "modelMinimumTemperatureC": -84.53501106644492,
+      "modelMaximumTemperatureC": 146.22873866436913,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r455a",
+      "side": "bubble",
+      "fluid": "HEOS::R1234yf[0.5789704507530905]&R32[0.36141605462337623]&CarbonDioxide[0.059613494623533179]",
+      "minimumTemperatureC": -82.5892299195,
+      "maximumTemperatureC": 72.4107700805,
+      "modelMinimumTemperatureC": -83.58922991946866,
+      "modelMaximumTemperatureC": 240.67085781700212,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r455a",
+      "side": "dew",
+      "fluid": "HEOS::R1234yf[0.5789704507530905]&R32[0.36141605462337623]&CarbonDioxide[0.059613494623533179]",
+      "minimumTemperatureC": -82.5892299195,
+      "maximumTemperatureC": 72.4107700805,
+      "modelMinimumTemperatureC": -83.58922991946866,
+      "modelMaximumTemperatureC": 240.67085781700212,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r50",
+      "side": "bubble",
+      "fluid": "R50",
+      "minimumTemperatureC": -181.4559,
+      "maximumTemperatureC": -85.5859973487,
+      "modelMinimumTemperatureC": -182.45589999999999,
+      "modelMaximumTemperatureC": 351.85,
+      "modelCriticalTemperatureC": -82.58599734871302
+    },
+    {
+      "id": "r50",
+      "side": "dew",
+      "fluid": "R50",
+      "minimumTemperatureC": -181.4559,
+      "maximumTemperatureC": -85.5859973487,
+      "modelMinimumTemperatureC": -182.45589999999999,
+      "modelMaximumTemperatureC": 351.85,
+      "modelCriticalTemperatureC": -82.58599734871302
+    },
+    {
+      "id": "r500",
+      "side": "bubble",
+      "fluid": "R500.mix",
+      "minimumTemperatureC": -140.9012790759,
+      "maximumTemperatureC": 89.0987209241,
+      "modelMinimumTemperatureC": -141.90127907587856,
+      "modelMaximumTemperatureC": 242.00254353493062,
+      "modelCriticalTemperatureC": 101.48316541501373
+    },
+    {
+      "id": "r500",
+      "side": "dew",
+      "fluid": "R500.mix",
+      "minimumTemperatureC": -140.9012790759,
+      "maximumTemperatureC": 89.0987209241,
+      "modelMinimumTemperatureC": -141.90127907587856,
+      "modelMaximumTemperatureC": 242.00254353493062,
+      "modelCriticalTemperatureC": 101.48316541501373
+    },
+    {
+      "id": "r501",
+      "side": "bubble",
+      "fluid": "R501.mix",
+      "minimumTemperatureC": -141.3489710712,
+      "maximumTemperatureC": 78.6510289288,
+      "modelMinimumTemperatureC": -157.34897107124328,
+      "modelMaximumTemperatureC": 272.03774195415485,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r501",
+      "side": "dew",
+      "fluid": "R501.mix",
+      "minimumTemperatureC": -136.3489710712,
+      "maximumTemperatureC": 83.6510289288,
+      "modelMinimumTemperatureC": -157.34897107124328,
+      "modelMaximumTemperatureC": 272.03774195415485,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r502",
+      "side": "bubble",
+      "fluid": "R502.mix",
+      "minimumTemperatureC": -135.0188799825,
+      "maximumTemperatureC": 69.9811200175,
+      "modelMinimumTemperatureC": -136.01887998249452,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r502",
+      "side": "dew",
+      "fluid": "R502.mix",
+      "minimumTemperatureC": -135.0188799825,
+      "maximumTemperatureC": 69.9811200175,
+      "modelMinimumTemperatureC": -136.01887998249452,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r503",
+      "side": "bubble",
+      "fluid": "R503.mix",
+      "minimumTemperatureC": -164.0709540473,
+      "maximumTemperatureC": 5.9290459527,
+      "modelMinimumTemperatureC": -165.07095404732024,
+      "modelMaximumTemperatureC": 189.34250874770981,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r503",
+      "side": "dew",
+      "fluid": "R503.mix",
+      "minimumTemperatureC": -154.0709540473,
+      "maximumTemperatureC": 5.9290459527,
+      "modelMinimumTemperatureC": -165.07095404732024,
+      "modelMaximumTemperatureC": 189.34250874770981,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r507a",
+      "side": "bubble",
+      "fluid": "R507A",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 67.615,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 70.61500000000001
+    },
+    {
+      "id": "r507a",
+      "side": "dew",
+      "fluid": "R507A",
+      "minimumTemperatureC": -72.15,
+      "maximumTemperatureC": 67.615,
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 70.61500000000001
+    },
+    {
+      "id": "r508a",
+      "side": "bubble",
+      "fluid": "R508A.mix",
+      "minimumTemperatureC": -129.7613393069,
+      "maximumTemperatureC": -4.7613393069,
+      "modelMinimumTemperatureC": -130.76133930689934,
+      "modelMaximumTemperatureC": 179.72884831780993,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r508a",
+      "side": "dew",
+      "fluid": "R508A.mix",
+      "minimumTemperatureC": -129.7613393069,
+      "maximumTemperatureC": -4.7613393069,
+      "modelMinimumTemperatureC": -130.76133930689934,
+      "modelMaximumTemperatureC": 179.72884831780993,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r508b",
+      "side": "bubble",
+      "fluid": "R508B.mix",
+      "minimumTemperatureC": -133.5714454491,
+      "maximumTemperatureC": -3.5714454491,
+      "modelMinimumTemperatureC": -134.57144544907467,
+      "modelMaximumTemperatureC": 183.1875503350352,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r508b",
+      "side": "dew",
+      "fluid": "R508B.mix",
+      "minimumTemperatureC": -133.5714454491,
+      "maximumTemperatureC": -3.5714454491,
+      "modelMinimumTemperatureC": -134.57144544907467,
+      "modelMaximumTemperatureC": 183.1875503350352,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r509a",
+      "side": "bubble",
+      "fluid": "R509A.mix",
+      "minimumTemperatureC": -137.8312808427,
+      "maximumTemperatureC": 57.1687191573,
+      "modelMinimumTemperatureC": -153.83128084268736,
+      "modelMaximumTemperatureC": 236.2369231168325,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r509a",
+      "side": "dew",
+      "fluid": "R509A.mix",
+      "minimumTemperatureC": -152.8312808427,
+      "maximumTemperatureC": 57.1687191573,
+      "modelMinimumTemperatureC": -153.83128084268736,
+      "modelMaximumTemperatureC": 236.2369231168325,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r510a",
+      "side": "bubble",
+      "fluid": "R510A.mix",
+      "minimumTemperatureC": -142.2389112646,
+      "maximumTemperatureC": 107.7610887354,
+      "modelMinimumTemperatureC": -143.23891126456536,
+      "modelMaximumTemperatureC": 256.72705316387476,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r510a",
+      "side": "dew",
+      "fluid": "R510A.mix",
+      "minimumTemperatureC": -142.2389112646,
+      "maximumTemperatureC": 112.7610887354,
+      "modelMinimumTemperatureC": -143.23891126456536,
+      "modelMaximumTemperatureC": 256.72705316387476,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r511a",
+      "side": "bubble",
+      "fluid": "R511A.mix",
+      "minimumTemperatureC": -174.4122957105,
+      "maximumTemperatureC": 75.5877042895,
+      "modelMinimumTemperatureC": -185.41229571049462,
+      "modelMaximumTemperatureC": 370.854811180488,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r511a",
+      "side": "dew",
+      "fluid": "R511A.mix",
+      "minimumTemperatureC": -159.4122957105,
+      "maximumTemperatureC": 75.5877042895,
+      "modelMinimumTemperatureC": -185.41229571049462,
+      "modelMaximumTemperatureC": 370.854811180488,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r512a",
+      "side": "bubble",
+      "fluid": "R512A.mix",
+      "minimumTemperatureC": -117.0862136752,
+      "maximumTemperatureC": 92.9137863248,
+      "modelMinimumTemperatureC": -118.08621367524344,
+      "modelMaximumTemperatureC": 225.36730643466063,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r512a",
+      "side": "dew",
+      "fluid": "R512A.mix",
+      "minimumTemperatureC": -117.0862136752,
+      "maximumTemperatureC": 92.9137863248,
+      "modelMinimumTemperatureC": -118.08621367524344,
+      "modelMaximumTemperatureC": 225.36730643466063,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r513a",
+      "side": "bubble",
+      "fluid": "R513A.mix",
+      "minimumTemperatureC": -75.5988483401,
+      "maximumTemperatureC": 79.4011516599,
+      "modelMinimumTemperatureC": -76.5988483401238,
+      "modelMaximumTemperatureC": 157.89084098316192,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r513a",
+      "side": "dew",
+      "fluid": "R513A.mix",
+      "minimumTemperatureC": -75.5988483401,
+      "maximumTemperatureC": 74.4011516599,
+      "modelMinimumTemperatureC": -76.5988483401238,
+      "modelMaximumTemperatureC": 157.89084098316192,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r513b",
+      "side": "bubble",
+      "fluid": "HEOS::R1234yf[0.55775520100410925]&R134a[0.4422447989958907]",
+      "minimumTemperatureC": -74.3285766696,
+      "maximumTemperatureC": 75.6714233304,
+      "modelMinimumTemperatureC": -75.3285766696439,
+      "modelMaximumTemperatureC": 156.7510159548151,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r513b",
+      "side": "dew",
+      "fluid": "HEOS::R1234yf[0.55775520100410925]&R134a[0.4422447989958907]",
+      "minimumTemperatureC": -74.3285766696,
+      "maximumTemperatureC": 75.6714233304,
+      "modelMinimumTemperatureC": -75.3285766696439,
+      "modelMaximumTemperatureC": 156.7510159548151,
+      "modelCriticalTemperatureC": null
+    },
+    {
+      "id": "r600",
+      "side": "bubble",
+      "fluid": "R600",
+      "minimumTemperatureC": -137.255,
+      "maximumTemperatureC": 148.975,
+      "modelMinimumTemperatureC": -138.25499999999997,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 151.97500000000804
+    },
+    {
+      "id": "r600",
+      "side": "dew",
+      "fluid": "R600",
+      "minimumTemperatureC": -137.255,
+      "maximumTemperatureC": 148.975,
+      "modelMinimumTemperatureC": -138.25499999999997,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 151.97500000000804
+    },
+    {
+      "id": "r600a",
+      "side": "bubble",
+      "fluid": "R600A",
+      "minimumTemperatureC": -158.42,
+      "maximumTemperatureC": 131.58,
+      "modelMinimumTemperatureC": -159.41999999999996,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 134.66000000000463
+    },
+    {
+      "id": "r600a",
+      "side": "dew",
+      "fluid": "R600A",
+      "minimumTemperatureC": -158.42,
+      "maximumTemperatureC": 131.58,
+      "modelMinimumTemperatureC": -159.41999999999996,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 134.66000000000463
+    },
+    {
+      "id": "r601",
+      "side": "bubble",
+      "fluid": "R601",
+      "minimumTemperatureC": -128.68,
+      "maximumTemperatureC": 193.5499998711,
+      "modelMinimumTemperatureC": -129.67999999999998,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 196.54999987111665
+    },
+    {
+      "id": "r601",
+      "side": "dew",
+      "fluid": "R601",
+      "minimumTemperatureC": -128.68,
+      "maximumTemperatureC": 193.5499998711,
+      "modelMinimumTemperatureC": -129.67999999999998,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 196.54999987111665
+    },
+    {
+      "id": "r601a",
+      "side": "bubble",
+      "fluid": "R601a",
+      "minimumTemperatureC": -159.5,
+      "maximumTemperatureC": 184.1997947114,
+      "modelMinimumTemperatureC": -160.49999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 187.19979471144592
+    },
+    {
+      "id": "r601a",
+      "side": "dew",
+      "fluid": "R601a",
+      "minimumTemperatureC": -159.5,
+      "maximumTemperatureC": 184.1997947114,
+      "modelMinimumTemperatureC": -160.49999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 187.19979471144592
+    },
+    {
+      "id": "r702",
+      "side": "bubble",
+      "fluid": "R702",
+      "minimumTemperatureC": -258.637266619,
+      "maximumTemperatureC": -240.6685539655,
+      "modelMinimumTemperatureC": -259.193,
+      "modelMaximumTemperatureC": 726.85,
+      "modelCriticalTemperatureC": -240.00566731168868
+    },
+    {
+      "id": "r702",
+      "side": "dew",
+      "fluid": "R702",
+      "minimumTemperatureC": -258.637266619,
+      "maximumTemperatureC": -240.6685539655,
+      "modelMinimumTemperatureC": -259.193,
+      "modelMaximumTemperatureC": 726.85,
+      "modelCriticalTemperatureC": -240.00566731168868
+    },
+    {
+      "id": "r704",
+      "side": "bubble",
+      "fluid": "R704",
+      "minimumTemperatureC": -270.8857621796,
+      "maximumTemperatureC": -268.0586059866,
+      "modelMinimumTemperatureC": -270.97319999999996,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -267.954699986364
+    },
+    {
+      "id": "r704",
+      "side": "dew",
+      "fluid": "R704",
+      "minimumTemperatureC": -270.8857621796,
+      "maximumTemperatureC": -268.0586059866,
+      "modelMinimumTemperatureC": -270.97319999999996,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -267.954699986364
+    },
+    {
+      "id": "r717",
+      "side": "bubble",
+      "fluid": "R717",
+      "minimumTemperatureC": -76.655,
+      "maximumTemperatureC": 129.4099999733,
+      "modelMinimumTemperatureC": -77.65499999999997,
+      "modelMaximumTemperatureC": 451.85,
+      "modelCriticalTemperatureC": 132.40999997326355
+    },
+    {
+      "id": "r717",
+      "side": "dew",
+      "fluid": "R717",
+      "minimumTemperatureC": -76.655,
+      "maximumTemperatureC": 129.4099999733,
+      "modelMinimumTemperatureC": -77.65499999999997,
+      "modelMaximumTemperatureC": 451.85,
+      "modelCriticalTemperatureC": 132.40999997326355
+    },
+    {
+      "id": "r718",
+      "side": "bubble",
+      "fluid": "R718",
+      "minimumTemperatureC": 1.01,
+      "maximumTemperatureC": 370.946,
+      "modelMinimumTemperatureC": 0.010000000000047748,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": 373.9459999999873
+    },
+    {
+      "id": "r718",
+      "side": "dew",
+      "fluid": "R718",
+      "minimumTemperatureC": 1.01,
+      "maximumTemperatureC": 370.946,
+      "modelMinimumTemperatureC": 0.010000000000047748,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": 373.9459999999873
+    },
+    {
+      "id": "r720",
+      "side": "bubble",
+      "fluid": "R720",
+      "minimumTemperatureC": -248.0214400087,
+      "maximumTemperatureC": -229.6380002891,
+      "modelMinimumTemperatureC": -248.58999999999997,
+      "modelMaximumTemperatureC": 451.85,
+      "modelCriticalTemperatureC": -228.75000029501308
+    },
+    {
+      "id": "r720",
+      "side": "dew",
+      "fluid": "R720",
+      "minimumTemperatureC": -248.0214400087,
+      "maximumTemperatureC": -229.6380002891,
+      "modelMinimumTemperatureC": -248.58999999999997,
+      "modelMaximumTemperatureC": 451.85,
+      "modelCriticalTemperatureC": -228.75000029501308
+    },
+    {
+      "id": "r728",
+      "side": "bubble",
+      "fluid": "R728",
+      "minimumTemperatureC": -208.999,
+      "maximumTemperatureC": -149.4818400004,
+      "modelMinimumTemperatureC": -209.99899999999997,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -146.95800000041442
+    },
+    {
+      "id": "r728",
+      "side": "dew",
+      "fluid": "R728",
+      "minimumTemperatureC": -208.999,
+      "maximumTemperatureC": -149.4818400004,
+      "modelMinimumTemperatureC": -209.99899999999997,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -146.95800000041442
+    },
+    {
+      "id": "r729",
+      "side": "bubble",
+      "fluid": "R729",
+      "minimumTemperatureC": -212.4,
+      "maximumTemperatureC": -143.270012,
+      "modelMinimumTemperatureC": -213.39999999999998,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -140.61939999999998
+    },
+    {
+      "id": "r729",
+      "side": "dew",
+      "fluid": "R729",
+      "minimumTemperatureC": -212.4,
+      "maximumTemperatureC": -143.270012,
+      "modelMinimumTemperatureC": -213.39999999999998,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -140.61939999999998
+    },
+    {
+      "id": "r732",
+      "side": "bubble",
+      "fluid": "R732",
+      "minimumTemperatureC": -217.789,
+      "maximumTemperatureC": -121.6425979614,
+      "modelMinimumTemperatureC": -218.789,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -118.55061016471444
+    },
+    {
+      "id": "r732",
+      "side": "dew",
+      "fluid": "R732",
+      "minimumTemperatureC": -217.789,
+      "maximumTemperatureC": -121.6425979614,
+      "modelMinimumTemperatureC": -218.789,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -118.55061016471444
+    },
+    {
+      "id": "r740",
+      "side": "bubble",
+      "fluid": "R740",
+      "minimumTemperatureC": -188.344,
+      "maximumTemperatureC": -125.47674,
+      "modelMinimumTemperatureC": -189.344,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -122.46299999998939
+    },
+    {
+      "id": "r740",
+      "side": "dew",
+      "fluid": "R740",
+      "minimumTemperatureC": -188.344,
+      "maximumTemperatureC": -125.47674,
+      "modelMinimumTemperatureC": -189.344,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -122.46299999998939
+    },
+    {
+      "id": "r744",
+      "side": "bubble",
+      "fluid": "R744",
+      "minimumTemperatureC": -55.558,
+      "maximumTemperatureC": 27.978200003,
+      "modelMinimumTemperatureC": -56.557999999999964,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": 30.978200002980714
+    },
+    {
+      "id": "r744",
+      "side": "dew",
+      "fluid": "R744",
+      "minimumTemperatureC": -55.558,
+      "maximumTemperatureC": 27.978200003,
+      "modelMinimumTemperatureC": -56.557999999999964,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": 30.978200002980714
+    },
+    {
+      "id": "rc318",
+      "side": "bubble",
+      "fluid": "RC318",
+      "minimumTemperatureC": -38.8,
+      "maximumTemperatureC": 112.2210224427,
+      "modelMinimumTemperatureC": -39.79999999999998,
+      "modelMaximumTemperatureC": 349.85,
+      "modelCriticalTemperatureC": 115.22102244269843
+    },
+    {
+      "id": "rc318",
+      "side": "dew",
+      "fluid": "RC318",
+      "minimumTemperatureC": -38.8,
+      "maximumTemperatureC": 112.2210224427,
+      "modelMinimumTemperatureC": -39.79999999999998,
+      "modelMaximumTemperatureC": 349.85,
+      "modelCriticalTemperatureC": 115.22102244269843
+    },
+    {
+      "id": "re143a",
+      "side": "bubble",
+      "fluid": "RE143A",
+      "minimumTemperatureC": -32.15,
+      "maximumTemperatureC": 101.767574501,
+      "modelMinimumTemperatureC": -33.14999999999998,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 104.76757450104975
+    },
+    {
+      "id": "re143a",
+      "side": "dew",
+      "fluid": "RE143A",
+      "minimumTemperatureC": -32.15,
+      "maximumTemperatureC": 101.767574501,
+      "modelMinimumTemperatureC": -33.14999999999998,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 104.76757450104975
+    },
+    {
+      "id": "re170",
+      "side": "bubble",
+      "fluid": "DimethylEther",
+      "minimumTemperatureC": -140.49,
+      "maximumTemperatureC": 124.2279999122,
+      "modelMinimumTemperatureC": -141.48999999999998,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 127.22799991219063
+    },
+    {
+      "id": "re170",
+      "side": "dew",
+      "fluid": "DimethylEther",
+      "minimumTemperatureC": -140.49,
+      "maximumTemperatureC": 124.2279999122,
+      "modelMinimumTemperatureC": -141.48999999999998,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 127.22799991219063
+    }
+  ]
 }

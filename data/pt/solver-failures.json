@@ -1,0 +1,52 @@
+{
+  "coolPropGitRevision": "98b3523d5daa98454618d381d2ae53f7471d216b",
+  "guardK": 5,
+  "reason": "Independent held-out validation observed solver failures. Exclude a 5 K numerical guard on each side; this is not a physical phase boundary.",
+  "failures": [
+    {
+      "refrigerantId": "r411a",
+      "side": "bubble",
+      "temperatureC": -137.6905479696
+    },
+    {
+      "refrigerantId": "r415a",
+      "side": "dew",
+      "temperatureC": -132.2836235889
+    },
+    {
+      "refrigerantId": "r415b",
+      "side": "bubble",
+      "temperatureC": -125.3142874937
+    },
+    {
+      "refrigerantId": "r428a",
+      "side": "bubble",
+      "temperatureC": 61.0447873311
+    },
+    {
+      "refrigerantId": "r501",
+      "side": "bubble",
+      "temperatureC": 88.0260289288
+    },
+    {
+      "refrigerantId": "r411b",
+      "side": "bubble",
+      "temperatureC": -131.3499634591
+    },
+    {
+      "refrigerantId": "r501",
+      "side": "dew",
+      "temperatureC": -155.5989710712
+    },
+    {
+      "refrigerantId": "r501",
+      "side": "dew",
+      "temperatureC": -143.5989710712
+    },
+    {
+      "refrigerantId": "r509a",
+      "side": "bubble",
+      "temperatureC": -143.3312808427
+    }
+  ]
+}
