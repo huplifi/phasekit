@@ -3,12 +3,18 @@
 import hashlib
 import json
 import math
+import sys
 from pathlib import Path
 
 import CoolProp.CoolProp as cp
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "data"))
+from coolprop_runtime import load_supplement
+
+MODEL_SUPPLEMENT = load_supplement()
 TABLE = json.loads((ROOT / "packages/core/generated/ph-grids.json").read_text())
+assert TABLE["modelSupplement"] == MODEL_SUPPLEMENT
 assert cp.get_global_param_string("gitrevision") == TABLE["coolPropGitRevision"]
 digest = hashlib.sha256(json.dumps(TABLE["grids"], sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:16]
 assert TABLE["gridSha256Prefix"] == digest

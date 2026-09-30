@@ -2,14 +2,20 @@
 """Recheck published P–h isolines against fresh CoolProp 7.2.0 states."""
 import json
 import math
+import sys
 from pathlib import Path
 
 import CoolProp.CoolProp as cp
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "data"))
+from coolprop_runtime import load_supplement
+
+MODEL_SUPPLEMENT = load_supplement()
 GRIDS = json.loads((ROOT / "packages/core/generated/ph-grids.json").read_text())
 LINES = json.loads((ROOT / "packages/core/generated/ph-isolines.json").read_text())
 assert cp.get_global_param_string("version") == "7.2.0"
+assert LINES["modelSupplement"] == MODEL_SUPPLEMENT
 assert cp.get_global_param_string("gitrevision") == LINES["coolPropGitRevision"]
 assert LINES["phGridVersion"] == GRIDS["dataVersion"]
 

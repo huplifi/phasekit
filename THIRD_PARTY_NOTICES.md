@@ -17,3 +17,5 @@ Selected safety classifications are adapted from the Australian Department of Cl
 ## Software dependencies
 
 Dependency versions are pinned by `pnpm-lock.yaml`. Their upstream licences and notices remain applicable. Installation obtains each package with its accompanying licence; PhaseKit does not claim ownership of third-party libraries.
+
+The six unmodified CoolProp EOS JSON files in `data/coolprop-supplement/` come from commit `afce86ff977552663ca3a78d8ea318cc64dcbdfd`. Their per-file SHA-256, CAS identities and EOS references are recorded in its manifest. The same [CoolProp MIT notice](licenses/CoolProp-MIT.txt) applies.

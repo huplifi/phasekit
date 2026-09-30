@@ -1,7 +1,7 @@
 {
-  "version": "2026-09-26.fffbb55a5c7e",
-  "sha256": "fffbb55a5c7e21fb442bc485a7032c827785c9b05076695f60081ddbadf92c58",
-  "checkedAt": "2026-09-26",
+  "version": "2026-09-30.51cabf3aa643",
+  "sha256": "51cabf3aa643cc12e67c21ae8d352b1605c99a7cb7eb0a0e218839c12be5fb03",
+  "checkedAt": "2026-09-30",
   "refrigerants": [
     {
       "id": "r11",
@@ -9232,19 +9232,19 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "odp": {
           "state": "verified",
@@ -9252,7 +9252,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -9268,13 +9268,13 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_boiling_c": {
           "state": "verified",
@@ -9282,7 +9282,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C",
           "conditions": {
             "temperatureC": -43.8,
@@ -9292,22 +9292,28 @@
           }
         },
         "critical_temp_c": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "86.03",
+          "sourceIds": [
+            "honeywell-r407c-product-2026"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "°C"
         },
         "critical_pressure_bar_abs": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "46.29",
+          "sourceIds": [
+            "honeywell-r407c-product-2026"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "bar abs"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "nominal_glide_k": {
           "state": "verified",
@@ -9315,7 +9321,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "conditions": {
             "temperatureC": -43.8,
             "pressureKPaAbsolute": 101.325,
@@ -9327,7 +9333,7 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "molar_mass_g_mol": {
           "state": "verified",
@@ -9335,20 +9341,20 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes": {
           "state": "verified",
@@ -9356,7 +9362,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes_en": {
           "state": "verified",
@@ -9364,7 +9370,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_typical": {
           "state": "verified",
@@ -9372,7 +9378,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_possible": {
           "state": "verified",
@@ -9380,13 +9386,14 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         }
       },
       "sourceIds": [
         "bitzer-refreport-table",
         "epa-snap-compositions",
-        "eu-2024-573"
+        "eu-2024-573",
+        "honeywell-r407c-product-2026"
       ],
       "coverage": {
         "identity": "verified",
@@ -11177,19 +11184,19 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "odp": {
           "state": "verified",
@@ -11197,7 +11204,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -11213,13 +11220,13 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_boiling_c": {
           "state": "verified",
@@ -11227,7 +11234,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C",
           "conditions": {
             "temperatureC": -51.4,
@@ -11237,22 +11244,28 @@
           }
         },
         "critical_temp_c": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "71.36",
+          "sourceIds": [
+            "honeywell-r410a-product-2026"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "°C"
         },
         "critical_pressure_bar_abs": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "49.02",
+          "sourceIds": [
+            "honeywell-r410a-product-2026"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "bar abs"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "nominal_glide_k": {
           "state": "verified",
@@ -11260,7 +11273,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "conditions": {
             "temperatureC": -51.4,
             "pressureKPaAbsolute": 101.325,
@@ -11272,7 +11285,7 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "molar_mass_g_mol": {
           "state": "verified",
@@ -11280,20 +11293,20 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes": {
           "state": "verified",
@@ -11301,7 +11314,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes_en": {
           "state": "verified",
@@ -11309,7 +11322,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_typical": {
           "state": "verified",
@@ -11317,7 +11330,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_possible": {
           "state": "verified",
@@ -11325,13 +11338,14 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         }
       },
       "sourceIds": [
         "bitzer-refreport-table",
         "epa-snap-compositions",
-        "eu-2024-573"
+        "eu-2024-573",
+        "honeywell-r410a-product-2026"
       ],
       "coverage": {
         "identity": "verified",
@@ -24419,7 +24433,7 @@
         "composition": "verified",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -25438,7 +25452,7 @@
         "composition": "verified",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -25657,19 +25671,19 @@
             "bitzer-refreport-table",
             "linde-2019-safety"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "odp": {
           "state": "verified",
@@ -25677,25 +25691,25 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_boiling_c": {
           "state": "verified",
@@ -25703,7 +25717,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C",
           "conditions": {
             "temperatureC": -52,
@@ -25713,22 +25727,25 @@
           }
         },
         "critical_temp_c": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "85.6",
+          "sourceIds": [
+            "honeywell-r455a-tds-2016"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "°C"
         },
         "critical_pressure_bar_abs": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "nominal_glide_k": {
           "state": "verified",
@@ -25736,7 +25753,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "conditions": {
             "temperatureC": -52,
             "pressureKPaAbsolute": 101.325,
@@ -25748,7 +25765,7 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "molar_mass_g_mol": {
           "state": "verified",
@@ -25756,20 +25773,20 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes": {
           "state": "verified",
@@ -25777,7 +25794,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes_en": {
           "state": "verified",
@@ -25785,7 +25802,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_typical": {
           "state": "verified",
@@ -25793,7 +25810,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_possible": {
           "state": "verified",
@@ -25801,7 +25818,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         }
       },
       "sourceIds": [
@@ -25809,6 +25826,7 @@
         "coolprop-mit",
         "eu-2024-573",
         "eu-2024-590",
+        "honeywell-r455a-tds-2016",
         "linde-2019-safety",
         "unep-ozone-oewg47-inf3-rev1"
       ],
@@ -25817,7 +25835,7 @@
         "composition": "verified",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -40070,7 +40088,7 @@
         "composition": "verified",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -40480,19 +40498,19 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "odp": {
           "state": "verified",
@@ -40500,7 +40518,7 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "verified",
@@ -40516,13 +40534,13 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_boiling_c": {
           "state": "verified",
@@ -40530,26 +40548,32 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C"
         },
         "critical_temp_c": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "108.7",
+          "sourceIds": [
+            "honeywell-r515b-metric-2026"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "°C"
         },
         "critical_pressure_bar_abs": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "35.8",
+          "sourceIds": [
+            "honeywell-r515b-metric-2026"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "bar abs"
         },
         "triple_point_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "nominal_glide_k": {
           "state": "verified",
@@ -40557,7 +40581,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "conditions": {
             "temperatureC": -18.8,
             "pressureKPaAbsolute": 101.325,
@@ -40569,7 +40593,7 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "molar_mass_g_mol": {
           "state": "verified",
@@ -40577,7 +40601,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
@@ -40586,13 +40610,13 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes": {
           "state": "verified",
@@ -40600,7 +40624,7 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes_en": {
           "state": "verified",
@@ -40608,7 +40632,7 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_typical": {
           "state": "verified",
@@ -40616,19 +40640,20 @@
           "sourceIds": [
             "honeywell-r515b-tds"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         }
       },
       "sourceIds": [
         "bitzer-refreport-table",
         "epa-gwp-identities",
         "eu-2024-573",
+        "honeywell-r515b-metric-2026",
         "honeywell-r515b-tds"
       ],
       "coverage": {
@@ -43312,139 +43337,154 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "odp": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_boiling_c": {
-          "state": "unknown",
-          "value": null,
-          "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "state": "verified",
+          "value": "-61.239",
+          "sourceIds": [
+            "nist-r1123-eos-930091"
+          ],
+          "checkedAt": "2026-09-30",
+          "unit": "°C",
+          "conditions": {
+            "temperatureC": -61.239,
+            "pressureKPaAbsolute": 101.325,
+            "phase": "saturation",
+            "method": "NIST-hosted paper Table 3; its footnote states all table properties were determined in this work except molar mass, critical temperature, and triple-point temperature."
+          }
         },
         "critical_temp_c": {
           "state": "verified",
           "value": "58.58",
           "sourceIds": [
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1123-eos-930091"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C"
         },
         "critical_pressure_bar_abs": {
           "state": "verified",
           "value": "45.488",
           "sourceIds": [
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1123-eos-930091"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "bar abs"
         },
         "triple_point_c": {
           "state": "verified",
           "value": "-78.00",
           "sourceIds": [
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1123-eos-930091"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C"
         },
         "nominal_glide_k": {
           "state": "not_applicable",
           "value": null,
           "sourceIds": [
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1123-eos-930091"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "molar_mass_g_mol": {
           "state": "verified",
           "value": "82.02455000",
           "sourceIds": [
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1123-eos-930091"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "nist-r1123-eos-930091",
         "nist-refprop-identities"
       ],
       "coverage": {
@@ -43452,7 +43492,7 @@
         "composition": "not_applicable",
         "safety": "partial",
         "regulatory_eu_fi": "unsupported",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -43642,7 +43682,7 @@
         "composition": "not_applicable",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -43667,13 +43707,13 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "euAnnex": {
           "state": "verified",
@@ -43681,7 +43721,7 @@
           "sourceIds": [
             "eu-2024-573"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "odp": {
           "state": "verified",
@@ -43689,25 +43729,25 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_boiling_c": {
           "state": "verified",
@@ -43715,7 +43755,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C",
           "conditions": {
             "temperatureC": -52.5,
@@ -43729,9 +43769,10 @@
           "value": "75.67",
           "sourceIds": [
             "bitzer-refreport-table",
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1132e-eos-958728"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "°C"
         },
         "critical_pressure_bar_abs": {
@@ -43739,57 +43780,64 @@
           "value": "51.737",
           "sourceIds": [
             "bitzer-refreport-table",
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1132e-eos-958728"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "bar abs"
         },
         "triple_point_c": {
           "state": "verified",
-          "value": "-33.15",
+          "value": "-88.25",
           "sourceIds": [
-            "bitzer-refreport-table",
-            "coolprop-mit"
+            "nist-r1132e-eos-958728"
           ],
-          "checkedAt": "2026-09-25",
-          "unit": "°C"
+          "checkedAt": "2026-09-30",
+          "unit": "°C",
+          "conditions": {
+            "temperatureC": -88.25,
+            "phase": "triple_point",
+            "method": "NIST-hosted paper Table 1, fixed-point constants; the triple-point row cites Tomassetti et al. [8], not this EOS work."
+          }
         },
         "nominal_glide_k": {
           "state": "not_applicable",
           "value": null,
           "sourceIds": [
             "bitzer-refreport-table",
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1132e-eos-958728"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "molar_mass_g_mol": {
           "state": "verified",
           "value": "64.035000",
           "sourceIds": [
             "bitzer-refreport-table",
-            "coolprop-mit"
+            "coolprop-mit",
+            "nist-r1132e-eos-958728"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-09-30",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes": {
           "state": "verified",
@@ -43797,7 +43845,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_notes_en": {
           "state": "verified",
@@ -43805,7 +43853,7 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_typical": {
           "state": "verified",
@@ -43813,26 +43861,27 @@
           "sourceIds": [
             "bitzer-refreport-table"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-09-30"
         }
       },
       "sourceIds": [
         "bitzer-refreport-table",
         "coolprop-mit",
-        "eu-2024-573"
+        "eu-2024-573",
+        "nist-r1132e-eos-958728"
       ],
       "coverage": {
         "identity": "verified",
         "composition": "not_applicable",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -44025,7 +44074,7 @@
         "composition": "not_applicable",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -44408,7 +44457,7 @@
         "composition": "not_applicable",
         "safety": "verified",
         "regulatory_eu_fi": "unsupported",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -45910,7 +45959,7 @@
         "composition": "not_applicable",
         "safety": "verified",
         "regulatory_eu_fi": "verified",
-        "pt": "unsupported"
+        "pt": "estimated"
       }
     },
     {
@@ -47028,6 +47077,15 @@
       "license": "Selected factual flammability-property extract with attribution"
     },
     {
+      "id": "coolprop-eos-supplement-afce86f",
+      "title": "CoolProp upstream pure-fluid EOS supplement (six fluids)",
+      "url": "https://github.com/CoolProp/CoolProp/tree/afce86ff977552663ca3a78d8ea318cc64dcbdfd/dev/fluids",
+      "version": "git commit afce86ff977552663ca3a78d8ea318cc64dcbdfd; loaded into CoolProp 7.2.0",
+      "checkedAt": "2026-09-30",
+      "license": "MIT License; notice retained in licenses/CoolProp-MIT.txt",
+      "note": "Each file is pinned by SHA-256 in data/coolprop-supplement/manifest.json; all generators and validators load identical files. No binary interactions or mixing rules are estimated. Numerical coverage is separate from physical/equipment limits."
+    },
+    {
       "id": "coolprop-mit",
       "title": "CoolProp fluid and predefined-mixture data",
       "url": "https://github.com/CoolProp/CoolProp/tree/afce86ff977552663ca3a78d8ea318cc64dcbdfd/dev",
@@ -47254,6 +47312,42 @@
       "note": "Only safety and trade name used. Page regulatory prose is outdated and excluded."
     },
     {
+      "id": "honeywell-r407c-product-2026",
+      "title": "Genetron 407C (R-407C) product information",
+      "url": "https://www.honeywell-refrigerants.com/europe/product/genetron-407c/",
+      "version": "Live product page checked 2026-09-30",
+      "checkedAt": "2026-09-30",
+      "license": "Selected factual property extracts with attribution; no product page or table reproduction",
+      "note": "Critical pressure displayed in bar without explicit pressure reference; mapped to absolute critical-pressure field by the thermodynamic convention. Existing row is r407c."
+    },
+    {
+      "id": "honeywell-r410a-product-2026",
+      "title": "Genetron AZ-20 (R-410A) product information",
+      "url": "https://www.honeywell-refrigerants.com/europe/product/genetron-az-20/",
+      "version": "Live product page checked 2026-09-30",
+      "checkedAt": "2026-09-30",
+      "license": "Selected factual property extracts with attribution; no product page or table reproduction",
+      "note": "Critical pressure displayed in bar without explicit pressure reference; mapped to absolute critical-pressure field by the thermodynamic convention. Existing row is r410a."
+    },
+    {
+      "id": "honeywell-r455a-tds-2016",
+      "title": "Solstice L40X (R-455A) technical data sheet",
+      "url": "https://www.honeywell-refrigerants.com/europe/wp-content/uploads/2016/10/Solstice_L40X_technical_datasheet.pdf",
+      "version": "Metric technical data sheet checked 2026-09-30; URL path dated 2016-10",
+      "checkedAt": "2026-09-30",
+      "license": "Selected factual property extracts with attribution; no table reproduction",
+      "note": "Critical temperature 85.6 C; selected fact only. URL path date does not establish document revision."
+    },
+    {
+      "id": "honeywell-r515b-metric-2026",
+      "title": "Solstice N15 (R-515B) metric technical data sheet",
+      "url": "https://www.honeywell-refrigerants.com/europe/?document=solstice-n15-r-515b-tds&download=1",
+      "version": "Metric technical data sheet checked 2026-09-30",
+      "checkedAt": "2026-09-30",
+      "license": "Selected factual product properties and contextual lubricant guidance with attribution",
+      "note": "Metric edition; distinct from the imperial TDS source. Critical pressure is reported as bar and interpreted as absolute thermodynamic critical pressure; no gauge conversion is applied."
+    },
+    {
       "id": "honeywell-r515b-tds",
       "title": "Solstice N15 (R-515B) technical data sheet",
       "url": "https://prod-edam.honeywell.com/content/dam/honeywell-edam/pmt/oneam/en-us/refrigerants/documents/pmt-am-515b-tds.pdf",
@@ -47280,6 +47374,15 @@
       "note": "SDS section 9 labels both as experimental results/key studies; it provides no test temperature for these values. No other SDS values imported."
     },
     {
+      "id": "nist-r1123-eos-930091",
+      "title": "Thermodynamic Properties of Trifluoroethene (R1123): (p, ρ, T) Behavior and Fundamental Equation of State",
+      "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=930091",
+      "version": "Preprint submitted 2020-06-29",
+      "checkedAt": "2026-09-30",
+      "license": "Research publication; cite selected individual facts with attribution; no paper or table reproduction",
+      "note": "Table 3 reports 211.911 K and footnote says the value was determined in this work. “Normal boiling point” carries the conventional 101.325 kPa absolute condition; pressure is not repeated in that table row."
+    },
+    {
       "id": "nist-r1130e-study",
       "title": "Compressed Liquid Measurements of trans-1,2-Dichloroethene [R-1130(E)]",
       "url": "https://link.springer.com/article/10.1007/s10765-025-03526-4",
@@ -47287,6 +47390,15 @@
       "checkedAt": "2026-09-25",
       "license": "Research publication; attribution; short chemical identity only",
       "note": "Reviewed designation/name pairs. The EPA ODS page additionally gives the matching CAS; the EU Annex I pairs are designation-specific and checked against existing CoolProp CAS rather than inferred from formula. No GWP or ODP values are imported from these name sources."
+    },
+    {
+      "id": "nist-r1132e-eos-958728",
+      "title": "A Helmholtz Energy Equation of State for Calculations of Thermodynamic Properties of trans-1,2-Difluoroethene [R-1132(E)]",
+      "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=958728",
+      "version": "NIST-hosted manuscript; publication year not confirmed from the inspected PDF metadata",
+      "checkedAt": "2026-09-30",
+      "license": "Research publication; cite selected individual facts with attribution; no paper or table reproduction",
+      "note": "Table 1 cites Tomassetti et al. [8] for Ttp=184.9 K. Abstract states EOS applicability 240 K to 400 K."
     },
     {
       "id": "nist-refprop-identities",

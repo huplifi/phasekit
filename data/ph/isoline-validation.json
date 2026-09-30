@@ -1,9 +1,9 @@
 {
-  "dataVersion": "ph-isolines-2026-09-26.a4688f0c6a0f56c9",
+  "dataVersion": "ph-isolines-2026-09-30.905bbea0844d601e",
   "coolPropGitRevision": "98b3523d5daa98454618d381d2ae53f7471d216b",
   "method": "independent log-pressure midpoints of every published segment; direct HEOS Hmass(P, constant T/S/D)",
-  "fluids": 113,
-  "withheldMidpoints": 11229,
+  "fluids": 131,
+  "withheldMidpoints": 13031,
   "maximumAbsoluteErrorKJkg": 1.969966,
   "thresholdKJkg": 2.01
 }

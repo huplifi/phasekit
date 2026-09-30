@@ -14,8 +14,10 @@ interface GridPlane {
   sides: Record<Phase, number[][]>;
 }
 interface Grid { coolPropFluid: string; planes: GridPlane[] }
-interface GridFile { dataVersion: string; sourceId: string; grids: Record<string, Grid> }
+interface GridFile { dataVersion: string; ptDataVersion: string; sourceId: string; grids: Record<string, Grid> }
 const table = rawGrids as GridFile;
+if (table.ptDataVersion !== offlinePTProvider.metadata.dataVersion)
+  throw new Error('ph_pt_grid_version_mismatch');
 export interface PHIsoline {
   kind: 'temperature' | 'entropy' | 'volume';
   phase: Phase;
@@ -42,7 +44,7 @@ export const phMetadata = {
   ptProviderId: offlinePTProvider.metadata.id,
   pressureConvention: 'absolute' as const,
   enthalpyUnit: 'kJ/kg' as const,
-  model: 'CoolProp HEOS equation of state / predefined mixture',
+  model: 'CoolProp HEOS / pinned pure-fluid EOS / exact mixture composition',
   interpolation: 'temperature offset and log absolute pressure, within one phase',
   point4Assumption: 'Isenthalpic expansion (h4 = h3); two-phase temperature bounded by bubble and dew states',
 };

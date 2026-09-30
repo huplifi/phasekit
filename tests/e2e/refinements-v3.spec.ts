@@ -48,7 +48,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   await t.fill("-999");
   await expect(p).toHaveValue("");
   await expect(page.getByRole("alert")).toContainText(
-    "käyttöalueen ulkopuolella",
+    "tuettu alue",
   );
   await t.fill("68");
   await choose(page, "R514A");

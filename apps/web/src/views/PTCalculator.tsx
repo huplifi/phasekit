@@ -46,6 +46,42 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
         : "bubble"
       : side;
   const available = getPTAvailability(id, effectiveSide);
+  const formatLimit = (value: number) =>
+    new Intl.NumberFormat(data.locale === "fi" ? "fi-FI" : "en-GB", {
+      maximumSignificantDigits: 5,
+    }).format(value);
+  const temperatureRange = available.supported
+    ? [available.minimumTemperatureC!, available.maximumTemperatureC!]
+        .map((value) =>
+          formatLimit(
+            tempUnit === "F" ? (Number(value) * 9) / 5 + 32 : Number(value),
+          ),
+        )
+        .join("…") + ` °${tempUnit}`
+    : "";
+  let pressureRange = "";
+  if (available.supported) {
+    try {
+      pressureRange =
+        [
+          available.minimumPressureBarAbsolute!,
+          available.maximumPressureBarAbsolute!,
+        ]
+          .map((value) =>
+            formatLimit(
+              Number(
+                convertPressure({ value, unit: "bar(a)" }, pressureUnit, {
+                  value: atmosphere,
+                  unit: "bar(a)",
+                }),
+              ),
+            ),
+          )
+          .join("…") + ` ${pressureUnit}`;
+    } catch {
+      // The calculation below reports an invalid atmospheric reference.
+    }
+  }
   useEffect(() => () => setDraftDirty(false), [setDraftDirty]);
 
   let result: ReturnType<typeof calculatePT> | undefined;
@@ -77,8 +113,8 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
       error =
         code === "pt_out_of_range"
           ? l(
-              "Arvo on aineiston käyttöalueen ulkopuolella.",
-              "Value is outside the available data range.",
+              `Arvo on laskenta-aineiston ulkopuolella. Valitun lämpötilapisteen tuettu alue on noin ${temperatureRange}${pressureRange ? ` / ${pressureRange}` : ""}. Tämä ei ole laitteen käyttöraja.`,
+              `Value is outside the calculation data. The supported range for the selected phase boundary is approximately ${temperatureRange}${pressureRange ? ` / ${pressureRange}` : ""}. This is not an equipment operating limit.`,
             )
           : code === "negative_absolute_pressure" ||
               code === "nonpositive_absolute_pressure"
@@ -490,10 +526,14 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             )}
           </p>
           <p className="mono">
-            {available.minimumTemperatureC}…{available.maximumTemperatureC} °C
+            {l(
+              "Tuettu lämpötila-alue, noin",
+              "Supported temperature range, approximately",
+            )}{" "}
+            {temperatureRange}
             <br />
-            {available.minimumPressureBarAbsolute}…
-            {available.maximumPressureBarAbsolute} bar(a)
+            {formatLimit(Number(available.minimumPressureBarAbsolute))}…
+            {formatLimit(Number(available.maximumPressureBarAbsolute))} bar(a)
           </p>
           <p className="caption">
             {l(

@@ -1,16 +1,3784 @@
 {
   "provider": "CoolProp 7.2.0 HEOS, MIT",
-  "dataVersion": "pt-2026-09-25.abf00eafe8777a3e",
+  "dataVersion": "pt-2026-09-30.fb555ea6f935452c",
   "coolPropGitRevision": "98b3523d5daa98454618d381d2ae53f7471d216b",
   "datasetRecords": 249,
-  "supportedRecords": 124,
+  "supportedRecords": 134,
+  "solverExclusions": {
+    "coolPropGitRevision": "98b3523d5daa98454618d381d2ae53f7471d216b",
+    "guardK": 5,
+    "reason": "Independent held-out validation observed solver failures. Exclude a 5 K numerical guard on each side; this is not a physical phase boundary.",
+    "failures": [
+      {
+        "refrigerantId": "r411a",
+        "side": "bubble",
+        "temperatureC": -137.6905479696
+      },
+      {
+        "refrigerantId": "r415a",
+        "side": "dew",
+        "temperatureC": -132.2836235889
+      },
+      {
+        "refrigerantId": "r415b",
+        "side": "bubble",
+        "temperatureC": -125.3142874937
+      },
+      {
+        "refrigerantId": "r428a",
+        "side": "bubble",
+        "temperatureC": 61.0447873311
+      },
+      {
+        "refrigerantId": "r501",
+        "side": "bubble",
+        "temperatureC": 88.0260289288
+      },
+      {
+        "refrigerantId": "r411b",
+        "side": "bubble",
+        "temperatureC": -131.3499634591
+      },
+      {
+        "refrigerantId": "r501",
+        "side": "dew",
+        "temperatureC": -155.5989710712
+      },
+      {
+        "refrigerantId": "r501",
+        "side": "dew",
+        "temperatureC": -143.5989710712
+      },
+      {
+        "refrigerantId": "r509a",
+        "side": "bubble",
+        "temperatureC": -143.3312808427
+      }
+    ]
+  },
+  "modelSupplement": {
+    "sourceId": "coolprop-eos-supplement-afce86f",
+    "sourceCommit": "afce86ff977552663ca3a78d8ea318cc64dcbdfd",
+    "sourceUrl": "https://github.com/CoolProp/CoolProp/tree/afce86ff977552663ca3a78d8ea318cc64dcbdfd/dev/fluids",
+    "runtimeVersion": "7.2.0",
+    "runtimeGitRevision": "98b3523d5daa98454618d381d2ae53f7471d216b",
+    "license": "MIT; ../../licenses/CoolProp-MIT.txt",
+    "fluids": [
+      {
+        "refrigerantId": "r1123",
+        "file": "R1123.json",
+        "name": "R1123",
+        "cas": "359-11-5",
+        "sha256": "b015c9e2b9a0b6e60cdc8e9331506507080ba0dc363da5cd969ce6d183cf6afd",
+        "eosReferences": [
+          "Akasaka-IJR-2020-R1123"
+        ]
+      },
+      {
+        "refrigerantId": "r1130e",
+        "file": "R1130(E).json",
+        "name": "R1130(E)",
+        "cas": "156-60-5",
+        "sha256": "c0d3df88247742b0887ce6f91162e3ba794167ff385d98551847adefec3a79dc",
+        "eosReferences": [
+          "Huber-IJT-2025-R1130E"
+        ]
+      },
+      {
+        "refrigerantId": "r1132a",
+        "file": "R1132a.json",
+        "name": "R1132a",
+        "cas": "75-38-7",
+        "sha256": "9e9da96eaf79c756c8acc7ee50eca6cc2f671339bedd1bd24f51dfe13dabb0d5",
+        "eosReferences": [
+          "Akasaka-IJT-2026-R1132a"
+        ]
+      },
+      {
+        "refrigerantId": "r1132e",
+        "file": "R1132(E).json",
+        "name": "R1132(E)",
+        "cas": "1630-78-0",
+        "sha256": "65727bd385167e5a1a7a587f0331058a2139dd866d3b3966fc36debb6d5be7fc",
+        "eosReferences": [
+          "Akasaka-IJT-2024-R1132E"
+        ]
+      },
+      {
+        "refrigerantId": "r1224ydz",
+        "file": "R1224yd(Z).json",
+        "name": "R1224YDZ",
+        "cas": "111512-60-8",
+        "sha256": "56109aad8d5a45281616adc0201718de9aa03e164c46dfe8c1728bc502ceb1d3",
+        "eosReferences": [
+          "Akasaka-IJT-2023-R1224ydZ"
+        ]
+      },
+      {
+        "refrigerantId": "r1336mzzz",
+        "file": "R1336mzz(Z).json",
+        "name": "R1336mzz(Z)",
+        "cas": "692-49-9",
+        "sha256": "1f293dbb0e264ed90d0762d049826ccf25feea6e9fc996de52bb4a58dbc76a8f",
+        "eosReferences": [
+          "McLinden-JCED-2020-R1336mzzZ"
+        ]
+      }
+    ]
+  },
+  "explicitBlendRecipes": {
+    "r452b": {
+      "coolPropFluid": "HEOS::R1234yf[0.14482932042283217]&R125[0.037049791728208929]&R32[0.81812088784895898]",
+      "components": [
+        {
+          "refrigerantId": "r1234yf",
+          "coolPropFluid": "R1234yf",
+          "massFraction": "0.26",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.1140415928,
+          "moleFraction": 0.14482932042283217
+        },
+        {
+          "refrigerantId": "r125",
+          "coolPropFluid": "R125",
+          "massFraction": "0.07",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.1200214,
+          "moleFraction": 0.03704979172820893
+        },
+        {
+          "refrigerantId": "r32",
+          "coolPropFluid": "R32",
+          "massFraction": "0.67",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.052024,
+          "moleFraction": 0.818120887848959
+        }
+      ],
+      "binaryPairs": [
+        {
+          "components": [
+            "r1234yf",
+            "r125"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        },
+        {
+          "components": [
+            "r1234yf",
+            "r32"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        },
+        {
+          "components": [
+            "r125",
+            "r32"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        }
+      ]
+    },
+    "r454c": {
+      "coolPropFluid": "HEOS::R1234yf[0.62485045342523393]&R32[0.37514954657476601]",
+      "components": [
+        {
+          "refrigerantId": "r1234yf",
+          "coolPropFluid": "R1234yf",
+          "massFraction": "0.785",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.1140415928,
+          "moleFraction": 0.6248504534252339
+        },
+        {
+          "refrigerantId": "r32",
+          "coolPropFluid": "R32",
+          "massFraction": "0.215",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.052024,
+          "moleFraction": 0.375149546574766
+        }
+      ],
+      "binaryPairs": [
+        {
+          "components": [
+            "r1234yf",
+            "r32"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        }
+      ]
+    },
+    "r455a": {
+      "coolPropFluid": "HEOS::R1234yf[0.5789704507530905]&R32[0.36141605462337623]&CarbonDioxide[0.059613494623533179]",
+      "components": [
+        {
+          "refrigerantId": "r1234yf",
+          "coolPropFluid": "R1234yf",
+          "massFraction": "0.755",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.1140415928,
+          "moleFraction": 0.5789704507530905
+        },
+        {
+          "refrigerantId": "r32",
+          "coolPropFluid": "R32",
+          "massFraction": "0.215",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.052024,
+          "moleFraction": 0.3614160546233762
+        },
+        {
+          "refrigerantId": "r744",
+          "coolPropFluid": "CarbonDioxide",
+          "massFraction": "0.03",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.0440098,
+          "moleFraction": 0.05961349462353318
+        }
+      ],
+      "binaryPairs": [
+        {
+          "components": [
+            "r1234yf",
+            "r32"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        },
+        {
+          "components": [
+            "r1234yf",
+            "r744"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        },
+        {
+          "components": [
+            "r32",
+            "r744"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        }
+      ]
+    },
+    "r513b": {
+      "coolPropFluid": "HEOS::R1234yf[0.55775520100410925]&R134a[0.4422447989958907]",
+      "components": [
+        {
+          "refrigerantId": "r1234yf",
+          "coolPropFluid": "R1234yf",
+          "massFraction": "0.585",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.1140415928,
+          "moleFraction": 0.5577552010041092
+        },
+        {
+          "refrigerantId": "r134a",
+          "coolPropFluid": "R134a",
+          "massFraction": "0.415",
+          "sourceId": "unep-ozone-oewg47-inf3-rev1",
+          "molarMassKgMol": 0.102032,
+          "moleFraction": 0.4422447989958907
+        }
+      ],
+      "binaryPairs": [
+        {
+          "components": [
+            "r1234yf",
+            "r134a"
+          ],
+          "policy": "built_in_HEOS_parameters_only"
+        }
+      ]
+    }
+  },
+  "supportedRanges": {
+    "r11": {
+      "coolPropFluid": "R11",
+      "modelMinimumTemperatureC": -110.46999999999997,
+      "modelReportedTripleTemperatureC": -110.46999999999997,
+      "effectiveLowerBoundC": -110.46999999999997,
+      "modelMaximumTemperatureC": 351.85,
+      "modelCriticalTemperatureC": 197.95999999855894,
+      "searchMinimumTemperatureC": -109.46999999999997,
+      "searchMaximumTemperatureC": 194.95999999855894,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -109.47,
+          "maximumTemperatureC": 194.9599999986,
+          "minimumPressureBarAbsolute": 7.49596920225126e-05,
+          "maximumPressureBarAbsolute": 42.180788879455
+        },
+        "dew": {
+          "minimumTemperatureC": -109.47,
+          "maximumTemperatureC": 194.9599999986,
+          "minimumPressureBarAbsolute": 7.49596920225126e-05,
+          "maximumPressureBarAbsolute": 42.180788879455
+        }
+      }
+    },
+    "r1123": {
+      "coolPropFluid": "R1123",
+      "modelMinimumTemperatureC": -77.99999999999997,
+      "modelReportedTripleTemperatureC": -77.99999999999997,
+      "effectiveLowerBoundC": -77.99999999999997,
+      "modelMaximumTemperatureC": 206.85000000000002,
+      "modelCriticalTemperatureC": 58.57998477335269,
+      "searchMinimumTemperatureC": -76.99999999999997,
+      "searchMaximumTemperatureC": 55.57998477335269,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -77.0,
+          "maximumTemperatureC": 55.5799847734,
+          "minimumPressureBarAbsolute": 0.415339200490582,
+          "maximumPressureBarAbsolute": 42.6094797284889
+        },
+        "dew": {
+          "minimumTemperatureC": -77.0,
+          "maximumTemperatureC": 55.5799847734,
+          "minimumPressureBarAbsolute": 0.415339200490582,
+          "maximumPressureBarAbsolute": 42.6094797284889
+        }
+      }
+    },
+    "r113": {
+      "coolPropFluid": "R113",
+      "modelMinimumTemperatureC": -36.21999999999997,
+      "modelReportedTripleTemperatureC": -36.21999999999997,
+      "effectiveLowerBoundC": -36.21999999999997,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 214.06000001666092,
+      "searchMinimumTemperatureC": -35.21999999999997,
+      "searchMaximumTemperatureC": 211.06000001666092,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -35.22,
+          "maximumTemperatureC": 211.0600000167,
+          "minimumPressureBarAbsolute": 0.020028160945377,
+          "maximumPressureBarAbsolute": 32.4472220591861
+        },
+        "dew": {
+          "minimumTemperatureC": -35.22,
+          "maximumTemperatureC": 211.0600000167,
+          "minimumPressureBarAbsolute": 0.020028160945377,
+          "maximumPressureBarAbsolute": 32.4472220591861
+        }
+      }
+    },
+    "r1130e": {
+      "coolPropFluid": "R1130(E)",
+      "modelMinimumTemperatureC": -49.839999999999975,
+      "modelReportedTripleTemperatureC": -49.839999999999975,
+      "effectiveLowerBoundC": -49.839999999999975,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 242.53999999943983,
+      "searchMinimumTemperatureC": -48.839999999999975,
+      "searchMaximumTemperatureC": 239.53999999943983,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -48.84,
+          "maximumTemperatureC": 239.5399999994,
+          "minimumPressureBarAbsolute": 0.0070169481447464,
+          "maximumPressureBarAbsolute": 50.4593953841341
+        },
+        "dew": {
+          "minimumTemperatureC": -48.84,
+          "maximumTemperatureC": 239.5399999994,
+          "minimumPressureBarAbsolute": 0.0070169481447464,
+          "maximumPressureBarAbsolute": 50.4593953841341
+        }
+      }
+    },
+    "r1132a": {
+      "coolPropFluid": "R1132a",
+      "modelMinimumTemperatureC": -162.14999999999998,
+      "modelReportedTripleTemperatureC": -162.14999999999998,
+      "effectiveLowerBoundC": -162.14999999999998,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 29.46999999913305,
+      "searchMinimumTemperatureC": -161.14999999999998,
+      "searchMaximumTemperatureC": 26.46999999913305,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -161.15,
+          "maximumTemperatureC": 26.4699999991,
+          "minimumPressureBarAbsolute": 0.00039927202146476,
+          "maximumPressureBarAbsolute": 41.6458903176884
+        },
+        "dew": {
+          "minimumTemperatureC": -161.15,
+          "maximumTemperatureC": 26.4699999991,
+          "minimumPressureBarAbsolute": 0.00039927202146476,
+          "maximumPressureBarAbsolute": 41.6458903176884
+        }
+      }
+    },
+    "r1132e": {
+      "coolPropFluid": "R1132(E)",
+      "modelMinimumTemperatureC": -33.14999999999998,
+      "modelReportedTripleTemperatureC": -33.14999999999998,
+      "effectiveLowerBoundC": -33.14999999999998,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 75.66999999960177,
+      "searchMinimumTemperatureC": -32.14999999999998,
+      "searchMaximumTemperatureC": 72.66999999960177,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -32.15,
+          "maximumTemperatureC": 72.6699999996,
+          "minimumPressureBarAbsolute": 2.58672032685181,
+          "maximumPressureBarAbsolute": 48.646118406665
+        },
+        "dew": {
+          "minimumTemperatureC": -32.15,
+          "maximumTemperatureC": 72.6699999996,
+          "minimumPressureBarAbsolute": 2.58672032685181,
+          "maximumPressureBarAbsolute": 48.646118406665
+        }
+      }
+    },
+    "r114": {
+      "coolPropFluid": "R114",
+      "modelMinimumTemperatureC": 5.684341886080802e-14,
+      "modelReportedTripleTemperatureC": 5.684341886080802e-14,
+      "effectiveLowerBoundC": 5.684341886080802e-14,
+      "modelMaximumTemperatureC": 233.85000000000002,
+      "modelCriticalTemperatureC": 147.45772506336033,
+      "searchMinimumTemperatureC": 1.0000000000000568,
+      "searchMaximumTemperatureC": 144.45772506336033,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": 1.0,
+          "maximumTemperatureC": 144.4577250634,
+          "minimumPressureBarAbsolute": 0.916845720329351,
+          "maximumPressureBarAbsolute": 31.8795978134548
+        },
+        "dew": {
+          "minimumTemperatureC": 1.0,
+          "maximumTemperatureC": 144.4577250634,
+          "minimumPressureBarAbsolute": 0.916845720329351,
+          "maximumPressureBarAbsolute": 31.8795978134548
+        }
+      }
+    },
+    "r115": {
+      "coolPropFluid": "R115",
+      "modelMinimumTemperatureC": -99.57999999999998,
+      "modelReportedTripleTemperatureC": -99.57999999999998,
+      "effectiveLowerBoundC": -99.57999999999998,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 79.9519775386571,
+      "searchMinimumTemperatureC": -98.57999999999998,
+      "searchMaximumTemperatureC": 76.9519775386571,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -98.58,
+          "maximumTemperatureC": 76.9519775387,
+          "minimumPressureBarAbsolute": 0.0238226468887145,
+          "maximumPressureBarAbsolute": 29.3794220431236
+        },
+        "dew": {
+          "minimumTemperatureC": -98.58,
+          "maximumTemperatureC": 76.9519775387,
+          "minimumPressureBarAbsolute": 0.0238226468887145,
+          "maximumPressureBarAbsolute": 29.3794220431236
+        }
+      }
+    },
+    "r1150": {
+      "coolPropFluid": "R1150",
+      "modelMinimumTemperatureC": -169.16099999999997,
+      "modelReportedTripleTemperatureC": -169.16099999999997,
+      "effectiveLowerBoundC": -169.16099999999997,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 9.20000000000249,
+      "searchMinimumTemperatureC": -168.16099999999997,
+      "searchMaximumTemperatureC": 6.20000000000249,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -168.161,
+          "maximumTemperatureC": 6.2,
+          "minimumPressureBarAbsolute": 0.00145398086958942,
+          "maximumPressureBarAbsolute": 47.1453435860185
+        },
+        "dew": {
+          "minimumTemperatureC": -168.161,
+          "maximumTemperatureC": 6.2,
+          "minimumPressureBarAbsolute": 0.00145398086958942,
+          "maximumPressureBarAbsolute": 47.1453435860185
+        }
+      }
+    },
+    "r116": {
+      "coolPropFluid": "R116",
+      "modelMinimumTemperatureC": -100.04999999999995,
+      "modelReportedTripleTemperatureC": -100.04999999999995,
+      "effectiveLowerBoundC": -100.04999999999995,
+      "modelMaximumTemperatureC": 151.85000000000002,
+      "modelCriticalTemperatureC": 19.879792782695006,
+      "searchMinimumTemperatureC": -99.04999999999995,
+      "searchMaximumTemperatureC": 16.879792782695006,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -99.05,
+          "maximumTemperatureC": 16.8797927827,
+          "minimumPressureBarAbsolute": 0.279910879868398,
+          "maximumPressureBarAbsolute": 28.2971343546121
+        },
+        "dew": {
+          "minimumTemperatureC": -99.05,
+          "maximumTemperatureC": 16.8797927827,
+          "minimumPressureBarAbsolute": 0.279910879868398,
+          "maximumPressureBarAbsolute": 28.2971343546121
+        }
+      }
+    },
+    "r12": {
+      "coolPropFluid": "R12",
+      "modelMinimumTemperatureC": -157.051,
+      "modelReportedTripleTemperatureC": -157.051,
+      "effectiveLowerBoundC": -157.051,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 111.96999976813441,
+      "searchMinimumTemperatureC": -156.051,
+      "searchMaximumTemperatureC": 108.96999976813441,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -156.051,
+          "maximumTemperatureC": 108.949,
+          "minimumPressureBarAbsolute": 3.05801441755306e-06,
+          "maximumPressureBarAbsolute": 39.1831638218447
+        },
+        "dew": {
+          "minimumTemperatureC": -156.051,
+          "maximumTemperatureC": 108.949,
+          "minimumPressureBarAbsolute": 3.05801441755306e-06,
+          "maximumPressureBarAbsolute": 39.1831638218447
+        }
+      }
+    },
+    "r1224ydz": {
+      "coolPropFluid": "R1224YDZ",
+      "modelMinimumTemperatureC": -115.34999999999997,
+      "modelReportedTripleTemperatureC": -115.34999999999997,
+      "effectiveLowerBoundC": -115.34999999999997,
+      "modelMaximumTemperatureC": 200.0,
+      "modelCriticalTemperatureC": 155.54000000006272,
+      "searchMinimumTemperatureC": -114.34999999999997,
+      "searchMaximumTemperatureC": 152.54000000006272,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -114.35,
+          "maximumTemperatureC": 152.5400000001,
+          "minimumPressureBarAbsolute": 2.98998036820873e-05,
+          "maximumPressureBarAbsolute": 31.635199942676
+        },
+        "dew": {
+          "minimumTemperatureC": -114.35,
+          "maximumTemperatureC": 152.5400000001,
+          "minimumPressureBarAbsolute": 2.98998036820873e-05,
+          "maximumPressureBarAbsolute": 31.635199942676
+        }
+      }
+    },
+    "r123": {
+      "coolPropFluid": "R123",
+      "modelMinimumTemperatureC": -107.14999999999998,
+      "modelReportedTripleTemperatureC": -107.14999999999998,
+      "effectiveLowerBoundC": -107.14999999999998,
+      "modelMaximumTemperatureC": 326.85,
+      "modelCriticalTemperatureC": 183.68002581312982,
+      "searchMinimumTemperatureC": -106.14999999999998,
+      "searchMaximumTemperatureC": 180.68002581312982,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -106.15,
+          "maximumTemperatureC": 180.6800258131,
+          "minimumPressureBarAbsolute": 4.87368816487701e-05,
+          "maximumPressureBarAbsolute": 34.8842356053938
+        },
+        "dew": {
+          "minimumTemperatureC": -106.15,
+          "maximumTemperatureC": 180.6800258131,
+          "minimumPressureBarAbsolute": 4.87368816487701e-05,
+          "maximumPressureBarAbsolute": 34.8842356053938
+        }
+      }
+    },
+    "r1233zde": {
+      "coolPropFluid": "R1233zd(E)",
+      "modelMinimumTemperatureC": -77.99999999999997,
+      "modelReportedTripleTemperatureC": -77.99999999999997,
+      "effectiveLowerBoundC": -77.99999999999997,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 166.45083307567268,
+      "searchMinimumTemperatureC": -76.99999999999997,
+      "searchMaximumTemperatureC": 163.45083307567268,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -77.0,
+          "maximumTemperatureC": 163.4508330757,
+          "minimumPressureBarAbsolute": 0.00301520360346141,
+          "maximumPressureBarAbsolute": 34.4402560166735
+        },
+        "dew": {
+          "minimumTemperatureC": -77.0,
+          "maximumTemperatureC": 163.4508330757,
+          "minimumPressureBarAbsolute": 0.00301520360346141,
+          "maximumPressureBarAbsolute": 34.4402560166735
+        }
+      }
+    },
+    "r1234yf": {
+      "coolPropFluid": "R1234yf",
+      "modelMinimumTemperatureC": -53.14999999999998,
+      "modelReportedTripleTemperatureC": -53.14999999999998,
+      "effectiveLowerBoundC": -53.14999999999998,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 94.69998882341457,
+      "searchMinimumTemperatureC": -52.14999999999998,
+      "searchMaximumTemperatureC": 91.69998882341457,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -52.15,
+          "maximumTemperatureC": 91.6999888234,
+          "minimumPressureBarAbsolute": 0.332968278666873,
+          "maximumPressureBarAbsolute": 31.860073113326
+        },
+        "dew": {
+          "minimumTemperatureC": -52.15,
+          "maximumTemperatureC": 91.6999888234,
+          "minimumPressureBarAbsolute": 0.332968278666873,
+          "maximumPressureBarAbsolute": 31.860073113326
+        }
+      }
+    },
+    "r1234zee": {
+      "coolPropFluid": "R1234ze(E)",
+      "modelMinimumTemperatureC": -104.52999999999997,
+      "modelReportedTripleTemperatureC": -104.52999999999997,
+      "effectiveLowerBoundC": -104.52999999999997,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 109.36300260465185,
+      "searchMinimumTemperatureC": -103.52999999999997,
+      "searchMaximumTemperatureC": 106.36300260465185,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -103.53,
+          "maximumTemperatureC": 106.3630026047,
+          "minimumPressureBarAbsolute": 0.00245583933822765,
+          "maximumPressureBarAbsolute": 34.2772179646395
+        },
+        "dew": {
+          "minimumTemperatureC": -103.53,
+          "maximumTemperatureC": 106.3630026047,
+          "minimumPressureBarAbsolute": 0.00245583933822765,
+          "maximumPressureBarAbsolute": 34.2772179646395
+        }
+      }
+    },
+    "r1234zez": {
+      "coolPropFluid": "R1234ze(Z)",
+      "modelMinimumTemperatureC": -0.14999999999997726,
+      "modelReportedTripleTemperatureC": -0.14999999999997726,
+      "effectiveLowerBoundC": -0.14999999999997726,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 150.12037839541892,
+      "searchMinimumTemperatureC": 0.8500000000000227,
+      "searchMaximumTemperatureC": 147.12037839541892,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": 0.85,
+          "maximumTemperatureC": 147.1203783954,
+          "minimumPressureBarAbsolute": 0.707679814653773,
+          "maximumPressureBarAbsolute": 33.4534821845999
+        },
+        "dew": {
+          "minimumTemperatureC": 0.85,
+          "maximumTemperatureC": 147.1203783954,
+          "minimumPressureBarAbsolute": 0.707679814653773,
+          "maximumPressureBarAbsolute": 33.4534821845999
+        }
+      }
+    },
+    "r124": {
+      "coolPropFluid": "R124",
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelReportedTripleTemperatureC": -153.14999999999998,
+      "effectiveLowerBoundC": -153.14999999999998,
+      "modelMaximumTemperatureC": 196.85000000000002,
+      "modelCriticalTemperatureC": 122.27796077320471,
+      "searchMinimumTemperatureC": -152.14999999999998,
+      "searchMaximumTemperatureC": 119.27796077320471,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -152.15,
+          "maximumTemperatureC": 119.2779607732,
+          "minimumPressureBarAbsolute": 3.45633641745441e-07,
+          "maximumPressureBarAbsolute": 34.2773010351932
+        },
+        "dew": {
+          "minimumTemperatureC": -152.15,
+          "maximumTemperatureC": 119.2779607732,
+          "minimumPressureBarAbsolute": 3.45633641745441e-07,
+          "maximumPressureBarAbsolute": 34.2773010351932
+        }
+      }
+    },
+    "r1243zf": {
+      "coolPropFluid": "R1243zf",
+      "modelMinimumTemperatureC": -53.14999999999998,
+      "modelReportedTripleTemperatureC": -53.14999999999998,
+      "effectiveLowerBoundC": -53.14999999999998,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 103.78000983860835,
+      "searchMinimumTemperatureC": -52.14999999999998,
+      "searchMaximumTemperatureC": 100.78000983860835,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -52.15,
+          "maximumTemperatureC": 100.7800098386,
+          "minimumPressureBarAbsolute": 0.273258849767897,
+          "maximumPressureBarAbsolute": 33.1987136073422
+        },
+        "dew": {
+          "minimumTemperatureC": -52.15,
+          "maximumTemperatureC": 100.7800098386,
+          "minimumPressureBarAbsolute": 0.273258849767897,
+          "maximumPressureBarAbsolute": 33.1987136073422
+        }
+      }
+    },
+    "r125": {
+      "coolPropFluid": "R125",
+      "modelMinimumTemperatureC": -100.62999999999997,
+      "modelReportedTripleTemperatureC": -100.62999999999997,
+      "effectiveLowerBoundC": -100.62999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 66.02728245610484,
+      "searchMinimumTemperatureC": -99.62999999999997,
+      "searchMaximumTemperatureC": 63.02728245610484,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -99.63,
+          "maximumTemperatureC": 63.0272824561,
+          "minimumPressureBarAbsolute": 0.031947038605446,
+          "maximumPressureBarAbsolute": 33.8736737511966
+        },
+        "dew": {
+          "minimumTemperatureC": -99.63,
+          "maximumTemperatureC": 63.0272824561,
+          "minimumPressureBarAbsolute": 0.031947038605446,
+          "maximumPressureBarAbsolute": 33.8736737511966
+        }
+      }
+    },
+    "r1270": {
+      "coolPropFluid": "R1270",
+      "modelMinimumTemperatureC": -185.19699999999997,
+      "modelReportedTripleTemperatureC": -185.19699999999997,
+      "effectiveLowerBoundC": -185.19699999999997,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 91.0610025913478,
+      "searchMinimumTemperatureC": -184.19699999999997,
+      "searchMaximumTemperatureC": 88.0610025913478,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -184.197,
+          "maximumTemperatureC": 88.0610025913,
+          "minimumPressureBarAbsolute": 1.09086264590524e-08,
+          "maximumPressureBarAbsolute": 43.126380103862
+        },
+        "dew": {
+          "minimumTemperatureC": -184.197,
+          "maximumTemperatureC": 88.0610025913,
+          "minimumPressureBarAbsolute": 1.09086264590524e-08,
+          "maximumPressureBarAbsolute": 43.126380103862
+        }
+      }
+    },
+    "r13": {
+      "coolPropFluid": "R13",
+      "modelMinimumTemperatureC": -174.99999999999997,
+      "modelReportedTripleTemperatureC": -174.99999999999997,
+      "effectiveLowerBoundC": -174.99999999999997,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 29.899905634213383,
+      "searchMinimumTemperatureC": -173.99999999999997,
+      "searchMaximumTemperatureC": 26.899905634213383,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -174.0,
+          "maximumTemperatureC": 26.8999056342,
+          "minimumPressureBarAbsolute": 1.24344154342118e-05,
+          "maximumPressureBarAbsolute": 37.1586352467916
+        },
+        "dew": {
+          "minimumTemperatureC": -174.0,
+          "maximumTemperatureC": 26.8999056342,
+          "minimumPressureBarAbsolute": 1.24344154342118e-05,
+          "maximumPressureBarAbsolute": 37.1586352467916
+        }
+      }
+    },
+    "r1336mzze": {
+      "coolPropFluid": "R1336mzz(E)",
+      "modelMinimumTemperatureC": -72.99999999999997,
+      "modelReportedTripleTemperatureC": -72.99999999999997,
+      "effectiveLowerBoundC": -72.99999999999997,
+      "modelMaximumTemperatureC": 136.85000000000002,
+      "modelCriticalTemperatureC": 130.3800000000283,
+      "searchMinimumTemperatureC": -71.99999999999997,
+      "searchMaximumTemperatureC": 127.3800000000283,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -72.0,
+          "maximumTemperatureC": 127.38,
+          "minimumPressureBarAbsolute": 0.00713827326016527,
+          "maximumPressureBarAbsolute": 26.1701269344203
+        },
+        "dew": {
+          "minimumTemperatureC": -72.0,
+          "maximumTemperatureC": 127.38,
+          "minimumPressureBarAbsolute": 0.00713827326016527,
+          "maximumPressureBarAbsolute": 26.1701269344203
+        }
+      }
+    },
+    "r1336mzzz": {
+      "coolPropFluid": "R1336mzz(Z)",
+      "modelMinimumTemperatureC": -90.49999999999997,
+      "modelReportedTripleTemperatureC": -90.49999999999997,
+      "effectiveLowerBoundC": -90.49999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 171.34999102533664,
+      "searchMinimumTemperatureC": -89.49999999999997,
+      "searchMaximumTemperatureC": 168.34999102533664,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -89.5,
+          "maximumTemperatureC": 168.3499910253,
+          "minimumPressureBarAbsolute": 0.000205504674671094,
+          "maximumPressureBarAbsolute": 27.5344225325151
+        },
+        "dew": {
+          "minimumTemperatureC": -89.5,
+          "maximumTemperatureC": 168.3499910253,
+          "minimumPressureBarAbsolute": 0.000205504674671094,
+          "maximumPressureBarAbsolute": 27.5344225325151
+        }
+      }
+    },
+    "r134a": {
+      "coolPropFluid": "R134a",
+      "modelMinimumTemperatureC": -103.29999999999998,
+      "modelReportedTripleTemperatureC": -103.29999999999998,
+      "effectiveLowerBoundC": -103.29999999999998,
+      "modelMaximumTemperatureC": 181.85000000000002,
+      "modelCriticalTemperatureC": 101.06196658495134,
+      "searchMinimumTemperatureC": -102.29999999999998,
+      "searchMaximumTemperatureC": 98.06196658495134,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -102.3,
+          "maximumTemperatureC": 98.061966585,
+          "minimumPressureBarAbsolute": 0.00435473662101754,
+          "maximumPressureBarAbsolute": 38.1997202896331
+        },
+        "dew": {
+          "minimumTemperatureC": -102.3,
+          "maximumTemperatureC": 98.061966585,
+          "minimumPressureBarAbsolute": 0.00435473662101754,
+          "maximumPressureBarAbsolute": 38.1997202896331
+        }
+      }
+    },
+    "r13i1": {
+      "coolPropFluid": "R13I1",
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelReportedTripleTemperatureC": -153.14999999999998,
+      "effectiveLowerBoundC": -153.14999999999998,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 123.28969044596568,
+      "searchMinimumTemperatureC": -152.14999999999998,
+      "searchMaximumTemperatureC": 120.28969044596568,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -152.15,
+          "maximumTemperatureC": 120.289690446,
+          "minimumPressureBarAbsolute": 5.68578118888449e-06,
+          "maximumPressureBarAbsolute": 37.5345931618515
+        },
+        "dew": {
+          "minimumTemperatureC": -152.15,
+          "maximumTemperatureC": 120.289690446,
+          "minimumPressureBarAbsolute": 5.68578118888449e-06,
+          "maximumPressureBarAbsolute": 37.5345931618515
+        }
+      }
+    },
+    "r14": {
+      "coolPropFluid": "R14",
+      "modelMinimumTemperatureC": -153.14999999999998,
+      "modelReportedTripleTemperatureC": -153.14999999999998,
+      "effectiveLowerBoundC": -153.14999999999998,
+      "modelMaximumTemperatureC": 349.85,
+      "modelCriticalTemperatureC": -45.75377152512965,
+      "searchMinimumTemperatureC": -152.14999999999998,
+      "searchMaximumTemperatureC": -48.75377152512965,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -152.15,
+          "maximumTemperatureC": -48.7537715251,
+          "minimumPressureBarAbsolute": 0.125756132373968,
+          "maximumPressureBarAbsolute": 34.327837592144
+        },
+        "dew": {
+          "minimumTemperatureC": -152.15,
+          "maximumTemperatureC": -48.7537715251,
+          "minimumPressureBarAbsolute": 0.125756132373968,
+          "maximumPressureBarAbsolute": 34.327837592144
+        }
+      }
+    },
+    "r141b": {
+      "coolPropFluid": "R141b",
+      "modelMinimumTemperatureC": -103.46999999999997,
+      "modelReportedTripleTemperatureC": -103.46999999999997,
+      "effectiveLowerBoundC": -103.46999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 204.35002770597333,
+      "searchMinimumTemperatureC": -102.46999999999997,
+      "searchMaximumTemperatureC": 201.35002770597333,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -102.47,
+          "maximumTemperatureC": 201.350027706,
+          "minimumPressureBarAbsolute": 7.46967770122978e-05,
+          "maximumPressureBarAbsolute": 40.2745576954365
+        },
+        "dew": {
+          "minimumTemperatureC": -102.47,
+          "maximumTemperatureC": 201.350027706,
+          "minimumPressureBarAbsolute": 7.46967770122978e-05,
+          "maximumPressureBarAbsolute": 40.2745576954365
+        }
+      }
+    },
+    "r142b": {
+      "coolPropFluid": "R142b",
+      "modelMinimumTemperatureC": -130.42999999999998,
+      "modelReportedTripleTemperatureC": -130.42999999999998,
+      "effectiveLowerBoundC": -130.42999999999998,
+      "modelMaximumTemperatureC": 196.85000000000002,
+      "modelCriticalTemperatureC": 137.1102326520994,
+      "searchMinimumTemperatureC": -129.42999999999998,
+      "searchMaximumTemperatureC": 134.1102326520994,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -129.43,
+          "maximumTemperatureC": 134.1102326521,
+          "minimumPressureBarAbsolute": 4.30168951141141e-05,
+          "maximumPressureBarAbsolute": 38.4743341888971
+        },
+        "dew": {
+          "minimumTemperatureC": -129.43,
+          "maximumTemperatureC": 134.1102326521,
+          "minimumPressureBarAbsolute": 4.30168951141141e-05,
+          "maximumPressureBarAbsolute": 38.4743341888971
+        }
+      }
+    },
+    "r143a": {
+      "coolPropFluid": "R143a",
+      "modelMinimumTemperatureC": -111.80999999999997,
+      "modelReportedTripleTemperatureC": -111.80999999999997,
+      "effectiveLowerBoundC": -111.80999999999997,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 72.7070008678619,
+      "searchMinimumTemperatureC": -110.80999999999997,
+      "searchMaximumTemperatureC": 69.7070008678619,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -110.81,
+          "maximumTemperatureC": 69.7070008679,
+          "minimumPressureBarAbsolute": 0.0119187543176014,
+          "maximumPressureBarAbsolute": 35.3087050100102
+        },
+        "dew": {
+          "minimumTemperatureC": -110.81,
+          "maximumTemperatureC": 69.7070008679,
+          "minimumPressureBarAbsolute": 0.0119187543176014,
+          "maximumPressureBarAbsolute": 35.3087050100102
+        }
+      }
+    },
+    "r152a": {
+      "coolPropFluid": "R152A",
+      "modelMinimumTemperatureC": -118.58999999999997,
+      "modelReportedTripleTemperatureC": -118.58999999999997,
+      "effectiveLowerBoundC": -118.58999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 113.26099777721072,
+      "searchMinimumTemperatureC": -117.58999999999997,
+      "searchMaximumTemperatureC": 110.26099777721072,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -117.59,
+          "maximumTemperatureC": 110.2609977772,
+          "minimumPressureBarAbsolute": 0.000733272739172847,
+          "maximumPressureBarAbsolute": 42.6427992422741
+        },
+        "dew": {
+          "minimumTemperatureC": -117.59,
+          "maximumTemperatureC": 110.2609977772,
+          "minimumPressureBarAbsolute": 0.000733272739172847,
+          "maximumPressureBarAbsolute": 42.6427992422741
+        }
+      }
+    },
+    "r161": {
+      "coolPropFluid": "R161",
+      "modelMinimumTemperatureC": -143.14999999999998,
+      "modelReportedTripleTemperatureC": -143.14999999999998,
+      "effectiveLowerBoundC": -143.14999999999998,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 102.09999890354493,
+      "searchMinimumTemperatureC": -142.14999999999998,
+      "searchMaximumTemperatureC": 99.09999890354493,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -142.15,
+          "maximumTemperatureC": 99.0999989035,
+          "minimumPressureBarAbsolute": 6.61740699376697e-05,
+          "maximumPressureBarAbsolute": 47.3392184022072
+        },
+        "dew": {
+          "minimumTemperatureC": -142.15,
+          "maximumTemperatureC": 99.0999989035,
+          "minimumPressureBarAbsolute": 6.61740699376697e-05,
+          "maximumPressureBarAbsolute": 47.3392184022072
+        }
+      }
+    },
+    "r170": {
+      "coolPropFluid": "R170",
+      "modelMinimumTemperatureC": -182.78199999999998,
+      "modelReportedTripleTemperatureC": -182.78199999999998,
+      "effectiveLowerBoundC": -182.78199999999998,
+      "modelMaximumTemperatureC": 401.85,
+      "modelCriticalTemperatureC": 32.172000000015544,
+      "searchMinimumTemperatureC": -181.78199999999998,
+      "searchMaximumTemperatureC": 29.172000000015544,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -181.782,
+          "maximumTemperatureC": 29.172,
+          "minimumPressureBarAbsolute": 1.48161939748013e-05,
+          "maximumPressureBarAbsolute": 45.750075795834
+        },
+        "dew": {
+          "minimumTemperatureC": -181.782,
+          "maximumTemperatureC": 29.172,
+          "minimumPressureBarAbsolute": 1.48161939748013e-05,
+          "maximumPressureBarAbsolute": 45.750075795834
+        }
+      }
+    },
+    "r21": {
+      "coolPropFluid": "R21",
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelReportedTripleTemperatureC": -73.14999999999998,
+      "effectiveLowerBoundC": -73.14999999999998,
+      "modelMaximumTemperatureC": 199.85000000000002,
+      "modelCriticalTemperatureC": 179.5701623436206,
+      "searchMinimumTemperatureC": -72.14999999999998,
+      "searchMaximumTemperatureC": 176.5701623436206,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 176.5701623436,
+          "minimumPressureBarAbsolute": 0.00951207415847738,
+          "maximumPressureBarAbsolute": 50.4592247973659
+        },
+        "dew": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 176.5701623436,
+          "minimumPressureBarAbsolute": 0.00951207415847738,
+          "maximumPressureBarAbsolute": 50.4592247973659
+        }
+      }
+    },
+    "r218": {
+      "coolPropFluid": "R218",
+      "modelMinimumTemperatureC": -147.7,
+      "modelReportedTripleTemperatureC": -147.7,
+      "effectiveLowerBoundC": -147.7,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 71.86996901445968,
+      "searchMinimumTemperatureC": -146.7,
+      "searchMaximumTemperatureC": 68.86996901445968,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -146.7,
+          "maximumTemperatureC": 68.8699690145,
+          "minimumPressureBarAbsolute": 2.46845907381658e-05,
+          "maximumPressureBarAbsolute": 24.7089714504445
+        },
+        "dew": {
+          "minimumTemperatureC": -146.7,
+          "maximumTemperatureC": 68.8699690145,
+          "minimumPressureBarAbsolute": 2.46845907381658e-05,
+          "maximumPressureBarAbsolute": 24.7089714504445
+        }
+      }
+    },
+    "r22": {
+      "coolPropFluid": "R22",
+      "modelMinimumTemperatureC": -157.41999999999996,
+      "modelReportedTripleTemperatureC": -157.41999999999996,
+      "effectiveLowerBoundC": -157.41999999999996,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": 96.14500000802741,
+      "searchMinimumTemperatureC": -156.41999999999996,
+      "searchMaximumTemperatureC": 93.14500000802741,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -156.42,
+          "maximumTemperatureC": 93.145000008,
+          "minimumPressureBarAbsolute": 4.79079255719109e-06,
+          "maximumPressureBarAbsolute": 47.1439571873553
+        },
+        "dew": {
+          "minimumTemperatureC": -156.42,
+          "maximumTemperatureC": 93.145000008,
+          "minimumPressureBarAbsolute": 4.79079255719109e-06,
+          "maximumPressureBarAbsolute": 47.1439571873553
+        }
+      }
+    },
+    "r227ea": {
+      "coolPropFluid": "R227EA",
+      "modelMinimumTemperatureC": -126.79999999999998,
+      "modelReportedTripleTemperatureC": -126.79999999999998,
+      "effectiveLowerBoundC": -126.79999999999998,
+      "modelMaximumTemperatureC": 201.85000000000002,
+      "modelCriticalTemperatureC": 101.7501034452502,
+      "searchMinimumTemperatureC": -125.79999999999998,
+      "searchMaximumTemperatureC": 98.7501034452502,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -125.8,
+          "maximumTemperatureC": 98.7501034453,
+          "minimumPressureBarAbsolute": 8.65262297693748e-05,
+          "maximumPressureBarAbsolute": 27.5059487975902
+        },
+        "dew": {
+          "minimumTemperatureC": -125.8,
+          "maximumTemperatureC": 98.7501034453,
+          "minimumPressureBarAbsolute": 8.65262297693748e-05,
+          "maximumPressureBarAbsolute": 27.5059487975902
+        }
+      }
+    },
+    "r23": {
+      "coolPropFluid": "R23",
+      "modelMinimumTemperatureC": -155.13,
+      "modelReportedTripleTemperatureC": -155.13,
+      "effectiveLowerBoundC": -155.13,
+      "modelMaximumTemperatureC": 201.85000000000002,
+      "modelCriticalTemperatureC": 26.143048971673124,
+      "searchMinimumTemperatureC": -154.13,
+      "searchMaximumTemperatureC": 23.143048971673124,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -154.13,
+          "maximumTemperatureC": 23.1430489717,
+          "minimumPressureBarAbsolute": 0.000691720789262951,
+          "maximumPressureBarAbsolute": 44.914853483722
+        },
+        "dew": {
+          "minimumTemperatureC": -154.13,
+          "maximumTemperatureC": 23.1430489717,
+          "minimumPressureBarAbsolute": 0.000691720789262951,
+          "maximumPressureBarAbsolute": 44.914853483722
+        }
+      }
+    },
+    "r236ea": {
+      "coolPropFluid": "R236EA",
+      "modelMinimumTemperatureC": -30.149999999999977,
+      "modelReportedTripleTemperatureC": -30.149999999999977,
+      "effectiveLowerBoundC": -30.149999999999977,
+      "modelMaximumTemperatureC": 138.85000000000002,
+      "modelCriticalTemperatureC": 139.25899003386525,
+      "searchMinimumTemperatureC": -29.149999999999977,
+      "searchMaximumTemperatureC": 136.25899003386525,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -29.15,
+          "maximumTemperatureC": 136.2589900339,
+          "minimumPressureBarAbsolute": 0.185273603509562,
+          "maximumPressureBarAbsolute": 32.2714106878112
+        },
+        "dew": {
+          "minimumTemperatureC": -29.15,
+          "maximumTemperatureC": 136.2589900339,
+          "minimumPressureBarAbsolute": 0.185273603509562,
+          "maximumPressureBarAbsolute": 32.2714106878112
+        }
+      }
+    },
+    "r236fa": {
+      "coolPropFluid": "R236FA",
+      "modelMinimumTemperatureC": -93.54999999999995,
+      "modelReportedTripleTemperatureC": -93.54999999999995,
+      "effectiveLowerBoundC": -93.54999999999995,
+      "modelMaximumTemperatureC": 126.85000000000002,
+      "modelCriticalTemperatureC": 124.92005160523104,
+      "searchMinimumTemperatureC": -92.54999999999995,
+      "searchMaximumTemperatureC": 121.92005160523104,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -92.55,
+          "maximumTemperatureC": 121.9200516052,
+          "minimumPressureBarAbsolute": 0.00179978471457508,
+          "maximumPressureBarAbsolute": 30.0837088390243
+        },
+        "dew": {
+          "minimumTemperatureC": -92.55,
+          "maximumTemperatureC": 121.9200516052,
+          "minimumPressureBarAbsolute": 0.00179978471457508,
+          "maximumPressureBarAbsolute": 30.0837088390243
+        }
+      }
+    },
+    "r245ca": {
+      "coolPropFluid": "R245ca",
+      "modelMinimumTemperatureC": -77.14999999999998,
+      "modelReportedTripleTemperatureC": -77.14999999999998,
+      "effectiveLowerBoundC": -77.14999999999998,
+      "modelMaximumTemperatureC": 176.85000000000002,
+      "modelCriticalTemperatureC": 174.4199955219675,
+      "searchMinimumTemperatureC": -76.14999999999998,
+      "searchMaximumTemperatureC": 171.4199955219675,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -76.15,
+          "maximumTemperatureC": 171.419995522,
+          "minimumPressureBarAbsolute": 0.0013204150707362,
+          "maximumPressureBarAbsolute": 37.4187140399993
+        },
+        "dew": {
+          "minimumTemperatureC": -76.15,
+          "maximumTemperatureC": 171.419995522,
+          "minimumPressureBarAbsolute": 0.0013204150707362,
+          "maximumPressureBarAbsolute": 37.4187140399993
+        }
+      }
+    },
+    "r245fa": {
+      "coolPropFluid": "R245fa",
+      "modelMinimumTemperatureC": -102.09999999999997,
+      "modelReportedTripleTemperatureC": -102.09999999999997,
+      "effectiveLowerBoundC": -102.09999999999997,
+      "modelMaximumTemperatureC": 166.85000000000002,
+      "modelCriticalTemperatureC": 153.85998969559256,
+      "searchMinimumTemperatureC": -101.09999999999997,
+      "searchMaximumTemperatureC": 150.85998969559256,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -101.1,
+          "maximumTemperatureC": 150.8599896956,
+          "minimumPressureBarAbsolute": 0.000158145771328422,
+          "maximumPressureBarAbsolute": 34.5819848021541
+        },
+        "dew": {
+          "minimumTemperatureC": -101.1,
+          "maximumTemperatureC": 150.8599896956,
+          "minimumPressureBarAbsolute": 0.000158145771328422,
+          "maximumPressureBarAbsolute": 34.5819848021541
+        }
+      }
+    },
+    "r290": {
+      "coolPropFluid": "R290",
+      "modelMinimumTemperatureC": -187.62499999999997,
+      "modelReportedTripleTemperatureC": -187.62499999999997,
+      "effectiveLowerBoundC": -187.62499999999997,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 96.74000895096344,
+      "searchMinimumTemperatureC": -186.62499999999997,
+      "searchMaximumTemperatureC": 93.74000895096344,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -186.625,
+          "maximumTemperatureC": 93.740008951,
+          "minimumPressureBarAbsolute": 2.57350275993774e-09,
+          "maximumPressureBarAbsolute": 40.2700928072916
+        },
+        "dew": {
+          "minimumTemperatureC": -186.625,
+          "maximumTemperatureC": 93.740008951,
+          "minimumPressureBarAbsolute": 2.57350275993774e-09,
+          "maximumPressureBarAbsolute": 40.2700928072916
+        }
+      }
+    },
+    "r32": {
+      "coolPropFluid": "R32",
+      "modelMinimumTemperatureC": -136.80999999999997,
+      "modelReportedTripleTemperatureC": -136.80999999999997,
+      "effectiveLowerBoundC": -136.80999999999997,
+      "modelMaximumTemperatureC": 161.85000000000002,
+      "modelCriticalTemperatureC": 78.10500044943205,
+      "searchMinimumTemperatureC": -135.80999999999997,
+      "searchMaximumTemperatureC": 75.10500044943205,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -135.81,
+          "maximumTemperatureC": 75.1050004494,
+          "minimumPressureBarAbsolute": 0.00056031826047477,
+          "maximumPressureBarAbsolute": 54.2875157360719
+        },
+        "dew": {
+          "minimumTemperatureC": -135.81,
+          "maximumTemperatureC": 75.1050004494,
+          "minimumPressureBarAbsolute": 0.00056031826047477,
+          "maximumPressureBarAbsolute": 54.2875157360719
+        }
+      }
+    },
+    "r365mfc": {
+      "coolPropFluid": "R365MFC",
+      "modelMinimumTemperatureC": -34.14999999999998,
+      "modelReportedTripleTemperatureC": -34.14999999999998,
+      "effectiveLowerBoundC": -34.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 186.8531716751766,
+      "searchMinimumTemperatureC": -33.14999999999998,
+      "searchMaximumTemperatureC": 183.8531716751766,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -33.15,
+          "maximumTemperatureC": 183.8531716752,
+          "minimumPressureBarAbsolute": 0.0265472923251106,
+          "maximumPressureBarAbsolute": 31.0047630722444
+        },
+        "dew": {
+          "minimumTemperatureC": -33.15,
+          "maximumTemperatureC": 183.8531716752,
+          "minimumPressureBarAbsolute": 0.0265472923251106,
+          "maximumPressureBarAbsolute": 31.0047630722444
+        }
+      }
+    },
+    "r40": {
+      "coolPropFluid": "R40",
+      "modelMinimumTemperatureC": -43.14999999999998,
+      "modelReportedTripleTemperatureC": -43.14999999999998,
+      "effectiveLowerBoundC": -43.14999999999998,
+      "modelMaximumTemperatureC": 456.85,
+      "modelCriticalTemperatureC": 145.4756521058676,
+      "searchMinimumTemperatureC": -42.14999999999998,
+      "searchMaximumTemperatureC": 142.4756521058676,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -42.15,
+          "maximumTemperatureC": 142.4756521059,
+          "minimumPressureBarAbsolute": 0.427319292747648,
+          "maximumPressureBarAbsolute": 66.2151760243991
+        },
+        "dew": {
+          "minimumTemperatureC": -42.15,
+          "maximumTemperatureC": 142.4756521059,
+          "minimumPressureBarAbsolute": 0.427319292747648,
+          "maximumPressureBarAbsolute": 66.2151760243991
+        }
+      }
+    },
+    "r404a": {
+      "coolPropFluid": "R404A",
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelReportedTripleTemperatureC": -73.14999999999998,
+      "effectiveLowerBoundC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 72.12,
+      "searchMinimumTemperatureC": -72.14999999999998,
+      "searchMaximumTemperatureC": 69.12,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 69.12,
+          "minimumPressureBarAbsolute": 0.24150572439954,
+          "maximumPressureBarAbsolute": 35.0611301543773
+        },
+        "dew": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 69.12,
+          "minimumPressureBarAbsolute": 0.227052161096533,
+          "maximumPressureBarAbsolute": 34.9627705881743
+        }
+      }
+    },
+    "r407a": {
+      "coolPropFluid": "R407A.mix",
+      "modelMinimumTemperatureC": -114.10668679548493,
+      "modelReportedTripleTemperatureC": -114.10668679548493,
+      "effectiveLowerBoundC": -114.10668679548493,
+      "modelMaximumTemperatureC": 188.43580275792834,
+      "modelCriticalTemperatureC": 82.24686697162866,
+      "searchMinimumTemperatureC": -113.10668679548493,
+      "searchMaximumTemperatureC": 79.24686697162866,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -113.1066867955,
+          "maximumTemperatureC": 79.2468669716,
+          "minimumPressureBarAbsolute": 0.00668234423861171,
+          "maximumPressureBarAbsolute": 42.9990399539413
+        },
+        "dew": {
+          "minimumTemperatureC": -113.1066867955,
+          "maximumTemperatureC": 76.8933132045,
+          "minimumPressureBarAbsolute": 0.00271973467696361,
+          "maximumPressureBarAbsolute": 39.4564450557109
+        }
+      }
+    },
+    "r407b": {
+      "coolPropFluid": "R407B.mix",
+      "modelMinimumTemperatureC": -108.32749393958073,
+      "modelReportedTripleTemperatureC": -108.32749393958073,
+      "effectiveLowerBoundC": -108.32749393958073,
+      "modelMaximumTemperatureC": 204.9089209386559,
+      "modelCriticalTemperatureC": 74.7544464259687,
+      "searchMinimumTemperatureC": -107.32749393958073,
+      "searchMaximumTemperatureC": 71.7544464259687,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -107.3274939396,
+          "maximumTemperatureC": 71.754446426,
+          "minimumPressureBarAbsolute": 0.0134896873491217,
+          "maximumPressureBarAbsolute": 38.9110765615465
+        },
+        "dew": {
+          "minimumTemperatureC": -107.3274939396,
+          "maximumTemperatureC": 67.6725060604,
+          "minimumPressureBarAbsolute": 0.00746108316182007,
+          "maximumPressureBarAbsolute": 34.7558286548845
+        }
+      }
+    },
+    "r407c": {
+      "coolPropFluid": "R407C",
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelReportedTripleTemperatureC": -73.14999999999998,
+      "effectiveLowerBoundC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 86.19500000000005,
+      "searchMinimumTemperatureC": -72.14999999999998,
+      "searchMaximumTemperatureC": 83.19500000000005,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 83.195,
+          "minimumPressureBarAbsolute": 0.204604683250646,
+          "maximumPressureBarAbsolute": 44.3389941921405
+        },
+        "dew": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 83.195,
+          "minimumPressureBarAbsolute": 0.121698145400369,
+          "maximumPressureBarAbsolute": 42.8048356747279
+        }
+      }
+    },
+    "r407d": {
+      "coolPropFluid": "R407D.mix",
+      "modelMinimumTemperatureC": -111.78507319917921,
+      "modelReportedTripleTemperatureC": -111.78507319917921,
+      "effectiveLowerBoundC": -111.78507319917921,
+      "modelMaximumTemperatureC": 181.7203140783161,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -110.78507319917921,
+      "searchMaximumTemperatureC": 181.7203140783161,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -110.7850731992,
+          "maximumTemperatureC": 79.2149268008,
+          "minimumPressureBarAbsolute": 0.00593550239725806,
+          "maximumPressureBarAbsolute": 35.7346933682202
+        },
+        "dew": {
+          "minimumTemperatureC": -110.7850731992,
+          "maximumTemperatureC": 89.2149268008,
+          "minimumPressureBarAbsolute": 0.00238909570676572,
+          "maximumPressureBarAbsolute": 42.0280550035861
+        }
+      }
+    },
+    "r407e": {
+      "coolPropFluid": "R407E.mix",
+      "modelMinimumTemperatureC": -116.51194020751487,
+      "modelReportedTripleTemperatureC": -116.51194020751487,
+      "effectiveLowerBoundC": -116.51194020751487,
+      "modelMaximumTemperatureC": 178.50965814145638,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -115.51194020751487,
+      "searchMaximumTemperatureC": 178.50965814145638,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -115.5119402075,
+          "maximumTemperatureC": 54.4880597925,
+          "minimumPressureBarAbsolute": 0.00448739394350701,
+          "maximumPressureBarAbsolute": 23.7587457589515
+        },
+        "dew": {
+          "minimumTemperatureC": -115.5119402075,
+          "maximumTemperatureC": 84.4880597925,
+          "minimumPressureBarAbsolute": 0.00158676571572252,
+          "maximumPressureBarAbsolute": 42.3533259297697
+        }
+      }
+    },
+    "r407f": {
+      "coolPropFluid": "R407F.mix",
+      "modelMinimumTemperatureC": -118.6091129263784,
+      "modelReportedTripleTemperatureC": -118.6091129263784,
+      "effectiveLowerBoundC": -118.6091129263784,
+      "modelMaximumTemperatureC": 181.6160154045328,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -117.6091129263784,
+      "searchMaximumTemperatureC": 181.6160154045328,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -117.6091129264,
+          "maximumTemperatureC": 47.3908870736,
+          "minimumPressureBarAbsolute": 0.00433960068675034,
+          "maximumPressureBarAbsolute": 22.8940839887278
+        },
+        "dew": {
+          "minimumTemperatureC": -117.6091129264,
+          "maximumTemperatureC": 77.3908870736,
+          "minimumPressureBarAbsolute": 0.00164171070701663,
+          "maximumPressureBarAbsolute": 41.6600177593893
+        }
+      }
+    },
+    "r41": {
+      "coolPropFluid": "R41",
+      "modelMinimumTemperatureC": -143.32999999999998,
+      "modelReportedTripleTemperatureC": -143.32999999999998,
+      "effectiveLowerBoundC": -143.32999999999998,
+      "modelMaximumTemperatureC": 151.85000000000002,
+      "modelCriticalTemperatureC": 44.129063855142704,
+      "searchMinimumTemperatureC": -142.32999999999998,
+      "searchMaximumTemperatureC": 41.129063855142704,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -142.33,
+          "maximumTemperatureC": 41.1290638551,
+          "minimumPressureBarAbsolute": 0.00394627145086074,
+          "maximumPressureBarAbsolute": 55.2088684974304
+        },
+        "dew": {
+          "minimumTemperatureC": -142.33,
+          "maximumTemperatureC": 41.1290638551,
+          "minimumPressureBarAbsolute": 0.00394627145086074,
+          "maximumPressureBarAbsolute": 55.2088684974304
+        }
+      }
+    },
+    "r410a": {
+      "coolPropFluid": "R410A",
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelReportedTripleTemperatureC": -73.14999999999998,
+      "effectiveLowerBoundC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 71.34400000000005,
+      "searchMinimumTemperatureC": -72.14999999999998,
+      "searchMaximumTemperatureC": 68.34400000000005,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 68.344,
+          "minimumPressureBarAbsolute": 0.310977523431044,
+          "maximumPressureBarAbsolute": 45.9959477104296
+        },
+        "dew": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 68.344,
+          "minimumPressureBarAbsolute": 0.309399928278078,
+          "maximumPressureBarAbsolute": 45.9558608166433
+        }
+      }
+    },
+    "r410b": {
+      "coolPropFluid": "R410B.mix",
+      "modelMinimumTemperatureC": -124.28046577804218,
+      "modelReportedTripleTemperatureC": -124.28046577804218,
+      "effectiveLowerBoundC": -124.28046577804218,
+      "modelMaximumTemperatureC": 184.36021902784017,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -123.28046577804218,
+      "searchMaximumTemperatureC": 184.36021902784017,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -123.280465778,
+          "maximumTemperatureC": 41.719534222,
+          "minimumPressureBarAbsolute": 0.00298449289337366,
+          "maximumPressureBarAbsolute": 25.1183423376177
+        },
+        "dew": {
+          "minimumTemperatureC": -123.280465778,
+          "maximumTemperatureC": 41.719534222,
+          "minimumPressureBarAbsolute": 0.00290434893826266,
+          "maximumPressureBarAbsolute": 25.0221191778839
+        }
+      }
+    },
+    "r411a": {
+      "coolPropFluid": "R411A.mix",
+      "modelMinimumTemperatureC": -152.9092979696211,
+      "modelReportedTripleTemperatureC": -152.9092979696211,
+      "effectiveLowerBoundC": -152.9092979696211,
+      "modelMaximumTemperatureC": 270.7256026329584,
+      "modelCriticalTemperatureC": 99.54751153347104,
+      "searchMinimumTemperatureC": -151.9092979696211,
+      "searchMaximumTemperatureC": 96.54751153347104,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -131.9092979696,
+          "maximumTemperatureC": 78.0907020304,
+          "minimumPressureBarAbsolute": 0.000504699097732563,
+          "maximumPressureBarAbsolute": 33.199270409104
+        },
+        "dew": {
+          "minimumTemperatureC": -131.9092979696,
+          "maximumTemperatureC": 78.0907020304,
+          "minimumPressureBarAbsolute": 0.000268222977655628,
+          "maximumPressureBarAbsolute": 32.5887845453519
+        }
+      }
+    },
+    "r411b": {
+      "coolPropFluid": "R411B.mix",
+      "modelMinimumTemperatureC": -157.59996345913083,
+      "modelReportedTripleTemperatureC": -157.59996345913083,
+      "effectiveLowerBoundC": -157.59996345913083,
+      "modelMaximumTemperatureC": 276.4440668697032,
+      "modelCriticalTemperatureC": 96.18096782530574,
+      "searchMinimumTemperatureC": -156.59996345913083,
+      "searchMaximumTemperatureC": 93.18096782530574,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -121.5999634591,
+          "maximumTemperatureC": 78.4000365409,
+          "minimumPressureBarAbsolute": 0.00236202396319855,
+          "maximumPressureBarAbsolute": 35.3950522178845
+        },
+        "dew": {
+          "minimumTemperatureC": -141.5999634591,
+          "maximumTemperatureC": 78.4000365409,
+          "minimumPressureBarAbsolute": 7.69619700662036e-05,
+          "maximumPressureBarAbsolute": 35.1427158547868
+        }
+      }
+    },
+    "r415a": {
+      "coolPropFluid": "R415A.mix",
+      "modelMinimumTemperatureC": -148.75237358887048,
+      "modelReportedTripleTemperatureC": -148.75237358887048,
+      "effectiveLowerBoundC": -148.75237358887048,
+      "modelMaximumTemperatureC": 265.68900796918683,
+      "modelCriticalTemperatureC": 102.30239152206951,
+      "searchMinimumTemperatureC": -147.75237358887048,
+      "searchMaximumTemperatureC": 99.30239152206951,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -147.7523735889,
+          "maximumTemperatureC": 77.2476264111,
+          "minimumPressureBarAbsolute": 2.35261075531171e-05,
+          "maximumPressureBarAbsolute": 30.9496198102942
+        },
+        "dew": {
+          "minimumTemperatureC": -122.7523735889,
+          "maximumTemperatureC": 82.2476264111,
+          "minimumPressureBarAbsolute": 0.000840449351204318,
+          "maximumPressureBarAbsolute": 33.4528347168548
+        }
+      }
+    },
+    "r415b": {
+      "coolPropFluid": "R415B.mix",
+      "modelMinimumTemperatureC": -126.47053749366268,
+      "modelReportedTripleTemperatureC": -126.47053749366268,
+      "effectiveLowerBoundC": -126.47053749366268,
+      "modelMaximumTemperatureC": 236.9974858275338,
+      "modelCriticalTemperatureC": 111.25935848356664,
+      "searchMinimumTemperatureC": -125.47053749366268,
+      "searchMaximumTemperatureC": 108.25935848356664,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -115.4705374937,
+          "maximumTemperatureC": 99.5294625063,
+          "minimumPressureBarAbsolute": 0.00143268619567621,
+          "maximumPressureBarAbsolute": 37.3135083249686
+        },
+        "dew": {
+          "minimumTemperatureC": -125.4705374937,
+          "maximumTemperatureC": 94.5294625063,
+          "minimumPressureBarAbsolute": 0.000283028527252867,
+          "maximumPressureBarAbsolute": 33.608051375715
+        }
+      }
+    },
+    "r417a": {
+      "coolPropFluid": "R417A.mix",
+      "modelMinimumTemperatureC": -104.37611952809516,
+      "modelReportedTripleTemperatureC": -104.37611952809516,
+      "effectiveLowerBoundC": -104.37611952809516,
+      "modelMaximumTemperatureC": 207.99376162172683,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -103.37611952809516,
+      "searchMaximumTemperatureC": 207.99376162172683,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -103.3761195281,
+          "maximumTemperatureC": 76.6238804719,
+          "minimumPressureBarAbsolute": 0.0129420712792187,
+          "maximumPressureBarAbsolute": 32.855991169423
+        },
+        "dew": {
+          "minimumTemperatureC": -103.3761195281,
+          "maximumTemperatureC": 71.6238804719,
+          "minimumPressureBarAbsolute": 0.00637589204188339,
+          "maximumPressureBarAbsolute": 28.5955756945585
+        }
+      }
+    },
+    "r417b": {
+      "coolPropFluid": "R417B.mix",
+      "modelMinimumTemperatureC": -103.14882532187664,
+      "modelReportedTripleTemperatureC": -103.14882532187664,
+      "effectiveLowerBoundC": -103.14882532187664,
+      "modelMaximumTemperatureC": 221.66128137279708,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -102.14882532187664,
+      "searchMaximumTemperatureC": 221.66128137279708,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -102.1488253219,
+          "maximumTemperatureC": 67.8511746781,
+          "minimumPressureBarAbsolute": 0.0212401906828865,
+          "maximumPressureBarAbsolute": 33.0106946080365
+        },
+        "dew": {
+          "minimumTemperatureC": -102.1488253219,
+          "maximumTemperatureC": 62.8511746781,
+          "minimumPressureBarAbsolute": 0.0129144146429162,
+          "maximumPressureBarAbsolute": 28.9999911041961
+        }
+      }
+    },
+    "r417c": {
+      "coolPropFluid": "R417C.mix",
+      "modelMinimumTemperatureC": -103.91055522011794,
+      "modelReportedTripleTemperatureC": -103.91055522011794,
+      "effectiveLowerBoundC": -103.91055522011794,
+      "modelMaximumTemperatureC": 193.07483972854368,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -102.91055522011794,
+      "searchMaximumTemperatureC": 193.07483972854368,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -102.9105552201,
+          "maximumTemperatureC": 87.0894447799,
+          "minimumPressureBarAbsolute": 0.00824686002786256,
+          "maximumPressureBarAbsolute": 34.6495548444015
+        },
+        "dew": {
+          "minimumTemperatureC": -102.9105552201,
+          "maximumTemperatureC": 87.0894447799,
+          "minimumPressureBarAbsolute": 0.00486797858945636,
+          "maximumPressureBarAbsolute": 34.0456127440466
+        }
+      }
+    },
+    "r419a": {
+      "coolPropFluid": "R419A.mix",
+      "modelMinimumTemperatureC": -105.0526777497291,
+      "modelReportedTripleTemperatureC": -105.0526777497291,
+      "effectiveLowerBoundC": -105.0526777497291,
+      "modelMaximumTemperatureC": 220.0611634931186,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -104.0526777497291,
+      "searchMaximumTemperatureC": 220.0611634931186,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -104.0526777497,
+          "maximumTemperatureC": 65.9473222503,
+          "minimumPressureBarAbsolute": 0.015102494619089,
+          "maximumPressureBarAbsolute": 29.0822090647425
+        },
+        "dew": {
+          "minimumTemperatureC": -104.0526777497,
+          "maximumTemperatureC": 80.9473222503,
+          "minimumPressureBarAbsolute": 0.0075173603483024,
+          "maximumPressureBarAbsolute": 38.1667656234786
+        }
+      }
+    },
+    "r419b": {
+      "coolPropFluid": "R419B.mix",
+      "modelMinimumTemperatureC": -105.21740542134356,
+      "modelReportedTripleTemperatureC": -105.21740542134356,
+      "effectiveLowerBoundC": -105.21740542134356,
+      "modelMaximumTemperatureC": 206.57614923331374,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -104.21740542134356,
+      "searchMaximumTemperatureC": 206.57614923331374,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -104.2174054213,
+          "maximumTemperatureC": 75.7825945787,
+          "minimumPressureBarAbsolute": 0.0101470289962184,
+          "maximumPressureBarAbsolute": 30.8339877498167
+        },
+        "dew": {
+          "minimumTemperatureC": -104.2174054213,
+          "maximumTemperatureC": 85.7825945787,
+          "minimumPressureBarAbsolute": 0.00513160082431919,
+          "maximumPressureBarAbsolute": 36.4443035698437
+        }
+      }
+    },
+    "r420a": {
+      "coolPropFluid": "R420A.mix",
+      "modelMinimumTemperatureC": -106.5993359130477,
+      "modelReportedTripleTemperatureC": -106.5993359130477,
+      "effectiveLowerBoundC": -106.5993359130477,
+      "modelMaximumTemperatureC": 183.67418130098474,
+      "modelCriticalTemperatureC": 104.48765055081043,
+      "searchMinimumTemperatureC": -105.5993359130477,
+      "searchMaximumTemperatureC": 101.48765055081043,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -105.599335913,
+          "maximumTemperatureC": 94.400664087,
+          "minimumPressureBarAbsolute": 0.00287653700849125,
+          "maximumPressureBarAbsolute": 33.542943785353
+        },
+        "dew": {
+          "minimumTemperatureC": -105.599335913,
+          "maximumTemperatureC": 101.4876505508,
+          "minimumPressureBarAbsolute": 0.00278199954629077,
+          "maximumPressureBarAbsolute": 38.2894708055985
+        }
+      }
+    },
+    "r421a": {
+      "coolPropFluid": "R421A.mix",
+      "modelMinimumTemperatureC": -101.85816871456962,
+      "modelReportedTripleTemperatureC": -101.85816871456962,
+      "effectiveLowerBoundC": -101.85816871456962,
+      "modelMaximumTemperatureC": 206.15052728253403,
+      "modelCriticalTemperatureC": 82.76699080217918,
+      "searchMinimumTemperatureC": -100.85816871456962,
+      "searchMaximumTemperatureC": 79.76699080217918,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -100.8581687146,
+          "maximumTemperatureC": 79.7669908022,
+          "minimumPressureBarAbsolute": 0.0177566571775419,
+          "maximumPressureBarAbsolute": 37.0996194812652
+        },
+        "dew": {
+          "minimumTemperatureC": -100.8581687146,
+          "maximumTemperatureC": 79.7669908022,
+          "minimumPressureBarAbsolute": 0.00905954358651645,
+          "maximumPressureBarAbsolute": 36.3365177992821
+        }
+      }
+    },
+    "r421b": {
+      "coolPropFluid": "R421B.mix",
+      "modelMinimumTemperatureC": -101.08897433897181,
+      "modelReportedTripleTemperatureC": -101.08897433897181,
+      "effectiveLowerBoundC": -101.08897433897181,
+      "modelMaximumTemperatureC": 219.11447743305888,
+      "modelCriticalTemperatureC": 72.38224139777759,
+      "searchMinimumTemperatureC": -100.08897433897181,
+      "searchMaximumTemperatureC": 69.38224139777759,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -100.088974339,
+          "maximumTemperatureC": 69.3822413978,
+          "minimumPressureBarAbsolute": 0.0263452348605775,
+          "maximumPressureBarAbsolute": 35.2810923742217
+        },
+        "dew": {
+          "minimumTemperatureC": -100.088974339,
+          "maximumTemperatureC": 69.3822413978,
+          "minimumPressureBarAbsolute": 0.0170614100494665,
+          "maximumPressureBarAbsolute": 34.8660428168857
+        }
+      }
+    },
+    "r422a": {
+      "coolPropFluid": "R422A.mix",
+      "modelMinimumTemperatureC": -104.87880503884182,
+      "modelReportedTripleTemperatureC": -104.87880503884182,
+      "effectiveLowerBoundC": -104.87880503884182,
+      "modelMaximumTemperatureC": 226.07222991514772,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -103.87880503884182,
+      "searchMaximumTemperatureC": 226.07222991514772,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -103.8788050388,
+          "maximumTemperatureC": 61.1211949612,
+          "minimumPressureBarAbsolute": 0.0208116004152683,
+          "maximumPressureBarAbsolute": 30.1507912147761
+        },
+        "dew": {
+          "minimumTemperatureC": -103.8788050388,
+          "maximumTemperatureC": 61.1211949612,
+          "minimumPressureBarAbsolute": 0.0134338341681526,
+          "maximumPressureBarAbsolute": 29.7097161995974
+        }
+      }
+    },
+    "r422b": {
+      "coolPropFluid": "R422B.mix",
+      "modelMinimumTemperatureC": -105.11564753449721,
+      "modelReportedTripleTemperatureC": -105.11564753449721,
+      "effectiveLowerBoundC": -105.11564753449721,
+      "modelMaximumTemperatureC": 210.94939728398288,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -104.11564753449721,
+      "searchMaximumTemperatureC": 210.94939728398288,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -104.1156475345,
+          "maximumTemperatureC": 75.8843524655,
+          "minimumPressureBarAbsolute": 0.014912737838922,
+          "maximumPressureBarAbsolute": 34.3806563696786
+        },
+        "dew": {
+          "minimumTemperatureC": -104.1156475345,
+          "maximumTemperatureC": 70.8843524655,
+          "minimumPressureBarAbsolute": 0.00657108478598193,
+          "maximumPressureBarAbsolute": 30.0017702583784
+        }
+      }
+    },
+    "r422c": {
+      "coolPropFluid": "R422C.mix",
+      "modelMinimumTemperatureC": -104.51618602254942,
+      "modelReportedTripleTemperatureC": -104.51618602254942,
+      "effectiveLowerBoundC": -104.51618602254942,
+      "modelMaximumTemperatureC": 223.73784966427905,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -103.51618602254942,
+      "searchMaximumTemperatureC": 223.73784966427905,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -103.5161860225,
+          "maximumTemperatureC": 66.4838139775,
+          "minimumPressureBarAbsolute": 0.0207814969633705,
+          "maximumPressureBarAbsolute": 33.1321997715877
+        },
+        "dew": {
+          "minimumTemperatureC": -103.5161860225,
+          "maximumTemperatureC": 61.4838139775,
+          "minimumPressureBarAbsolute": 0.0124091978850284,
+          "maximumPressureBarAbsolute": 29.2348538346726
+        }
+      }
+    },
+    "r422d": {
+      "coolPropFluid": "R422D.mix",
+      "modelMinimumTemperatureC": -105.31693541110914,
+      "modelReportedTripleTemperatureC": -105.31693541110914,
+      "effectiveLowerBoundC": -105.31693541110914,
+      "modelMaximumTemperatureC": 216.4002352442517,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -104.31693541110914,
+      "searchMaximumTemperatureC": 216.4002352442517,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -104.3169354111,
+          "maximumTemperatureC": 70.6830645889,
+          "minimumPressureBarAbsolute": 0.0164629306384376,
+          "maximumPressureBarAbsolute": 32.8110307201247
+        },
+        "dew": {
+          "minimumTemperatureC": -104.3169354111,
+          "maximumTemperatureC": 65.6830645889,
+          "minimumPressureBarAbsolute": 0.00771464851184505,
+          "maximumPressureBarAbsolute": 28.6179145208977
+        }
+      }
+    },
+    "r422e": {
+      "coolPropFluid": "R422E.mix",
+      "modelMinimumTemperatureC": -104.73923621142234,
+      "modelReportedTripleTemperatureC": -104.73923621142234,
+      "effectiveLowerBoundC": -104.73923621142234,
+      "modelMaximumTemperatureC": 211.71266474391507,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -103.73923621142234,
+      "searchMaximumTemperatureC": 211.71266474391507,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -103.7392362114,
+          "maximumTemperatureC": 76.2607637886,
+          "minimumPressureBarAbsolute": 0.0158444023190581,
+          "maximumPressureBarAbsolute": 35.1892688765962
+        },
+        "dew": {
+          "minimumTemperatureC": -103.7392362114,
+          "maximumTemperatureC": 71.2607637886,
+          "minimumPressureBarAbsolute": 0.00712242614997712,
+          "maximumPressureBarAbsolute": 30.778773700417
+        }
+      }
+    },
+    "r423a": {
+      "coolPropFluid": "R423A.mix",
+      "modelMinimumTemperatureC": -111.56928986672918,
+      "modelReportedTripleTemperatureC": -111.56928986672918,
+      "effectiveLowerBoundC": -111.56928986672918,
+      "modelMaximumTemperatureC": 188.88769350359934,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -110.56928986672918,
+      "searchMaximumTemperatureC": 188.88769350359934,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -110.5692898667,
+          "maximumTemperatureC": 79.4307101333,
+          "minimumPressureBarAbsolute": 0.00147050551218554,
+          "maximumPressureBarAbsolute": 23.7079772344173
+        },
+        "dew": {
+          "minimumTemperatureC": -110.5692898667,
+          "maximumTemperatureC": 79.4307101333,
+          "minimumPressureBarAbsolute": 0.0013350815249004,
+          "maximumPressureBarAbsolute": 23.4284932728413
+        }
+      }
+    },
+    "r425a": {
+      "coolPropFluid": "R425A.mix",
+      "modelMinimumTemperatureC": -115.55898681146462,
+      "modelReportedTripleTemperatureC": -115.55898681146462,
+      "effectiveLowerBoundC": -115.55898681146462,
+      "modelMaximumTemperatureC": 176.70200937408276,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -114.55898681146462,
+      "searchMaximumTemperatureC": 176.70200937408276,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -114.5589868115,
+          "maximumTemperatureC": 80.4410131885,
+          "minimumPressureBarAbsolute": 0.00387481450007368,
+          "maximumPressureBarAbsolute": 35.3033472061168
+        },
+        "dew": {
+          "minimumTemperatureC": -114.5589868115,
+          "maximumTemperatureC": 85.4410131885,
+          "minimumPressureBarAbsolute": 0.00134812533721286,
+          "maximumPressureBarAbsolute": 36.8709570133646
+        }
+      }
+    },
+    "r427a": {
+      "coolPropFluid": "R427A.mix",
+      "modelMinimumTemperatureC": -112.45142877224256,
+      "modelReportedTripleTemperatureC": -112.45142877224256,
+      "effectiveLowerBoundC": -112.45142877224256,
+      "modelMaximumTemperatureC": 206.0977829639877,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -111.45142877224256,
+      "searchMaximumTemperatureC": 206.0977829639877,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -111.4514287722,
+          "maximumTemperatureC": 78.5485712278,
+          "minimumPressureBarAbsolute": 0.00739009559088739,
+          "maximumPressureBarAbsolute": 38.9784390189489
+        },
+        "dew": {
+          "minimumTemperatureC": -111.4514287722,
+          "maximumTemperatureC": 78.5485712278,
+          "minimumPressureBarAbsolute": 0.0028431646610852,
+          "maximumPressureBarAbsolute": 37.2504053185918
+        }
+      }
+    },
+    "r428a": {
+      "coolPropFluid": "R428A.mix",
+      "modelMinimumTemperatureC": -106.83021266889972,
+      "modelReportedTripleTemperatureC": -106.83021266889972,
+      "effectiveLowerBoundC": -106.83021266889972,
+      "modelMaximumTemperatureC": 270.0649248691276,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -105.83021266889972,
+      "searchMaximumTemperatureC": 270.0649248691276,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -105.8302126689,
+          "maximumTemperatureC": 54.1697873311,
+          "minimumPressureBarAbsolute": 0.020454781116513,
+          "maximumPressureBarAbsolute": 27.0774836179501
+        },
+        "dew": {
+          "minimumTemperatureC": -105.8302126689,
+          "maximumTemperatureC": 59.1697873311,
+          "minimumPressureBarAbsolute": 0.0173540014545945,
+          "maximumPressureBarAbsolute": 30.10862391684
+        }
+      }
+    },
+    "r430a": {
+      "coolPropFluid": "R430A.mix",
+      "modelMinimumTemperatureC": -129.37293630172653,
+      "modelReportedTripleTemperatureC": -129.37293630172653,
+      "effectiveLowerBoundC": -129.37293630172653,
+      "modelMaximumTemperatureC": 246.65701010603698,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -128.37293630172653,
+      "searchMaximumTemperatureC": 246.65701010603698,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -128.3729363017,
+          "maximumTemperatureC": 91.6270636983,
+          "minimumPressureBarAbsolute": 0.000340146253124391,
+          "maximumPressureBarAbsolute": 31.1930409290541
+        },
+        "dew": {
+          "minimumTemperatureC": -128.3729363017,
+          "maximumTemperatureC": 91.6270636983,
+          "minimumPressureBarAbsolute": 0.000208098843740583,
+          "maximumPressureBarAbsolute": 31.1387544220884
+        }
+      }
+    },
+    "r431a": {
+      "coolPropFluid": "R431A.mix",
+      "modelMinimumTemperatureC": -172.8337357218499,
+      "modelReportedTripleTemperatureC": -172.8337357218499,
+      "effectiveLowerBoundC": -172.8337357218499,
+      "modelMaximumTemperatureC": 344.71137985481994,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -171.8337357218499,
+      "searchMaximumTemperatureC": 344.71137985481994,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -171.8337357218,
+          "maximumTemperatureC": 73.1662642782,
+          "minimumPressureBarAbsolute": 4.33184110469826e-07,
+          "maximumPressureBarAbsolute": 30.8840695891657
+        },
+        "dew": {
+          "minimumTemperatureC": -76.8337357218,
+          "maximumTemperatureC": 73.1662642782,
+          "minimumPressureBarAbsolute": 0.178898697232809,
+          "maximumPressureBarAbsolute": 30.6836569047797
+        }
+      }
+    },
+    "r432a": {
+      "coolPropFluid": "R432A.mix",
+      "modelMinimumTemperatureC": -177.07174814314774,
+      "modelReportedTripleTemperatureC": -177.07174814314774,
+      "effectiveLowerBoundC": -177.07174814314774,
+      "modelMaximumTemperatureC": 292.5548620851898,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -176.07174814314774,
+      "searchMaximumTemperatureC": 292.5548620851898,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -171.0717481431,
+          "maximumTemperatureC": 78.9282518569,
+          "minimumPressureBarAbsolute": 6.33047013246441e-07,
+          "maximumPressureBarAbsolute": 34.2254053496618
+        },
+        "dew": {
+          "minimumTemperatureC": -161.0717481431,
+          "maximumTemperatureC": 83.9282518569,
+          "minimumPressureBarAbsolute": 1.34375460885318e-06,
+          "maximumPressureBarAbsolute": 37.1739173280158
+        }
+      }
+    },
+    "r433a": {
+      "coolPropFluid": "R433A.mix",
+      "modelMinimumTemperatureC": -186.87251967111996,
+      "modelReportedTripleTemperatureC": -186.87251967111996,
+      "effectiveLowerBoundC": -186.87251967111996,
+      "modelMaximumTemperatureC": 353.60616776523875,
+      "modelCriticalTemperatureC": 94.14202523197702,
+      "searchMinimumTemperatureC": -185.87251967111996,
+      "searchMaximumTemperatureC": 91.14202523197702,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -175.8725196711,
+          "maximumTemperatureC": 69.1274803289,
+          "minimumPressureBarAbsolute": 1.47824055515971e-07,
+          "maximumPressureBarAbsolute": 27.3181745133329
+        },
+        "dew": {
+          "minimumTemperatureC": -175.8725196711,
+          "maximumTemperatureC": 69.1274803289,
+          "minimumPressureBarAbsolute": 1.34742026443122e-07,
+          "maximumPressureBarAbsolute": 27.1938118380082
+        }
+      }
+    },
+    "r433b": {
+      "coolPropFluid": "R433B.mix",
+      "modelMinimumTemperatureC": -187.49808818167168,
+      "modelReportedTripleTemperatureC": -187.49808818167168,
+      "effectiveLowerBoundC": -187.49808818167168,
+      "modelMaximumTemperatureC": 372.92974202033554,
+      "modelCriticalTemperatureC": 96.26762086135699,
+      "searchMinimumTemperatureC": -186.49808818167168,
+      "searchMaximumTemperatureC": 93.26762086135699,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -171.4980881817,
+          "maximumTemperatureC": 73.5019118183,
+          "minimumPressureBarAbsolute": 4.31197603747748e-07,
+          "maximumPressureBarAbsolute": 28.0539126615802
+        },
+        "dew": {
+          "minimumTemperatureC": -176.4980881817,
+          "maximumTemperatureC": 73.5019118183,
+          "minimumPressureBarAbsolute": 9.48662476558705e-08,
+          "maximumPressureBarAbsolute": 28.0158364625329
+        }
+      }
+    },
+    "r433c": {
+      "coolPropFluid": "R433C.mix",
+      "modelMinimumTemperatureC": -186.99644881599087,
+      "modelReportedTripleTemperatureC": -186.99644881599087,
+      "effectiveLowerBoundC": -186.99644881599087,
+      "modelMaximumTemperatureC": 357.434292091976,
+      "modelCriticalTemperatureC": 94.53200060723128,
+      "searchMinimumTemperatureC": -185.99644881599087,
+      "searchMaximumTemperatureC": 91.53200060723128,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -175.996448816,
+          "maximumTemperatureC": 69.003551184,
+          "minimumPressureBarAbsolute": 1.37796318771209e-07,
+          "maximumPressureBarAbsolute": 26.9648366064341
+        },
+        "dew": {
+          "minimumTemperatureC": -175.996448816,
+          "maximumTemperatureC": 69.003551184,
+          "minimumPressureBarAbsolute": 1.25650206182393e-07,
+          "maximumPressureBarAbsolute": 26.8460602567038
+        }
+      }
+    },
+    "r434a": {
+      "coolPropFluid": "R434A.mix",
+      "modelMinimumTemperatureC": -106.59929125243971,
+      "modelReportedTripleTemperatureC": -106.59929125243971,
+      "effectiveLowerBoundC": -106.59929125243971,
+      "modelMaximumTemperatureC": 257.17925284580645,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -105.59929125243971,
+      "searchMaximumTemperatureC": 257.17925284580645,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -105.5992912524,
+          "maximumTemperatureC": 69.4007087476,
+          "minimumPressureBarAbsolute": 0.0159758314466506,
+          "maximumPressureBarAbsolute": 34.0374910889592
+        },
+        "dew": {
+          "minimumTemperatureC": -105.5992912524,
+          "maximumTemperatureC": 64.4007087476,
+          "minimumPressureBarAbsolute": 0.00980193716939492,
+          "maximumPressureBarAbsolute": 30.137075348924
+        }
+      }
+    },
+    "r436a": {
+      "coolPropFluid": "R436A.mix",
+      "modelMinimumTemperatureC": -177.09121470896656,
+      "modelReportedTripleTemperatureC": -177.09121470896656,
+      "effectiveLowerBoundC": -177.09121470896656,
+      "modelMaximumTemperatureC": 348.83957997420646,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -176.09121470896656,
+      "searchMaximumTemperatureC": 348.83957997420646,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -171.091214709,
+          "maximumTemperatureC": 98.908785291,
+          "minimumPressureBarAbsolute": 2.73581458482828e-07,
+          "maximumPressureBarAbsolute": 32.8163165609521
+        },
+        "dew": {
+          "minimumTemperatureC": -161.091214709,
+          "maximumTemperatureC": 113.908785291,
+          "minimumPressureBarAbsolute": 3.75175046658942e-07,
+          "maximumPressureBarAbsolute": 40.7272590022045
+        }
+      }
+    },
+    "r436b": {
+      "coolPropFluid": "R436B.mix",
+      "modelMinimumTemperatureC": -176.0081362392542,
+      "modelReportedTripleTemperatureC": -176.0081362392542,
+      "effectiveLowerBoundC": -176.0081362392542,
+      "modelMaximumTemperatureC": 345.9595627705751,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -175.0081362392542,
+      "searchMaximumTemperatureC": 345.9595627705751,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -170.0081362393,
+          "maximumTemperatureC": 99.9918637607,
+          "minimumPressureBarAbsolute": 3.44205986615959e-07,
+          "maximumPressureBarAbsolute": 32.4515367842964
+        },
+        "dew": {
+          "minimumTemperatureC": -160.0081362393,
+          "maximumTemperatureC": 114.9918637607,
+          "minimumPressureBarAbsolute": 4.56297277738113e-07,
+          "maximumPressureBarAbsolute": 40.1579716630467
+        }
+      }
+    },
+    "r439a": {
+      "coolPropFluid": "R439A.mix",
+      "modelMinimumTemperatureC": -127.55208952547574,
+      "modelReportedTripleTemperatureC": -127.55208952547574,
+      "effectiveLowerBoundC": -127.55208952547574,
+      "modelMaximumTemperatureC": 185.12122650332702,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -126.55208952547574,
+      "searchMaximumTemperatureC": 185.12122650332702,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -126.5520895255,
+          "maximumTemperatureC": 53.4479104745,
+          "minimumPressureBarAbsolute": 0.00272416261179193,
+          "maximumPressureBarAbsolute": 33.4378669155507
+        },
+        "dew": {
+          "minimumTemperatureC": -101.5520895255,
+          "maximumTemperatureC": 53.4479104745,
+          "minimumPressureBarAbsolute": 0.0330313228501722,
+          "maximumPressureBarAbsolute": 33.3493190494712
+        }
+      }
+    },
+    "r440a": {
+      "coolPropFluid": "R440A.mix",
+      "modelMinimumTemperatureC": -119.05330768590835,
+      "modelReportedTripleTemperatureC": -119.05330768590835,
+      "effectiveLowerBoundC": -119.05330768590835,
+      "modelMaximumTemperatureC": 227.7343652474744,
+      "modelCriticalTemperatureC": 112.65486795909965,
+      "searchMinimumTemperatureC": -118.05330768590835,
+      "searchMaximumTemperatureC": 109.65486795909965,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -118.0533076859,
+          "maximumTemperatureC": 96.9466923141,
+          "minimumPressureBarAbsolute": 0.00155936734611295,
+          "maximumPressureBarAbsolute": 33.4860827736682
+        },
+        "dew": {
+          "minimumTemperatureC": -118.0533076859,
+          "maximumTemperatureC": 96.9466923141,
+          "minimumPressureBarAbsolute": 0.000672705325151487,
+          "maximumPressureBarAbsolute": 33.3262167668075
+        }
+      }
+    },
+    "r441a": {
+      "coolPropFluid": "R441A.mix",
+      "modelMinimumTemperatureC": -171.16518241885086,
+      "modelReportedTripleTemperatureC": -171.16518241885086,
+      "effectiveLowerBoundC": -171.16518241885086,
+      "modelMaximumTemperatureC": 351.8533092346763,
+      "modelCriticalTemperatureC": 118.46730997143811,
+      "searchMinimumTemperatureC": -170.16518241885086,
+      "searchMaximumTemperatureC": 115.46730997143811,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -170.1651824189,
+          "maximumTemperatureC": 89.8348175811,
+          "minimumPressureBarAbsolute": 2.60023556778238e-05,
+          "maximumPressureBarAbsolute": 29.6760948309897
+        },
+        "dew": {
+          "minimumTemperatureC": -155.1651824189,
+          "maximumTemperatureC": 109.8348175811,
+          "minimumPressureBarAbsolute": 4.9542579060137e-07,
+          "maximumPressureBarAbsolute": 36.3207227683069
+        }
+      }
+    },
+    "r442a": {
+      "coolPropFluid": "R442A.mix",
+      "modelMinimumTemperatureC": -120.19574448745797,
+      "modelReportedTripleTemperatureC": -120.19574448745797,
+      "effectiveLowerBoundC": -120.19574448745797,
+      "modelMaximumTemperatureC": 183.7611426891146,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -119.19574448745797,
+      "searchMaximumTemperatureC": 183.7611426891146,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -119.1957444875,
+          "maximumTemperatureC": 50.8042555125,
+          "minimumPressureBarAbsolute": 0.0037347053159416,
+          "maximumPressureBarAbsolute": 24.9828219719574
+        },
+        "dew": {
+          "minimumTemperatureC": -119.1957444875,
+          "maximumTemperatureC": 75.8042555125,
+          "minimumPressureBarAbsolute": 0.00125855947162337,
+          "maximumPressureBarAbsolute": 40.3663804090869
+        }
+      }
+    },
+    "r443a": {
+      "coolPropFluid": "R443A.mix",
+      "modelMinimumTemperatureC": -185.19048016602235,
+      "modelReportedTripleTemperatureC": -185.19048016602235,
+      "effectiveLowerBoundC": -185.19048016602235,
+      "modelMaximumTemperatureC": 331.42757462582733,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -184.19048016602235,
+      "searchMaximumTemperatureC": 331.42757462582733,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -174.190480166,
+          "maximumTemperatureC": 70.809519834,
+          "minimumPressureBarAbsolute": 2.63992639039271e-07,
+          "maximumPressureBarAbsolute": 28.6025211034781
+        },
+        "dew": {
+          "minimumTemperatureC": -164.190480166,
+          "maximumTemperatureC": 75.809519834,
+          "minimumPressureBarAbsolute": 1.19677227274287e-06,
+          "maximumPressureBarAbsolute": 30.5767520701311
+        }
+      }
+    },
+    "r444a": {
+      "coolPropFluid": "R444A.mix",
+      "modelMinimumTemperatureC": -112.75896837374427,
+      "modelReportedTripleTemperatureC": -112.75896837374427,
+      "effectiveLowerBoundC": -112.75896837374427,
+      "modelMaximumTemperatureC": 156.05148559386294,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -111.75896837374427,
+      "searchMaximumTemperatureC": 156.05148559386294,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -111.7589683737,
+          "maximumTemperatureC": 93.2410316263,
+          "minimumPressureBarAbsolute": 0.00609944941391699,
+          "maximumPressureBarAbsolute": 36.1430289734146
+        },
+        "dew": {
+          "minimumTemperatureC": -111.7589683737,
+          "maximumTemperatureC": 83.2410316263,
+          "minimumPressureBarAbsolute": 0.00119952883976687,
+          "maximumPressureBarAbsolute": 26.8829358431376
+        }
+      }
+    },
+    "r444b": {
+      "coolPropFluid": "R444B.mix",
+      "modelMinimumTemperatureC": -124.81440993307217,
+      "modelReportedTripleTemperatureC": -124.81440993307217,
+      "effectiveLowerBoundC": -124.81440993307217,
+      "modelMaximumTemperatureC": 164.36866548251413,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -123.81440993307217,
+      "searchMaximumTemperatureC": 164.36866548251413,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -123.8144099331,
+          "maximumTemperatureC": 81.1855900669,
+          "minimumPressureBarAbsolute": 0.00224875136384504,
+          "maximumPressureBarAbsolute": 42.5218684893007
+        },
+        "dew": {
+          "minimumTemperatureC": -123.8144099331,
+          "maximumTemperatureC": 86.1855900669,
+          "minimumPressureBarAbsolute": 0.000433152065434733,
+          "maximumPressureBarAbsolute": 42.6324974637257
+        }
+      }
+    },
+    "r449a": {
+      "coolPropFluid": "R449A.mix",
+      "modelMinimumTemperatureC": -106.76850766989841,
+      "modelReportedTripleTemperatureC": -106.76850766989841,
+      "effectiveLowerBoundC": -106.76850766989841,
+      "modelMaximumTemperatureC": 173.07272519055635,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -105.76850766989841,
+      "searchMaximumTemperatureC": 173.07272519055635,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -105.7685076699,
+          "maximumTemperatureC": 74.2314923301,
+          "minimumPressureBarAbsolute": 0.0156074654278339,
+          "maximumPressureBarAbsolute": 39.0510127877244
+        },
+        "dew": {
+          "minimumTemperatureC": -105.7685076699,
+          "maximumTemperatureC": 74.2314923301,
+          "minimumPressureBarAbsolute": 0.0080546111311414,
+          "maximumPressureBarAbsolute": 37.1712622201452
+        }
+      }
+    },
+    "r449b": {
+      "coolPropFluid": "R449B.mix",
+      "modelMinimumTemperatureC": -108.04079769262415,
+      "modelReportedTripleTemperatureC": -108.04079769262415,
+      "effectiveLowerBoundC": -108.04079769262415,
+      "modelMaximumTemperatureC": 173.44520882929515,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -107.04079769262415,
+      "searchMaximumTemperatureC": 173.44520882929515,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -107.0407976926,
+          "maximumTemperatureC": 77.9592023074,
+          "minimumPressureBarAbsolute": 0.0137460653946552,
+          "maximumPressureBarAbsolute": 42.1744129039773
+        },
+        "dew": {
+          "minimumTemperatureC": -107.0407976926,
+          "maximumTemperatureC": 72.9592023074,
+          "minimumPressureBarAbsolute": 0.00689507432068518,
+          "maximumPressureBarAbsolute": 36.2885266856106
+        }
+      }
+    },
+    "r451a": {
+      "coolPropFluid": "R451A.mix",
+      "modelMinimumTemperatureC": -58.79956449741729,
+      "modelReportedTripleTemperatureC": -58.79956449741729,
+      "effectiveLowerBoundC": -58.79956449741729,
+      "modelMaximumTemperatureC": 141.9193998481312,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -57.79956449741729,
+      "searchMaximumTemperatureC": 141.9193998481312,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -57.7995644974,
+          "maximumTemperatureC": 67.2004355026,
+          "minimumPressureBarAbsolute": 0.242105721710376,
+          "maximumPressureBarAbsolute": 19.6599826030464
+        },
+        "dew": {
+          "minimumTemperatureC": -57.7995644974,
+          "maximumTemperatureC": 67.2004355026,
+          "minimumPressureBarAbsolute": 0.242093259474312,
+          "maximumPressureBarAbsolute": 19.6310133872583
+        }
+      }
+    },
+    "r451b": {
+      "coolPropFluid": "R451B.mix",
+      "modelMinimumTemperatureC": -59.34623666268786,
+      "modelReportedTripleTemperatureC": -59.34623666268786,
+      "effectiveLowerBoundC": -59.34623666268786,
+      "modelMaximumTemperatureC": 142.40993319682866,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -58.34623666268786,
+      "searchMaximumTemperatureC": 142.40993319682866,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -58.3462366627,
+          "maximumTemperatureC": 71.6537633373,
+          "minimumPressureBarAbsolute": 0.234374807035665,
+          "maximumPressureBarAbsolute": 21.6747902896362
+        },
+        "dew": {
+          "minimumTemperatureC": -58.3462366627,
+          "maximumTemperatureC": 71.6537633373,
+          "minimumPressureBarAbsolute": 0.234350245161223,
+          "maximumPressureBarAbsolute": 21.642871527611
+        }
+      }
+    },
+    "r452a": {
+      "coolPropFluid": "R452A.mix",
+      "modelMinimumTemperatureC": -95.61981447554913,
+      "modelReportedTripleTemperatureC": -95.61981447554913,
+      "effectiveLowerBoundC": -95.61981447554913,
+      "modelMaximumTemperatureC": 188.1170173503599,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -94.61981447554913,
+      "searchMaximumTemperatureC": 188.1170173503599,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -94.6198144755,
+          "maximumTemperatureC": 70.3801855245,
+          "minimumPressureBarAbsolute": 0.0466824723813359,
+          "maximumPressureBarAbsolute": 36.9659949574575
+        },
+        "dew": {
+          "minimumTemperatureC": -94.6198144755,
+          "maximumTemperatureC": 65.3801855245,
+          "minimumPressureBarAbsolute": 0.0351801231938941,
+          "maximumPressureBarAbsolute": 31.9262752837734
+        }
+      }
+    },
+    "r452b": {
+      "coolPropFluid": "HEOS::R1234yf[0.14482932042283217]&R125[0.037049791728208929]&R32[0.81812088784895898]",
+      "modelMinimumTemperatureC": -123.35311758869923,
+      "modelReportedTripleTemperatureC": -123.35311758869923,
+      "effectiveLowerBoundC": -123.35311758869923,
+      "modelMaximumTemperatureC": 160.63750345176283,
+      "modelCriticalTemperatureC": 77.10115564265834,
+      "searchMinimumTemperatureC": -122.35311758869923,
+      "searchMaximumTemperatureC": 74.10115564265834,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -122.3531175887,
+          "maximumTemperatureC": 52.6468824113,
+          "minimumPressureBarAbsolute": 0.00337044771243619,
+          "maximumPressureBarAbsolute": 31.1212113951631
+        },
+        "dew": {
+          "minimumTemperatureC": -122.3531175887,
+          "maximumTemperatureC": 67.6468824113,
+          "minimumPressureBarAbsolute": 0.00300815745640242,
+          "maximumPressureBarAbsolute": 42.4079150203051
+        }
+      }
+    },
+    "r454a": {
+      "coolPropFluid": "R454A.mix",
+      "modelMinimumTemperatureC": -98.44017694940635,
+      "modelReportedTripleTemperatureC": -98.44017694940635,
+      "effectiveLowerBoundC": -98.44017694940635,
+      "modelMaximumTemperatureC": 150.38399980558404,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -97.44017694940635,
+      "searchMaximumTemperatureC": 150.38399980558404,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -97.4401769494,
+          "maximumTemperatureC": 72.5598230506,
+          "minimumPressureBarAbsolute": 0.0401946206487551,
+          "maximumPressureBarAbsolute": 39.2971066039538
+        },
+        "dew": {
+          "minimumTemperatureC": -97.4401769494,
+          "maximumTemperatureC": 72.5598230506,
+          "minimumPressureBarAbsolute": 0.0249001891219168,
+          "maximumPressureBarAbsolute": 37.0597825635838
+        }
+      }
+    },
+    "r454b": {
+      "coolPropFluid": "R454B.mix",
+      "modelMinimumTemperatureC": -122.52488039062729,
+      "modelReportedTripleTemperatureC": -122.52488039062729,
+      "effectiveLowerBoundC": -122.52488039062729,
+      "modelMaximumTemperatureC": 157.58119782172702,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -121.52488039062729,
+      "searchMaximumTemperatureC": 157.58119782172702,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -121.5248803906,
+          "maximumTemperatureC": 53.4751196094,
+          "minimumPressureBarAbsolute": 0.00372065521746869,
+          "maximumPressureBarAbsolute": 31.3869935275497
+        },
+        "dew": {
+          "minimumTemperatureC": -121.5248803906,
+          "maximumTemperatureC": 68.4751196094,
+          "minimumPressureBarAbsolute": 0.00325861089477138,
+          "maximumPressureBarAbsolute": 42.6052896952489
+        }
+      }
+    },
+    "r454c": {
+      "coolPropFluid": "HEOS::R1234yf[0.62485045342523393]&R32[0.37514954657476601]",
+      "modelMinimumTemperatureC": -84.53501106644492,
+      "modelReportedTripleTemperatureC": -84.53501106644492,
+      "effectiveLowerBoundC": -84.53501106644492,
+      "modelMaximumTemperatureC": 146.22873866436913,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -83.53501106644492,
+      "searchMaximumTemperatureC": 146.22873866436913,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -83.5350110664,
+          "maximumTemperatureC": 76.4649889336,
+          "minimumPressureBarAbsolute": 0.109742569610309,
+          "maximumPressureBarAbsolute": 37.0746012667225
+        },
+        "dew": {
+          "minimumTemperatureC": -83.5350110664,
+          "maximumTemperatureC": 76.4649889336,
+          "minimumPressureBarAbsolute": 0.0634473193438322,
+          "maximumPressureBarAbsolute": 34.3397923627679
+        }
+      }
+    },
+    "r455a": {
+      "coolPropFluid": "HEOS::R1234yf[0.5789704507530905]&R32[0.36141605462337623]&CarbonDioxide[0.059613494623533179]",
+      "modelMinimumTemperatureC": -83.58922991946866,
+      "modelReportedTripleTemperatureC": -83.58922991946866,
+      "effectiveLowerBoundC": -83.58922991946866,
+      "modelMaximumTemperatureC": 240.67085781700212,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -82.58922991946866,
+      "searchMaximumTemperatureC": 240.67085781700212,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -82.5892299195,
+          "maximumTemperatureC": 72.4107700805,
+          "minimumPressureBarAbsolute": 0.186456982847549,
+          "maximumPressureBarAbsolute": 38.3448119156927
+        },
+        "dew": {
+          "minimumTemperatureC": -82.5892299195,
+          "maximumTemperatureC": 72.4107700805,
+          "minimumPressureBarAbsolute": 0.0732775942856378,
+          "maximumPressureBarAbsolute": 33.9454066470084
+        }
+      }
+    },
+    "r50": {
+      "coolPropFluid": "R50",
+      "modelMinimumTemperatureC": -182.45589999999999,
+      "modelReportedTripleTemperatureC": -182.45589999999999,
+      "effectiveLowerBoundC": -182.45589999999999,
+      "modelMaximumTemperatureC": 351.85,
+      "modelCriticalTemperatureC": -82.58599734871302,
+      "searchMinimumTemperatureC": -181.45589999999999,
+      "searchMaximumTemperatureC": -85.58599734871302,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -181.4559,
+          "maximumTemperatureC": -85.5859973487,
+          "minimumPressureBarAbsolute": 0.13282663661359,
+          "maximumPressureBarAbsolute": 41.8717044158387
+        },
+        "dew": {
+          "minimumTemperatureC": -181.4559,
+          "maximumTemperatureC": -85.5859973487,
+          "minimumPressureBarAbsolute": 0.13282663661359,
+          "maximumPressureBarAbsolute": 41.8717044158387
+        }
+      }
+    },
+    "r500": {
+      "coolPropFluid": "R500.mix",
+      "modelMinimumTemperatureC": -141.90127907587856,
+      "modelReportedTripleTemperatureC": -141.90127907587856,
+      "effectiveLowerBoundC": -141.90127907587856,
+      "modelMaximumTemperatureC": 242.00254353493062,
+      "modelCriticalTemperatureC": 101.48316541501373,
+      "searchMinimumTemperatureC": -140.90127907587856,
+      "searchMaximumTemperatureC": 98.48316541501373,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -140.9012790759,
+          "maximumTemperatureC": 89.0987209241,
+          "minimumPressureBarAbsolute": 8.45248569831173e-05,
+          "maximumPressureBarAbsolute": 32.923947886699
+        },
+        "dew": {
+          "minimumTemperatureC": -140.9012790759,
+          "maximumTemperatureC": 89.0987209241,
+          "minimumPressureBarAbsolute": 4.25253498016445e-05,
+          "maximumPressureBarAbsolute": 32.8877916404068
+        }
+      }
+    },
+    "r501": {
+      "coolPropFluid": "R501.mix",
+      "modelMinimumTemperatureC": -157.34897107124328,
+      "modelReportedTripleTemperatureC": -157.34897107124328,
+      "effectiveLowerBoundC": -157.34897107124328,
+      "modelMaximumTemperatureC": 272.03774195415485,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -156.34897107124328,
+      "searchMaximumTemperatureC": 272.03774195415485,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -141.3489710712,
+          "maximumTemperatureC": 78.6510289288,
+          "minimumPressureBarAbsolute": 0.000117500033827483,
+          "maximumPressureBarAbsolute": 34.8677186673833
+        },
+        "dew": {
+          "minimumTemperatureC": -136.3489710712,
+          "maximumTemperatureC": 83.6510289288,
+          "minimumPressureBarAbsolute": 0.00026045629736826,
+          "maximumPressureBarAbsolute": 38.2925286617994
+        }
+      }
+    },
+    "r502": {
+      "coolPropFluid": "R502.mix",
+      "modelMinimumTemperatureC": -136.01887998249452,
+      "modelReportedTripleTemperatureC": -136.01887998249452,
+      "effectiveLowerBoundC": -136.01887998249452,
+      "modelMaximumTemperatureC": 276.85,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -135.01887998249452,
+      "searchMaximumTemperatureC": 276.85,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -135.0188799825,
+          "maximumTemperatureC": 69.9811200175,
+          "minimumPressureBarAbsolute": 0.000518760394050927,
+          "maximumPressureBarAbsolute": 31.6582487535648
+        },
+        "dew": {
+          "minimumTemperatureC": -135.0188799825,
+          "maximumTemperatureC": 69.9811200175,
+          "minimumPressureBarAbsolute": 0.000404295875869834,
+          "maximumPressureBarAbsolute": 31.6495926605781
+        }
+      }
+    },
+    "r503": {
+      "coolPropFluid": "R503.mix",
+      "modelMinimumTemperatureC": -165.07095404732024,
+      "modelReportedTripleTemperatureC": -165.07095404732024,
+      "effectiveLowerBoundC": -165.07095404732024,
+      "modelMaximumTemperatureC": 189.34250874770981,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -164.07095404732024,
+      "searchMaximumTemperatureC": 189.34250874770981,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -164.0709540473,
+          "maximumTemperatureC": 5.9290459527,
+          "minimumPressureBarAbsolute": 0.000295686248501899,
+          "maximumPressureBarAbsolute": 31.8105088649524
+        },
+        "dew": {
+          "minimumTemperatureC": -154.0709540473,
+          "maximumTemperatureC": 5.9290459527,
+          "minimumPressureBarAbsolute": 0.00133827710936629,
+          "maximumPressureBarAbsolute": 31.568183574142
+        }
+      }
+    },
+    "r507a": {
+      "coolPropFluid": "R507A",
+      "modelMinimumTemperatureC": -73.14999999999998,
+      "modelReportedTripleTemperatureC": -73.14999999999998,
+      "effectiveLowerBoundC": -73.14999999999998,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 70.61500000000001,
+      "searchMinimumTemperatureC": -72.14999999999998,
+      "searchMaximumTemperatureC": 67.61500000000001,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 67.615,
+          "minimumPressureBarAbsolute": 0.247733357708213,
+          "maximumPressureBarAbsolute": 34.7415794575218
+        },
+        "dew": {
+          "minimumTemperatureC": -72.15,
+          "maximumTemperatureC": 67.615,
+          "minimumPressureBarAbsolute": 0.247628525307166,
+          "maximumPressureBarAbsolute": 34.7307414699294
+        }
+      }
+    },
+    "r508a": {
+      "coolPropFluid": "R508A.mix",
+      "modelMinimumTemperatureC": -130.76133930689934,
+      "modelReportedTripleTemperatureC": -130.76133930689934,
+      "effectiveLowerBoundC": -130.76133930689934,
+      "modelMaximumTemperatureC": 179.72884831780993,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -129.76133930689934,
+      "searchMaximumTemperatureC": 179.72884831780993,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -129.7613393069,
+          "maximumTemperatureC": -4.7613393069,
+          "minimumPressureBarAbsolute": 0.0379048810303479,
+          "maximumPressureBarAbsolute": 24.9568195513445
+        },
+        "dew": {
+          "minimumTemperatureC": -129.7613393069,
+          "maximumTemperatureC": -4.7613393069,
+          "minimumPressureBarAbsolute": 0.0352173247372454,
+          "maximumPressureBarAbsolute": 24.8207439892456
+        }
+      }
+    },
+    "r508b": {
+      "coolPropFluid": "R508B.mix",
+      "modelMinimumTemperatureC": -134.57144544907467,
+      "modelReportedTripleTemperatureC": -134.57144544907467,
+      "effectiveLowerBoundC": -134.57144544907467,
+      "modelMaximumTemperatureC": 183.1875503350352,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -133.57144544907467,
+      "searchMaximumTemperatureC": 183.1875503350352,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -133.5714454491,
+          "maximumTemperatureC": -3.5714454491,
+          "minimumPressureBarAbsolute": 0.0252336311436949,
+          "maximumPressureBarAbsolute": 25.9141626266206
+        },
+        "dew": {
+          "minimumTemperatureC": -133.5714454491,
+          "maximumTemperatureC": -3.5714454491,
+          "minimumPressureBarAbsolute": 0.0206748530129311,
+          "maximumPressureBarAbsolute": 25.9077901285422
+        }
+      }
+    },
+    "r509a": {
+      "coolPropFluid": "R509A.mix",
+      "modelMinimumTemperatureC": -153.83128084268736,
+      "modelReportedTripleTemperatureC": -153.83128084268736,
+      "effectiveLowerBoundC": -153.83128084268736,
+      "modelMaximumTemperatureC": 236.2369231168325,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -152.83128084268736,
+      "searchMaximumTemperatureC": 236.2369231168325,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -137.8312808427,
+          "maximumTemperatureC": 57.1687191573,
+          "minimumPressureBarAbsolute": 0.000363234165116333,
+          "maximumPressureBarAbsolute": 26.6863290991562
+        },
+        "dew": {
+          "minimumTemperatureC": -152.8312808427,
+          "maximumTemperatureC": 57.1687191573,
+          "minimumPressureBarAbsolute": 1.67308103039048e-05,
+          "maximumPressureBarAbsolute": 26.6856799158475
+        }
+      }
+    },
+    "r510a": {
+      "coolPropFluid": "R510A.mix",
+      "modelMinimumTemperatureC": -143.23891126456536,
+      "modelReportedTripleTemperatureC": -143.23891126456536,
+      "effectiveLowerBoundC": -143.23891126456536,
+      "modelMaximumTemperatureC": 256.72705316387476,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -142.23891126456536,
+      "searchMaximumTemperatureC": 256.72705316387476,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -142.2389112646,
+          "maximumTemperatureC": 107.7610887354,
+          "minimumPressureBarAbsolute": 2.19899584814205e-05,
+          "maximumPressureBarAbsolute": 37.3790359248074
+        },
+        "dew": {
+          "minimumTemperatureC": -142.2389112646,
+          "maximumTemperatureC": 112.7610887354,
+          "minimumPressureBarAbsolute": 2.05507239434975e-05,
+          "maximumPressureBarAbsolute": 40.8091614511926
+        }
+      }
+    },
+    "r511a": {
+      "coolPropFluid": "R511A.mix",
+      "modelMinimumTemperatureC": -185.41229571049462,
+      "modelReportedTripleTemperatureC": -185.41229571049462,
+      "effectiveLowerBoundC": -185.41229571049462,
+      "modelMaximumTemperatureC": 370.854811180488,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -184.41229571049462,
+      "searchMaximumTemperatureC": 370.854811180488,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -174.4122957105,
+          "maximumTemperatureC": 75.5877042895,
+          "minimumPressureBarAbsolute": 1.68979867024833e-07,
+          "maximumPressureBarAbsolute": 28.9534366620157
+        },
+        "dew": {
+          "minimumTemperatureC": -159.4122957105,
+          "maximumTemperatureC": 75.5877042895,
+          "minimumPressureBarAbsolute": 7.31804463125546e-06,
+          "maximumPressureBarAbsolute": 28.9498560079158
+        }
+      }
+    },
+    "r512a": {
+      "coolPropFluid": "R512A.mix",
+      "modelMinimumTemperatureC": -118.08621367524344,
+      "modelReportedTripleTemperatureC": -118.08621367524344,
+      "effectiveLowerBoundC": -118.08621367524344,
+      "modelMaximumTemperatureC": 225.36730643466063,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -117.08621367524344,
+      "searchMaximumTemperatureC": 225.36730643466063,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -117.0862136752,
+          "maximumTemperatureC": 92.9137863248,
+          "minimumPressureBarAbsolute": 0.000763816811726361,
+          "maximumPressureBarAbsolute": 30.5902897594077
+        },
+        "dew": {
+          "minimumTemperatureC": -117.0862136752,
+          "maximumTemperatureC": 92.9137863248,
+          "minimumPressureBarAbsolute": 0.000718174902826125,
+          "maximumPressureBarAbsolute": 30.5871367443731
+        }
+      }
+    },
+    "r513a": {
+      "coolPropFluid": "R513A.mix",
+      "modelMinimumTemperatureC": -76.5988483401238,
+      "modelReportedTripleTemperatureC": -76.5988483401238,
+      "effectiveLowerBoundC": -76.5988483401238,
+      "modelMaximumTemperatureC": 157.89084098316192,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -75.5988483401238,
+      "searchMaximumTemperatureC": 157.89084098316192,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -75.5988483401,
+          "maximumTemperatureC": 79.4011516599,
+          "minimumPressureBarAbsolute": 0.0716583392150146,
+          "maximumPressureBarAbsolute": 26.4834875482416
+        },
+        "dew": {
+          "minimumTemperatureC": -75.5988483401,
+          "maximumTemperatureC": 74.4011516599,
+          "minimumPressureBarAbsolute": 0.0693235653905985,
+          "maximumPressureBarAbsolute": 23.8303313051687
+        }
+      }
+    },
+    "r513b": {
+      "coolPropFluid": "HEOS::R1234yf[0.55775520100410925]&R134a[0.4422447989958907]",
+      "modelMinimumTemperatureC": -75.3285766696439,
+      "modelReportedTripleTemperatureC": -75.3285766696439,
+      "effectiveLowerBoundC": -75.3285766696439,
+      "modelMaximumTemperatureC": 156.7510159548151,
+      "modelCriticalTemperatureC": null,
+      "searchMinimumTemperatureC": -74.3285766696439,
+      "searchMaximumTemperatureC": 156.7510159548151,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "validated_solver_interval_below_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -74.3285766696,
+          "maximumTemperatureC": 75.6714233304,
+          "minimumPressureBarAbsolute": 0.0791050220532992,
+          "maximumPressureBarAbsolute": 24.455157887812
+        },
+        "dew": {
+          "minimumTemperatureC": -74.3285766696,
+          "maximumTemperatureC": 75.6714233304,
+          "minimumPressureBarAbsolute": 0.0769351240679327,
+          "maximumPressureBarAbsolute": 24.4435009706917
+        }
+      }
+    },
+    "r600": {
+      "coolPropFluid": "R600",
+      "modelMinimumTemperatureC": -138.25499999999997,
+      "modelReportedTripleTemperatureC": -138.25499999999997,
+      "effectiveLowerBoundC": -138.25499999999997,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 151.97500000000804,
+      "searchMinimumTemperatureC": -137.25499999999997,
+      "searchMaximumTemperatureC": 148.97500000000804,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -137.255,
+          "maximumTemperatureC": 148.975,
+          "minimumPressureBarAbsolute": 8.04104485679763e-06,
+          "maximumPressureBarAbsolute": 36.1335870791869
+        },
+        "dew": {
+          "minimumTemperatureC": -137.255,
+          "maximumTemperatureC": 148.975,
+          "minimumPressureBarAbsolute": 8.04104485679763e-06,
+          "maximumPressureBarAbsolute": 36.1335870791869
+        }
+      }
+    },
+    "r600a": {
+      "coolPropFluid": "R600A",
+      "modelMinimumTemperatureC": -159.41999999999996,
+      "modelReportedTripleTemperatureC": -159.41999999999996,
+      "effectiveLowerBoundC": -159.41999999999996,
+      "modelMaximumTemperatureC": 301.85,
+      "modelCriticalTemperatureC": 134.66000000000463,
+      "searchMinimumTemperatureC": -158.41999999999996,
+      "searchMaximumTemperatureC": 131.66000000000463,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -158.42,
+          "maximumTemperatureC": 131.58,
+          "minimumPressureBarAbsolute": 2.96079086933227e-07,
+          "maximumPressureBarAbsolute": 34.4733368405172
+        },
+        "dew": {
+          "minimumTemperatureC": -158.42,
+          "maximumTemperatureC": 131.58,
+          "minimumPressureBarAbsolute": 2.96079086933227e-07,
+          "maximumPressureBarAbsolute": 34.4733368405172
+        }
+      }
+    },
+    "r601": {
+      "coolPropFluid": "R601",
+      "modelMinimumTemperatureC": -129.67999999999998,
+      "modelReportedTripleTemperatureC": -129.67999999999998,
+      "effectiveLowerBoundC": -129.67999999999998,
+      "modelMaximumTemperatureC": 376.85,
+      "modelCriticalTemperatureC": 196.54999987111665,
+      "searchMinimumTemperatureC": -128.67999999999998,
+      "searchMaximumTemperatureC": 193.54999987111665,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -128.68,
+          "maximumTemperatureC": 193.5499998711,
+          "minimumPressureBarAbsolute": 9.52790736409506e-07,
+          "maximumPressureBarAbsolute": 32.1524924237773
+        },
+        "dew": {
+          "minimumTemperatureC": -128.68,
+          "maximumTemperatureC": 193.5499998711,
+          "minimumPressureBarAbsolute": 9.52790736409506e-07,
+          "maximumPressureBarAbsolute": 32.1524924237773
+        }
+      }
+    },
+    "r601a": {
+      "coolPropFluid": "R601a",
+      "modelMinimumTemperatureC": -160.49999999999997,
+      "modelReportedTripleTemperatureC": -160.49999999999997,
+      "effectiveLowerBoundC": -160.49999999999997,
+      "modelMaximumTemperatureC": 226.85000000000002,
+      "modelCriticalTemperatureC": 187.19979471144592,
+      "searchMinimumTemperatureC": -159.49999999999997,
+      "searchMaximumTemperatureC": 184.19979471144592,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -159.5,
+          "maximumTemperatureC": 184.1997947114,
+          "minimumPressureBarAbsolute": 1.24000769964001e-09,
+          "maximumPressureBarAbsolute": 32.2514145427965
+        },
+        "dew": {
+          "minimumTemperatureC": -159.5,
+          "maximumTemperatureC": 184.1997947114,
+          "minimumPressureBarAbsolute": 1.24000769964001e-09,
+          "maximumPressureBarAbsolute": 32.2514145427965
+        }
+      }
+    },
+    "r702": {
+      "coolPropFluid": "R702",
+      "modelMinimumTemperatureC": -259.193,
+      "modelReportedTripleTemperatureC": -259.193,
+      "effectiveLowerBoundC": -259.193,
+      "modelMaximumTemperatureC": 726.85,
+      "modelCriticalTemperatureC": -240.00566731168868,
+      "searchMinimumTemperatureC": -258.6372666189636,
+      "searchMaximumTemperatureC": -240.66855396545492,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -258.637266619,
+          "maximumTemperatureC": -240.6685539655,
+          "minimumPressureBarAbsolute": 0.100139080109195,
+          "maximumPressureBarAbsolute": 11.7649905072929
+        },
+        "dew": {
+          "minimumTemperatureC": -258.637266619,
+          "maximumTemperatureC": -240.6685539655,
+          "minimumPressureBarAbsolute": 0.100139080109195,
+          "maximumPressureBarAbsolute": 11.7649905072929
+        }
+      }
+    },
+    "r704": {
+      "coolPropFluid": "R704",
+      "modelMinimumTemperatureC": -270.97319999999996,
+      "modelReportedTripleTemperatureC": -270.97319999999996,
+      "effectiveLowerBoundC": -270.97319999999996,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -267.954699986364,
+      "searchMinimumTemperatureC": -270.88576217959906,
+      "searchMaximumTemperatureC": -268.05860598663673,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -270.8857621796,
+          "maximumTemperatureC": -268.0586059866,
+          "minimumPressureBarAbsolute": 0.0620131517952676,
+          "maximumPressureBarAbsolute": 2.10702667996259
+        },
+        "dew": {
+          "minimumTemperatureC": -270.8857621796,
+          "maximumTemperatureC": -268.0586059866,
+          "minimumPressureBarAbsolute": 0.0620131517952676,
+          "maximumPressureBarAbsolute": 2.10702667996259
+        }
+      }
+    },
+    "r717": {
+      "coolPropFluid": "R717",
+      "modelMinimumTemperatureC": -77.65499999999997,
+      "modelReportedTripleTemperatureC": -77.65499999999997,
+      "effectiveLowerBoundC": -77.65499999999997,
+      "modelMaximumTemperatureC": 451.85,
+      "modelCriticalTemperatureC": 132.40999997326355,
+      "searchMinimumTemperatureC": -76.65499999999997,
+      "searchMaximumTemperatureC": 129.40999997326355,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -76.655,
+          "maximumTemperatureC": 129.4099999733,
+          "minimumPressureBarAbsolute": 0.0655818848107642,
+          "maximumPressureBarAbsolute": 107.752169408719
+        },
+        "dew": {
+          "minimumTemperatureC": -76.655,
+          "maximumTemperatureC": 129.4099999733,
+          "minimumPressureBarAbsolute": 0.0655818848107642,
+          "maximumPressureBarAbsolute": 107.752169408719
+        }
+      }
+    },
+    "r718": {
+      "coolPropFluid": "R718",
+      "modelMinimumTemperatureC": 0.010000000000047748,
+      "modelReportedTripleTemperatureC": 0.010000000000047748,
+      "effectiveLowerBoundC": 0.010000000000047748,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": 373.9459999999873,
+      "searchMinimumTemperatureC": 1.0100000000000477,
+      "searchMaximumTemperatureC": 370.9459999999873,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": 1.01,
+          "maximumTemperatureC": 370.946,
+          "minimumPressureBarAbsolute": 0.0065755938383615,
+          "maximumPressureBarAbsolute": 212.833334373748
+        },
+        "dew": {
+          "minimumTemperatureC": 1.01,
+          "maximumTemperatureC": 370.946,
+          "minimumPressureBarAbsolute": 0.0065755938383615,
+          "maximumPressureBarAbsolute": 212.833334373748
+        }
+      }
+    },
+    "r720": {
+      "coolPropFluid": "R720",
+      "modelMinimumTemperatureC": -248.58999999999997,
+      "modelReportedTripleTemperatureC": -248.58999999999997,
+      "effectiveLowerBoundC": -248.58999999999997,
+      "modelMaximumTemperatureC": 451.85,
+      "modelCriticalTemperatureC": -228.75000029501308,
+      "searchMinimumTemperatureC": -248.02144000867335,
+      "searchMaximumTemperatureC": -229.6380002891128,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -248.0214400087,
+          "maximumTemperatureC": -229.6380002891,
+          "minimumPressureBarAbsolute": 0.532952356372711,
+          "maximumPressureBarAbsolute": 23.7272841507267
+        },
+        "dew": {
+          "minimumTemperatureC": -248.0214400087,
+          "maximumTemperatureC": -229.6380002891,
+          "minimumPressureBarAbsolute": 0.532952356372711,
+          "maximumPressureBarAbsolute": 23.7272841507267
+        }
+      }
+    },
+    "r728": {
+      "coolPropFluid": "R728",
+      "modelMinimumTemperatureC": -209.99899999999997,
+      "modelReportedTripleTemperatureC": -209.99899999999997,
+      "effectiveLowerBoundC": -209.99899999999997,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -146.95800000041442,
+      "searchMinimumTemperatureC": -208.99899999999997,
+      "searchMaximumTemperatureC": -149.48184000040612,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -208.999,
+          "maximumTemperatureC": -149.4818400004,
+          "minimumPressureBarAbsolute": 0.150003963502184,
+          "maximumPressureBarAbsolute": 30.0755320654052
+        },
+        "dew": {
+          "minimumTemperatureC": -208.999,
+          "maximumTemperatureC": -149.4818400004,
+          "minimumPressureBarAbsolute": 0.150003963502184,
+          "maximumPressureBarAbsolute": 30.0755320654052
+        }
+      }
+    },
+    "r729": {
+      "coolPropFluid": "R729",
+      "modelMinimumTemperatureC": -213.39999999999998,
+      "modelReportedTripleTemperatureC": -213.39999999999998,
+      "effectiveLowerBoundC": -213.39999999999998,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -140.61939999999998,
+      "searchMinimumTemperatureC": -212.39999999999998,
+      "searchMaximumTemperatureC": -143.27001199999998,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -212.4,
+          "maximumTemperatureC": -143.270012,
+          "minimumPressureBarAbsolute": 0.0646407662139354,
+          "maximumPressureBarAbsolute": 34.1190377369055
+        },
+        "dew": {
+          "minimumTemperatureC": -212.4,
+          "maximumTemperatureC": -143.270012,
+          "minimumPressureBarAbsolute": 0.0308806615332202,
+          "maximumPressureBarAbsolute": 32.8939306204217
+        }
+      }
+    },
+    "r732": {
+      "coolPropFluid": "R732",
+      "modelMinimumTemperatureC": -218.789,
+      "modelReportedTripleTemperatureC": -218.789,
+      "effectiveLowerBoundC": -218.789,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -118.55061016471444,
+      "searchMinimumTemperatureC": -217.789,
+      "searchMaximumTemperatureC": -121.64259796142017,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -217.789,
+          "maximumTemperatureC": -121.6425979614,
+          "minimumPressureBarAbsolute": 0.00199435848195378,
+          "maximumPressureBarAbsolute": 44.7578156815891
+        },
+        "dew": {
+          "minimumTemperatureC": -217.789,
+          "maximumTemperatureC": -121.6425979614,
+          "minimumPressureBarAbsolute": 0.00199435848195378,
+          "maximumPressureBarAbsolute": 44.7578156815891
+        }
+      }
+    },
+    "r740": {
+      "coolPropFluid": "R740",
+      "modelMinimumTemperatureC": -189.344,
+      "modelReportedTripleTemperatureC": -189.344,
+      "effectiveLowerBoundC": -189.344,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": -122.46299999998939,
+      "searchMinimumTemperatureC": -188.344,
+      "searchMaximumTemperatureC": -125.4767399999896,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -188.344,
+          "maximumTemperatureC": -125.47674,
+          "minimumPressureBarAbsolute": 0.77199044335306,
+          "maximumPressureBarAbsolute": 43.2404148020219
+        },
+        "dew": {
+          "minimumTemperatureC": -188.344,
+          "maximumTemperatureC": -125.47674,
+          "minimumPressureBarAbsolute": 0.77199044335306,
+          "maximumPressureBarAbsolute": 43.2404148020219
+        }
+      }
+    },
+    "r744": {
+      "coolPropFluid": "R744",
+      "modelMinimumTemperatureC": -56.557999999999964,
+      "modelReportedTripleTemperatureC": -56.557999999999964,
+      "effectiveLowerBoundC": -56.557999999999964,
+      "modelMaximumTemperatureC": 1726.85,
+      "modelCriticalTemperatureC": 30.978200002980714,
+      "searchMinimumTemperatureC": -55.557999999999964,
+      "searchMaximumTemperatureC": 27.978200002980714,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -55.558,
+          "maximumTemperatureC": 27.978200003,
+          "minimumPressureBarAbsolute": 5.40861265144201,
+          "maximumPressureBarAbsolute": 68.8838781983492
+        },
+        "dew": {
+          "minimumTemperatureC": -55.558,
+          "maximumTemperatureC": 27.978200003,
+          "minimumPressureBarAbsolute": 5.40861265144201,
+          "maximumPressureBarAbsolute": 68.8838781983492
+        }
+      }
+    },
+    "rc318": {
+      "coolPropFluid": "RC318",
+      "modelMinimumTemperatureC": -39.79999999999998,
+      "modelReportedTripleTemperatureC": -39.79999999999998,
+      "effectiveLowerBoundC": -39.79999999999998,
+      "modelMaximumTemperatureC": 349.85,
+      "modelCriticalTemperatureC": 115.22102244269843,
+      "searchMinimumTemperatureC": -38.79999999999998,
+      "searchMaximumTemperatureC": 112.22102244269843,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -38.8,
+          "maximumTemperatureC": 112.2210224427,
+          "minimumPressureBarAbsolute": 0.206053419336258,
+          "maximumPressureBarAbsolute": 26.168272077024
+        },
+        "dew": {
+          "minimumTemperatureC": -38.8,
+          "maximumTemperatureC": 112.2210224427,
+          "minimumPressureBarAbsolute": 0.206053419336258,
+          "maximumPressureBarAbsolute": 26.168272077024
+        }
+      }
+    },
+    "re143a": {
+      "coolPropFluid": "RE143A",
+      "modelMinimumTemperatureC": -33.14999999999998,
+      "modelReportedTripleTemperatureC": -33.14999999999998,
+      "effectiveLowerBoundC": -33.14999999999998,
+      "modelMaximumTemperatureC": 146.85000000000002,
+      "modelCriticalTemperatureC": 104.76757450104975,
+      "searchMinimumTemperatureC": -32.14999999999998,
+      "searchMaximumTemperatureC": 101.76757450104975,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -32.15,
+          "maximumTemperatureC": 101.767574501,
+          "minimumPressureBarAbsolute": 0.685547504635122,
+          "maximumPressureBarAbsolute": 34.3286676714077
+        },
+        "dew": {
+          "minimumTemperatureC": -32.15,
+          "maximumTemperatureC": 101.767574501,
+          "minimumPressureBarAbsolute": 0.685547504635122,
+          "maximumPressureBarAbsolute": 34.3286676714077
+        }
+      }
+    },
+    "re170": {
+      "coolPropFluid": "DimethylEther",
+      "modelMinimumTemperatureC": -141.48999999999998,
+      "modelReportedTripleTemperatureC": -141.48999999999998,
+      "effectiveLowerBoundC": -141.48999999999998,
+      "modelMaximumTemperatureC": 251.85000000000002,
+      "modelCriticalTemperatureC": 127.22799991219063,
+      "searchMinimumTemperatureC": -140.48999999999998,
+      "searchMaximumTemperatureC": 124.22799991219063,
+      "lowerPolicy": "above_model_minimum_and_reported_triple_point",
+      "upperPolicy": "critical_margin_or_model_maximum",
+      "sides": {
+        "bubble": {
+          "minimumTemperatureC": -140.49,
+          "maximumTemperatureC": 124.2279999122,
+          "minimumPressureBarAbsolute": 2.66463281792288e-05,
+          "maximumPressureBarAbsolute": 50.6605201179502
+        },
+        "dew": {
+          "minimumTemperatureC": -140.49,
+          "maximumTemperatureC": 124.2279999122,
+          "minimumPressureBarAbsolute": 2.66463281792288e-05,
+          "maximumPressureBarAbsolute": 50.6605201179502
+        }
+      }
+    }
+  },
   "unsupportedRecords": {
-    "r1123": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r1130e": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r1132a": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r1132e": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r1224ydz": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r1336mzzz": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r31": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r401a": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r401b": "no_exact_coolprop_fluid_or_predefined_mixture",
@@ -56,12 +3824,9 @@
     "r448b": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r449c": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r450a": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r452b": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r452c": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r453a": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r454c": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r454d": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r455a": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r455b": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r455c": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r456a": "no_exact_coolprop_fluid_or_predefined_mixture",
@@ -125,7 +3890,6 @@
     "r505": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r506": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r509": "no_exact_coolprop_fluid_or_predefined_mixture",
-    "r513b": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r514a": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r515a": "no_exact_coolprop_fluid_or_predefined_mixture",
     "r515b": "no_exact_coolprop_fluid_or_predefined_mixture",

@@ -1,5 +1,28 @@
 [
   {
+    "version": "0.3.0-beta.9",
+    "date": "2026-09-30",
+    "channel": "beta",
+    "title": {
+      "fi": "Laajemmat kylmäainemallit ja tarkistetut laskenta-alueet",
+      "en": "Broader refrigerant models and checked calculation ranges"
+    },
+    "changes": {
+      "fi": [
+        "R410A:n lämpöpumppumittaukset toimivat myös 56 °C:ssa. Kaikkien tuettujen aineiden laskenta-alueet on tarkistettu, ja rajailmoitus kertoo käytettävissä olevan alueen.",
+        "Paine–lämpötila- ja log(p)–h-tukea on laajennettu uusilla aineilla. Mallit, seoskoostumukset ja lähdeversiot kulkevat laskennan mukana.",
+        "Seitsemän puuttuvaa kriittisen lämpötilan tai paineen tietoa on täydennetty valmistajalähteistä.",
+        "R1123:n kiehumispiste lisätty tutkimuslähteestä. R1132(E):n kolmoispiste korjattu erilleen mallin alimmasta laskentalämpötilasta."
+      ],
+      "en": [
+        "R410A heat-pump measurements now work at 56 °C. Calculation ranges have been checked for every supported fluid, and out-of-range messages show the supported interval.",
+        "Pressure–temperature and log(p)–h coverage extends to additional refrigerants, with model, mixture composition and source versions retained.",
+        "Seven missing critical-temperature or pressure facts have been added from manufacturer sources.",
+        "Added a research-sourced R1123 boiling point and corrected the R1132(E) physical triple point, keeping it separate from the model lower limit."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.8",
     "date": "2026-09-28",
     "channel": "beta",

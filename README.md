@@ -2,11 +2,11 @@
 
 A source-attributed refrigerant reference and calculation app for refrigeration work. Built with React, strict TypeScript and Vite, with local IndexedDB storage and an installable offline PWA. The interface supports Finnish and English; project documentation is maintained in English.
 
-The stable release **0.2.0** includes the expanded field tools, refrigeration cycle and P–h chart, saved reports and equipment-linked history. The separate public beta is the testing channel for subsequent updates. Beta and stable retain independent browser storage.
+The stable release **0.2.1** includes the expanded field tools, refrigeration cycle and P–h chart, saved reports and equipment-linked history. The separate public beta is the testing channel for subsequent updates. Beta and stable retain independent browser storage.
 
 - **249 refrigerant records**, including legacy, ODS, natural and newer blends. Coverage is explicit: this is not a complete inventory of every refrigerant or property.
-- Bidirectional pressure–temperature conversion for **124 refrigerants**.
-- A combined refrigeration-cycle tool: LP/HP, suction, hot gas and liquid temperatures; superheat, subcooling and a log(p)–h diagram for **113 supported refrigerants**. Saved reports retain a frozen chart and can be exported as PNG.
+- Bidirectional pressure–temperature conversion for **134 refrigerants**.
+- A combined refrigeration-cycle tool: LP/HP, suction, hot gas and liquid temperatures; superheat, subcooling and a log(p)–h diagram for **131 supported refrigerants**. Saved reports retain a frozen chart and can be exported as PNG.
 - kg ↔ t CO₂e conversion using a visible, source-backed GWP basis and source-gated component breakdown.
 - EU/Finland periodic leak-check assessment, contextual restrictions and effective dates, completed-inspection-based next due date and shareable explanation.
 - Search with regulation/model/oil filters, favourites and comparison.

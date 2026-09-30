@@ -8,12 +8,18 @@ phase boundary. The browser receives static coordinates, not CoolProp code.
 import hashlib
 import json
 import math
+import sys
 import os
+from datetime import date
 from pathlib import Path
 
 import CoolProp.CoolProp as cp
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "data"))
+from coolprop_runtime import load_supplement
+
+MODEL_SUPPLEMENT = load_supplement()
 GRIDS = json.loads((ROOT / "packages/core/generated/ph-grids.json").read_text())
 assert cp.get_global_param_string("version") == "7.2.0"
 assert cp.get_global_param_string("gitrevision") == GRIDS["coolPropGitRevision"]
@@ -40,6 +46,14 @@ def state_at_pressure(fluid, plane, kind, level, phase):
         return None
     sat = plane["dewTemperatureC"] if phase == "vapour" else plane["bubbleTemperatureC"]
     offset = temperature - 273.15 - sat if phase == "vapour" else sat - (temperature - 273.15)
+    # An interpolated dome plane must not hide a failed saturation flash at
+    # this exact pressure (including midpoint guide samples).
+    source_sat = props("T", fluid, "P", p, "Q", 1 if phase == "vapour" else 0)
+    if source_sat is None:
+        return None
+    source_offset = temperature - source_sat if phase == "vapour" else source_sat - temperature
+    if source_offset < 1:
+        return None
     samples = plane["sides"][phase]
     # The published single-phase grid starts at 1 K from saturation and ends
     # at the final validated offset for this pressure plane.
@@ -129,9 +143,10 @@ for rid, grid in GRIDS["grids"].items():
 digest = hashlib.sha256(json.dumps(output_grids, sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:16]
 output = {
     "schema": "phasekit-ph-isolines-1",
-    "dataVersion": f"ph-isolines-2026-09-26.{digest}",
+    "dataVersion": f"ph-isolines-{date.today().isoformat()}.{digest}",
     "phGridVersion": GRIDS["dataVersion"],
     "sourceId": GRIDS["sourceId"],
+    "modelSupplement": MODEL_SUPPLEMENT,
     "coolPropGitRevision": GRIDS["coolPropGitRevision"],
     "interpolation": "direct HEOS states, log-pressure midpoint error <= 2 kJ/kg; single-phase segments only",
     "curves": output_grids,

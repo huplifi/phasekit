@@ -1,12 +1,12 @@
 {
-  "dataVersion": "ph-2026-09-25.d8daa2309a3dda04",
-  "withheldChecks": 29741,
+  "dataVersion": "ph-2026-09-30.977a84b0f42241a4",
+  "withheldChecks": 34433,
   "failedSourceEvaluations": 0,
   "maximumAbsoluteEnthalpyErrorKJkg": [
     1.8958798098718717,
     "r1270:vapour:33.5713 bar:delta 2 K"
   ],
-  "percentile99AbsoluteEnthalpyErrorKJkg": 0.5695994203601913,
+  "percentile99AbsoluteEnthalpyErrorKJkg": 0.6011353020234083,
   "acceptanceMaximumAbsoluteEnthalpyErrorKJkg": 2,
   "casesOver2KJkg": 0,
   "validationMethod": "midpoint of adjacent log-pressure planes, off-grid temperature offsets against CoolProp Hmass(P,T)"
