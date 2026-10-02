@@ -1,7 +1,7 @@
 import { Coverage } from "./views/Coverage";
 import { Symbols } from "./views/Symbols";
 import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   Snowflake,
@@ -252,9 +252,11 @@ export function App() {
           : "/phasekit-logo-light.svg",
       );
   }, [theme, data.locale]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     mainRef.current?.focus();
     window.scrollTo(0, 0);
+  }, [path, ready]);
+  useEffect(() => {
     const [section, id] = path.split("/").slice(1);
     if (!ready) return;
     if (section === "refrigerants" && byId.has(id))

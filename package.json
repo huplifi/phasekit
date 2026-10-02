@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "verify": "pnpm data:validate && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e",
     "data:add": "node --import tsx packages/refrigerant-data/scripts/cli.ts add",
     "data:validate": "node --import tsx packages/refrigerant-data/scripts/cli.ts validate",
     "data:build": "node --import tsx packages/refrigerant-data/scripts/cli.ts build",

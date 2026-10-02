@@ -28,3 +28,11 @@ Tulostus, paluu ja kaaviokuvan latauksen odotus suoritetaan nyt esikatselun omas
 - Ainetietonäkymän axe-tarkistus läpäisty. Termodynamiikka- ja GWP-osioiden mobiili-WebKit-kuvat tarkistettu.
 
 Fyysisen iPhonen tulostusvalinnan/AirPrintin avautuminen sekä asennetun PWA:n käytännön tulostus on vielä varmistettava laitteella. Selaintestien tulostuskutsun varmennus ei yksin todista sitä.
+
+## Julkaisutarkistuksissa löytyneet korjaukset
+
+- Linuxin mobiili-Chromiumissa CO₂e-laskurin painike ulottui noin 10 px alavalikon alle. Lomakkeen mobiiliväleistä poistettiin 24 px; kontrollien kokoa ja näkyvyysvaatimusta ei pienennetty.
+- WebKitin epäonnistuneessa jäljessä Täytös oli tyhjä heti täyttökomennon jälkeen. Erillinen kohdistuskoe vanhassa Deploy Preview'ssa osoitti järjestyksen `main → input → main`; korjatussa versiossa järjestys on `main → input`. Navigaation kohdistus ja vieritys tehdään nyt layout-efektissä ennen käyttökelpoisen lomakkeen piirtämistä. Sama ajoitus tarkistetaan erillisellä regressiotestillä neljässä selainprofiilissa.
+- CI:n saman työhaaran push- ja PR-tupla-ajot poistettiin. PR-päivitys käynnistää yhden tarkistuksen, beta/main-pushit omat tarkistuksensa; uusi versio keskeyttää vanhentuneen ajon.
+- `pnpm verify` kokoaa paikalliset julkaisutarkistukset yhdeksi komennoksi. Retry-määrää tai hyväksymisrajoja ei väljennetty. Linux-CI säilyy pakollisena ennen julkaisua.
+- Koko paikallinen selainajo: 433 läpi, 2 tarkoituksella ohitettu. Viidessä testissä päällekkäinen paikallinen testiajo poisti trace-tiedoston (`ENOENT`); kaikki viisi läpäisivät puhtaan uusinta-ajon. Uusi kohdistusregressio läpäisi erikseen kaikki neljä selainprofiilia. Linux-CI tarkistetaan erikseen.

@@ -622,7 +622,7 @@ export function Calculator({
       )}
       <RefrigerantPicker value={id} onChange={selectId} />
       <form
-        className="calculator-form"
+        className={`calculator-form${tool === "co2e" ? " co2e-form" : ""}`}
         onSubmit={(e) => {
           e.preventDefault();
           calculate();

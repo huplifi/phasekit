@@ -244,6 +244,12 @@
   }
 }
 @media (max-width: 620px) {
+  .calculator-form.co2e-form {
+    margin-top: 16px;
+  }
+  .co2e-form .co2e-quantity {
+    margin-top: 12px;
+  }
   .calculator-form .shsc-unit-settings {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

@@ -14,6 +14,7 @@ Compact refrigerant details and independent print controls
 - Coverage opens in an app view with refrigerant-specific details and a back button.
 - Cycle temperature inputs sit on the left on phones. The heading information button is aligned correctly.
 - Print controls and chart loading run in the preview window independently of a suspended opener. The physical iPhone print dialog still needs device testing.
+- The CO₂e calculator leaves more room for Calculate on phones. Initial navigation no longer takes focus away while the first input is being filled.
 
 ## 0.4.0-beta.1 — 2026-10-02 · Beta
 
