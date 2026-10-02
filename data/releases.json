@@ -1,5 +1,22 @@
 [
   {
+    "version": "0.4.0-beta.5",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Kevyempi beta-ilmoitus",
+      "en": "A lighter beta notice"
+    },
+    "changes": {
+      "fi": [
+        "Beta-ilmoituksen Versiohistoria ja Vakaa versio ovat yhtenäisiä tekstilinkkejä. Napautusalueet säilyvät riittävän suurina."
+      ],
+      "en": [
+        "Release history and Stable version use matching text links in the beta notice, retaining generous touch targets."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.4",
     "date": "2026-10-02",
     "channel": "beta",

@@ -198,14 +198,16 @@ strong.mono {
 .beta-banner-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0 20px;
 }
-.beta-banner .secondary-button {
+.beta-banner-actions a {
+  display: inline-flex;
+  align-items: center;
   min-height: 44px;
-  padding: 8px 10px;
   gap: 6px;
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .beta-banner p {
   margin: 0;
