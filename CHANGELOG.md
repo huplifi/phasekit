@@ -11,6 +11,8 @@ Consistent refrigerant details and contextual help
 - Blend chemical names use Refrigerant blend. Missing property values consistently show Data unavailable.
 - Property and source disclosure content aligns with the heading text.
 - Oil guidance opens below its heading. Information icons sit closer to their labels throughout the app while retaining their touch target size.
+- Settings actions align to the left. Coverage buttons no longer have link underlines, and the version number alone links to release history.
+- Feedback has a distinct button with a clear GitHub destination.
 
 ## 0.4.0-beta.3 — 2026-10-02 · Beta
 
