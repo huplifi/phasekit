@@ -64,3 +64,12 @@ Käyttäjä pyysi myös offline-puutteen korjaamista. Tulostuksen ohjauskoodi tu
 - Fyysisen iPhonen AirPrint-valinta on edelleen laitteella varmennettava.
 
 Beta.3 julkaistiin PR:llä 23, commit `5b886b0` (sama Git-puu kuin paikallisesti testatussa `5c1f859`-ehdokkaassa). Julkisessa https://beta.phasekit.app-osoitteessa varmennettiin näkyvä versio sekä mobiili-Chromiumilla offline-uudelleenlataus, offline-tulostuspainikkeen aktivoituminen, tulostuskutsu ja paluu ehjään raporttiin. Ensimmäinen live-WebKit-koe katkesi selaimen sisäiseen virheeseen offline-uudelleenlatauksessa ennen tulostusta; sitä ei lasketa läpäistyksi. WebKitin neljä kohdennettua paikallista tulostustapausta läpäisivät. Esikatselubuildia ei tehty; mergen automaattinen laaja CI-ajo 37008090934 keskeytettiin sovitun rajauksen mukaisesti. Vakaan main-haaran koodia ei muutettu.
+
+## Ainetietojen viimeistely 0.4.0-beta.4
+
+- Seoksen kemiallinen nimi on lyhyesti Kylmäaineseos. Puuttuvien arvojen teksti on Tieto puuttuu (englanniksi Data unavailable); taustan tilat ja Ei sovellu / Ei liukumaa -erottelu säilyvät.
+- Lähde- ja lisätietohaitarien chevron peri 8 px ylimääräisen marginaalin. Sen poisto linjaa sisällön otsikon tekstin kanssa.
+- Öljyohjeen painike avasi sisällön, mutta puuttuva asemointikonteksti sijoitti sen ruudun ulkopuolelle: ennen korjausta tooltipin y oli −1686 px, otsikon y 526 px. Öljyotsikko toimii nyt ankkurina. Tooltipin y on 576 px, otsikon alareuna 570 px.
+- Infoikonit on tuotu 9 px lähemmäs tekstiä yhteisessä tyylissä. 44 × 44 px napautusalue säilyy.
+- TypeScript, muutettujen tiedostojen ESLint, versiohistorian muodostus ja tuotantokooste läpäistiin. Yksi mobiili-WebKit-katselmointi varmisti napautuksen, sulkemisen, tooltipin näkyvyyden, haitarien otsikko/sisältölinjaukset ja tekstit; kuvat tarkastettiin. Nykyisen ainetietotestin odotukset päivitettiin.
+- Käyttäjän vähäisen testauksen ja build-kustannusten rajauksen mukaisesti tämä pieni esitystapakorjaus käyttää beta.3:n kohdennettua julkaisumenettelyä: ei laajaa CI-uusintakierrosta eikä Netlify-esikatselua, yksi beta-build. Fyysisen iPhonen toiminta jää käyttäjän laitetestiin.

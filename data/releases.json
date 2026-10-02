@@ -1,5 +1,26 @@
 [
   {
+    "version": "0.4.0-beta.4",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Yhtenäiset ainetiedot ja toimivat info-ohjeet",
+      "en": "Consistent refrigerant details and contextual help"
+    },
+    "changes": {
+      "fi": [
+        "Seoksen kemiallinen nimi näkyy muodossa Kylmäaineseos. Puuttuvien ominaisuustietojen merkintä on yhtenäisesti Tieto puuttuu.",
+        "Lisätieto- ja lähdehaitarien sisältö on linjattu otsikkotekstin kanssa.",
+        "Öljyosion infoteksti avautuu otsikon alle. Infoikonit ovat kautta sovelluksen lähempänä tekstiä, ja napautusalueen koko säilyy ennallaan."
+      ],
+      "en": [
+        "Blend chemical names use Refrigerant blend. Missing property values consistently show Data unavailable.",
+        "Property and source disclosure content aligns with the heading text.",
+        "Oil guidance opens below its heading. Information icons sit closer to their labels throughout the app while retaining their touch target size."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.3",
     "date": "2026-10-02",
     "channel": "beta",

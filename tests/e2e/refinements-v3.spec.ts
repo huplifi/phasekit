@@ -146,20 +146,23 @@ test("property labels distinguish verified absence from missing classifications"
   await page.goto("/#/refrigerants/r1243zf");
   const overview = page.locator(".facts.overview");
   await expect(overview).toContainText("HFO");
-  await expect(overview).toContainText("Luokitus puuttuu aineistosta");
+  await expect(overview).toContainText("Tieto puuttuu");
 
   await page.getByRole("tab", { name: "Ominaisuudet", exact: true }).click();
   const panel = page.locator("#detail-panel");
   await expect(panel.getByText("Ei liukumaa", { exact: true })).toBeVisible();
   await expect(
-    panel.getByText("Tieto puuttuu aineistosta", { exact: true }).first(),
+    panel.getByText("Tieto puuttuu", { exact: true }).first(),
   ).toBeVisible();
   await expect(
     panel.getByRole("term").filter({ hasText: /^PED-fluidiryhmä$/ }),
   ).toBeVisible();
   await expect(
-    panel.getByText("Luokitus puuttuu aineistosta", { exact: true }),
-  ).toHaveCount(2);
+    panel
+      .getByRole("term")
+      .filter({ hasText: /^PED-fluidiryhmä$/ })
+      .locator("+ dd"),
+  ).toHaveText("Tieto puuttuu");
   await expect(panel).not.toContainText("Ei syty");
 });
 
