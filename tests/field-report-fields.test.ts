@@ -1,9 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   checklistDefinitions,
+  checklistEditorFields,
   checklistReportFields,
   checklistText,
+  combinedReportNotes,
   commissioningMissingFields,
+  commissioningProtocolStatus,
+  updateCombinedReportNotes,
   updateCommissioningFields,
   type ChecklistDraft,
 } from "../packages/core/src/field-tools";
@@ -22,6 +26,21 @@ const draft = (
 });
 
 describe("structured field reports", () => {
+  it("hides optional old evacuation duration in new forms and retains saved values", () => {
+    for (const kind of ["evacuation", "commissioning"] as const) {
+      expect(
+        checklistEditorFields(draft(kind)).map((field) => field.id),
+      ).not.toContain("evacuationMinutes");
+      const old = draft(kind, { evacuationMinutes: "35" });
+      expect(checklistEditorFields(old).map((field) => field.id)).toContain(
+        "evacuationMinutes",
+      );
+      expect(checklistReportFields(old).map((field) => field.id)).toContain(
+        "evacuationMinutes",
+      );
+      expect(checklistText(old, "fi")).toContain("35");
+    }
+  });
   it("keeps old free text byte-for-byte without guessing structured values", () => {
     const old = draft("evacuation", {
       date: "26.9.2026 Samu",
@@ -46,7 +65,6 @@ describe("structured field reports", () => {
         "performedOn",
         "technician",
         "achievedPressure",
-        "evacuationMinutes",
         "holdStartPressure",
         "holdEndPressure",
         "holdMinutes",
@@ -127,7 +145,9 @@ describe("structured field reports", () => {
   it("requires explicit commissioning certificate records without treating readings as protocol approval", () => {
     const complete = {
       equipment: "SN-123",
+      performedOn: "2026-10-02",
       technician: "Installer",
+      installationLocation: "Test site",
       installerCompany: "Test Company",
       installerQualificationNumber: "INST-1",
       responsiblePerson: "Responsible person",
@@ -144,6 +164,7 @@ describe("structured field reports", () => {
       evacuationReportReference: "Annex V-1",
       operatorDeclaration: "confirmed",
       pressureTestRequired: "no",
+      pressureAssessmentBasis: "equipment_documents",
       pressureTestExemptionReason: "Documented equipment assessment",
     };
     expect(commissioningMissingFields(complete)).toEqual([]);
@@ -186,10 +207,11 @@ describe("structured field reports", () => {
         dischargeC: "60",
         liquidC: "20",
       }).map((field) => field.id),
-    ).toContain("testRunReportReference");
+    ).toContain("conditions");
     const inline = {
       ...complete,
       evacuationReportReference: "",
+      targetPressure: "1",
       achievedPressure: "1",
       holdStartPressure: "1",
       holdEndPressure: "1.2",
@@ -198,7 +220,7 @@ describe("structured field reports", () => {
     };
     expect(
       commissioningMissingFields(inline).map((field) => field.id),
-    ).toContain("evacuationReportReference");
+    ).toContain("holdAcceptanceCriterion");
     expect(
       commissioningMissingFields({
         ...inline,
@@ -208,6 +230,70 @@ describe("structured field reports", () => {
         evacuationFinding: "Results compared to instruction",
       }),
     ).toEqual([]);
+  });
+  it("uses explicit internal or external protocol modes and retains hidden saved fields in export", () => {
+    const record = draft("commissioning", {
+      commissioningPurpose: "installation",
+      tightnessRecordMode: "external",
+      tightnessTestReportReference: "Annex T-1",
+      tightnessMedium: "Nitrogen",
+      evacuationRecordMode: "internal",
+      evacuationReportReference: "Old annex V-1",
+    });
+    const modes = commissioningProtocolStatus(record.fields);
+    expect(modes.find((item) => item.id === "tightness")?.mode).toBe(
+      "external",
+    );
+    expect(modes.find((item) => item.id === "evacuation")?.mode).toBe(
+      "missing",
+    );
+    expect(
+      modes
+        .find((item) => item.id === "evacuation")
+        ?.missing.map((item) => item.id),
+    ).toContain("vacuumUnit");
+    const editorIds = checklistEditorFields(record).map((item) => item.id);
+    expect(editorIds).toContain("tightnessTestReportReference");
+    expect(editorIds).not.toContain("tightnessMedium");
+    expect(editorIds).not.toContain("evacuationReportReference");
+    expect(checklistReportFields(record).map((item) => item.id)).toContain(
+      "tightnessMedium",
+    );
+    expect(checklistReportFields(record).map((item) => item.id)).toContain(
+      "evacuationReportReference",
+    );
+  });
+  it("preserves legacy finding and notes until an explicit edit within storage limits", () => {
+    const old = {
+      ...draft("evacuation", { finding: "Original finding" }),
+      notes: "Original notes",
+    };
+    expect(combinedReportNotes(old)).toBe("Original finding\n\nOriginal notes");
+    expect(updateCombinedReportNotes(old, combinedReportNotes(old))).toBe(old);
+    const edited = updateCombinedReportNotes(old, "Combined edited note");
+    expect(edited.fields.finding).toBe("");
+    expect(edited.notes).toBe("Combined edited note");
+    expect(() => updateCombinedReportNotes(old, "x".repeat(10001))).toThrow(
+      RangeError,
+    );
+    expect(old.fields.finding).toBe("Original finding");
+  });
+  it("technical commissioning does not ask for installation certificate declarations", () => {
+    const record = draft("commissioning", {
+      commissioningPurpose: "technical",
+      operatorDeclaration: "confirmed",
+    });
+    expect(commissioningMissingFields(record.fields)).toEqual([]);
+    expect(
+      checklistEditorFields(record).some(
+        (field) => field.id === "operatorDeclaration",
+      ),
+    ).toBe(false);
+    expect(
+      checklistReportFields(record).some(
+        (field) => field.id === "operatorDeclaration",
+      ),
+    ).toBe(true);
   });
   it.each([
     ["refrigerantGwp", "2088"],
@@ -232,8 +318,9 @@ describe("structured field reports", () => {
     const reconfirmed = updateCommissioningFields(updated, {
       operatorDeclaration: "confirmed",
     });
-    expect(commissioningMissingFields(reconfirmed).map((item) => item.id))
-      .toContain("leakCheckInterval");
+    expect(
+      commissioningMissingFields(reconfirmed).map((item) => item.id),
+    ).toContain("leakCheckInterval");
   });
   it("requires renewed declaration and dependent assessments after substantive changes", () => {
     const before = {

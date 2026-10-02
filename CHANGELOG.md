@@ -4,6 +4,17 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.1 — 2026-10-02 · Beta
+
+Clearer field reports and refrigerant properties
+
+- Field forms are grouped into sections. Missing-item links open the relevant field, and observations and notes share one writing area.
+- Commissioning details and recorded test protocols can share one printout. Included protocol sections are distinguished from attachments supplied separately.
+- The commissioning leak-check interval uses the existing calculation engine and requests missing inputs.
+- Existing report content is retained alongside the revised fields. Locking a record is distinguished from technical acceptance and signing.
+- Property availability and explanations, oil names, restriction badges and Settings links are clearer. Reports are accessed through their main navigation section.
+- Removed tab-like lines from the pressure–temperature calculator and reduced spacing and nesting in supporting disclosures.
+
 ## 0.3.0-beta.9 — 2026-09-30 · Beta
 
 Broader refrigerant models and checked calculation ranges

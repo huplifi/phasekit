@@ -1,5 +1,32 @@
 [
   {
+    "version": "0.4.0-beta.1",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät työmaaraportit ja aineominaisuudet",
+      "en": "Clearer field reports and refrigerant properties"
+    },
+    "changes": {
+      "fi": [
+        "Raporttilomakkeet on ryhmitelty osiin. Puuttuvan tiedon linkki avaa oikean kohdan, ja havainnoille sekä muistiinpanoille on yhteinen kirjoitusalue.",
+        "Käyttöönoton tiedot ja kirjatut koepöytäkirjat voidaan koota samaan tulosteeseen. Sisäiset pöytäkirjaosat ja erikseen toimitettavat liitteet erottuvat toisistaan.",
+        "Käyttöönottoraportin vuototarkastusväli hyödyntää sovelluksen laskentaa. Puuttuvat lähtötiedot pyydetään täydentämään.",
+        "Vanhojen raporttien tiedot säilyvät myös uudistettujen kenttien yhteydessä. Raportin lukitseminen erotetaan hyväksynnästä ja allekirjoittamisesta.",
+        "Aineominaisuuksien puuttuvat tiedot ja selitteet, öljyjen nimet, rajoitustunnisteet sekä asetusten linkit on selkeytetty. Raportit löytyvät omasta pääosiostaan.",
+        "Paine–lämpötilalaskurin välilehtiä muistuttavat viivat on poistettu ja taustatietojen haitareita tiivistetty."
+      ],
+      "en": [
+        "Field forms are grouped into sections. Missing-item links open the relevant field, and observations and notes share one writing area.",
+        "Commissioning details and recorded test protocols can share one printout. Included protocol sections are distinguished from attachments supplied separately.",
+        "The commissioning leak-check interval uses the existing calculation engine and requests missing inputs.",
+        "Existing report content is retained alongside the revised fields. Locking a record is distinguished from technical acceptance and signing.",
+        "Property availability and explanations, oil names, restriction badges and Settings links are clearer. Reports are accessed through their main navigation section.",
+        "Removed tab-like lines from the pressure–temperature calculator and reduced spacing and nesting in supporting disclosures."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.9",
     "date": "2026-09-30",
     "channel": "beta",

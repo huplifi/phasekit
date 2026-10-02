@@ -8,6 +8,18 @@ test("next inspection and shareable explanation survive a saved snapshot", async
   await page.locator("#check-date").fill("2026-09-26");
   await page.locator("#check-last-inspection").fill("2026-01-31");
   await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  await expect(
+    page.locator(".notice.caption").filter({
+      hasText: "Arvio koskee vuototarkastusväliä",
+    }),
+  ).toBeVisible();
+  const basisLink = page.getByRole("button", {
+    name: "Lähteet ja laskentaperusteet",
+    exact: true,
+  });
+  await expect(basisLink).toBeVisible();
+  await basisLink.click();
+  await expect(page.locator("#check-calculation")).toHaveAttribute("open", "");
   const schedule = page.locator(".check-schedule");
   await expect(schedule).toContainText("31.1.2027");
   await schedule.getByText("Näytä jaettava selite", { exact: true }).click();

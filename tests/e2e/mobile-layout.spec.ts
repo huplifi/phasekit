@@ -62,9 +62,20 @@ test("native selects match form fields and backup actions share their corners", 
   await page.locator(".charge-grid select").selectOption("g");
   await expect(page.locator(".charge-grid select")).toHaveValue("g");
   await page.goto("/#/settings");
+  await page.setViewportSize({ width: 390, height: 844 });
   for (const select of await page.locator(".settings-fields select").all()) {
     expect((await select.boundingBox())!.height).toBe(50);
   }
+  const backupActions = page.locator(
+    ".settings-backup-actions .secondary-button",
+  );
+  await expect(backupActions).toHaveCount(2);
+  await noOverflow(page);
+  await expect(page.locator(".settings-delete-action")).toBeVisible();
+  await page.setViewportSize({ width: 550, height: 844 });
+  const exportBounds = (await backupActions.nth(0).boundingBox())!;
+  const importBounds = (await backupActions.nth(1).boundingBox())!;
+  expect(Math.abs(exportBounds.y - importBounds.y)).toBeLessThan(1);
   const radii = await page
     .locator(".settings-actions .secondary-button")
     .evaluateAll((elements) =>

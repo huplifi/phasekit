@@ -194,6 +194,11 @@ strong.mono {
 .beta-banner a {
   font-weight: 600;
 }
+.beta-banner .beta-release-link {
+  min-height: auto;
+  padding: 0;
+  white-space: nowrap;
+}
 .offline-indicator {
   display: flex;
   align-items: center;
@@ -233,6 +238,12 @@ main {
   color: var(--link);
   padding-left: 0;
   padding-right: 0;
+}
+.inline-text-link {
+  min-height: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .primary {
   background: var(--primary-background);
@@ -358,8 +369,11 @@ main {
 summary {
   cursor: pointer;
   min-height: 44px;
-  padding: 12px 0;
+  padding: 8px 0;
   font-weight: 700;
+}
+details + details {
+  margin-block-start: 4px;
 }
 summary svg {
   vertical-align: middle;
@@ -650,8 +664,56 @@ select {
   flex-wrap: wrap;
 }
 .settings-actions {
-  align-items: flex-start;
-  flex-direction: column;
+  align-items: center;
+}
+.settings-backup-actions {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.settings-delete-action {
+  margin-inline-start: auto;
+  padding-inline: 10px;
+  border: 1px solid var(--status-error-foreground);
+  border-radius: 8px;
+}
+.coverage-report-link {
+  width: fit-content;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.5rem;
+  padding: 2px 8px;
+  border: 1px solid var(--divider);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.status-badge.status-badge--success {
+  color: var(--status-success-foreground);
+  background: var(--status-success-background);
+  border-color: var(--status-success-foreground);
+}
+.status-badge.status-badge--warning {
+  color: var(--status-warning-foreground);
+  background: var(--status-warning-background);
+  border-color: var(--status-warning-foreground);
+}
+.status-badge.status-badge--error {
+  color: var(--status-error-foreground);
+  background: var(--status-error-background);
+  border-color: var(--status-error-foreground);
+}
+.status-badge.status-badge--neutral {
+  color: var(--status-neutral-foreground);
+  background: var(--status-neutral-background);
+  border-color: var(--status-neutral-foreground);
 }
 .settings-fields {
   max-width: 480px;
@@ -1311,9 +1373,12 @@ pre.share-text {
 }
 
 .release-history-link {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
   width: fit-content;
-  padding-block: 10px;
+  padding-block: 6px;
   min-height: 44px;
   text-decoration: underline;
   text-underline-offset: 3px;

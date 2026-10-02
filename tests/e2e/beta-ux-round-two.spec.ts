@@ -7,7 +7,7 @@ test("checklist editing keeps scroll and focus stable during automatic saves", a
   await page.goto("/#/checklists");
   await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   const notes = page.getByRole("textbox", {
-    name: "Muistiinpanot",
+    name: "Havainnot ja muistiinpanot",
     exact: true,
   });
   await notes.scrollIntoViewIfNeeded();
@@ -39,7 +39,10 @@ test("checklist editing keeps scroll and focus stable during automatic saves", a
   await page.goto("/#/reports");
   await page.locator(".field-report-link").first().click();
   await expect(
-    page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
+    page.getByRole("textbox", {
+      name: "Havainnot ja muistiinpanot",
+      exact: true,
+    }),
   ).toHaveValue("Mittaus");
 });
 
@@ -95,7 +98,9 @@ test("checklist control pairs and footer actions align", async ({
   expect(Math.abs(print!.height - download!.height)).toBeLessThan(2);
 });
 
-test("release version and shared choices expose their state", async ({ page }) => {
+test("release version and shared choices expose their state", async ({
+  page,
+}) => {
   await page.goto("/#/settings");
   await expect(page.locator(".about-details")).toContainText(
     packageInfo.version,

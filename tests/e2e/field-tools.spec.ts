@@ -13,7 +13,7 @@ test("every tool has a distinct identity icon in the tools catalogue", async ({
 }) => {
   await page.goto("/#/tools");
   const tools = page.locator(".tool-row");
-  await expect(tools).toHaveCount(12);
+  await expect(tools).toHaveCount(11);
   // Only the leading SVG identifies a tool. Trailing chevrons, inline unit
   // arrows and bottom-navigation icons serve other purposes.
   const identities = await tools.evaluateAll((rows) =>
@@ -139,6 +139,11 @@ test("checklist keeps observations after reload, exports them and requires delet
     .getByRole("combobox", { name: "Raporttipohja", exact: true })
     .selectOption("evacuation");
   await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
+  await expect(
+    page.getByLabel("Tyhjiöinnin kesto tavoitepaineeseen · min", {
+      exact: true,
+    }),
+  ).toHaveCount(0);
   await page.getByLabel("Kohteen nimi", { exact: true }).fill("Testikohde");
   await page
     .getByRole("combobox", {
@@ -146,10 +151,13 @@ test("checklist keeps observations after reload, exports them and requires delet
       exact: true,
     })
     .selectOption("Pa");
+  await page.getByLabel("Tavoitepaine", { exact: true }).fill("500");
   await page.getByLabel("Saavutettu paine", { exact: true }).fill("300");
   await page
-    .getByLabel("Tyhjiöinnin kesto tavoitepaineeseen · min", { exact: true })
-    .fill("30");
+    .getByLabel("Pitokokeen alkupaine", { exact: true })
+    .fill("350");
+  await page.getByLabel("Pitokokeen loppupaine", { exact: true }).fill("400");
+  await page.getByLabel("Pitokokeen kesto · min", { exact: true }).fill("15");
   await page
     .getByLabel("Saavutettu tyhjiö ja mittauspaikka kirjattu", { exact: true })
     .check();
@@ -182,6 +190,18 @@ test("checklist keeps observations after reload, exports them and requires delet
       exact: true,
     }),
   ).toHaveValue("300");
+  await expect(page.getByLabel("Tavoitepaine", { exact: true })).toHaveValue(
+    "500",
+  );
+  await expect(
+    page.getByLabel("Pitokokeen alkupaine", { exact: true }),
+  ).toHaveValue("350");
+  await expect(
+    page.getByLabel("Pitokokeen loppupaine", { exact: true }),
+  ).toHaveValue("400");
+  await expect(
+    page.getByLabel("Pitokokeen kesto · min", { exact: true }),
+  ).toHaveValue("15");
   await page.goto("/#/reports");
   await page
     .locator(".field-report-link")
@@ -201,11 +221,6 @@ test("checklist keeps observations after reload, exports them and requires delet
       exact: true,
     }),
   ).toHaveValue("Pa");
-  await expect(
-    page.getByLabel("Tyhjiöinnin kesto tavoitepaineeseen · min", {
-      exact: true,
-    }),
-  ).toHaveValue("30");
   await expect(
     page.getByLabel("Saavutettu tyhjiö ja mittauspaikka kirjattu", {
       exact: true,

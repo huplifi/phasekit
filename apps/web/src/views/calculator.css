@@ -75,11 +75,7 @@
 }
 .pt-value-field {
   min-width: 0;
-  border-block-start: 2px solid var(--divider);
-  padding-top: 12px;
-}
-.pt-value-field.is-input {
-  border-block-start-color: var(--text);
+  padding-top: 0;
 }
 .pt-value-field > label {
   margin: 0 0 8px;

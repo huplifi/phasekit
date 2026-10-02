@@ -1,3 +1,7 @@
+import {
+  completeExternalCertificate,
+  openReportSection,
+} from "./helpers/commissioning";
 import { expect, test } from "@playwright/test";
 
 test("field report survives reload and finalisation preserves the original revision", async ({
@@ -24,9 +28,7 @@ test("field report survives reload and finalisation preserves the original revis
   await expect(
     page.getByLabel("Pitokokeen loppupaine", { exact: true }),
   ).toHaveValue("2,3");
-  await page
-    .getByRole("button", { name: "Merkitse raportti valmiiksi" })
-    .click();
+  await page.getByRole("button", { name: "Lukitse raportti" }).click();
   await expect(
     page.getByLabel("Pitokokeen loppupaine", { exact: true }),
   ).toBeDisabled();
@@ -56,9 +58,7 @@ test("unfinished reports save but require identifying fields before finalisation
   await expect(page.locator(".field-report-save-state").last()).toHaveText(
     "Tallennettu automaattisesti tähän selaimeen",
   );
-  await page
-    .getByRole("button", { name: "Merkitse raportti valmiiksi" })
-    .click();
+  await page.getByRole("button", { name: "Lukitse raportti" }).click();
   await expect(page.getByRole("alert")).toContainText(
     "Täytä kohteen nimi, suorituspäivä ja tekijä",
   );
@@ -79,38 +79,6 @@ test("commissioning cycle remains frozen through notes and finalisation", async 
   await page.getByLabel("Suorituspäivä", { exact: true }).fill("2026-09-26");
   await page.getByLabel("Tekijä", { exact: true }).fill("Test technician");
   await page.getByLabel("Laite / tunniste", { exact: true }).fill("SN-123");
-  await page.getByText("Asentaja ja vastuuhenkilö", { exact: true }).click();
-  await page.getByLabel("Asennusliike", { exact: true }).fill("Test Company");
-  await page.getByLabel("Asentajan lupanumero", { exact: true }).fill("INST-1");
-  await page
-    .getByLabel("Vastuuhenkilön nimi", { exact: true })
-    .fill("Responsible person");
-  await page
-    .getByLabel("Vastuuhenkilön lupanumero", { exact: true })
-    .fill("RESP-1");
-  await page.getByText("Koepöytäkirjat ja vakuutus", { exact: true }).click();
-  await page
-    .getByLabel("Lakisääteinen vuototarkastusväli ja peruste", { exact: true })
-    .fill("Documented assessment");
-  await page
-    .getByRole("combobox", {
-      name: "Edellyttääkö painelaitesääntely painekoetta?",
-      exact: true,
-    })
-    .selectOption("no");
-  await page
-    .getByLabel("Peruste sille, ettei painekoetta edellytetä", { exact: true })
-    .fill("Documented equipment assessment");
-  await page
-    .getByLabel("Tiiviyskoepöytäkirjan viite / liite", { exact: true })
-    .fill("Annex T-1");
-  await page
-    .getByLabel("Tyhjiöintipöytäkirjan viite / liite", { exact: true })
-    .fill("Annex V-1");
-  await page
-    .getByLabel("Koekäyttöpöytäkirjan viite / liite", { exact: true })
-    .fill("Annex R-1");
-
   await page
     .getByRole("button", { name: "Valitse kylmäaine", exact: true })
     .click();
@@ -139,30 +107,14 @@ test("commissioning cycle remains frozen through notes and finalisation", async 
   await expect(chart).toBeVisible();
   const frozenSrc = await chart.getAttribute("src");
   await page
-    .getByLabel("Muistiinpanot", { exact: true })
+    .getByLabel("Havainnot ja muistiinpanot", { exact: true })
     .fill("Ready for handover");
   await expect(chart).toHaveAttribute("src", frozenSrc!);
-  await page
-    .getByLabel("Lakisääteinen vuototarkastusväli ja peruste", { exact: true })
-    .fill("Documented final assessment");
-  await page
-    .getByRole("combobox", {
-      name: "Edellyttääkö painelaitesääntely painekoetta?",
-      exact: true,
-    })
-    .selectOption("no");
-  await page
-    .getByRole("checkbox", {
-      name: "Toiminnanharjoittajan vakuutus",
-      exact: true,
-    })
-    .check();
+  await completeExternalCertificate(page);
   await expect(page.locator(".field-report-save-state").last()).toHaveText(
     "Tallennettu automaattisesti tähän selaimeen",
   );
-  await page
-    .getByRole("button", { name: "Merkitse raportti valmiiksi" })
-    .click();
+  await page.getByRole("button", { name: "Lukitse raportti" }).click();
   await expect(chart).toHaveAttribute("src", frozenSrc!);
   await page.getByRole("button", { name: "Luo uusi versio" }).click();
   const revisedDeclaration = page.getByRole("checkbox", {
@@ -171,7 +123,7 @@ test("commissioning cycle remains frozen through notes and finalisation", async 
   });
   // The editor preserves disclosure state when switching to the new revision.
   if (!(await revisedDeclaration.isVisible())) {
-    await page.getByText("Koepöytäkirjat ja vakuutus", { exact: true }).click();
+    await openReportSection(page, "Painekoe, asiakirjat ja vakuutus");
   }
   await expect(revisedDeclaration).not.toBeChecked();
   await page.getByLabel("LP · imupaine", { exact: true }).fill("3.1");

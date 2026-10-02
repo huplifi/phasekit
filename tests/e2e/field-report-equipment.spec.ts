@@ -90,7 +90,7 @@ test("equipment history opens reports and preserves final field records through 
     "Tallennettu automaattisesti",
   );
   await page
-    .getByRole("button", { name: "Merkitse raportti valmiiksi", exact: true })
+    .getByRole("button", { name: "Lukitse raportti", exact: true })
     .click();
   await expect(
     page.getByRole("button", { name: "Luo uusi versio", exact: true }),

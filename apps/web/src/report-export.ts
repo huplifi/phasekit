@@ -6,6 +6,8 @@ import {
   checklistDefinitions,
   checklistReportFields,
   commissioningMissingFields,
+  commissioningProtocolStatus,
+  combinedReportNotes,
   type ChecklistDraft,
   type ChecklistField,
   type ChecklistKind,
@@ -77,6 +79,7 @@ export function createPrintDocument(
   style.textContent += `.field-report-document .field-summary-compact{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.field-report-document .field-summary-compact .field-summary-card{padding:7px 9px}.field-report-document .field-summary-compact .field-summary-card dd{font-size:17px}.field-report-document .meta{margin-bottom:4px}.field-report-document .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:7px 0}.field-report-document .signature-line{max-width:none;margin:9px 0 4px}.signature-caption{font-size:11px;color:#405158}.legacy-signature-name{font-size:11px;color:#405158}.source-list{list-style:none;margin:5px 0;padding:0;font-size:11px;line-height:1.25;columns:2;column-gap:18px}.source-list li{margin:0 0 4px;break-inside:avoid;overflow-wrap:anywhere}.source-meta{color:#405158;font-size:10.5px}.leak-document h2{margin:12px 0 5px}.leak-document .detail-list{gap:3px 15px}.leak-document .detail-list div{padding:3px 0}.leak-document .hero{margin:10px 0 8px}.hero-alert{font-weight:700;color:#84213b;border-top:1px solid #84213b;margin:9px 0 0;padding-top:8px}.compact-table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0 10px}.compact-table th{text-align:left;color:#405158;font-weight:650}.compact-table th,.compact-table td{padding:5px 6px;border-bottom:1px solid #d7dfe2;vertical-align:top;overflow-wrap:anywhere}.compact-table tr{break-inside:avoid;page-break-inside:avoid}.compact-table td:last-child,.compact-table th:last-child{text-align:right}.compact-table .subline{display:block;font-size:10px;color:#405158}.leak-document .source-version-line{font-size:11px;color:#405158;margin:4px 0}.leak-document .notice{margin-top:8px;padding-top:6px}.leak-document .document-footer{margin-top:6px;padding-top:6px}`;
   style.textContent += `.commissioning-document h2{margin:9px 0 4px}.commissioning-document .field-summary-card{padding:5px 8px}.commissioning-document .field-summary-card dd{font-size:16px;margin-top:2px}.commissioning-document .checklist-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.commissioning-document .checklist-steps li{min-width:0}.commissioning-document .field-inline-note{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px solid #d7dfe2}.commissioning-document .cycle-input-line{font-size:11px;color:#405158;margin:4px 0 8px;line-height:1.35}.commissioning-document .cycle-details .row{padding:2px 0}`;
   style.textContent += `.print-toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:stretch;background:#fff;border-bottom:1px solid #929fa5;padding:10px 0;margin:0 0 16px}.print-toolbar a,.print-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:0;flex:1;padding:8px 12px;border:1px solid #283b42;border-radius:5px;background:#fff;color:#182127;font:600 14px/1.2 system-ui,sans-serif;text-align:center;text-decoration:none;cursor:pointer}.print-toolbar .print-action{background:#283b42;color:#fff}.print-toolbar button:disabled{opacity:.5;cursor:wait}.print-toolbar :focus-visible{outline:3px solid #276e9f;outline-offset:2px}@media screen and (max-width:500px){body{margin:0 auto;padding:0 16px 24px}.rows,.detail-list{grid-template-columns:minmax(0,1fr)}.row dt{overflow-wrap:anywhere}.sources,.source-list{columns:1}.print-toolbar{margin:0 -16px 16px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px}.print-toolbar a,.print-toolbar button{padding:8px 7px}}@media print{.print-toolbar{display:none!important}}`;
+  style.textContent += `.field-report-document .detail-long{grid-column:1 / -1;break-inside:auto;page-break-inside:auto}.field-report-document .detail-long dd{orphans:3;widows:3}.protocol-manifest{font-size:11px;padding-left:18px}.protocol-manifest li{margin:4px 0;break-inside:avoid}.field-report-document p{orphans:3;widows:3}`;
   doc.head.append(style);
   const toolbar = doc.createElement("nav");
   toolbar.className = "print-toolbar";
@@ -390,7 +393,14 @@ export function printChecklistDraft(
   const report = draft as FieldReport;
   const definition = checklistDefinitions[draft.kind];
   const site = draft.title.trim();
-  const title = fieldReportTitle(draft.kind, locale);
+  const installation =
+    draft.kind === "commissioning" &&
+    draft.fields.commissioningPurpose !== "technical";
+  const title = installation
+    ? locale === "fi"
+      ? "Asennustodistus ja käyttöönottopöytäkirjat"
+      : "Installation certificate and commissioning records"
+    : fieldReportTitle(draft.kind, locale);
   const doc = createPrintDocument(
     win,
     `${title}${site ? ` · ${site}` : ""} · PhaseKit`,
@@ -411,15 +421,21 @@ export function printChecklistDraft(
         ? "Luonnos / keskeneräinen"
         : "Draft / in progress";
   doc.body.append(state);
-  if (draft.kind === "commissioning") {
+  if (installation) {
     const missing = commissioningMissingFields(draft.fields);
     const preparation = doc.createElement("p");
     preparation.className = "meta";
     preparation.textContent =
       locale === "fi"
-        ? `Asennustodistuksen valmistelu · VNa 1063/2025 § 9${missing.length ? ` · ${missing.length} täydennettävää` : ""}.`
-        : `Installation-certificate preparation · Finnish Decree 1063/2025 § 9${missing.length ? ` · ${missing.length} items to complete` : ""}.`;
+        ? `Asennustodistus · VNa 1063/2025 § 9 · ${missing.length ? `${missing.length} täydennettävää` : "tietokentät täytetty"}. Vastuuhenkilön tarkastettava ja allekirjoitettava.`
+        : `Installation certificate · Finnish Decree 1063/2025 § 9 · ${missing.length ? `${missing.length} items to complete` : "fields completed"}. Requires the responsible person’s review and signature.`;
     doc.body.append(preparation);
+    if (missing.length)
+      appendText(
+        doc.body,
+        "p",
+        `${locale === "fi" ? "Täydennettävät tiedot" : "Items to complete"}: ${missing.map((field) => field.label[locale]).join("; ")}.`,
+      );
   }
   const subhead = doc.createElement("p");
   subhead.className = "document-subhead";
@@ -441,6 +457,8 @@ export function printChecklistDraft(
     `${locale === "fi" ? "Tekijä" : "Technician"}: ${technician || "—"}`,
   ].join(" · ");
   doc.body.append(meta);
+  if (draft.kind === "commissioning")
+    appendProtocolManifest(doc, draft, locale);
   appendFieldSummary(doc, draft, locale);
   const complete = draft.checkedIds.filter((id) =>
     definition.steps.some((step) => step.id === id),
@@ -472,9 +490,13 @@ export function printChecklistDraft(
   }
   doc.body.append(steps);
   appendObservationSections(doc, draft, locale);
-  if (draft.notes.trim()) {
-    appendText(doc.body, "h2", locale === "fi" ? "Muistiinpanot" : "Notes");
-    appendText(doc.body, "p", draft.notes);
+  if (combinedReportNotes(draft).trim()) {
+    appendText(
+      doc.body,
+      "h2",
+      locale === "fi" ? "Havainnot ja muistiinpanot" : "Observations and notes",
+    );
+    appendText(doc.body, "p", combinedReportNotes(draft));
   }
   const cycleImage = report.cycleReport
     ? appendFrozenCycleReport(doc, report.cycleReport, locale)
@@ -488,14 +510,13 @@ export function printChecklistDraft(
   );
   const signatureGrid = doc.createElement("div");
   signatureGrid.className = "signature-grid";
-  const signatureLabels =
-    draft.kind === "commissioning"
-      ? locale === "fi"
-        ? ["Vastuuhenkilön allekirjoitus", "Nimenselvennys"]
-        : ["Responsible person's signature", "Printed name"]
-      : locale === "fi"
-        ? ["Allekirjoitus", "Nimenselvennys"]
-        : ["Signature", "Printed name"];
+  const signatureLabels = installation
+    ? locale === "fi"
+      ? ["Vastuuhenkilön allekirjoitus", "Nimenselvennys"]
+      : ["Responsible person's signature", "Printed name"]
+    : locale === "fi"
+      ? ["Allekirjoitus", "Nimenselvennys"]
+      : ["Signature", "Printed name"];
   for (const label of signatureLabels) {
     const cell = doc.createElement("div");
     const line = doc.createElement("div");
@@ -507,6 +528,22 @@ export function printChecklistDraft(
     signatureGrid.append(cell);
   }
   closing.append(signatureGrid);
+  if (installation) {
+    appendText(
+      closing,
+      "p",
+      locale === "fi"
+        ? "Allekirjoituksellaan vastuuhenkilö vakuuttaa tehtyjen kokeiden riittävyyden ja oikeellisuuden."
+        : "By signing, the responsible person attests to the sufficiency and correctness of the tests performed.",
+    );
+    appendText(
+      closing,
+      "p",
+      locale === "fi"
+        ? "Allekirjoituspäivä: ____________________"
+        : "Date signed: ____________________",
+    );
+  }
   if (draft.fields.signatureName?.trim()) {
     const historicalName = doc.createElement("p");
     historicalName.className = "legacy-signature-name";
@@ -546,8 +583,8 @@ export function printChecklistDraft(
 function fieldReportTitle(kind: ChecklistKind, locale: Locale): string {
   const titles: Record<ChecklistKind, { fi: string; en: string }> = {
     tightness: {
-      fi: "Paine- ja tiiviyskoeraportti",
-      en: "Pressure and tightness test record",
+      fi: "Tiiviyskoeraportti",
+      en: "Tightness test record",
     },
     evacuation: {
       fi: "Tyhjiöinti- ja pitokoeraportti",
@@ -558,6 +595,46 @@ function fieldReportTitle(kind: ChecklistKind, locale: Locale): string {
     refrigerant: { fi: "Kylmäainekirjaus", en: "Refrigerant handling record" },
   };
   return titles[kind][locale];
+}
+
+function appendProtocolManifest(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  appendText(
+    doc.body,
+    "h2",
+    locale === "fi"
+      ? "Asiakirjan sisältö ja erilliset liitteet"
+      : "Document contents and separate attachments",
+  );
+  const list = doc.createElement("ul");
+  list.className = "protocol-manifest";
+  for (const protocol of commissioningProtocolStatus(draft.fields)) {
+    const row = doc.createElement("li");
+    const status =
+      protocol.mode === "internal"
+        ? locale === "fi"
+          ? "sisältyy tähän asiakirjaan"
+          : "included in this document"
+        : protocol.mode === "external"
+          ? locale === "fi"
+            ? "erillinen pöytäkirja, toimitettava erikseen"
+            : "separate record, supply separately"
+          : locale === "fi"
+            ? "kirjaus puuttuu tai on kesken"
+            : "record missing or incomplete";
+    row.textContent = `${protocol.label[locale]} — ${status}`;
+    if (protocol.mode === "internal") {
+      const link = doc.createElement("a");
+      link.href = `#protocol-${protocol.id}`;
+      link.textContent = locale === "fi" ? " · mittaukset" : " · readings";
+      row.append(link);
+    }
+    list.append(row);
+  }
+  doc.body.append(list);
 }
 
 function fieldReportValue(
@@ -601,6 +678,8 @@ export function fieldReportObservationFields(
     "performedOn",
     "technician",
     "signatureName",
+    "finding",
+    "leakCheckEvidence",
     ...fieldReportSummary(draft, locale).map((metric) => metric.id),
     ...(draft.kind === "commissioning"
       ? evacuationMetrics(draft, locale).map((metric) => metric.id)
@@ -625,13 +704,47 @@ export function fieldReportObservationFields(
   );
 }
 
+function selectedProtocolMode(
+  draft: ChecklistDraft,
+  group: string,
+): "internal" | "external" {
+  const keys = (
+    {
+      tightness: ["tightnessRecordMode", "tightnessTestReportReference"],
+      evacuation: ["evacuationRecordMode", "evacuationReportReference"],
+      "test-run": ["testRunRecordMode", "testRunReportReference"],
+    } as Record<string, string[]>
+  )[group];
+  return keys &&
+    (draft.fields[keys[0]] === "external" ||
+      (draft.fields[keys[0]] !== "internal" && draft.fields[keys[1]]?.trim()))
+    ? "external"
+    : "internal";
+}
+function isRetainedProtocolField(
+  draft: ChecklistDraft,
+  field: ChecklistField,
+): boolean {
+  if (
+    draft.kind !== "commissioning" ||
+    !["tightness", "evacuation", "test-run"].includes(field.group ?? "") ||
+    field.id.endsWith("RecordMode")
+  )
+    return false;
+  return field.id.endsWith("ReportReference")
+    ? selectedProtocolMode(draft, field.group!) === "internal"
+    : selectedProtocolMode(draft, field.group!) === "external";
+}
+
 function appendObservationSections(
   doc: Document,
   draft: ChecklistDraft,
   locale: Locale,
 ) {
   const observations = fieldReportObservationFields(draft, locale);
-  if (!observations.length) return;
+  const vacuumMetrics =
+    draft.kind === "commissioning" ? evacuationMetrics(draft, locale) : [];
+  if (!observations.length && !vacuumMetrics.length) return;
   const groups =
     draft.kind === "commissioning"
       ? [
@@ -651,8 +764,33 @@ function appendObservationSections(
             id: "evacuation",
             title:
               locale === "fi"
-                ? "Tyhjiöinnin havainnot"
-                : "Evacuation observations",
+                ? "Tyhjiöinnin ja pitokokeen mittaukset"
+                : "Evacuation and standing-test readings",
+          },
+          {
+            id: "refrigerant",
+            title:
+              locale === "fi"
+                ? "Kylmäaine ja täyttö"
+                : "Refrigerant and charge",
+          },
+          {
+            id: "leak-check",
+            title:
+              locale === "fi"
+                ? "Vuototarkastusväli ja peruste"
+                : "Leak-check interval and basis",
+          },
+          {
+            id: "tightness",
+            title:
+              locale === "fi"
+                ? "Tiiviyskoepöytäkirja"
+                : "Tightness-test record",
+          },
+          {
+            id: "test-run",
+            title: locale === "fi" ? "Koekäyttöpöytäkirja" : "Test-run record",
           },
           {
             id: "other",
@@ -666,7 +804,8 @@ function appendObservationSections(
         group.id === "all" ||
         (group.id === "other" ? !field.group : field.group === group.id),
     );
-    if (!fields.length) continue;
+    if (!fields.length && !(group.id === "evacuation" && vacuumMetrics.length))
+      continue;
     if (
       draft.kind === "commissioning" &&
       fields.length === 1 &&
@@ -681,9 +820,14 @@ function appendObservationSections(
       continue;
     }
     appendText(doc.body, "h2", group.title);
+    if (["tightness", "evacuation", "test-run"].includes(group.id))
+      doc.body.lastElementChild!.id = `protocol-${group.id}`;
     if (
-      group.id === "test-reports" &&
-      fields.some((field) => field.id.endsWith("ReportReference"))
+      fields.some(
+        (field) =>
+          field.id.endsWith("ReportReference") &&
+          !isRetainedProtocolField(draft, field),
+      )
     )
       appendText(
         doc.body,
@@ -692,12 +836,35 @@ function appendObservationSections(
           ? "Viitteet yksilöivät erilliset pöytäkirjat. Tämä PDF ei sisällä niitä liitteinä."
           : "References identify separate test reports. They are not attached to this PDF.",
       );
+    if (group.id === "evacuation" && vacuumMetrics.length) {
+      if (selectedProtocolMode(draft, "evacuation") === "external")
+        appendText(
+          doc.body,
+          "p",
+          locale === "fi"
+            ? "Säilytetyt aiemmat mittaukset. Valittu tyhjiöintipöytäkirja toimitetaan erikseen viitteen mukaisesti."
+            : "Retained earlier readings. Supply the selected external evacuation record according to its reference.",
+        );
+      appendMetricGrid(doc, vacuumMetrics, true, locale);
+      appendVacuumNote(doc, locale);
+    }
     const list = doc.createElement("dl");
     list.className = "detail-list";
     for (const field of fields) {
       const item = doc.createElement("div");
+      if (
+        (draft.fields[field.id]?.length ?? 0) > 180 ||
+        field.type === "textarea"
+      )
+        item.className = "detail-long";
       const dt = doc.createElement("dt");
-      dt.textContent = field.label[locale];
+      dt.textContent =
+        field.label[locale] +
+        (isRetainedProtocolField(draft, field)
+          ? locale === "fi"
+            ? " · aiempi tieto, ei valitun pöytäkirjan osa"
+            : " · retained earlier value, not part of the selected record"
+          : "");
       const dd = doc.createElement("dd");
       dd.textContent = fieldReportValue(draft, field, locale);
       item.append(dt, dd);
@@ -866,27 +1033,16 @@ function appendFieldSummary(
     );
     appendMetricGrid(doc, metrics, draft.kind === "commissioning", locale);
   }
-  const vacuumMetrics =
-    draft.kind === "commissioning" ? evacuationMetrics(draft, locale) : [];
-  if (vacuumMetrics.length) {
-    appendText(
-      doc.body,
-      "h2",
-      locale === "fi"
-        ? "Tyhjiöinnin ja pitokokeen mittaukset"
-        : "Evacuation and standing-test readings",
-    );
-    appendMetricGrid(doc, vacuumMetrics, true, locale);
-  }
-  if (draft.kind === "evacuation" || vacuumMetrics.length) {
-    const note = doc.createElement("p");
-    note.className = "field-summary-note";
-    note.textContent =
-      locale === "fi"
-        ? "Paineen muutos on kirjattujen absoluuttisten paineiden erotus. Vertaa arvoja kohteen omiin hyväksymisrajoihin."
-        : "Pressure change is the difference between recorded absolute pressures. Compare the readings with the equipment's acceptance criteria.";
-    doc.body.append(note);
-  }
+  if (draft.kind === "evacuation") appendVacuumNote(doc, locale);
+}
+function appendVacuumNote(doc: Document, locale: Locale) {
+  const note = doc.createElement("p");
+  note.className = "field-summary-note";
+  note.textContent =
+    locale === "fi"
+      ? "Paineen muutos on kirjattujen absoluuttisten paineiden erotus. Vertaa arvoja kohteen omiin hyväksymisrajoihin."
+      : "Pressure change is the difference between recorded absolute pressures. Compare the readings with the equipment's acceptance criteria.";
+  doc.body.append(note);
 }
 
 function appendMetricGrid(
