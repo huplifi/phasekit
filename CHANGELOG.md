@@ -13,6 +13,7 @@ Consistent refrigerant details and contextual help
 - Oil guidance opens below its heading. Information icons sit closer to their labels throughout the app while retaining their touch target size.
 - Settings actions align to the left. Coverage buttons no longer have link underlines, and the version number alone links to release history.
 - Feedback has a distinct button with a clear GitHub destination.
+- The beta notice shows its version, matching Release history and Stable version buttons, and a brief note about separate records. The build revision remains in Settings.
 
 ## 0.4.0-beta.3 — 2026-10-02 · Beta
 

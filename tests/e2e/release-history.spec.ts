@@ -9,7 +9,7 @@ test("release history is discoverable and bilingual", async ({ page }) => {
     "#/releases",
   );
   await expect(page.locator(".beta-banner .beta-release-link")).toHaveText(
-    "Uutta →",
+    "Versiohistoria",
   );
   await expect(
     page.getByRole("link", { name: "Anna palautetta", exact: true }),

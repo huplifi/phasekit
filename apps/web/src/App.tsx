@@ -11,6 +11,7 @@ import {
   WifiOff,
   RefreshCw,
   ArrowRight,
+  ExternalLink,
   X,
 } from "lucide-react";
 import { useRegisterSW } from "virtual:pwa-register/react";
@@ -38,7 +39,7 @@ import {
   WorkChecklists,
   PipeCalculator,
 } from "./views/FieldTools";
-import { appVersion, isBeta, buildRevision as buildVersion } from "./release";
+import { appVersion, isBeta } from "./release";
 const pathNow = () => window.location.hash.replace(/^#/, "") || "/";
 export function App() {
   const [data, setRenderedData] = useState(emptyData);
@@ -388,23 +389,31 @@ export function App() {
         </header>
         {isBeta && (
           <aside className="beta-banner caption" aria-label="Beta">
-            <strong>
-              Beta {appVersion} · {buildVersion}
-            </strong>
-            {" · "}
-            <a className="beta-release-link" href="#/releases">
-              {data.locale === "fi" ? "Uutta" : "What’s new"}
-              <span aria-hidden="true"> →</span>
-            </a>
-            {" · "}
-            {data.locale === "fi"
-              ? "Testiversio. Tallennukset säilyvät vain tässä selaimessa ja osoitteessa."
-              : "Test version. Records stay in this browser and site."}{" "}
-            <a href="https://phasekit.app">
+            <div className="beta-banner-heading">
+              <strong>Beta</strong>
+              <span className="mono">{appVersion}</span>
+            </div>
+            <div className="beta-banner-actions">
+              <a
+                className="secondary-button beta-release-link"
+                href="#/releases"
+              >
+                {data.locale === "fi" ? "Versiohistoria" : "Release history"}
+              </a>
+              <a
+                className="secondary-button"
+                href="https://phasekit.app"
+                aria-describedby="beta-storage-note"
+              >
+                {data.locale === "fi" ? "Vakaa versio" : "Stable version"}
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            </div>
+            <p id="beta-storage-note">
               {data.locale === "fi"
-                ? "Avaa vakaa versio"
-                : "Open stable version"}
-            </a>
+                ? "Betan tallennukset ovat erillään vakaasta versiosta."
+                : "Beta records are separate from the stable version."}
+            </p>
           </aside>
         )}
         {storageError && (
