@@ -1,6 +1,6 @@
 # Ainetietojen ja tulostuksen jatkokorjaukset 2.10.2026
 
-Tila: toteutettu ja tarkistettu paikallisesti. Käyttäjä hyväksyi 0.4.0-beta.2-testijulkaisun 2.10.2026; julkaisu varmennetaan PR:n ja julkisen beta-osoitteen kautta.
+Tila: julkaistu testattavaksi osoitteessa https://beta.phasekit.app 2.10.2026, versio 0.4.0-beta.2 / `f5205a3`. Offline-tulostuksen tunnettu puute ja fyysisen iPhonen tarkistus on kuvattu alla.
 
 - Kylmäkierron lämpötilakentät ovat puhelimessa vasemmalla ja kenttien nimet oikealla. Otsikon infopainike on samalla linjalla otsikon kanssa.
 - GWP-riveillä on lyhyt nimi ja avattava laskentaperuste. Jos perusteita on useita, lyhyt tunniste erottaa arvot toisistaan.
@@ -36,3 +36,19 @@ Fyysisen iPhonen tulostusvalinnan/AirPrintin avautuminen sekä asennetun PWA:n k
 - CI:n saman työhaaran push- ja PR-tupla-ajot poistettiin. PR-päivitys käynnistää yhden tarkistuksen, beta/main-pushit omat tarkistuksensa; uusi versio keskeyttää vanhentuneen ajon.
 - `pnpm verify` kokoaa paikalliset julkaisutarkistukset yhdeksi komennoksi. Retry-määrää tai hyväksymisrajoja ei väljennetty. Linux-CI säilyy pakollisena ennen julkaisua.
 - Koko paikallinen selainajo: 433 läpi, 2 tarkoituksella ohitettu. Viidessä testissä päällekkäinen paikallinen testiajo poisti trace-tiedoston (`ENOENT`); kaikki viisi läpäisivät puhtaan uusinta-ajon. Uusi kohdistusregressio läpäisi erikseen kaikki neljä selainprofiilia. Linux-CI tarkistetaan erikseen.
+
+## Julkaisuehdokkaan varmennus
+
+- Lopullinen PR-ehdokas `fc5935f`: [CI 37005575807](https://github.com/huplifi/phasekit/actions/runs/37005575807) onnistui. 442 selaintestiä läpäistiin ilman retry-kierroksia, 2 ohitettiin tarkoituksella; kaikki aiemmat tarkistusvaiheet läpäistiin.
+- Deploy Preview 22 tarkistettiin Chromiumilla ja WebKitillä koossa 390/1440 px: ainetiedot, kattavuus ja paluu, tulostuksen itsenäiset käsittelijät. Ei sivuvirheitä. CO₂e-painikkeelle jäi 390 × 844 px esikatselussa noin 31 px tilaa alavalikon yläpuolelle.
+- [PR 22](https://github.com/huplifi/phasekit/pull/22) yhdistettiin betaan commitilla `f5205a3`. Git-puu vastaa täsmälleen testattua `fc5935f`-ehdokasta. Mergen automaattinen uusinta-ajo 37007069178 peruttiin tarkoituksella päällekkäisen testauksen vähentämiseksi.
+- Käyttäjän kustannus- ja testausrajaus on kirjattu julkaisuohjeeseen: kohdennetut tarkistukset, yksi laaja julkaisuajo, Netlify-esikatselujen ohitus korjauskierroksilla.
+
+## Julkinen beta ja päivitys
+
+- Julkisen beta-osoitteen näkyvä versio varmennettiin: **0.4.0-beta.2 · f5205a3**.
+- Vakaan phasekit.app-sivuston HTML:n SHA-256 säilyi ennallaan: `5de0f2c8173fc526cec75cb0c9175ee3d037c3c2e58b4aec89bbdf9e86982693`.
+- Synteettisen vanhan beta.1-selaimen päivityskokeessa päivityskehote ilmestyi, keskeneräinen laskelma pysyi ehjänä ja sen hylkääminen vaati vahvistuksen. Beta.2-version varmuuskopio vastasi täsmälleen ennen päivitystä vietyä varmuuskopiota. Raportti avautui myös offline-uudelleenlatauksella.
+- **Tunnettu jatkokorjaus:** tämän jälkeen offline-tilassa avattu tulostusesikatselu jätti Tulosta / PDF -painikkeen pois käytöstä (5 sekunnin odotus). Päivitys ja raportin säilyminen läpäisivät omat tarkistuksensa ennen tätä virhettä. Offline-tulostusta ei merkitä toimivaksi. Verkossa tulostuskäsittelijät läpäisivät aiemmat selaintarkistukset; fyysisen iPhonen AirPrint-valinta on edelleen käyttäjän laitetestissä varmennettava.
+
+Käyttäjän pyynnöstä testaus ja Netlify-buildit pidetään vähäisinä: tässä vaiheessa ei käynnistetty uutta korjausjulkaisua tai laajaa testikierrosta. Seuraavan tulostuskorjauksen kohdennettu hyväksymisehto on offline-esikatselun toimiva painike sekä palaaminen raporttiin.
