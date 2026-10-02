@@ -4,6 +4,17 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.4 — 2026-10-02 · Beta
+
+Consistent refrigerant details and contextual help
+
+- Blend chemical names use Refrigerant blend. Missing property values consistently show Data unavailable.
+- Property and source disclosure content aligns with the heading text.
+- Oil guidance opens below its heading. Information icons sit closer to their labels throughout the app while retaining their touch target size.
+- Settings actions align to the left. Coverage buttons no longer have link underlines, and the version number alone links to release history.
+- Feedback has a distinct button with a clear GitHub destination.
+- The beta notice shows its version, matching Release history and Stable version buttons, and a brief note about separate records. The build revision remains in Settings.
+
 ## 0.4.0-beta.3 — 2026-10-02 · Beta
 
 Print controls work offline

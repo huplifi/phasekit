@@ -2,7 +2,7 @@ import releases from "../../../../data/releases.json";
 import { appVersion, buildRevision, isBeta } from "../release";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
-import { Download, Upload, Trash2 } from "lucide-react";
+import { Download, Upload, Trash2, ExternalLink } from "lucide-react";
 import { useApp } from "../context";
 import { dataset } from "../data";
 import { downloadJSON, emptyData, mergeBackup, parseBackup } from "../storage";
@@ -170,12 +170,6 @@ export function Settings() {
             <dd>
               <a className="release-history-link" href="#/releases">
                 <span className="mono">{appVersion}</span>
-                <span aria-hidden="true"> · </span>
-                {l(
-                  "Versiohistoria ja uutta",
-                  "Release history and what’s new",
-                )}{" "}
-                <span aria-hidden="true">→</span>
               </a>
             </dd>
           </div>
@@ -247,16 +241,21 @@ export function Settings() {
           </a>
         </p>
         <a
-          className="text-button"
+          className="secondary-button feedback-action"
+          aria-describedby="feedback-destination"
           href="https://github.com/huplifi/phasekit/issues"
           target="_blank"
           rel="noreferrer"
         >
-          {l(
-            "Anna palautetta tai ilmoita virheestä (GitHub Issues)",
-            "Share feedback or report an issue (GitHub Issues)",
-          )}
+          {l("Anna palautetta", "Give feedback")}
+          <ExternalLink size={18} aria-hidden="true" />
         </a>
+        <p id="feedback-destination" className="caption secondary feedback-description">
+          {l(
+            "Palaute ja virheilmoitukset GitHubissa. Avautuu uuteen välilehteen.",
+            "Feedback and bug reports on GitHub. Opens in a new tab.",
+          )}
+        </p>
       </section>
     </>
   );

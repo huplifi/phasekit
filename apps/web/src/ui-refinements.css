@@ -142,6 +142,10 @@
   font-weight: 400;
   list-style: none;
 }
+.source-disclosure > summary > svg {
+  flex: none;
+  margin-right: 0;
+}
 .source-disclosure > summary::-webkit-details-marker {
   display: none;
 }
@@ -190,6 +194,7 @@
 }
 
 .oil-heading {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 4px;

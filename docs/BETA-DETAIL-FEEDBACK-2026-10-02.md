@@ -64,3 +64,16 @@ Käyttäjä pyysi myös offline-puutteen korjaamista. Tulostuksen ohjauskoodi tu
 - Fyysisen iPhonen AirPrint-valinta on edelleen laitteella varmennettava.
 
 Beta.3 julkaistiin PR:llä 23, commit `5b886b0` (sama Git-puu kuin paikallisesti testatussa `5c1f859`-ehdokkaassa). Julkisessa https://beta.phasekit.app-osoitteessa varmennettiin näkyvä versio sekä mobiili-Chromiumilla offline-uudelleenlataus, offline-tulostuspainikkeen aktivoituminen, tulostuskutsu ja paluu ehjään raporttiin. Ensimmäinen live-WebKit-koe katkesi selaimen sisäiseen virheeseen offline-uudelleenlatauksessa ennen tulostusta; sitä ei lasketa läpäistyksi. WebKitin neljä kohdennettua paikallista tulostustapausta läpäisivät. Esikatselubuildia ei tehty; mergen automaattinen laaja CI-ajo 37008090934 keskeytettiin sovitun rajauksen mukaisesti. Vakaan main-haaran koodia ei muutettu.
+
+## Ainetietojen viimeistely 0.4.0-beta.4
+
+- Seoksen kemiallinen nimi on lyhyesti Kylmäaineseos. Puuttuvien arvojen teksti on Tieto puuttuu (englanniksi Data unavailable); taustan tilat ja Ei sovellu / Ei liukumaa -erottelu säilyvät.
+- Lähde- ja lisätietohaitarien chevron peri 8 px ylimääräisen marginaalin. Sen poisto linjaa sisällön otsikon tekstin kanssa.
+- Öljyohjeen painike avasi sisällön, mutta puuttuva asemointikonteksti sijoitti sen ruudun ulkopuolelle: ennen korjausta tooltipin y oli −1686 px, otsikon y 526 px. Öljyotsikko toimii nyt ankkurina. Tooltipin y on 576 px, otsikon alareuna 570 px.
+- Infoikonit on tuotu 9 px lähemmäs tekstiä yhteisessä tyylissä. 44 × 44 px napautusalue säilyy.
+- TypeScript, muutettujen tiedostojen ESLint, versiohistorian muodostus ja tuotantokooste läpäistiin. Yksi mobiili-WebKit-katselmointi varmisti napautuksen, sulkemisen, tooltipin näkyvyyden, haitarien otsikko/sisältölinjaukset ja tekstit; kuvat tarkastettiin. Nykyisen ainetietotestin odotukset päivitettiin.
+- Käyttäjän vähäisen testauksen ja build-kustannusten rajauksen mukaisesti tämä pieni esitystapakorjaus käyttää beta.3:n kohdennettua julkaisumenettelyä: ei laajaa CI-uusintakierrosta eikä Netlify-esikatselua, yksi beta-build. Fyysisen iPhonen toiminta jää käyttäjän laitetestiin.
+
+Samaan beta.4-erään lisättiin asetussivun palaute: varmuuskopiointi ja poisto ovat vasemmassa linjassa; kattavuusraportti on alleviivaamaton painiketyylinen linkki; versiohistorialinkissä näkyy vain numero. Anna palautetta -painikkeessa on ulkoisen linkin ikoni sekä erillinen GitHub-selite. Näiden kohdennetut mobiili-WebKit-tarkistukset läpäistiin (linjaus, tyyli, versionumerolinkin navigaatio ja palautepainikkeen yhden rivin koko sekä kohde). Palautetta ei lähetetty. Muutettua nykyistä ainetietotestiä ajettiin vain kerran: mobiili-Chromium, 1 läpäisty / 1,4 s.
+
+Beta-ilmoitus viimeisteltiin samaan erään: versionumero, yhtenäiset Versiohistoria/Vakaa versio -painikkeet ja lyhyt tallennusten erillisyyttä kuvaava lause. Build-revisio näkyy edelleen asetuksissa. Mobiili-WebKitissä painikkeet mahtuivat samalle riville 320/390 px leveydessä; laskurin painike jäi vierityksen jälkeen 40,5 px alavalikon yläpuolelle. Nykyinen kaksikielinen versiohistoriatesti läpäistiin kerran (1 testi / 1,3 s). Alustava paikallinen geometriatarkistus mittasi laskuripainiketta ennen vieritystä ja epäonnistui; tarkistus korjattiin mittaamaan käyttäjän vieritettävissä olevaa näkymää, sovelluksen laskurin asettelua ei muutettu.

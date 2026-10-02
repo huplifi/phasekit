@@ -25,14 +25,13 @@ export function describeRefrigerantFact(
   locale: "fi" | "en",
 ): RefrigerantFactDescription {
   const fi = locale === "fi";
+  const missingText = fi ? "Tieto puuttuu" : "Data unavailable";
   if (key === "family")
     return refrigerant.family && refrigerant.family !== "unclassified"
       ? { state: "known", text: refrigerant.family }
       : {
           state: "unclassified",
-          text: fi
-            ? "Aineryhmä puuttuu aineistosta"
-            : "Refrigerant family missing from dataset",
+          text: missingText,
         };
   const fact =
     refrigerant.facts[keys[key]] ??
@@ -41,13 +40,7 @@ export function describeRefrigerantFact(
     const classification = key === "safety" || key === "ped";
     return {
       state: classification ? "unclassified" : "missing",
-      text: classification
-        ? fi
-          ? "Luokitus puuttuu aineistosta"
-          : "Classification missing from dataset"
-        : fi
-          ? "Tieto puuttuu aineistosta"
-          : "Data missing from dataset",
+      text: missingText,
       ...(key === "ped"
         ? {
             detail: fi
@@ -86,7 +79,7 @@ export function describeRefrigerantFact(
   if (fact.value === null)
     return {
       state: "missing",
-      text: fi ? "Tieto puuttuu aineistosta" : "Data missing from dataset",
+      text: missingText,
       fact,
     };
   const value = String(fact.value);
@@ -109,7 +102,7 @@ export function describeRefrigerantFact(
     )
       return {
         state: "missing",
-        text: fi ? "Olosuhteet puuttuvat" : "Conditions missing",
+        text: missingText,
         detail: fi
           ? "Tallennettua lukuarvoa ei näytetä ilman yksikköä, olomuotoa, lämpötilaa, absoluuttista painetta ja menetelmää."
           : "The stored number is withheld until unit, phase, temperature, absolute pressure and method are available.",

@@ -173,10 +173,8 @@ strong.mono {
   border-radius: 8px;
 }
 .beta-banner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 8px;
+  display: grid;
+  gap: 8px;
   margin: -16px 0 24px;
   padding: 10px 12px;
   border-inline-start: 3px solid var(--link);
@@ -188,16 +186,29 @@ strong.mono {
   color: var(--text-secondary);
   overflow-wrap: anywhere;
 }
-.beta-banner strong {
+.beta-banner-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.beta-banner-heading strong {
   color: var(--text);
 }
-.beta-banner a {
+.beta-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.beta-banner .secondary-button {
+  min-height: 44px;
+  padding: 8px 10px;
+  gap: 6px;
+  font-size: 0.8125rem;
   font-weight: 600;
 }
-.beta-banner .beta-release-link {
-  min-height: auto;
-  padding: 0;
-  white-space: nowrap;
+.beta-banner p {
+  margin: 0;
 }
 .offline-indicator {
   display: flex;
@@ -664,7 +675,8 @@ select {
   flex-wrap: wrap;
 }
 .settings-actions {
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .settings-backup-actions {
   display: flex;
@@ -673,15 +685,20 @@ select {
   gap: 12px;
 }
 .settings-delete-action {
-  margin-inline-start: auto;
   padding-inline: 10px;
   border: 1px solid var(--status-error-foreground);
   border-radius: 8px;
 }
+.feedback-action {
+  font-weight: 700;
+}
+.feedback-description {
+  margin-top: 8px;
+}
 .coverage-report-link {
   width: fit-content;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  font-weight: 700;
 }
 .status-badge {
   display: inline-flex;
@@ -1024,12 +1041,15 @@ input[aria-invalid="true"] {
 }
 .info-help {
   display: inline-flex;
+  flex-shrink: 0;
 }
 .info-help-button {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-inline: 4px 0;
   width: 44px;
+  flex-shrink: 0;
   height: 44px;
   margin-block: -8px;
   color: var(--secondary-text, var(--text));

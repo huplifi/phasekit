@@ -1,5 +1,32 @@
 [
   {
+    "version": "0.4.0-beta.4",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Yhtenäiset ainetiedot ja toimivat info-ohjeet",
+      "en": "Consistent refrigerant details and contextual help"
+    },
+    "changes": {
+      "fi": [
+        "Seoksen kemiallinen nimi näkyy muodossa Kylmäaineseos. Puuttuvien ominaisuustietojen merkintä on yhtenäisesti Tieto puuttuu.",
+        "Lisätieto- ja lähdehaitarien sisältö on linjattu otsikkotekstin kanssa.",
+        "Öljyosion infoteksti avautuu otsikon alle. Infoikonit ovat kautta sovelluksen lähempänä tekstiä, ja napautusalueen koko säilyy ennallaan.",
+        "Asetusten toimintopainikkeet ovat vasemmassa linjassa. Kattavuusraportin painikkeesta poistettiin linkkialleviivaus, ja versiohistoriaan johtaa pelkkä versionumero.",
+        "Palautteen antamiselle on oma selkeä painike ja tieto GitHubiin siirtymisestä.",
+        "Beta-ilmoituksessa on versionumero, yhtenäiset Versiohistoria- ja Vakaa versio -painikkeet sekä lyhyt huomio tallennusten erillisyydestä. Build-tunniste löytyy asetuksista."
+      ],
+      "en": [
+        "Blend chemical names use Refrigerant blend. Missing property values consistently show Data unavailable.",
+        "Property and source disclosure content aligns with the heading text.",
+        "Oil guidance opens below its heading. Information icons sit closer to their labels throughout the app while retaining their touch target size.",
+        "Settings actions align to the left. Coverage buttons no longer have link underlines, and the version number alone links to release history.",
+        "Feedback has a distinct button with a clear GitHub destination.",
+        "The beta notice shows its version, matching Release history and Stable version buttons, and a brief note about separate records. The build revision remains in Settings."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.3",
     "date": "2026-10-02",
     "channel": "beta",
