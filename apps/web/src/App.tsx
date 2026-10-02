@@ -395,13 +395,12 @@ export function App() {
             </div>
             <div className="beta-banner-actions">
               <a
-                className="secondary-button beta-release-link"
+                className="beta-release-link"
                 href="#/releases"
               >
                 {data.locale === "fi" ? "Versiohistoria" : "Release history"}
               </a>
               <a
-                className="secondary-button"
                 href="https://phasekit.app"
                 aria-describedby="beta-storage-note"
               >
