@@ -47,9 +47,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   );
   await t.fill("-999");
   await expect(p).toHaveValue("");
-  await expect(page.getByRole("alert")).toContainText(
-    "tuettu alue",
-  );
+  await expect(page.getByRole("alert")).toContainText("tuettu alue");
   await t.fill("68");
   await choose(page, "R514A");
   await expect(t).toHaveValue("68");
@@ -157,7 +155,7 @@ test("property labels distinguish verified absence from missing classifications"
     panel.getByText("Tieto puuttuu aineistosta", { exact: true }).first(),
   ).toBeVisible();
   await expect(
-    panel.getByText("PED-fluidiryhmä", { exact: true }),
+    panel.getByRole("term").filter({ hasText: /^PED-fluidiryhmä$/ }),
   ).toBeVisible();
   await expect(
     panel.getByText("Luokitus puuttuu aineistosta", { exact: true }),

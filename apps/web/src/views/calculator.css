@@ -260,11 +260,15 @@
   }
   .shsc-temperatures label {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(100px, 42%);
+    grid-template-columns: minmax(100px, 42%) minmax(0, 1fr);
     align-items: center;
   }
-  .shsc-temperatures input {
+  .shsc-temperatures label > span {
     grid-column: 2;
+    grid-row: 1;
+  }
+  .shsc-temperatures input {
+    grid-column: 1;
     grid-row: 1;
   }
 }
@@ -279,4 +283,14 @@
   .pt-value-field:last-child {
     grid-column: 1;
   }
+}
+
+.calculator-form .temperature-heading {
+  margin-block: 24px 12px;
+}
+.calculator-form .temperature-heading h2 {
+  margin: 0;
+}
+.calculator-form .temperature-heading .info-help-button {
+  margin-block: 0;
 }

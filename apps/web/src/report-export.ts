@@ -91,32 +91,11 @@ export function createPrintDocument(
   const returnUrl = window.location.href;
   back.href = returnUrl;
   back.textContent = locale === "fi" ? "Takaisin raporttiin" : "Back to report";
-  back.addEventListener("click", (event) => {
-    event.preventDefault();
-    try {
-      window.focus();
-      win.close();
-      if (win.closed) return;
-    } catch {
-      /* Closing may be unavailable in an installed web app. */
-    }
-    // document.open() can inherit the original URL. A link to that exact URL
-    // then leaves the temporary print DOM in place; reload fetches the app.
-    const current = new URL(win.location.href, returnUrl);
-    const target = new URL(returnUrl);
-    const reloadRequired =
-      current.origin === target.origin &&
-      current.pathname === target.pathname &&
-      current.search === target.search;
-    win.location.replace(returnUrl);
-    if (reloadRequired) win.location.reload();
-  });
   const print = doc.createElement("button");
   print.type = "button";
   print.className = "print-action";
   print.textContent = locale === "fi" ? "Tulosta / PDF" : "Print / PDF";
   print.disabled = true;
-  print.addEventListener("click", () => win.print());
   toolbar.append(back, print);
   doc.body.append(toolbar);
   const brand = doc.createElement("p");
@@ -1172,30 +1151,21 @@ export function printWhenReady(
   locale: Locale,
   image?: HTMLImageElement,
 ) {
-  const action = doc.querySelector<HTMLButtonElement>(".print-action");
-  if (!action) return;
-  if (!image) {
-    action.disabled = false;
-    return;
-  }
-  const failed = () => {
+  if (image) image.dataset.printChart = "true";
+  const script = doc.createElement("script");
+  script.src = new URL("./print-controls.js?no-inline", import.meta.url).href;
+  script.addEventListener("error", () => {
     const warning = doc.createElement("p");
     warning.className = "notice";
     warning.setAttribute("role", "alert");
     warning.textContent =
       locale === "fi"
-        ? "Tallennetun kaavion lataus epäonnistui. Tulostusta ei aloitettu."
-        : "The saved chart could not load. Printing was cancelled.";
-    image.replaceWith(warning);
-    win.focus();
-  };
-  const ready = () =>
-    image.naturalWidth > 0 ? (action.disabled = false) : failed();
-  if (image.complete) ready();
-  else {
-    image.onload = ready;
-    image.onerror = failed;
-  }
+        ? "Tulostustoiminto ei latautunut. Palaa raporttiin ja avaa esikatselu uudelleen."
+        : "Print controls could not load. Return to the report and reopen the preview.";
+    doc.querySelector(".print-toolbar")?.after(warning);
+  });
+  doc.body.append(script);
+  win.focus();
 }
 
 export function printCheckResult({

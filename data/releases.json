@@ -1,5 +1,32 @@
 [
   {
+    "version": "0.4.0-beta.2",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Tiiviimmät ainetiedot ja itsenäinen tulostusnäkymä",
+      "en": "Compact refrigerant details and independent print controls"
+    },
+    "changes": {
+      "fi": [
+        "GWP:n laskentaperuste avautuu infopainikkeesta. Pitkät aineominaisuuksien menetelmätekstit on koottu lisätietohaitariin, ja lyhyet olosuhdetiedot säilyvät arvon vieressä.",
+        "Puhtaan aineen koostumus näkyy perustiedoissa. Seoksissa aineosan nimi on linkki ja prosenttiosuus tavallinen arvo.",
+        "Öljytyyppi-riviä on tiivistetty ja tyhjän vaihtoehtolistan aiheuttama irrallinen nolla poistettu. Päällekkäiset rajoitusten lähdelinkit on yhdistetty.",
+        "Kattavuusraportti avautuu nyt sovelluksen omaan näkymään, jossa on ainekohtaiset tiedot ja paluupainike.",
+        "Kylmäkierron lämpötilakentät ovat puhelimessa vasemmalla. Otsikon infopainikkeen kohdistus on korjattu.",
+        "Tulostusnäkymän painikkeet ja kaavion latauksen odotus toimivat omassa ikkunassaan myös avaavan sivun ollessa pysäytettynä. Fyysisen iPhonen tulostusvalinnan toiminta on vielä testattava."
+      ],
+      "en": [
+        "GWP calculation bases open from an information button. Longer property methods are grouped in a disclosure while brief conditions remain beside each value.",
+        "Pure-substance composition is shown in basic information. Blend component names are links and mass percentages are plain values.",
+        "The oil-type row is shorter and the stray zero from an empty alternatives list is removed. Duplicate restriction source links are consolidated.",
+        "Coverage opens in an app view with refrigerant-specific details and a back button.",
+        "Cycle temperature inputs sit on the left on phones. The heading information button is aligned correctly.",
+        "Print controls and chart loading run in the preview window independently of a suspended opener. The physical iPhone print dialog still needs device testing."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.1",
     "date": "2026-10-02",
     "channel": "beta",

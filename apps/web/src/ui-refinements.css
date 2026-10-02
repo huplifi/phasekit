@@ -418,3 +418,33 @@
     transition: none;
   }
 }
+
+.fact-row {
+  position: relative;
+}
+.gwp-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.coverage-report-link {
+  margin-top: 16px;
+}
+.coverage-view .fact-row dt,
+.coverage-view .fact-row dd {
+  min-width: 0;
+}
+
+.property-context {
+  display: block;
+  margin-top: 6px;
+}
+
+.property-background h3 {
+  font-size: 0.875rem;
+  margin: 16px 0 6px;
+}
+
+.coverage-view .fact-row dd > .caption {
+  display: block;
+}

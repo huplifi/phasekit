@@ -1,3 +1,4 @@
+import { Coverage } from "./views/Coverage";
 import { Symbols } from "./views/Symbols";
 import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -329,7 +330,9 @@ export function App() {
     ? "tools"
     : ["saved", "reports", "equipment", "checklists"].includes(section)
       ? "saved"
-      : section === "settings" || section === "releases"
+      : section === "settings" ||
+          section === "releases" ||
+          (section === "coverage" && !r)
         ? "settings"
         : "refrigerants";
   return (
@@ -491,6 +494,8 @@ export function App() {
             <Equipment />
           ) : section === "saved" || section === "reports" ? (
             <Saved />
+          ) : section === "coverage" ? (
+            <Coverage r={r} />
           ) : section === "releases" ? (
             <ReleaseHistory />
           ) : section === "settings" ? (

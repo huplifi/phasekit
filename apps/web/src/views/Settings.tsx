@@ -142,14 +142,9 @@ export function Settings() {
           <summary>{t("dataHash")}</summary>
           <p className="mono wrap caption">{dataset.sha256}</p>
         </details>
-        <a
-          className="text-button coverage-report-link"
-          href="/coverage.html"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a className="secondary-button coverage-report-link" href="#/coverage">
           {l("Avaa kattavuusraportti", "Open coverage report")}{" "}
-          <span aria-hidden="true">↗</span>
+          <span aria-hidden="true">→</span>
         </a>
         <h3>{t("install")}</h3>
         <p className="secondary">{t("installHelp")}</p>
@@ -176,7 +171,10 @@ export function Settings() {
               <a className="release-history-link" href="#/releases">
                 <span className="mono">{appVersion}</span>
                 <span aria-hidden="true"> · </span>
-                {l("Versiohistoria ja uutta", "Release history and what’s new")}{" "}
+                {l(
+                  "Versiohistoria ja uutta",
+                  "Release history and what’s new",
+                )}{" "}
                 <span aria-hidden="true">→</span>
               </a>
             </dd>

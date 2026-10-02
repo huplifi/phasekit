@@ -4,6 +4,17 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.2 — 2026-10-02 · Beta
+
+Compact refrigerant details and independent print controls
+
+- GWP calculation bases open from an information button. Longer property methods are grouped in a disclosure while brief conditions remain beside each value.
+- Pure-substance composition is shown in basic information. Blend component names are links and mass percentages are plain values.
+- The oil-type row is shorter and the stray zero from an empty alternatives list is removed. Duplicate restriction source links are consolidated.
+- Coverage opens in an app view with refrigerant-specific details and a back button.
+- Cycle temperature inputs sit on the left on phones. The heading information button is aligned correctly.
+- Print controls and chart loading run in the preview window independently of a suspended opener. The physical iPhone print dialog still needs device testing.
+
 ## 0.4.0-beta.1 — 2026-10-02 · Beta
 
 Clearer field reports and refrigerant properties
