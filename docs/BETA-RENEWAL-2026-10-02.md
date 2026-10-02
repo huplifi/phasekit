@@ -2,7 +2,7 @@
 
 Päiväys: 2026-10-02
 Havaintojen lähtöversio: kuvakaappauksissa 0.3.0-beta.9 / b9e6275
-Tila: 0.4.0-beta.1-julkaisuehdokas toteutettu ja paikallinen yhdistetty tarkistus läpäisty. Beta-julkaisu ja live-tarkistus seuraavaksi; vakaa erikseen.
+Tila: **0.4.0-beta.1 julkaistu betaan 2.10.2026 ja live-tarkistettu**. Julkaistu sovellusrevisio `49d0e86`. Vakaa 0.2.1 säilyi ennallaan.
 
 ## Toteutuslupa ja työskentelyohje
 
@@ -705,7 +705,7 @@ Hyväksyminen:
 - [x] Raporttien todelliset tulosteet/PDF:t tarkistettu myös monisivuisina.
 - [x] Lähteet ja säädöstulkintojen tarkistuspäivät kirjattu.
 - [x] Versiohistoria päivitetty käyttäjälle ymmärrettävästi.
-- [ ] Julkaistu ensin betaan ja julkaistu versio kirjattu tähän.
+- [x] Julkaistu ensin betaan ja julkaistu versio kirjattu tähän.
 - [x] Vakaa versio jätetty odottamaan erillistä julkaisupäätöstä.
 
 ## Toteutusmerkinnän malli
@@ -734,4 +734,15 @@ Lisää valmistuvaan kohtaan:
 - Testattu vanhan beta.9:n kymmenen synteettistä raporttia (viisi pohjaa, luonnos ja lukittu): tuonti, avaaminen, tulostus ja vienti säilyttävät alkuperäiset raporttiobjektit täsmälleen.
 - Pitkä vanha havainto ja muistiinpano säilyvät muokkauksen ja viennin jälkeen; molempien loppumerkit löytyvät nelisivuisen PDF:n tekstistä. Kolmisivuinen sisäisten pöytäkirjojen asennustodistus tarkistettu kuvina.
 - Jäljelle jäävät rajat: puuttuvia ominaisuusarvoja ei arvata; R1243zf:n turvallisuusluokka on edelleen avoin lähderistiriidan vuoksi. Fyysistä iPhonea ei ole testattu tällä kierroksella.
-- Beta-julkaisun ja live-tarkistuksen tila päivitetään julkaisun jälkeen.
+
+## Varmennettu beta-julkaisu 2.10.2026
+
+- Julkaisu: **0.4.0-beta.1**, [beta.phasekit.app](https://beta.phasekit.app), sovellusrevisio `49d0e86eeababb921acfc50c21ae4dbcedaadb12`.
+- [PR #21](https://github.com/huplifi/phasekit/pull/21) yhdistetty beta-haaraan klo 13.37 Suomen aikaa. Testattu lähdecommit `26717ef`.
+- [GitHub push-CI](https://github.com/huplifi/phasekit/actions/runs/36995073557): 436 yksikkötestiä, 426 selaintestiä ilman uusintoja ja 2 tunnettua WebKit offline -ohitusta; kaikki muut vaiheet hyväksytty.
+- [Rinnakkainen PR-CI](https://github.com/huplifi/phasekit/actions/runs/36995074257) hyväksytty, mutta R454C:n mobiili-WebKit P–T-testi vaati yhden uusinnan. Sama polku läpäisi lisäksi viisi peräkkäistä paikallista WebKit-ajoa. Tätä ajoa ei kirjata uusinnattomaksi.
+- Ensimmäinen CI hylkäsi liian suuren mobiiliversiohistorian kuvakaappauksen. Testikuva rajattiin CSS-pikseleihin, minkä jälkeen molemmat CI-ajot hyväksyttiin.
+- Netlifyn PR-esikatselu ja varsinainen beta-osoite tarkistettu erikseen Chromiumissa ja WebKitissä: oikea versio/revisio, versiohistoria, mobiiliraportin luonti, tallennus, tulostus, ei vaakavuotoa eikä JavaScript-virheitä.
+- Oikea beta.9 → 0.4.0-beta.1 service worker -päivityskehote testattu avoimessa Chromium-istunnossa. Kymmenen synteettistä vanhaa raporttia säilyi täsmälleen vientiin asti; päivityksen jälkeinen offline-uudelleenlataus toimi. Selain- tai sivustotietoja ei tyhjennetty.
+- [phasekit.app](https://phasekit.app) jäi versioon **0.2.1**. Myös etusivun HTML-tiedoston SHA-256 pysyi samana ennen ja jälkeen beta-julkaisun: `5de0f2c8173fc526cec75cb0c9175ee3d037c3c2e58b4aec89bbdf9e86982693`.
+- Tämä jälkikäteinen dokumentointimerkintä ei muuta julkaistua sovelluskoostetta. Fyysisen iPhonen hyväksyntää tai laitetoimittajan/asennuskohteen vaatimusten täyttymistä ei ole väitetty tarkistetuksi.
