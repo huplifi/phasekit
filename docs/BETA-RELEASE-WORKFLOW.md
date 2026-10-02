@@ -28,13 +28,15 @@ Once the CNAME resolves, use [the beta domain panel](https://app.netlify.com/pro
 
 1. Create a feature branch from the current `beta`; submit a PR targeting `beta`.
 2. Update the root `package.json` version and add matching Finnish and English notes at the top of `data/releases.json`. Record the version date, channel and user-visible changes; run `pnpm release:build` and commit the generated `CHANGELOG.md`. The bundled Settings → Release history view uses those same entries. The build rejects missing translations, duplicate versions, invalid dates and channel/version mismatches. Update README and run `pnpm data:coverage` when data coverage changes.
-3. Run the repository checks and inspect the PR's isolated Deploy Preview on desktop and phone. Check local-data behaviour as well as calculations.
+3. Run `pnpm verify` before pushing a release candidate: data validation, lint, TypeScript, unit tests, production build and the full Chromium/WebKit suite. Install the pinned browser versions first with `pnpm exec playwright install chromium webkit` if needed. Then inspect the PR's isolated Deploy Preview on desktop and phone. Check local-data behaviour as well as calculations. Local macOS checks do not replace the Linux CI run.
 4. Merge reviewed work into `beta`. That updates the public beta automatically. The stable site does not change.
 5. For release, open a PR from `beta` into `main`, review the aggregate changes and source/model versions, and obtain the owner's explicit stable-release decision.
 6. Set the root `package.json` version to the intended stable version (remove the prerelease suffix), add its matching stable history entry, verify the channel in Settings and rerun checks. The root version is the single source for the displayed application version; the build revision comes from Netlify `COMMIT_REF`. Merge only after checks pass. The existing stable Netlify project deploys `main` automatically.
 7. Record the stable Git commit/deploy URL. Verify the actual stable site and retain the previous published deploy as a reference. Before any rollback, confirm storage compatibility: 0.1.0 drops the newer report/equipment collections when it writes its older schema. After 0.2.0 records exist, prefer a corrective release retaining the 0.2.0 storage model rather than rolling back to 0.1.0.
 
 Do not force-push shared branches, auto-merge beta into main, or use a production deployment command on the stable project for testing. GitHub branch protection can additionally enforce the `verify` check, but no protection rule is claimed configured by this document.
+
+CI runs once per pull request update and on pushes to `beta` and `main`. Feature-branch pushes do not start a duplicate run. New commits cancel superseded runs on the same PR or branch. A retry that passes is still a flaky result to investigate; do not add blind sleeps, widen assertions or increase retries to hide failures. Retained traces and screenshots distinguish input/focus failures from calculation errors.
 
 ## Local records and updates
 

@@ -73,3 +73,31 @@ test("print preview returns to persisted draft in the same window when close is 
     printed.getByRole("navigation", { name: "Raportin toiminnot" }),
   ).toHaveCount(0);
 });
+
+test("print controls remain live when the editor is suspended or replaced", async ({
+  page,
+  browserName,
+}) => {
+  const { printed } = await openDraftPrint(page);
+  await expect(
+    printed.getByRole("button", { name: "Tulosta / PDF" }),
+  ).toBeEnabled();
+  if (browserName === "chromium") {
+    const session = await page.context().newCDPSession(page);
+    await session.send("Emulation.setScriptExecutionDisabled", { value: true });
+  } else {
+    await page.reload();
+  }
+  await printed.evaluate(() => {
+    (window as Window & { printCalls?: number }).printCalls = 0;
+    window.print = () => {
+      (window as Window & { printCalls?: number }).printCalls! += 1;
+    };
+  });
+  await printed.getByRole("button", { name: "Tulosta / PDF" }).click();
+  expect(
+    await printed.evaluate(
+      () => (window as Window & { printCalls?: number }).printCalls,
+    ),
+  ).toBe(1);
+});

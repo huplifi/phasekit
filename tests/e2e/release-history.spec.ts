@@ -14,10 +14,9 @@ test("release history is discoverable and bilingual", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: /GitHub Issues/ }),
   ).toHaveAttribute("href", "https://github.com/huplifi/phasekit/issues");
-  await expect(page.getByRole("link", { name: /kattavuusraportti/ })).toHaveAttribute(
-    "target",
-    "_blank",
-  );
+  await expect(
+    page.getByRole("link", { name: /kattavuusraportti/ }),
+  ).toHaveAttribute("href", "#/coverage");
   const versionLink = page.getByRole("link", {
     name: /Versiohistoria ja uutta/,
   });
@@ -51,7 +50,9 @@ test("release history is discoverable and bilingual", async ({ page }) => {
   await page
     .getByRole("combobox", { name: "Kieli", exact: true })
     .selectOption("en");
-  await page.getByRole("link", { name: /Release history and what’s new/ }).click();
+  await page
+    .getByRole("link", { name: /Release history and what’s new/ })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Visible release history", exact: true }),
   ).toBeVisible();
@@ -70,7 +71,9 @@ test("release history survives an offline reload", async ({
   await page
     .getByRole("combobox", { name: "Kieli", exact: true })
     .selectOption("en");
-  await page.getByRole("link", { name: /Release history and what’s new/ }).click();
+  await page
+    .getByRole("link", { name: /Release history and what’s new/ })
+    .click();
   await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
   await page.reload();
   await page.waitForFunction(() => !!navigator.serviceWorker.controller);

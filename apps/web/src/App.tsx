@@ -1,6 +1,7 @@
+import { Coverage } from "./views/Coverage";
 import { Symbols } from "./views/Symbols";
 import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   Snowflake,
@@ -251,9 +252,11 @@ export function App() {
           : "/phasekit-logo-light.svg",
       );
   }, [theme, data.locale]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     mainRef.current?.focus();
     window.scrollTo(0, 0);
+  }, [path, ready]);
+  useEffect(() => {
     const [section, id] = path.split("/").slice(1);
     if (!ready) return;
     if (section === "refrigerants" && byId.has(id))
@@ -303,7 +306,7 @@ export function App() {
       setData((d) => ({ ...d, favourites: [...d.favourites, id] }));
     }
   }
-  const [section, id] = path.split("/").slice(1);
+  const [section, id, detailTab] = path.split("/").slice(1);
   const r = id ? byId.get(id) : undefined;
   const nav = [
     { key: "refrigerants", path: "/", icon: Snowflake },
@@ -329,7 +332,9 @@ export function App() {
     ? "tools"
     : ["saved", "reports", "equipment", "checklists"].includes(section)
       ? "saved"
-      : section === "settings" || section === "releases"
+      : section === "settings" ||
+          section === "releases" ||
+          (section === "coverage" && !r)
         ? "settings"
         : "refrigerants";
   return (
@@ -465,7 +470,13 @@ export function App() {
             />
           ) : section === "refrigerants" ? (
             r ? (
-              <RefrigerantDetail key={r.id} r={r} />
+              <RefrigerantDetail
+                key={`${r.id}:${detailTab ?? ""}`}
+                r={r}
+                initialTab={
+                  detailTab === "properties" ? "properties" : "overview"
+                }
+              />
             ) : (
               <p className="notice">{t("unknownId")}</p>
             )
@@ -491,6 +502,8 @@ export function App() {
             <Equipment />
           ) : section === "saved" || section === "reports" ? (
             <Saved />
+          ) : section === "coverage" ? (
+            <Coverage r={r} />
           ) : section === "releases" ? (
             <ReleaseHistory />
           ) : section === "settings" ? (

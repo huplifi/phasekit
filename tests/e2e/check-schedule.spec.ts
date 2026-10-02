@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
 
+test("initial navigation does not steal focus from an available input", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    // Focus at the first opportunity after the form enters the DOM. A deferred
+    // navigation effect used to steal this focus before WebKit inserted text.
+    const observer = new MutationObserver(() => {
+      const input =
+        document.querySelector<HTMLInputElement>(".charge-grid input");
+      if (!input) return;
+      observer.disconnect();
+      input.focus();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  });
+  await page.goto("/#/check/r134a");
+  const charge = page.getByLabel("Täytös", { exact: true });
+  await expect(charge).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      }),
+  );
+  await expect(charge).toBeFocused();
+  await page.keyboard.type("10");
+  await expect(charge).toHaveValue("10");
+});
+
 test("next inspection and shareable explanation survive a saved snapshot", async ({
   page,
 }) => {
@@ -62,6 +91,7 @@ test("assessment date alone never creates a completed inspection or due date", a
 }) => {
   await page.goto("/#/check/r134a");
   await page.getByLabel("Täytös", { exact: true }).fill("10");
+  await expect(page.getByLabel("Täytös", { exact: true })).toHaveValue("10");
   await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
   await expect(page.locator(".check-schedule")).toContainText(
     "Syötä viimeksi tehdyn tarkastuksen",

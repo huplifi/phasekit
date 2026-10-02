@@ -622,7 +622,7 @@ export function Calculator({
       )}
       <RefrigerantPicker value={id} onChange={selectId} />
       <form
-        className="calculator-form"
+        className={`calculator-form${tool === "co2e" ? " co2e-form" : ""}`}
         onSubmit={(e) => {
           e.preventDefault();
           calculate();
@@ -825,7 +825,7 @@ export function Calculator({
                 />
               </label>
             </div>
-            <div className="help-heading">
+            <div className="help-heading temperature-heading">
               <h2>{l("Lämpötilat", "Temperatures")}</h2>
               <InfoHelp label={l("Mittauspisteet", "Measurement points")}>
                 {l(

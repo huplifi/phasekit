@@ -14,7 +14,11 @@ import {
   type RefrigerantFactDescription,
   type RefrigerantFactKey,
 } from "../../../../packages/refrigerant-data/src/fact-status";
-import { formatDate } from "../../../../packages/i18n/src";
+import {
+  formatDate,
+  formatNumber,
+  formatDecimal,
+} from "../../../../packages/i18n/src";
 import { useApp } from "../context";
 import { byId, dataset, getFact, factKeys } from "../data";
 import type { Fact } from "../../../../packages/core/src/contracts";
@@ -25,6 +29,7 @@ import {
   FactRow,
   FactValue,
   GwpFacts,
+  GwpBasisHelp,
   GwpSummary,
   Group,
   OilGuidanceHelp,
@@ -68,16 +73,100 @@ function PropertyFactValue({
   description: RefrigerantFactDescription;
   showFactValue?: boolean;
 }) {
-  if (
-    showFactValue &&
-    description.state === "known" &&
-    description.fact
-  )
+  if (showFactValue && description.state === "known" && description.fact)
     return <FactValue fact={description.fact} />;
   const known =
     description.state === "known" || description.state === "known_absent";
   return (
     <span className={known ? undefined : "missing"}>{description.text}</span>
+  );
+}
+
+function conditionSummary(
+  conditions: NonNullable<Fact["conditions"]>,
+  locale: "fi" | "en",
+) {
+  const phases: Record<string, [string, string]> = {
+    bubble: ["Kuplapiste", "Bubble point"],
+    gas_in_air: ["Kaasu ilmassa", "Gas in air"],
+    saturation: ["Kyllästystila", "Saturation"],
+    triple_point: ["Kolmoispiste", "Triple point"],
+    two_phase: ["Neste ja höyry", "Liquid and vapour"],
+  };
+  return [
+    conditions.temperatureC !== undefined
+      ? `${formatNumber(conditions.temperatureC, locale)} °C`
+      : null,
+    conditions.pressureKPaAbsolute !== undefined
+      ? `${formatNumber(conditions.pressureKPaAbsolute, locale)} kPa(a)`
+      : null,
+    conditions.phase
+      ? (phases[conditions.phase]?.[locale === "fi" ? 0 : 1] ??
+        conditions.phase)
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+function PropertyBackground({
+  r,
+  fields,
+}: {
+  r: Refrigerant;
+  fields: (keyof typeof factKeys)[];
+}) {
+  const { data, t } = useApp();
+  const entries = fields.flatMap((key) => {
+    const statusKey = statusFactKeys[key];
+    const description = statusKey
+      ? describeRefrigerantFact(r, statusKey, data.locale)
+      : undefined;
+    const fact = description?.fact ?? factForLocale(r, key, data.locale);
+    // Conditions are rendered from their structured fields; do not repeat the descriptor's copy.
+    const detail = description?.detail?.match(/^(Olosuhteet|Conditions):/)
+      ? undefined
+      : description?.detail;
+    return detail || fact?.conditions?.method || fact?.basis
+      ? [{ key, fact, detail }]
+      : [];
+  });
+  if (!entries.length) return null;
+  return (
+    <details className="source-disclosure property-background">
+      <summary>
+        <ChevronRight size={16} aria-hidden="true" />
+        {data.locale === "fi"
+          ? "Olosuhteet ja lisätiedot"
+          : "Conditions and details"}{" "}
+        ({entries.length})
+      </summary>
+      <div className="source-disclosure-content">
+        {entries.map(({ key, fact, detail }) => (
+          <div key={key}>
+            <h3>
+              {key === "ped"
+                ? data.locale === "fi"
+                  ? "PED-fluidiryhmä"
+                  : "PED fluid group"
+                : t(key)}
+            </h3>
+            {detail && <p className="caption">{detail}</p>}
+            {fact?.conditions && (
+              <p className="caption">
+                {conditionSummary(fact.conditions, data.locale)}
+              </p>
+            )}
+            {fact?.conditions?.method && (
+              <p className="caption">{fact.conditions.method}</p>
+            )}
+            {fact?.basis && fact.basis !== fact.conditions?.method && (
+              <p className="caption">{fact.basis}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </details>
   );
 }
 
@@ -96,7 +185,9 @@ function OilCodeList({ codes }: { codes: string[] }) {
       {codes.map((code) => (
         <span className="oil-type" key={code}>
           <strong>{code}</strong>
-          <span>({oilTypeText(data.locale, code).toLocaleLowerCase(data.locale)})</span>
+          <span>
+            ({oilTypeText(data.locale, code).toLocaleLowerCase(data.locale)})
+          </span>
         </span>
       ))}
     </span>
@@ -110,9 +201,9 @@ function OilGuidance({ r }: { r: Refrigerant }) {
   const typicalCodes = oilCodes(typical);
   const possibleCodes = oilCodes(possible);
   const knownTypical =
-    typical?.state === "not_applicable" || typicalCodes.length;
+    typical?.state === "not_applicable" || typicalCodes.length > 0;
   const knownPossible =
-    possible?.state === "not_applicable" || possibleCodes.length;
+    possible?.state === "not_applicable" || possibleCodes.length > 0;
   const hasStructured = Boolean(knownTypical || knownPossible);
   const note = factForLocale(r, "oils", data.locale);
 
@@ -120,7 +211,7 @@ function OilGuidance({ r }: { r: Refrigerant }) {
     return (
       <dl className="facts oil-facts">
         {knownTypical && (
-          <FactRow label={refinementText(data.locale, "oilTypical")}>
+          <FactRow label={data.locale === "fi" ? "Öljytyyppi" : "Oil type"}>
             {typical?.state === "not_applicable" ? (
               <span className="missing">{t("notApplicable")}</span>
             ) : (
@@ -297,9 +388,15 @@ function RestrictionList({
                   <p>{notice.summary[data.locale]}</p>
                   <p className="caption">{notice.scope[data.locale]}</p>
                   <p className="caption">{notice.caveats[data.locale]}</p>
-                  <a href={notice.sourceUrl} target="_blank" rel="noreferrer">
-                    {t("source")}
-                  </a>
+                  {!dataset.sources.some(
+                    (source) =>
+                      notice.sourceIds.includes(source.id) &&
+                      source.url === notice.sourceUrl,
+                  ) && (
+                    <a href={notice.sourceUrl} target="_blank" rel="noreferrer">
+                      {t("source")}
+                    </a>
+                  )}
                   <SourceNote ids={notice.sourceIds} />
                 </div>
               </details>
@@ -338,10 +435,23 @@ const detailTabs = [
 ] as const;
 type DetailTab = (typeof detailTabs)[number];
 
-export function RefrigerantDetail({ r }: { r: Refrigerant }) {
+export function RefrigerantDetail({
+  r,
+  initialTab = "overview",
+}: {
+  r: Refrigerant;
+  initialTab?: DetailTab;
+}) {
   const { t, data } = useApp();
   const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
-  const [tab, setTab] = useState<DetailTab>("overview");
+  const [tab, setTab] = useState<DetailTab>(initialTab);
+  useEffect(() => {
+    if (initialTab !== "properties") return;
+    const frame = requestAnimationFrame(() =>
+      document.getElementById("detail-coverage-link")?.focus(),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [initialTab]);
   const notices = restrictionsFor(r, dataset, today());
   const chemicalName =
     r.name[data.locale] === r.designation ? null : r.name[data.locale];
@@ -428,8 +538,15 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                   )}
                 />
               </FactRow>
-              <FactRow label={t("gwp")}>
-                <GwpSummary r={r} />
+              <FactRow
+                label={
+                  <span className="gwp-heading">
+                    {t("gwp")}
+                    <GwpBasisHelp r={r} />
+                  </span>
+                }
+              >
+                <GwpSummary r={r} showBasis={false} />
               </FactRow>
             </dl>
             <SourceNote
@@ -472,6 +589,9 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                     t(r.kind === "blend" ? "notApplicable" : "unknown")
                   )}
                 </FactRow>
+                {r.kind === "pure" && (
+                  <FactRow label={t("composition")}>{t("pure")}</FactRow>
+                )}
                 <FactRow label="CAS">
                   {r.cas ?? t(r.kind === "blend" ? "notApplicable" : "unknown")}
                 </FactRow>
@@ -499,47 +619,42 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                 ))}
               </dl>
               <a
-                className="text-button"
-                href="/coverage.html"
-                target="_blank"
-                rel="noreferrer"
+                id="detail-coverage-link"
+                className="secondary-button coverage-report-link"
+                href={`#/coverage/${r.id}`}
               >
-                {t("coverageReport")}
+                {t("coverageReport")}{" "}
+                <ChevronRight size={18} aria-hidden="true" />
               </a>
             </Group>
-            <Group
-              title="composition"
-              ids={
-                r.kind === "pure"
-                  ? r.sourceIds
-                  : r.components.flatMap((c) => c.sourceIds)
-              }
-            >
-              {r.kind === "pure" ? (
-                <p>{t("pure")}</p>
-              ) : r.components.length ? (
-                <dl className="facts">
-                  {r.components.map((c) => (
-                    <FactRow
-                      key={c.refrigerantId}
-                      label={
-                        byId.get(c.refrigerantId)?.designation ??
-                        c.refrigerantId
-                      }
-                    >
-                      <a
-                        href={`#/refrigerants/${c.refrigerantId}`}
-                        className="mono"
+            {r.kind === "blend" && (
+              <Group
+                title="composition"
+                ids={r.components.flatMap((c) => c.sourceIds)}
+              >
+                {r.components.length ? (
+                  <dl className="facts">
+                    {r.components.map((c) => (
+                      <FactRow
+                        key={c.refrigerantId}
+                        label={
+                          <a href={`#/refrigerants/${c.refrigerantId}`}>
+                            {byId.get(c.refrigerantId)?.designation ??
+                              c.refrigerantId}
+                          </a>
+                        }
                       >
-                        {c.massPercent} %
-                      </a>
-                    </FactRow>
-                  ))}
-                </dl>
-              ) : (
-                <p>{t("unknown")}</p>
-              )}
-            </Group>
+                        <span className="mono">
+                          {formatDecimal(c.massPercent, data.locale)} %
+                        </span>
+                      </FactRow>
+                    ))}
+                  </dl>
+                ) : (
+                  <p>{t("unknown")}</p>
+                )}
+              </Group>
+            )}
             {groups.map((group) => (
               <Group
                 key={group.title}
@@ -570,63 +685,45 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                     <OilGuidance r={r} />
                   </>
                 ) : (
-                  <dl className="facts">
-                    {group.fields.map((key) => {
-                      const statusKey = statusFactKeys[key];
-                      const description = statusKey
-                        ? describeRefrigerantFact(r, statusKey, data.locale)
-                        : undefined;
-                      const fact =
-                        description?.fact ??
-                        factForLocale(r, key, data.locale);
-                      return (
-                        <div key={key}>
+                  <>
+                    <dl className="facts">
+                      {group.fields.map((key) => {
+                        const statusKey = statusFactKeys[key];
+                        const description = statusKey
+                          ? describeRefrigerantFact(r, statusKey, data.locale)
+                          : undefined;
+                        const fact =
+                          description?.fact ??
+                          factForLocale(r, key, data.locale);
+                        return (
                           <FactRow
+                            key={key}
                             label={
                               key === "ped"
                                 ? l("PED-fluidiryhmä", "PED fluid group")
                                 : t(key)
                             }
-                            fact={fact}
                           >
-                            {description && (
+                            {description ? (
                               <PropertyFactValue
                                 description={description}
                                 showFactValue={key !== "ped"}
                               />
+                            ) : (
+                              <FactValue fact={fact} />
+                            )}
+                            {fact?.conditions && (
+                              <span className="caption property-context">
+                                {conditionSummary(fact.conditions, data.locale)}
+                              </span>
                             )}
                           </FactRow>
-                          {description?.detail &&
-                            (!fact?.conditions ||
-                              description.state !== "known") && (
-                            <p className="caption">{description.detail}</p>
-                          )}
-                          {fact?.conditions && (
-                            <p className="caption">
-                              {t("condition")}:{" "}
-                              {[
-                                fact.conditions.temperatureC !== undefined
-                                  ? `${fact.conditions.temperatureC} °C`
-                                  : null,
-                                fact.conditions.pressureKPaAbsolute !==
-                                undefined
-                                  ? `${fact.conditions.pressureKPaAbsolute} kPa(a)`
-                                  : null,
-                                fact.conditions.phase,
-                                fact.conditions.method,
-                              ]
-                                .filter(Boolean)
-                                .join(" · ")}
-                            </p>
-                          )}
-                          {fact?.basis && (
-                            <p className="caption">{fact.basis}</p>
-                          )}
-                        </div>
-                      );
-                    })}
-                    {group.title === "environment" && <GwpFacts r={r} />}
-                  </dl>
+                        );
+                      })}
+                      {group.title === "environment" && <GwpFacts r={r} />}
+                    </dl>
+                    <PropertyBackground r={r} fields={group.fields} />
+                  </>
                 )}
               </Group>
             ))}
