@@ -1,6 +1,7 @@
 import type { FieldReport, ToolRecord } from "./storage";
 import packageInfo from "../../../package.json" with { type: "json" };
 import Decimal from "decimal.js";
+import printControlsSource from "./print-controls.js?raw";
 import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
   checklistDefinitions,
@@ -1153,7 +1154,10 @@ export function printWhenReady(
 ) {
   if (image) image.dataset.printChart = "true";
   const script = doc.createElement("script");
-  script.src = new URL("./print-controls.js?no-inline", import.meta.url).href;
+  // Bundle this trusted static code with the app: a new about:blank preview
+  // cannot rely on the opener's service worker to fetch a script offline.
+  // Inserting a script also keeps its handlers in the preview's own realm.
+  script.textContent = printControlsSource;
   script.addEventListener("error", () => {
     const warning = doc.createElement("p");
     warning.className = "notice";

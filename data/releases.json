@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.4.0-beta.3",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Tulostuspainike toimii myös offline-tilassa",
+      "en": "Print controls work offline"
+    },
+    "changes": {
+      "fi": [
+        "Tulostusnäkymän ohjaus sisältyy nyt sovellukseen, joten Tulosta / PDF -painike ja paluu raporttiin toimivat myös ilman verkkoyhteyttä.",
+        "Tulostusnäkymä toimii edelleen itsenäisesti avaavan sivun ollessa pysäytettynä. Fyysisen iPhonen tulostusvalinta on vielä varmennettava laitteella."
+      ],
+      "en": [
+        "Print controls are bundled with the app, so Print / PDF and return-to-report controls also work without a network connection.",
+        "The preview remains independent of a suspended opener. The physical iPhone print dialog still needs device verification."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.2",
     "date": "2026-10-02",
     "channel": "beta",
