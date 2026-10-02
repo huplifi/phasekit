@@ -24,7 +24,7 @@ export function Coverage({ r }: { r?: Refrigerant }) {
   ).length;
   return (
     <div className="coverage-view">
-      <Back to={r ? `/refrigerants/${r.id}` : "/settings"} />
+      <Back to={r ? `/refrigerants/${r.id}/properties` : "/settings"} />
       <h1>{l("Aineiston kattavuus", "Data coverage")}</h1>
       <p className="secondary">
         {l(

@@ -8,7 +8,7 @@ Tila: toteutettu ja tarkistettu paikallisesti. Käyttäjä hyväksyi 0.4.0-beta.
 - Pitkät ominaisuuksien menetelmä- ja taustatiedot ovat yhteisessä haitarissa. Lyhyt lämpötila-, paine- ja faasitieto säilyy arvon yhteydessä. Kaksoiskappaleena näkyvä menetelmäteksti poistui ja tunnetut faasinimet käännettiin.
 - Öljyrivin nimi on Öljytyyppi. Valmistajan ohjeen ensisijaisuus säilyy infotekstissä. Tyhjän vaihtoehtolistan pituudesta syntynyt irrallinen nolla on korjattu boolean-ehdolla.
 - Rajoituksen suora Lähde-linkki jätetään pois, jos sama URL on jo Tietojen tausta -haitarissa. Erillistä lähdelinkkiä ei poisteta, jos sen osoite poikkeaa taustalähteistä.
-- Kattavuuspainike avaa sovelluksen oman näkymän, jossa on paluu, navigaatio, ainekohtaiset tiedot ja koko aineiston kattavuus. Englanninkielinen tekninen HTML-raportti säilyy erillisessä lisätietokohdassa.
+- Kattavuuspainike avaa sovelluksen oman näkymän, jossa on paluu Ominaisuudet-välilehden avaavaan painikkeeseen, navigaatio, ainekohtaiset tiedot ja koko aineiston kattavuus. Englanninkielinen tekninen HTML-raportti säilyy erillisessä lisätietokohdassa.
 
 ## Tulostuspainike
 

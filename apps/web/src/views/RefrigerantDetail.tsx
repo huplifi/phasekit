@@ -435,10 +435,23 @@ const detailTabs = [
 ] as const;
 type DetailTab = (typeof detailTabs)[number];
 
-export function RefrigerantDetail({ r }: { r: Refrigerant }) {
+export function RefrigerantDetail({
+  r,
+  initialTab = "overview",
+}: {
+  r: Refrigerant;
+  initialTab?: DetailTab;
+}) {
   const { t, data } = useApp();
   const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
-  const [tab, setTab] = useState<DetailTab>("overview");
+  const [tab, setTab] = useState<DetailTab>(initialTab);
+  useEffect(() => {
+    if (initialTab !== "properties") return;
+    const frame = requestAnimationFrame(() =>
+      document.getElementById("detail-coverage-link")?.focus(),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [initialTab]);
   const notices = restrictionsFor(r, dataset, today());
   const chemicalName =
     r.name[data.locale] === r.designation ? null : r.name[data.locale];
@@ -606,6 +619,7 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                 ))}
               </dl>
               <a
+                id="detail-coverage-link"
                 className="secondary-button coverage-report-link"
                 href={`#/coverage/${r.id}`}
               >

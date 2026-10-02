@@ -129,21 +129,17 @@ test("refrigerant details keep context accessible without duplicate metadata or 
   await page.goto("/#/refrigerants/r514a");
   await page.getByRole("tab", { name: "Ominaisuudet", exact: true }).click();
   const panel = page.locator("#detail-panel");
-  const composition = panel
-    .locator("section")
-    .filter({
-      has: page.getByRole("heading", { name: "Koostumus", exact: true }),
-    });
+  const composition = panel.locator("section").filter({
+    has: page.getByRole("heading", { name: "Koostumus", exact: true }),
+  });
   await expect(
     composition.getByRole("link", { name: "R1130(E)", exact: true }),
   ).toHaveAttribute("href", "#/refrigerants/r1130e");
   await expect(composition.locator("dd a")).toHaveCount(0);
   await expect(composition).toContainText("25,3 %");
-  const thermo = panel
-    .locator("section")
-    .filter({
-      has: page.locator(".property-context").filter({ hasText: "28,8 °C" }),
-    });
+  const thermo = panel.locator("section").filter({
+    has: page.locator(".property-context").filter({ hasText: "28,8 °C" }),
+  });
   const method = thermo.getByText(
     "BITZER normal dew minus bubble point at ambient pressure",
     { exact: true },
@@ -167,14 +163,12 @@ test("refrigerant details keep context accessible without duplicate metadata or 
         .filter(Boolean),
     ),
   ).toEqual([]);
-  const environment = panel
-    .locator("section")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Ympäristö ja sääntely",
-        exact: true,
-      }),
-    });
+  const environment = panel.locator("section").filter({
+    has: page.getByRole("heading", {
+      name: "Ympäristö ja sääntely",
+      exact: true,
+    }),
+  });
   await expect(environment.locator(".gwp-heading")).toContainText("GWP");
   const help = environment.locator(".gwp-heading button");
   await help.click();
@@ -224,7 +218,13 @@ test("coverage stays in the app and restriction sources are not duplicated", asy
     ),
   ).toBe(true);
   await page.getByRole("button", { name: "Takaisin", exact: true }).click();
-  await expect(page).toHaveURL(/#\/refrigerants\/r134a$/);
+  await expect(page).toHaveURL(/#\/refrigerants\/r134a\/properties$/);
+  await expect(
+    page.getByRole("tab", { name: "Ominaisuudet", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  await expect(
+    page.getByRole("link", { name: "Avaa kattavuusraportti" }),
+  ).toBeFocused();
   await page.getByRole("tab", { name: "Rajoitukset", exact: true }).click();
   const restriction = page
     .locator("details.restriction")

@@ -304,7 +304,7 @@ export function App() {
       setData((d) => ({ ...d, favourites: [...d.favourites, id] }));
     }
   }
-  const [section, id] = path.split("/").slice(1);
+  const [section, id, detailTab] = path.split("/").slice(1);
   const r = id ? byId.get(id) : undefined;
   const nav = [
     { key: "refrigerants", path: "/", icon: Snowflake },
@@ -468,7 +468,13 @@ export function App() {
             />
           ) : section === "refrigerants" ? (
             r ? (
-              <RefrigerantDetail key={r.id} r={r} />
+              <RefrigerantDetail
+                key={`${r.id}:${detailTab ?? ""}`}
+                r={r}
+                initialTab={
+                  detailTab === "properties" ? "properties" : "overview"
+                }
+              />
             ) : (
               <p className="notice">{t("unknownId")}</p>
             )
