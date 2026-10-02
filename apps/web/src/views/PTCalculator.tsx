@@ -276,7 +276,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           setUnitError(false);
         }}
       />
-      <p className="caption secondary pt-instruction">
+      <p className="secondary pt-instruction">
         {l(
           "Muuta painetta tai lämpötilaa — toinen arvo päivittyy heti.",
           "Edit pressure or temperature — the other value updates immediately.",
@@ -519,12 +519,14 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           <summary>
             {l("Tietojen tausta ja käyttöalue", "Data provenance and range")}
           </summary>
+          <h3>{l("Laskentamalli", "Calculation model")}</h3>
           <p>
             {l(
               "CoolProp 7.2.0 -malliin perustuva offline-interpolointi neste–höyry-tasapainolle. Ei mittaustulos; kriittisen pisteen lähialue on rajattu pois.",
               "Offline interpolation of the CoolProp 7.2.0 liquid–vapour equilibrium model. Not a measurement; the near-critical region is excluded.",
             )}
           </p>
+          <h3>{l("Käyttöalue", "Supported range")}</h3>
           <p className="mono">
             {l(
               "Tuettu lämpötila-alue, noin",
@@ -542,9 +544,14 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             )}
           </p>
           <p className="caption mono">
+            {l("P–T-aineiston versio", "P–T dataset version")}:{" "}
             {offlinePTProvider.metadata.dataVersion}
           </p>
-          <SourceNote ids={offlinePTProvider.metadata.sourceIds} />
+          <h3>{l("Lähteet", "Sources")}</h3>
+          <SourceNote
+            ids={offlinePTProvider.metadata.sourceIds}
+            disclosure={false}
+          />
         </details>
       )}
     </>

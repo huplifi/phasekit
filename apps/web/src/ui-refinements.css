@@ -204,18 +204,33 @@
 .oil-facts .fact-row dd {
   max-width: 68%;
 }
-.oil-code-list {
+.oil-code-list,
+.oil-type {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  text-align: right;
+}
+.oil-type {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  flex-direction: row;
+  gap: 5px;
+  text-align: left;
+}
+.oil-type > strong {
+  font-size: 0.9375rem;
+}
+.oil-type > span {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+.oil-code-list {
   align-items: flex-end;
   gap: 6px;
   text-align: right;
-}
-.oil-code {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 6px;
 }
 .oil-notes {
   color: var(--text-secondary);
@@ -335,11 +350,17 @@
   min-width: 0;
 }
 .restriction-meta {
-  display: block;
-  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-bottom: 7px;
   color: var(--text-secondary);
   font-size: 0.8125rem;
   font-weight: 400;
+}
+.restriction-meta .status-badge {
+  flex: 0 0 auto;
 }
 .restriction-date {
   color: var(--text-secondary);

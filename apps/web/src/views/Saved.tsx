@@ -256,7 +256,13 @@ export function Saved() {
                     <span className="report-kind">
                       {fieldKindLabels[record.kind][data.locale]}
                     </span>
-                    <span className="report-status">
+                    <span
+                      className={
+                        record.status === "final"
+                          ? "report-status status-badge status-badge--success"
+                          : "report-status status-badge status-badge--neutral"
+                      }
+                    >
                       {record.status === "final"
                         ? l(data.locale, "Viimeistelty", "Finalised")
                         : l(data.locale, "Luonnos", "Draft")}

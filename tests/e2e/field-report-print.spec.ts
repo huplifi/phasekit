@@ -1,3 +1,4 @@
+import { completeExternalCertificate } from "./helpers/commissioning";
 import { expect, test } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 
@@ -25,7 +26,7 @@ test("evacuation draft and final print keep measured facts, status and provenanc
   await page.getByLabel("Pitokokeen loppupaine", { exact: true }).fill("0,29");
   await page.getByLabel("Pitokokeen kesto · min", { exact: true }).fill("15");
   await page
-    .getByRole("textbox", { name: "Muistiinpanot", exact: true })
+    .getByRole("textbox", { name: "Havainnot ja muistiinpanot", exact: true })
     .fill("Poikkeama kirjattu jatkotutkimusta varten.");
 
   const draftPopup = page.waitForEvent("popup");
@@ -71,7 +72,7 @@ test("evacuation draft and final print keep measured facts, status and provenanc
     );
 
   const finalise = page.getByRole("button", {
-    name: "Merkitse raportti valmiiksi",
+    name: "Lukitse raportti",
   });
   await expect(finalise).toBeEnabled();
   await finalise.click();
@@ -122,7 +123,7 @@ test("commissioning print keeps pressure reference, marked steps and written not
     })
     .check();
   await page
-    .getByRole("textbox", { name: "Muistiinpanot", exact: true })
+    .getByRole("textbox", { name: "Havainnot ja muistiinpanot", exact: true })
     .fill("Toimintakoe keskeytettiin; tarkista anturi.");
   await page
     .locator("summary")
@@ -141,7 +142,9 @@ test("commissioning print keeps pressure reference, marked steps and written not
   const popup = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Tulosta / PDF" }).click();
   const printed = await popup;
-  await expect(printed.locator("h1")).toHaveText("Käyttöönottoraportti");
+  await expect(printed.locator("h1")).toHaveText(
+    "Asennustodistus ja käyttöönottopöytäkirjat",
+  );
   await expect(
     printed.getByRole("heading", {
       name: "Tyhjiöinnin ja pitokokeen mittaukset",
@@ -215,45 +218,9 @@ test("finalised commissioning print keeps the frozen cycle chart", async ({
     .locator(".field-report-cycle img")
     .getAttribute("src");
   expect(frozenSrc).toContain("data:image/svg+xml");
-  await page.getByText("Asentaja ja vastuuhenkilö", { exact: true }).click();
-  await page.getByLabel("Asennusliike", { exact: true }).fill("Test Company");
-  await page.getByLabel("Asentajan lupanumero", { exact: true }).fill("INST-1");
-  await page
-    .getByLabel("Vastuuhenkilön nimi", { exact: true })
-    .fill("Responsible person");
-  await page
-    .getByLabel("Vastuuhenkilön lupanumero", { exact: true })
-    .fill("RESP-1");
-  await page.getByText("Koepöytäkirjat ja vakuutus", { exact: true }).click();
-  await page
-    .getByLabel("Lakisääteinen vuototarkastusväli ja peruste", { exact: true })
-    .fill("Documented assessment");
-  await page
-    .getByRole("combobox", {
-      name: "Edellyttääkö painelaitesääntely painekoetta?",
-      exact: true,
-    })
-    .selectOption("no");
-  await page
-    .getByLabel("Peruste sille, ettei painekoetta edellytetä", { exact: true })
-    .fill("Documented equipment assessment");
-  await page
-    .getByLabel("Tiiviyskoepöytäkirjan viite / liite", { exact: true })
-    .fill("Annex T-1");
-  await page
-    .getByLabel("Tyhjiöintipöytäkirjan viite / liite", { exact: true })
-    .fill("Annex V-1");
-  await page
-    .getByLabel("Koekäyttöpöytäkirjan viite / liite", { exact: true })
-    .fill("Annex R-1");
-  await page
-    .getByRole("checkbox", {
-      name: "Toiminnanharjoittajan vakuutus",
-      exact: true,
-    })
-    .check();
+  await completeExternalCertificate(page);
   const finalise = page.getByRole("button", {
-    name: "Merkitse raportti valmiiksi",
+    name: "Lukitse raportti",
   });
   await expect(finalise).toBeEnabled();
   await finalise.click();

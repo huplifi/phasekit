@@ -113,7 +113,7 @@ test("commissioning print keeps marked steps, blank steps and written measuremen
         `Havainto ${index + 1}: Mittaus kirjattu ja tarkistettava ennen hyväksyntää.`,
     ).join("\n");
   await page
-    .getByRole("textbox", { name: "Muistiinpanot", exact: true })
+    .getByRole("textbox", { name: "Havainnot ja muistiinpanot", exact: true })
     .fill(longNotes);
   const firstStep = page.getByRole("checkbox", {
     name: "Kohteen käyttöönotto-ohje ja perustiedot tarkistettu",

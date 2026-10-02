@@ -1,7 +1,7 @@
 {
-  "version": "2026-09-30.51cabf3aa643",
-  "sha256": "51cabf3aa643cc12e67c21ae8d352b1605c99a7cb7eb0a0e218839c12be5fb03",
-  "checkedAt": "2026-09-30",
+  "version": "2026-10-02.0172a15b0827",
+  "sha256": "0172a15b0827f914b96075273124cfaf10f87027dde5fd9db4dec976d13bea15",
+  "checkedAt": "2026-10-02",
   "refrigerants": [
     {
       "id": "r11",
@@ -45232,7 +45232,7 @@
         "en": "3,3,3-Trifluoropropene"
       },
       "kind": "pure",
-      "family": "unclassified",
+      "family": "HFO",
       "aliases": [
         "R-1243zf"
       ],
@@ -45244,19 +45244,19 @@
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "ped_fluid_group": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "euAnnex": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "odp": {
           "state": "verified",
@@ -45264,31 +45264,31 @@
           "sourceIds": [
             "coolprop-mit"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "gwp_eu_2024_573_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "gwp_ar4_100": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "gwp_eu_2024_590_100yr": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "normal_boiling_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "critical_temp_c": {
           "state": "verified",
@@ -45296,7 +45296,7 @@
           "sourceIds": [
             "coolprop-mit"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-10-02",
           "unit": "°C"
         },
         "critical_pressure_bar_abs": {
@@ -45305,7 +45305,7 @@
           "sourceIds": [
             "coolprop-mit"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-10-02",
           "unit": "bar abs"
         },
         "triple_point_c": {
@@ -45314,7 +45314,7 @@
           "sourceIds": [
             "coolprop-mit"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-10-02",
           "unit": "°C"
         },
         "nominal_glide_k": {
@@ -45323,13 +45323,13 @@
           "sourceIds": [
             "coolprop-mit"
           ],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "normal_density_kg_m3": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "molar_mass_g_mol": {
           "state": "verified",
@@ -45337,48 +45337,49 @@
           "sourceIds": [
             "coolprop-mit"
           ],
-          "checkedAt": "2026-09-25",
+          "checkedAt": "2026-10-02",
           "unit": "g/mol"
         },
         "lower_flammability_limit_vol_pct": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "autoignition_c": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "oil_notes": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "oil_notes_en": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "oil_typical": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         },
         "oil_possible": {
           "state": "unknown",
           "value": null,
           "sourceIds": [],
-          "checkedAt": "2026-09-25"
+          "checkedAt": "2026-10-02"
         }
       },
       "sourceIds": [
         "coolprop-mit",
+        "epa-hfo-1243zf-family",
         "nist-refprop-identities"
       ],
       "coverage": {
@@ -47179,6 +47180,15 @@
       "checkedAt": "2026-09-25",
       "license": "US EPA data are public domain by default unless otherwise specified",
       "note": "37 rows, 10 overlap the EPA composition page."
+    },
+    {
+      "id": "epa-hfo-1243zf-family",
+      "title": "Transitioning to Low-GWP Alternatives in Motor Vehicle Air Conditioning Systems",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/transitioning_to_low-gwp_alternatives_in_motor_vehicle_air_conditioning_systems.pdf",
+      "version": "EPA-430-F-10-041, October 2010",
+      "checkedAt": "2026-10-02",
+      "license": "US EPA public-domain factual identification",
+      "note": "Classification of family independently checked; safety designation remains unresolved."
     },
     {
       "id": "epa-hfo-yf-name",

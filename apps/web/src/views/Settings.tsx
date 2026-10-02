@@ -64,42 +64,44 @@ export function Settings() {
         <h2>{t("localData")}</h2>
         <p className="secondary">{t("privacy")}</p>
         <div className="settings-actions">
+          <div className="settings-backup-actions">
+            <button
+              className="secondary-button"
+              onClick={() =>
+                downloadJSON(
+                  data,
+                  `phasekit-backup-${new Date().toISOString().slice(0, 10)}.json`,
+                )
+              }
+            >
+              <Download size={20} />
+              {t("export")}
+            </button>
+            <label className="secondary-button upload">
+              <Upload size={20} />
+              {t("import")}
+              <input
+                aria-label={t("import")}
+                type="file"
+                accept="application/json,.json"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  try {
+                    if (file.size > 10_000_000) throw new Error("Too large");
+                    const incoming = parseBackup(await file.text());
+                    setData((d) => mergeBackup(d, incoming));
+                    notify(t("importSuccess"));
+                  } catch {
+                    notify(t("importError"));
+                  }
+                  e.target.value = "";
+                }}
+              />
+            </label>
+          </div>
           <button
-            className="secondary-button"
-            onClick={() =>
-              downloadJSON(
-                data,
-                `phasekit-backup-${new Date().toISOString().slice(0, 10)}.json`,
-              )
-            }
-          >
-            <Download size={20} />
-            {t("export")}
-          </button>
-          <label className="secondary-button upload">
-            <Upload size={20} />
-            {t("import")}
-            <input
-              aria-label={t("import")}
-              type="file"
-              accept="application/json,.json"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                try {
-                  if (file.size > 10_000_000) throw new Error("Too large");
-                  const incoming = parseBackup(await file.text());
-                  setData((d) => mergeBackup(d, incoming));
-                  notify(t("importSuccess"));
-                } catch {
-                  notify(t("importError"));
-                }
-                e.target.value = "";
-              }}
-            />
-          </label>
-          <button
-            className="text-button danger-text"
+            className="text-button danger-text settings-delete-action"
             onClick={() => setConfirm(true)}
           >
             <Trash2 size={18} />
@@ -141,12 +143,13 @@ export function Settings() {
           <p className="mono wrap caption">{dataset.sha256}</p>
         </details>
         <a
-          className="text-button"
+          className="text-button coverage-report-link"
           href="/coverage.html"
           target="_blank"
           rel="noreferrer"
         >
-          {t("coverageReport")}
+          {l("Avaa kattavuusraportti", "Open coverage report")}{" "}
+          <span aria-hidden="true">↗</span>
         </a>
         <h3>{t("install")}</h3>
         <p className="secondary">{t("installHelp")}</p>
@@ -170,8 +173,9 @@ export function Settings() {
           <div>
             <dt>{l("Sovellusversio", "App version")}</dt>
             <dd>
-              <span className="mono">{appVersion}</span>
               <a className="release-history-link" href="#/releases">
+                <span className="mono">{appVersion}</span>
+                <span aria-hidden="true"> · </span>
                 {l("Versiohistoria ja uutta", "Release history and what’s new")}{" "}
                 <span aria-hidden="true">→</span>
               </a>
@@ -251,8 +255,8 @@ export function Settings() {
           rel="noreferrer"
         >
           {l(
-            "Anna palautetta tai ilmoita virheestä",
-            "Share feedback or report an issue",
+            "Anna palautetta tai ilmoita virheestä (GitHub Issues)",
+            "Share feedback or report an issue (GitHub Issues)",
           )}
         </a>
       </section>

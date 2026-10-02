@@ -147,6 +147,15 @@ test("compact provenance, formula, restrictions and comparison remain accessible
     fullPage: true,
   });
   await page.goto("/#/tools");
+  await expect(
+    page.locator(".tool-list .tool-row").filter({ hasText: "Työmaaraportit" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("navigation", { name: "PhaseKit" }).getByRole("link", {
+      name: "Raportit",
+      exact: true,
+    }),
+  ).toBeVisible();
   await page.screenshot({
     path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-tools.png`),
     fullPage: true,

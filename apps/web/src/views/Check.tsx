@@ -164,6 +164,7 @@ export function CheckResultView({
   saveAction?: ReactNode;
 }) {
   const { t, data, notify } = useApp();
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   const designation = (id: string) =>
     snapshot
       ? snapshotDesignation(snapshot, id)
@@ -293,7 +294,7 @@ export function CheckResultView({
           dataset.sources.filter((s) => result.sourceIds.includes(s.id))
         }
       />
-      <details className="calculation-details">
+      <details id="check-calculation" className="calculation-details">
         <summary>{t("calculation")}</summary>
         {result.components.length > 0 && (
           <>
@@ -374,16 +375,22 @@ export function CheckResultView({
             .join(" · ")}
         </p>
         {snapshot ? (
-          snapshot.sources.map((s) => (
-            <p className="caption" key={s.id}>
-              <a href={s.url} target="_blank" rel="noreferrer">
-                {s.title}
-              </a>{" "}
-              · {s.checkedAt} · {s.version}
-            </p>
-          ))
+          <>
+            <h3>{l("Lähteet", "Sources")}</h3>
+            {snapshot.sources.map((s) => (
+              <p className="caption" key={s.id}>
+                <a href={s.url} target="_blank" rel="noreferrer">
+                  {s.title}
+                </a>{" "}
+                · {s.checkedAt} · {s.version}
+              </p>
+            ))}
+          </>
         ) : (
-          <SourceNote ids={result.sourceIds} />
+          <>
+            <h3>{l("Lähteet", "Sources")}</h3>
+            <SourceNote ids={result.sourceIds} disclosure={false} />
+          </>
         )}
       </details>
     </section>
@@ -466,7 +473,28 @@ export function Check({ r: initial }: { r?: Refrigerant }) {
       <Back to="/tools" />
       <h1 className="long-heading">{t("leakCheck")}</h1>
       <p className="secondary">{t("checkIntro")}</p>
-      <p className="notice caption">{t("poc")}</p>
+      <p className="notice caption">
+        {l(
+          "Arvio koskee vuototarkastusväliä; se ei arvioi laitteen muuta vaatimustenmukaisuutta.",
+          "This estimates leak-check intervals only; it does not assess overall equipment compliance.",
+        )}{" "}
+        {result && (
+          <button
+            className="text-button inline-text-link"
+            type="button"
+            onClick={() => {
+              const calculation = document.getElementById(
+                "check-calculation",
+              ) as HTMLDetailsElement | null;
+              if (!calculation) return;
+              calculation.open = true;
+              calculation.scrollIntoView({ block: "start" });
+            }}
+          >
+            {l("Lähteet ja laskentaperusteet", "Sources and calculation basis")}
+          </button>
+        )}
+      </p>
       <RefrigerantPicker
         value={input.refrigerantId}
         onChange={(id) => change("refrigerantId", id)}

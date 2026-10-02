@@ -305,11 +305,32 @@ export function FactRow({
     </div>
   );
 }
-export function SourceNote({ ids }: { ids: string[] }) {
+export function SourceNote({
+  ids,
+  disclosure = true,
+}: {
+  ids: string[];
+  disclosure?: boolean;
+}) {
   const { t, data } = useApp();
   const sourceIds = new Set(ids);
   const sources = dataset.sources.filter((s) => sourceIds.has(s.id));
   if (!sources.length) return <p className="caption">{t("sourceMissing")}</p>;
+  if (!disclosure)
+    return (
+      <div className="source-note-list">
+        {sources.map((s) => (
+          <p className="caption" key={s.id}>
+            <a href={s.url} target="_blank" rel="noreferrer">
+              {s.title}
+            </a>
+            <br />
+            {t("checked", { date: formatDate(s.checkedAt, data.locale) })}
+            {s.version ? " · " + t("version") + ": " + s.version : ""}
+          </p>
+        ))}
+      </div>
+    );
   return (
     <details className="source-disclosure">
       <summary>

@@ -5,7 +5,6 @@ import {
   Waves,
   Zap,
   Ruler,
-  ListChecks,
   BookOpen,
 } from "lucide-react";
 import { useApp } from "../context";
@@ -59,12 +58,6 @@ export function Tools() {
               fi: "Putkilaskurit",
               en: "Pipe calculators",
               icon: Ruler,
-            },
-            {
-              path: "reports",
-              fi: "Työmaaraportit",
-              en: "Field reports",
-              icon: ListChecks,
             },
           ].map(({ path, fi, en, icon: Icon }) => (
             <button

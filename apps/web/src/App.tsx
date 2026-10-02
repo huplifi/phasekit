@@ -387,6 +387,11 @@ export function App() {
               Beta {appVersion} · {buildVersion}
             </strong>
             {" · "}
+            <a className="beta-release-link" href="#/releases">
+              {data.locale === "fi" ? "Uutta" : "What’s new"}
+              <span aria-hidden="true"> →</span>
+            </a>
+            {" · "}
             {data.locale === "fi"
               ? "Testiversio. Tallennukset säilyvät vain tässä selaimessa ja osoitteessa."
               : "Test version. Records stay in this browser and site."}{" "}

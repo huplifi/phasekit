@@ -21,7 +21,7 @@
   margin-top: 8px;
 }
 .field-report-legacy {
-  border-left: 2px solid var(--border);
+  border-left: 2px solid var(--divider);
   padding-left: 12px;
 }
 .field-report-save-state {
@@ -157,5 +157,66 @@
   .field-checklist-save-state .field-report-status {
     line-height: 1.5;
     min-block-size: 1.5em;
+  }
+}
+
+/* Field sections stay compact, while summaries and jump links keep touch targets. */
+.field-report-optional {
+  margin-block: 12px;
+  padding-block: 4px;
+}
+.field-report-optional > summary {
+  min-height: 48px;
+  padding-block: 12px;
+}
+.field-report-optional > summary .status-badge {
+  margin-left: 8px;
+  font-size: 0.75rem;
+}
+.field-report-optional .field-report-grid {
+  margin-block: 12px 16px;
+}
+.field-report-field textarea,
+.field-report-fields > label > textarea {
+  min-height: 7.5em;
+  resize: vertical;
+  field-sizing: content;
+}
+.field-report-missing-link {
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 44px;
+}
+.field-report-document-guide {
+  padding: 12px 0;
+  border-block: 1px solid var(--divider);
+}
+.field-report-leak-result {
+  padding: 12px;
+  border-left: 3px solid var(--primary-foreground);
+}
+.field-report-leak-result p {
+  margin: 0;
+}
+.field-report-field:focus-within {
+  scroll-margin-block: 100px;
+}
+.field-report-preserved-note {
+  display: block;
+  font-weight: 400;
+  font-size: 0.875rem;
+  margin-block: 8px;
+}
+.field-report-preserved-note > span {
+  display: block;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-block: 8px;
+}
+
+@media (max-width: 600px) {
+  .field-report-editor .field-actions > .primary {
+    flex-basis: 100%;
   }
 }

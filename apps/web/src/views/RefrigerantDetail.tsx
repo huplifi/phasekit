@@ -9,6 +9,11 @@ import {
   oilTypeText,
   refinementText,
 } from "../../../../packages/i18n/src/refinements";
+import {
+  describeRefrigerantFact,
+  type RefrigerantFactDescription,
+  type RefrigerantFactKey,
+} from "../../../../packages/refrigerant-data/src/fact-status";
 import { formatDate } from "../../../../packages/i18n/src";
 import { useApp } from "../context";
 import { byId, dataset, getFact, factKeys } from "../data";
@@ -18,6 +23,7 @@ import {
   ChemicalFormula,
   CompareButton,
   FactRow,
+  FactValue,
   GwpFacts,
   GwpSummary,
   Group,
@@ -44,6 +50,37 @@ const groups: { title: MessageKey; fields: (keyof typeof factKeys)[] }[] = [
   { title: "use", fields: ["oils"] },
 ];
 
+const statusFactKeys: Partial<
+  Record<keyof typeof factKeys, RefrigerantFactKey>
+> = {
+  glide: "glide",
+  density: "density",
+  safety: "safety",
+  ped: "ped",
+  lfl: "lfl",
+  autoignition: "autoignition",
+};
+
+function PropertyFactValue({
+  description,
+  showFactValue = true,
+}: {
+  description: RefrigerantFactDescription;
+  showFactValue?: boolean;
+}) {
+  if (
+    showFactValue &&
+    description.state === "known" &&
+    description.fact
+  )
+    return <FactValue fact={description.fact} />;
+  const known =
+    description.state === "known" || description.state === "known_absent";
+  return (
+    <span className={known ? undefined : "missing"}>{description.text}</span>
+  );
+}
+
 function oilCodes(fact?: Fact): string[] {
   if (!fact || fact.state !== "verified" || typeof fact.value !== "string")
     return [];
@@ -57,9 +94,9 @@ function OilCodeList({ codes }: { codes: string[] }) {
   return (
     <span className="oil-code-list">
       {codes.map((code) => (
-        <span className="oil-code" key={code}>
-          <span className="mono">{code}</span>
-          <span>{oilTypeText(data.locale, code)}</span>
+        <span className="oil-type" key={code}>
+          <strong>{code}</strong>
+          <span>({oilTypeText(data.locale, code).toLocaleLowerCase(data.locale)})</span>
         </span>
       ))}
     </span>
@@ -230,7 +267,15 @@ function RestrictionList({
                 <summary>
                   <span className="restriction-summary-text">
                     <span className="restriction-meta">
-                      {t(notice.status)} <span aria-hidden="true">·</span>{" "}
+                      <span
+                        className={
+                          notice.status === "active"
+                            ? "status-badge status-badge--success"
+                            : "status-badge status-badge--warning"
+                        }
+                      >
+                        {t(notice.status)}
+                      </span>
                       <time
                         className="mono restriction-date"
                         dateTime={notice.effectiveFrom}
@@ -295,6 +340,7 @@ type DetailTab = (typeof detailTabs)[number];
 
 export function RefrigerantDetail({ r }: { r: Refrigerant }) {
   const { t, data } = useApp();
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   const [tab, setTab] = useState<DetailTab>("overview");
   const notices = restrictionsFor(r, dataset, today());
   const chemicalName =
@@ -364,12 +410,24 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
           <>
             <dl className="facts overview">
               <FactRow label={t("family")}>
-                {familyText(data.locale, r.family)}
+                {describeRefrigerantFact(r, "family", data.locale).state ===
+                "known" ? (
+                  familyText(data.locale, r.family)
+                ) : (
+                  <span className="missing">
+                    {describeRefrigerantFact(r, "family", data.locale).text}
+                  </span>
+                )}
               </FactRow>
-              <FactRow
-                label={t("safety")}
-                fact={getFact(r, ...factKeys.safety)}
-              />
+              <FactRow label={t("safety")}>
+                <PropertyFactValue
+                  description={describeRefrigerantFact(
+                    r,
+                    "safety",
+                    data.locale,
+                  )}
+                />
+              </FactRow>
               <FactRow label={t("gwp")}>
                 <GwpSummary r={r} />
               </FactRow>
@@ -514,10 +572,35 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                 ) : (
                   <dl className="facts">
                     {group.fields.map((key) => {
-                      const fact = factForLocale(r, key, data.locale);
+                      const statusKey = statusFactKeys[key];
+                      const description = statusKey
+                        ? describeRefrigerantFact(r, statusKey, data.locale)
+                        : undefined;
+                      const fact =
+                        description?.fact ??
+                        factForLocale(r, key, data.locale);
                       return (
                         <div key={key}>
-                          <FactRow label={t(key)} fact={fact} />
+                          <FactRow
+                            label={
+                              key === "ped"
+                                ? l("PED-fluidiryhmä", "PED fluid group")
+                                : t(key)
+                            }
+                            fact={fact}
+                          >
+                            {description && (
+                              <PropertyFactValue
+                                description={description}
+                                showFactValue={key !== "ped"}
+                              />
+                            )}
+                          </FactRow>
+                          {description?.detail &&
+                            (!fact?.conditions ||
+                              description.state !== "known") && (
+                            <p className="caption">{description.detail}</p>
+                          )}
                           {fact?.conditions && (
                             <p className="caption">
                               {t("condition")}:{" "}

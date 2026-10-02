@@ -55,6 +55,18 @@ test("R410A heating case works and genuine bounds explain the data limit", async
   await temperature.fill("56");
   await expect(page.locator(".pt-live-result")).toContainText("R410A");
   await expect(page.getByRole("alert")).toHaveCount(0);
+  const provenance = page.locator(".calculation-details");
+  await provenance.locator(":scope > summary").click();
+  await expect(
+    provenance.getByRole("heading", { name: "Laskentamalli", exact: true }),
+  ).toBeVisible();
+  await expect(
+    provenance.getByRole("heading", { name: "Käyttöalue", exact: true }),
+  ).toBeVisible();
+  await expect(
+    provenance.getByRole("heading", { name: "Lähteet", exact: true }),
+  ).toBeVisible();
+  await expect(provenance.locator(".source-disclosure")).toHaveCount(0);
   expect(Number(await pressure.inputValue())).toBeCloseTo(35.1, 1);
   await page
     .getByLabel("Lämpötilapiste", { exact: true })

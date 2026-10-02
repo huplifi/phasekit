@@ -142,6 +142,29 @@ test("R142b uses sourced name, ODS GWP and one environmental provenance block", 
   });
 });
 
+test("property labels distinguish verified absence from missing classifications", async ({
+  page,
+}) => {
+  await page.goto("/#/refrigerants/r1243zf");
+  const overview = page.locator(".facts.overview");
+  await expect(overview).toContainText("HFO");
+  await expect(overview).toContainText("Luokitus puuttuu aineistosta");
+
+  await page.getByRole("tab", { name: "Ominaisuudet", exact: true }).click();
+  const panel = page.locator("#detail-panel");
+  await expect(panel.getByText("Ei liukumaa", { exact: true })).toBeVisible();
+  await expect(
+    panel.getByText("Tieto puuttuu aineistosta", { exact: true }).first(),
+  ).toBeVisible();
+  await expect(
+    panel.getByText("PED-fluidiryhmä", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    panel.getByText("Luokitus puuttuu aineistosta", { exact: true }),
+  ).toHaveCount(2);
+  await expect(panel).not.toContainText("Ei syty");
+});
+
 test("leak result exposes the controlling quantity and refrigerant family with styled checkboxes", async ({
   page,
 }, info) => {

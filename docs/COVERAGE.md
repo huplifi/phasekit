@@ -1,6 +1,6 @@
 # Refrigerant inventory coverage
 
-Generated: 2026-09-30. Dataset version: `2026-09-30.51cabf3aa643`; SHA-256: `51cabf3aa643cc12e67c21ae8d352b1605c99a7cb7eb0a0e218839c12be5fb03`.
+Generated: 2026-10-02. Dataset version: `2026-10-02.0172a15b0827`; SHA-256: `0172a15b0827f914b96075273124cfaf10f87027dde5fd9db4dec976d13bea15`.
 
 ## What the denominator means
 
