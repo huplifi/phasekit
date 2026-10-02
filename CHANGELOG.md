@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.3 — 2026-10-02 · Beta
+
+Print controls work offline
+
+- Print controls are bundled with the app, so Print / PDF and return-to-report controls also work without a network connection.
+- The preview remains independent of a suspended opener. The physical iPhone print dialog still needs device verification.
+
 ## 0.4.0-beta.2 — 2026-10-02 · Beta
 
 Compact refrigerant details and independent print controls

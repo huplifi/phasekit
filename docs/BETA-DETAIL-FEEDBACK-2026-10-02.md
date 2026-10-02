@@ -52,3 +52,13 @@ Fyysisen iPhonen tulostusvalinnan/AirPrintin avautuminen sekä asennetun PWA:n k
 - **Tunnettu jatkokorjaus:** tämän jälkeen offline-tilassa avattu tulostusesikatselu jätti Tulosta / PDF -painikkeen pois käytöstä (5 sekunnin odotus). Päivitys ja raportin säilyminen läpäisivät omat tarkistuksensa ennen tätä virhettä. Offline-tulostusta ei merkitä toimivaksi. Verkossa tulostuskäsittelijät läpäisivät aiemmat selaintarkistukset; fyysisen iPhonen AirPrint-valinta on edelleen käyttäjän laitetestissä varmennettava.
 
 Käyttäjän pyynnöstä testaus ja Netlify-buildit pidetään vähäisinä: tässä vaiheessa ei käynnistetty uutta korjausjulkaisua tai laajaa testikierrosta. Seuraavan tulostuskorjauksen kohdennettu hyväksymisehto on offline-esikatselun toimiva painike sekä palaaminen raporttiin.
+
+## Offline-painikkeen korjaus 0.4.0-beta.3
+
+Käyttäjä pyysi myös offline-puutteen korjaamista. Tulostuksen ohjauskoodi tuodaan nyt sovellukseen `?raw`-tuonnilla ja asetetaan esikatselun oman script-elementin tekstiksi. Esikatselu ei lataa erillistä skriptitiedostoa verkosta, ja käsittelijät suoritetaan edelleen esikatselun omassa JavaScript-ympäristössä. Raportin käyttäjätekstejä ei liitetä skriptiin.
+
+- Ennen korjausta yksi kohdennettu offline-testi epäonnistui, koska painike jäi disabled-tilaan.
+- Korjauksen jälkeen kaikki 8 tulostusnavigaation mobiili-Chromium/WebKit-tarkistusta läpäistiin (4,6 s): online/offline, tulostuskutsu, paluu, sulkemisen estävä ympäristö ja avaavan sivun pysäyttäminen/korvaaminen.
+- TypeScript, muutettujen tiedostojen ESLint, versiohistorian muodostus ja tuotantokooste läpäistiin.
+- Käyttäjän pyytämän vähäisen testauksen ja build-kustannusten vuoksi tähän rajattuun jatkokorjaukseen tehdään poikkeus yleisestä CI-menettelystä: laaja CI-uusinta-ajo ja Netlify-esikatselu ohitetaan, paikallinen kohdennettu näyttö kirjataan PR:ään ja julkaistaan yksi beta-build. Sovelluksen muuta toimintaa ei muutettu eikä testien hyväksymisrajoja väljennetty.
+- Fyysisen iPhonen AirPrint-valinta on edelleen laitteella varmennettava.
