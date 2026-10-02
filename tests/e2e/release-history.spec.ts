@@ -43,6 +43,8 @@ test("release history is discoverable and bilingual", async ({ page }) => {
   ).toBe(true);
   await page.screenshot({
     path: test.info().outputPath("release-history-fi.png"),
+    // A long history at mobile DPR 3 exceeds Linux WebKit's bitmap limit.
+    scale: "css",
     fullPage: true,
   });
   await page.getByRole("button", { name: "Takaisin", exact: true }).click();
