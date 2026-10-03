@@ -75,8 +75,11 @@ test("comparison print preserves two refrigerants, oil limits, GWP basis and sou
     printed.locator(".compare-table button, .compare-table details"),
   ).toHaveCount(0);
   await expect(
-    printed.getByRole("button", { name: "Tulosta / PDF", exact: true }),
+    printed.getByRole("button", { name: "Tulosta", exact: true }),
   ).toBeEnabled();
+  await expect(printed.locator(".pdf-action")).toHaveText(
+    /Tallenna PDF|Jaa \/ tallenna PDF/,
+  );
   await printed.emulateMedia({ media: "print" });
   await expect(printed.locator(".print-toolbar")).toBeHidden();
   if (info.project.name === "desktop-chromium") {

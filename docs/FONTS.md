@@ -72,3 +72,7 @@ Import these declarations from the app stylesheet. Keeping each `@font-face` at 
 ```
 
 Use Unbounded only at 600 or 700, Poppins only at 400 or 700, and Ioskeley Mono only at 400, 600, or 800. The installed assets include no Poppins Semibold and no additional weights by design.
+
+## Direct PDF export
+
+PDF export embeds Poppins Regular/Bold as vector text and uses the same Ioskeley Mono family for technical glyphs missing from Poppins (for example CO₂ and Greek symbols). The TTF file `apps/web/public/fonts/ioskeley-mono/IoskeleyMono-Regular.ttf` comes from `Normal/Unhinted/` in the official v2.0.0 `IoskeleyMono.zip` release above; the existing OFL notice applies. It is precached with the app and used without remote font requests.

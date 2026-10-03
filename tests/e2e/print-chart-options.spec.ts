@@ -4,12 +4,15 @@ import { readFile, writeFile } from "node:fs/promises";
 async function printChart(page: Page) {
   const popup = page.waitForEvent("popup");
   await page
-    .getByRole("button", { name: "Tulosta / tallenna PDF", exact: true })
+    .getByRole("button", { name: /^Tulosta \/ (?:tallenna )?PDF$/ })
     .click();
   const printed = await popup;
   await expect(
-    printed.getByRole("button", { name: "Tulosta / PDF", exact: true }),
+    printed.getByRole("button", { name: "Tulosta", exact: true }),
   ).toBeEnabled();
+  await expect(printed.locator(".pdf-action")).toHaveText(
+    /Tallenna PDF|Jaa \/ tallenna PDF/,
+  );
   const src = await printed.locator("img.chart").getAttribute("src");
   return {
     printed,

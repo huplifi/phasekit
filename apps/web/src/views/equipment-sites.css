@@ -1,4 +1,15 @@
-.equipment-create-actions,
+.equipment-create-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.equipment-create-actions > .equipment-add {
+  justify-self: stretch;
+  min-width: 0;
+  white-space: normal;
+}
+
 .equipment-site-actions {
   display: flex;
   align-items: center;
