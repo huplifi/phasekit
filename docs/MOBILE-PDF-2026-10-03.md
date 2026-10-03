@@ -17,3 +17,9 @@ The Reports destination is named Laitteet ja kohteet. The two creation actions f
 - Physical iPhone share-sheet/AirPrint behaviour remains for the owner's device test. Browser emulation and a simulated share call do not establish that OS-level UI result.
 
 This batch follows the owner's scoped-test and single-beta-build preference; no full browser matrix or paid Deploy Preview is requested. Exact live release evidence is appended after publication.
+
+## Published beta
+
+Published `0.4.0-beta.8` at https://beta.phasekit.app, revision `edc354b`, via PR #28 and a one-line dependency-policy follow-up. The initial CI install stopped on core-js's unapproved postinstall script (a support banner, no build output). `allowBuilds.core-js: false` explicitly skips that script; frozen offline installation then passed. No application code changed in the follow-up. The first release attempt did not produce the verified live release; the corrected revision did.
+
+The public bundle and a fresh mobile-WebKit session both confirmed version/revision. The live Reports button opens Laitteet ja kohteet; the two create buttons measured 167 px each at 390 px viewport width. GitHub run 37146460473 failed during the initial install; redundant broad run 37146576625 was cancelled after the targeted local checks. Stable was not changed. Physical iPhone file-sharing and printing remain unverified.
