@@ -573,14 +573,14 @@ function ToolReport({
     setDraftDirty(notesDirty);
   }, [notesDirty, setDraftDirty]);
   useEffect(() => {
-    const guardNavigation = (event: HashChangeEvent) => {
+    const guardNavigation = (event: Event) => {
       if (restoringNavigationRef.current) {
         restoringNavigationRef.current = false;
         return;
       }
       if (!notesDirtyRef.current) return;
       if (!window.confirm(discardMessage)) {
-        event.stopImmediatePropagation();
+        event.preventDefault();
         const storedIndex = window.history.state?.phasekitNavigationIndex;
         const destinationIndex = Number.isSafeInteger(storedIndex)
           ? (storedIndex as number)
@@ -598,10 +598,10 @@ function ToolReport({
       event.preventDefault();
       event.returnValue = "";
     };
-    window.addEventListener("hashchange", guardNavigation, true);
+    window.addEventListener("phasekit:before-navigation", guardNavigation);
     window.addEventListener("beforeunload", guardReload);
     return () => {
-      window.removeEventListener("hashchange", guardNavigation, true);
+      window.removeEventListener("phasekit:before-navigation", guardNavigation);
       window.removeEventListener("beforeunload", guardReload);
     };
   }, [discardMessage, historyIndex, setDraftDirty]);

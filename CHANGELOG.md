@@ -13,6 +13,7 @@ Reports, sites and PDF export
 - Report entry, finalisation and printouts are clearer. Previews can save or share PDF files in installed apps.
 - Refrigerant data and calculation models have expanded. Diagram symbols, heat calculators and clearer calculation notes also support offline use.
 - Existing records remain on their current site. Move beta records to stable using backup export and import in Settings.
+- The unsaved calculation-notes confirmation also protects browser Back navigation in Chromium.
 
 ## 0.4.0-beta.8 — 2026-10-03 · Beta
 

@@ -93,6 +93,20 @@ test("mixed reports share rows and open dedicated details with reliable return n
     .fill("Unsaved test note");
   const detailUrl = page.url();
   page.once("dialog", (dialog) => dialog.dismiss());
+  await page.evaluate(() => {
+    window.location.hash = "/reports";
+  });
+  await expect(page).toHaveURL(detailUrl);
+  await expect(
+    page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
+  ).toHaveValue("Unsaved test note");
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.goForward();
+  await expect(page).toHaveURL(detailUrl);
+  await expect(
+    page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
+  ).toHaveValue("Unsaved test note");
+  page.once("dialog", (dialog) => dialog.dismiss());
   await page.goBack();
   await expect(page).toHaveURL(detailUrl);
   await expect(
