@@ -51,8 +51,38 @@
   });
 
   const image = document.querySelector("img[data-print-chart]");
+  let chartReady = !image;
+  let fontsReady = !document.documentElement.dataset.printFonts;
   const ready = () => {
-    print.disabled = false;
+    if (chartReady && fontsReady) print.disabled = false;
+  };
+  const settleFonts = () => {
+    fontsReady = true;
+    ready();
+  };
+  const loadEmbeddedFonts = () => {
+    if (!document.fonts) return settleFonts();
+    Promise.allSettled([
+      document.fonts.load("600 12px Unbounded"),
+      document.fonts.load("400 12px Poppins"),
+      document.fonts.load("700 12px Poppins"),
+      document.fonts.load('600 12px "Ioskeley Mono"'),
+    ]).then(settleFonts);
+  };
+  // This timer runs in the preview even if an installed app suspends its opener.
+  // Unavailable fonts must never stop a complete report being printed.
+  if (!fontsReady) {
+    window.setTimeout(settleFonts, 2200);
+    if (document.documentElement.dataset.printFonts === "embedded")
+      loadEmbeddedFonts();
+    else
+      document.addEventListener("phasekit-print-fonts", loadEmbeddedFonts, {
+        once: true,
+      });
+  }
+  const chartLoaded = () => {
+    chartReady = true;
+    ready();
   };
   const failed = () => {
     showError(
@@ -63,12 +93,12 @@
   };
   if (!image) ready();
   else if (image.complete) {
-    if (image.naturalWidth > 0) ready();
+    if (image.naturalWidth > 0) chartLoaded();
     else failed();
   } else {
     image.addEventListener(
       "load",
-      () => (image.naturalWidth > 0 ? ready() : failed()),
+      () => (image.naturalWidth > 0 ? chartLoaded() : failed()),
       { once: true },
     );
     image.addEventListener("error", failed, { once: true });

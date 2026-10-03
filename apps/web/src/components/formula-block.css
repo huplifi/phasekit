@@ -1,0 +1,31 @@
+.formula-block {
+  margin-block: 16px;
+  padding: 16px;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--surface) 45%, var(--background));
+  color: var(--text);
+}
+.formula-block-equation {
+  font-family: var(--font-data), monospace;
+  font-variant-numeric: tabular-nums;
+  font-size: 1rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.formula-block-equation p {
+  margin: 0;
+}
+.formula-block-equation sub,
+.formula-block-equation sup {
+  font-size: 0.75em;
+}
+.formula-block-explanation {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+.formula-block-explanation p:last-child {
+  margin-bottom: 0;
+}

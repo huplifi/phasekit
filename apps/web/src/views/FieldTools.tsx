@@ -1,5 +1,6 @@
 import { heatMaterials, heatFormulaSource } from "../heat-materials";
 import { ExclusiveChoices } from "../components/ExclusiveChoices";
+import { FormulaBlock } from "../components/FormulaBlock";
 import { useDraftGuard } from "../useDraftGuard";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Download, Plus, Printer, Trash2 } from "lucide-react";
@@ -242,12 +243,13 @@ function ErrorMessage({ error }: { error: string }) {
     </p>
   ) : null;
 }
-function Sources({ children }: { children: ReactNode }) {
+function Sources({ children, title }: { children: ReactNode; title?: string }) {
   const { l } = useLabels();
   return (
     <details className="field-sources">
       <summary>
-        {l("Laskentaperuste ja lähteet", "Calculation basis and sources")}
+        {title ??
+          l("Laskentaperuste ja lähteet", "Calculation basis and sources")}
       </summary>
       {children}
     </details>
@@ -474,15 +476,26 @@ export function ThermalPowerCalculator() {
           }}
         />
       )}
-      <p className="caption">
-        <a href="#/heat-quantity">
-          {l(
-            "Laske erillisen massan lämpömäärä tai lämmitysaika →",
-            "Calculate heat quantity or heating time for a fixed mass →",
-          )}
-        </a>
-      </p>
+      <aside className="related-tool">
+        <h2>{l("Liittyvä työkalu", "Related tool")}</h2>
+        <a href="#/heat-quantity">{l("Lämpömäärä", "Heat quantity")}</a>
+      </aside>
       <Sources>
+        <FormulaBlock
+          formula={
+            <>
+              P = ρ · q<sub>v</sub> · c<sub>p</sub> · (T
+              <sub>{l("ulos", "out")}</sub> − T<sub>{l("sisään", "in")}</sub>)
+            </>
+          }
+        >
+          <p>
+            {l(
+              "P = lämpöteho · kW; ρ = tiheys · kg/m³; qᵥ = tilavuusvirta · m³/s; cₚ = ominaislämpökapasiteetti · kJ/(kg·K); lämpötilaero · K.",
+              "P = thermal power · kW; ρ = density · kg/m³; qᵥ = volume flow · m³/s; cₚ = specific heat capacity · kJ/(kg·K); temperature difference · K.",
+            )}
+          </p>
+        </FormulaBlock>
         {materialId === "water" && (
           <p>
             <a href={heatFormulaSource.url} target="_blank" rel="noreferrer">
@@ -490,13 +503,6 @@ export function ThermalPowerCalculator() {
             </a>
           </p>
         )}
-        <p className="mono">P = ρ · qᵥ · cₚ · (Tᵤₗₒₛ − Tₛᵢₛääₙ)</p>
-        <p>
-          {l(
-            "Tiheys kg/m³, virtaama m³/s ja ominaislämpökapasiteetti kJ/(kg·K) tuottavat tehon kilowatteina.",
-            "Density in kg/m³, flow in m³/s and specific heat in kJ/(kg·K) give power in kW.",
-          )}
-        </p>
         <a
           href="https://www.caleffi.com/en-us/blog/3-site-measurements-circuit-performance"
           target="_blank"
@@ -812,15 +818,28 @@ export function ElectricalCalculator() {
         />
       )}
       <Sources>
-        <p className="mono">
-          DC: P = U · I; I = P / U; U = P / I<br />
-          1~: P = U · I · PF; I = P / (U · PF); U = P / (I · PF)
-          <br />
-          3~: P = √3 · Uₗₗ · Iₗ · PF; Iₗ = P / (√3 · Uₗₗ · PF); Uₗₗ = P / (√3 ·
-          Iₗ · PF)
-          <br />
-          {l("Ohmin laki", "Ohm’s law")}: I = U / R; U = R · I; R = U / I
-        </p>
+        <FormulaBlock
+          formula={
+            input.mode === "ohm" ? (
+              <>I = U / R; U = R · I; R = U / I</>
+            ) : input.mode === "three_phase" ? (
+              <>
+                P = √3 · U<sub>LL</sub> · I<sub>L</sub> · PF
+              </>
+            ) : input.mode === "single_phase" ? (
+              <>P = U · I · PF</>
+            ) : (
+              <>P = U · I</>
+            )
+          }
+        >
+          <p>
+            {l(
+              "P = pätöteho · W; U = jännite · V; I = virta · A; R = resistanssi · Ω; PF = tehokerroin. Kolmivaiheella Uₗₗ on pääjännite ja Iₗ vaihejohtimen virta.",
+              "P = real power · W; U = voltage · V; I = current · A; R = resistance · Ω; PF = power factor. For three-phase, Uₗₗ is line-to-line voltage and Iₗ is line current.",
+            )}
+          </p>
+        </FormulaBlock>
         <p>
           {l(
             "Vaihtovirtalaskenta olettaa sinimuotoisen kuorman (PF = cos φ), kolmivaihelaskenta myös tasapainoiset vaiheet. Teho on sähköinen ottoteho; hyötysuhdetta tai moottorin akselitehoa ei lasketa. Laskuri ei mitoita suojalaitteita tai kaapeleita.",
@@ -1380,9 +1399,20 @@ export function PipeCalculator() {
       <Sources>
         {mode === "geometry" && (
           <>
-            <p className="mono">
-              A = π · d² / 4 · · · V = A · L · · · v = qᵥ / A
-            </p>
+            <FormulaBlock
+              formula={
+                <>
+                  A = π · d<sup>2</sup> / 4; V = A · L; v = q<sub>v</sub> / A
+                </>
+              }
+            >
+              <p>
+                {l(
+                  "A = poikkipinta-ala · m²; d = sisähalkaisija · m; V = tilavuus · m³; L = pituus · m; v = virtausnopeus · m/s; qᵥ = tilavuusvirta · m³/s.",
+                  "A = cross-sectional area · m²; d = inner diameter · m; V = volume · m³; L = length · m; v = flow velocity · m/s; qᵥ = volume flow · m³/s.",
+                )}
+              </p>
+            </FormulaBlock>
             <p>
               {l(
                 "Virtaama on tilavuusvirta putken käyttöolosuhteissa. Laskenta ei huomioi painehäviöitä, liittimiä, kaksifaasivirtausta tai öljynpalautumista eikä valitse sopivaa kylmäaineputkikokoa.",
@@ -1400,10 +1430,21 @@ export function PipeCalculator() {
         )}
         {mode === "loss" && (
           <>
-            <p className="mono">
-              Δp = f · (L/D) · ρv²/2; Re = ρvD/μ; f = 64/Re (Re &lt; 2,000) or
-              Swamee–Jain (Re &gt; 4,000).
-            </p>
+            <FormulaBlock
+              formula={
+                <>
+                  Δp = f · (L/D) · ρv<sup>2</sup>/2; Re = ρvD/μ
+                </>
+              }
+            >
+              <p>
+                {l(
+                  "Δp = painehäviö · Pa; f = Darcy-kitkakerroin; L = pituus · m; D = sisähalkaisija · m; ρ = tiheys · kg/m³; v = nopeus · m/s; μ = dynaaminen viskositeetti · Pa·s; Re = Reynoldsin luku.",
+                  "Δp = pressure loss · Pa; f = Darcy friction factor; L = length · m; D = inner diameter · m; ρ = density · kg/m³; v = velocity · m/s; μ = dynamic viscosity · Pa·s; Re = Reynolds number.",
+                )}
+              </p>
+              <p>f = 64/Re (Re &lt; 2,000) · Swamee–Jain (Re &gt; 4,000)</p>
+            </FormulaBlock>
             <p>
               {l(
                 "Darcy–Weisbachin yhtälö. Siirtymäalue 2 000–4 000 estetään. Ei sisällä kaksifaasivirtausta, kaasun merkittävää kokoonpuristumista, liittimiä, korkeuseroa, öljynpalautumista eikä putkikoon valintaa.",
@@ -1419,7 +1460,20 @@ export function PipeCalculator() {
         )}
         {mode === "expansion" && (
           <>
-            <p>ΔL = α · L₀ · (T₁ − T₀)</p>
+            <FormulaBlock
+              formula={
+                <>
+                  ΔL = α · L<sub>0</sub> · (T<sub>1</sub> − T<sub>0</sub>)
+                </>
+              }
+            >
+              <p>
+                {l(
+                  "ΔL = pituuden muutos · m; α = lämpölaajenemiskerroin · 1/K; L₀ = alkupituus · m; T₁ − T₀ = lämpötilan muutos · K.",
+                  "ΔL = length change · m; α = thermal expansion coefficient · 1/K; L₀ = initial length · m; T₁ − T₀ = temperature change · K.",
+                )}
+              </p>
+            </FormulaBlock>
             {Object.values(pipeExpansionMaterials).map((material) => (
               <p key={material.sourceUrl}>
                 <a href={material.sourceUrl} target="_blank" rel="noreferrer">
@@ -1865,6 +1919,31 @@ export function WorkChecklists() {
     draft?.kind === "commissioning"
       ? commissioningMissingFields(draft.fields)
       : [];
+  const reviewMissingFields: {
+    id: string;
+    label: { fi: string; en: string };
+  }[] = draft
+    ? [
+        ...(!draft.title.trim()
+          ? [{ id: "title", label: { fi: "Kohteen nimi", en: "Site name" } }]
+          : []),
+        ...(!draft.fields.performedOn ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(draft.fields.performedOn) ||
+        !Number.isFinite(Date.parse(`${draft.fields.performedOn}T12:00:00Z`)) ||
+        new Date(`${draft.fields.performedOn}T12:00:00Z`)
+          .toISOString()
+          .slice(0, 10) !== draft.fields.performedOn
+          ? commonChecklistFields.filter((field) => field.id === "performedOn")
+          : []),
+        ...(!draft.fields.technician?.trim()
+          ? commonChecklistFields.filter((field) => field.id === "technician")
+          : []),
+        ...missingFields,
+      ].filter(
+        (field, index, fields) =>
+          fields.findIndex((candidate) => candidate.id === field.id) === index,
+      )
+    : [];
   const renderReportSection = (
     group: string,
     fi: string,
@@ -1873,15 +1952,52 @@ export function WorkChecklists() {
     initiallyOpen = false,
   ) => {
     if (!draft || !fields.length) return null;
-    const missing = missingFields.filter((field) =>
-      fields.some((candidate) => candidate.id === field.id),
-    );
     const protocol =
       draft.kind === "commissioning"
         ? commissioningProtocolStatus(draft.fields).find(
             (item) => item.id === group,
           )
         : undefined;
+    const recorded = fields.filter(
+      (field) =>
+        !field.id.endsWith("RecordMode") &&
+        !["pressureUnit", "pressureReference", "atmosphericReference"].includes(
+          field.id,
+        ) &&
+        Boolean(draft.fields[field.id]?.trim()) &&
+        draft.fields[field.id] !== "not_assessed",
+    ).length;
+    const sectionSummary =
+      group === "refrigerant"
+        ? [
+            draft.fields.refrigerantDesignation ||
+              byId.get(draft.fields.refrigerantId)?.designation ||
+              draft.fields.refrigerantId,
+            draft.fields.chargeKg ? `${draft.fields.chargeKg} kg` : "",
+          ]
+            .filter(Boolean)
+            .join(" · ")
+        : protocol?.mode === "external"
+          ? l("Erillinen pöytäkirja", "Separate test record")
+          : group === "installation"
+            ? [draft.fields.installerCompany, draft.fields.responsiblePerson]
+                .filter(Boolean)
+                .join(" · ")
+            : recorded
+              ? `${recorded} ${l("kenttää kirjattu", "fields recorded")}`
+              : "";
+    const refrigerantDetails = fields.filter((field) =>
+      [
+        "refrigerantSafetyClass",
+        "refrigerantGwp",
+        "refrigerantGwpBasis",
+        "refrigerantSourceNote",
+      ].includes(field.id),
+    );
+    const visibleFields =
+      group === "refrigerant"
+        ? fields.filter((field) => !refrigerantDetails.includes(field))
+        : fields;
     return (
       <details
         className="field-report-optional"
@@ -1889,13 +2005,9 @@ export function WorkChecklists() {
         key={group}
       >
         <summary>
-          {l(fi, en)}{" "}
-          <span
-            className={`status-badge ${missing.length ? "status-badge--warning" : "status-badge--neutral"}`}
-          >
-            {missing.length
-              ? `${missing.length} ${l("täydennettävää", "to complete")}`
-              : `${fields.filter((field) => Boolean(draft.fields[field.id]?.trim())).length}/${fields.length} ${l("kenttää kirjattu", "fields recorded")}`}
+          <span>{l(fi, en)}</span>
+          <span className="field-report-section-summary">
+            {sectionSummary || l("Ei vielä kirjauksia", "No entries yet")}
           </span>
         </summary>
         {group === "leak-check" && !final && leakAssessment && (
@@ -1930,13 +2042,65 @@ export function WorkChecklists() {
           </p>
         )}
         <div className="field-report-grid field-report-measurements">
-          {[...fields]
+          {[...visibleFields]
             .sort(
               (a, b) =>
                 Number(b.id.endsWith("RecordMode")) -
                 Number(a.id.endsWith("RecordMode")),
             )
             .map(renderField)}
+          {group === "refrigerant" && refrigerantDetails.length > 0 && (
+            <div className="field-report-full field-report-refrigerant-facts">
+              {draft.fields.refrigerantId ||
+              refrigerantDetails.some((field) =>
+                draft.fields[field.id]?.trim(),
+              ) ? (
+                <dl>
+                  {refrigerantDetails.map((field) => (
+                    <div key={field.id}>
+                      <dt>{field.label[locale]}</dt>
+                      <dd>
+                        {field.id === "refrigerantGwpBasis" &&
+                        draft.fields[field.id] === "gwp_eu_2024_573_100yr"
+                          ? l(
+                              "EU 2024/573 · 100 vuotta",
+                              "EU 2024/573 · 100 years",
+                            )
+                          : draft.fields[field.id] ||
+                            l("Tieto puuttuu", "Data unavailable")}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <p className="supporting-copy">
+                  {l(
+                    "Valitse kylmäaine, niin saatavilla olevat ainetiedot täyttyvät automaattisesti.",
+                    "Select a refrigerant to fill the available substance details automatically.",
+                  )}
+                </p>
+              )}
+              {!final && (
+                <details className="field-report-refrigerant-edit">
+                  <summary>
+                    {l(
+                      "Muokkaa kylmäaineen tietoja",
+                      "Edit refrigerant details",
+                    )}
+                  </summary>
+                  <p className="supporting-copy">
+                    {l(
+                      "Kylmäaineen valinta tuo saatavilla olevat tiedot aineistosta. Tarkista peruste ja lähde; voit korjata tiedot tässä.",
+                      "Selecting a refrigerant fills the available dataset values. Check the basis and source; you can correct the details here.",
+                    )}
+                  </p>
+                  <div className="field-report-grid">
+                    {refrigerantDetails.map(renderField)}
+                  </div>
+                </details>
+              )}
+            </div>
+          )}
         </div>
       </details>
     );
@@ -2079,15 +2243,6 @@ export function WorkChecklists() {
                 )
                 .map(renderField)}
             </div>
-            {draft.kind === "commissioning" &&
-              draft.fields.commissioningPurpose !== "technical" && (
-                <p className="supporting-copy field-report-document-guide">
-                  {l(
-                    "Tuloste sisältää asennustodistuksen tiedot ja tähän kirjatut käyttöönottokokeet samassa asiakirjassa. Erilliset pöytäkirjat toimitetaan viitteiden mukaisesti. Kenttien täyttö, tekninen hyväksyntä ja vastuuhenkilön allekirjoitus ovat erillisiä vaiheita.",
-                    "The printout combines the installation-certificate details with the commissioning tests recorded here. Separate records are supplied according to their references. Completing fields, technical acceptance and the responsible person’s signature are separate steps.",
-                  )}
-                </p>
-              )}
             {renderReportSection(
               "installation",
               "Asentaja ja vastuuhenkilö",
@@ -2109,6 +2264,18 @@ export function WorkChecklists() {
               true,
             )}
             {renderReportSection(
+              "tightness",
+              "Tiiviyskoe",
+              "Tightness test",
+              reportFields.filter((field) => field.group === "tightness"),
+            )}
+            {renderReportSection(
+              "evacuation",
+              "Tyhjiöinti ja pitokoe",
+              "Evacuation and standing test",
+              reportFields.filter((field) => field.group === "evacuation"),
+            )}
+            {renderReportSection(
               "measurements",
               "Mittaukset",
               "Measurements",
@@ -2121,18 +2288,6 @@ export function WorkChecklists() {
                   ),
               ),
               true,
-            )}
-            {renderReportSection(
-              "tightness",
-              "Tiiviyskoe",
-              "Tightness test",
-              reportFields.filter((field) => field.group === "tightness"),
-            )}
-            {renderReportSection(
-              "evacuation",
-              "Tyhjiöinti ja pitokoe",
-              "Evacuation and standing test",
-              reportFields.filter((field) => field.group === "evacuation"),
             )}
             {renderReportSection(
               "test-run",
@@ -2252,22 +2407,74 @@ export function WorkChecklists() {
               </div>
             </section>
           )}
+          {!final && (
+            <details
+              className="field-report-review"
+              open={Boolean(formError) || undefined}
+            >
+              <summary>
+                {l("Tarkista ja viimeistele", "Review and finalise")}
+              </summary>
+              <p className="supporting-copy">
+                {l(
+                  "Tarkistus seuraa valittua asiakirjatyyppiä ja kirjaustapaa. Luonnos tallentuu myös keskeneräisenä.",
+                  "The review follows the selected document type and recording method. Incomplete drafts are saved too.",
+                )}
+              </p>
+              {reviewMissingFields.length ? (
+                <>
+                  <p>
+                    {reviewMissingFields.length}{" "}
+                    {l(
+                      "täydennettävää ennen lukitsemista",
+                      "fields to complete before locking",
+                    )}
+                  </p>
+                  <ul>
+                    {reviewMissingFields.map((field) => (
+                      <li key={field.id}>
+                        <button
+                          type="button"
+                          className="text-button field-report-missing-link"
+                          onClick={() =>
+                            focusField(
+                              field.id === "leakCheckInterval"
+                                ? (leakAssessment?.missing[0] ??
+                                    "leakEquipment")
+                                : field.id,
+                            )
+                          }
+                        >
+                          {field.label[locale]}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p>
+                  {l(
+                    "Tiedot täytetty. Tarkista sisältö ja soveltuvuus ennen lukitsemista.",
+                    "Fields filled. Review the content and applicability before locking.",
+                  )}
+                </p>
+              )}
+              <p className="supporting-copy">
+                {l(
+                  "Lukitseminen säilyttää tämän version. Kenttien täyttö, tekninen hyväksyntä ja allekirjoitus ovat erillisiä vaiheita.",
+                  "Locking preserves this revision. Completing fields, technical acceptance and signing are separate steps.",
+                )}
+              </p>
+            </details>
+          )}
           {draft.kind === "commissioning" &&
-            draft.fields.commissioningPurpose !== "technical" &&
-            !final && (
-              <details
-                className="field-report-requirements"
-                open={Boolean(formError)}
-              >
+            draft.fields.commissioningPurpose !== "technical" && (
+              <details className="field-report-document-context">
                 <summary>
                   {l(
-                    "Asennustodistuksen tiedot",
-                    "Installation-certificate fields",
-                  )}{" "}
-                  · VNa 1063/2025 § 9
-                  {commissioningMissingFields(draft.fields).length
-                    ? ` · ${commissioningMissingFields(draft.fields).length} ${l("täydennettävää", "to complete")}`
-                    : ""}
+                    "Asiakirjan tarkoitus ja säädöstausta",
+                    "Document purpose and regulatory context",
+                  )}
                 </summary>
                 <p className="supporting-copy">
                   {l(
@@ -2287,35 +2494,6 @@ export function WorkChecklists() {
                     )}
                   </a>
                 </p>
-                {commissioningMissingFields(draft.fields).length ? (
-                  <ul>
-                    {commissioningMissingFields(draft.fields).map((field) => (
-                      <li key={field.id}>
-                        <button
-                          type="button"
-                          className="text-button field-report-missing-link"
-                          onClick={() =>
-                            focusField(
-                              field.id === "leakCheckInterval"
-                                ? (leakAssessment?.missing[0] ??
-                                    "leakEquipment")
-                                : field.id,
-                            )
-                          }
-                        >
-                          {field.label[locale]}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>
-                    {l(
-                      "Tietokentät on täytetty. Sisältö, koepöytäkirjat ja soveltuvuus on vielä tarkastettava.",
-                      "The fields are filled. The content, test reports and applicability still require review.",
-                    )}
-                  </p>
-                )}
               </details>
             )}
           {saveState()}
@@ -2389,7 +2567,12 @@ export function WorkChecklists() {
           )}
         </section>
       )}
-      <Sources>
+      <Sources
+        title={l(
+          "Raporttipohjan tausta ja lähteet",
+          "Report template background and sources",
+        )}
+      >
         <p>
           {l(
             "Raportit ovat yleisiä kirjauspohjia. Valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Valmis raportti tai rastit eivät tarkoita teknistä hyväksyntää. Kirjaa poikkeamat muistiinpanoihin.",
@@ -2402,7 +2585,7 @@ export function WorkChecklists() {
             "Records stay in this browser and are included in Settings backups.",
           )}
         </p>
-        {(draft?.kind === "commissioning" || kind === "commissioning") && (
+        {!draft && kind === "commissioning" && (
           <p>
             <a
               href="https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf"

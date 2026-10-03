@@ -1,5 +1,30 @@
 [
   {
+    "version": "0.4.0-beta.6",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämpi täyttö, tiedot ja tulosteet",
+      "en": "Clearer forms, details and printouts"
+    },
+    "changes": {
+      "fi": [
+        "Ainetietojen kattavuus on Ominaisuudet-välilehden lopussa. Rajoitusten haku, tilasuodatin, lukumäärä ja ajallinen ryhmittely muodostavat yhden kokonaisuuden.",
+        "Raporttilista korostaa kohdetta ja erottaa raporttityypin luonnostilasta. Laitteiden tiedot ja niihin liittyvät raportit ovat rauhallisemmassa näkymässä.",
+        "Raportin osiot näyttävät kirjattujen tietojen yhteenvedon. Tarkista ja viimeistele ohjaa puuttuviin kenttiin; asiakirjan säädöstausta on erikseen.",
+        "Laskentakaavoilla on omat selkeät laatikot. Muihin laskureihin siirtyminen on erotettu laskentapainikkeesta. Beta-ilmoitus ja asetusten versiorivi ovat kompaktimpia.",
+        "Tulosteissa kohde ja laite erottuvat heti. Täydennettävät tiedot ja mittausperusteet on ryhmitelty selkeämmin. Tuloste käyttää PhaseKitin fontteja, ja tulostus säilyy käytettävissä myös varafonteilla."
+      ],
+      "en": [
+        "Data coverage sits at the end of Properties. Restriction search, status filters, result counts and date grouping form a coherent view.",
+        "The report list prioritises the site and separates report type from draft status. Equipment details and linked records have a quieter layout.",
+        "Report sections summarise recorded details. Review and finalise leads to missing fields, with regulatory context shown separately.",
+        "Calculation formulas have dedicated blocks. Links to related calculators are separated from Calculate. The beta notice and Settings version row are more compact.",
+        "Printouts identify the site and device immediately. Missing details and measurement context are grouped more clearly. Printouts use PhaseKit fonts, with reliable fallback fonts so printing remains available."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.5",
     "date": "2026-10-02",
     "channel": "beta",

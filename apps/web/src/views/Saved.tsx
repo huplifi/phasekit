@@ -243,6 +243,21 @@ export function Saved() {
         {entries.map((entry) => {
           if (entry.type === "field") {
             const record = entry.record;
+            const siteName = record.title.trim();
+            const reportType = fieldKindLabels[record.kind][data.locale];
+            const equipmentName =
+              record.fields.equipment?.trim() ||
+              data.equipment.find((item) => item.id === record.equipmentId)
+                ?.name;
+            const primaryLabel = siteName || reportType;
+            const secondaryLabel = siteName
+              ? [reportType, equipmentName].filter(Boolean).join(" · ")
+              : [
+                  l(data.locale, "Kohde nimeämättä", "Site not named"),
+                  equipmentName,
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
             return (
               <button
                 key={record.id}
@@ -252,33 +267,23 @@ export function Saved() {
                 }
               >
                 <span className="report-row-content">
-                  <span className="report-row-tags">
-                    <span className="report-kind">
-                      {fieldKindLabels[record.kind][data.locale]}
-                    </span>
-                    <span
-                      className={
-                        record.status === "final"
-                          ? "report-status status-badge status-badge--success"
-                          : "report-status status-badge status-badge--neutral"
-                      }
-                    >
-                      {record.status === "final"
-                        ? l(data.locale, "Viimeistelty", "Finalised")
-                        : l(data.locale, "Luonnos", "Draft")}
-                    </span>
+                  <strong className="report-summary">{primaryLabel}</strong>
+                  <span className="report-field-secondary">
+                    {secondaryLabel}
                   </span>
-                  <strong className="report-summary">
-                    {record.title ||
-                      l(data.locale, "Nimetön kohde", "Untitled site")}
-                  </strong>
-                  <span className="secondary">
-                    {formatDate(record.updatedAt, data.locale)}
-                    {record.fields.equipment
-                      ? ` · ${record.fields.equipment}`
-                      : ""}{" "}
-                    · {l(data.locale, "Versio", "Revision")}{" "}
-                    {record.revision ?? 1}
+                  <span className="report-row-tertiary">
+                    <time dateTime={record.updatedAt}>
+                      {formatDate(record.updatedAt, data.locale)}
+                    </time>
+                    {record.status === "final" ? (
+                      <span className="report-field-final-status">
+                        {l(data.locale, "Viimeistelty", "Finalised")}
+                      </span>
+                    ) : (
+                      <span className="report-field-draft-status status-badge status-badge--warning">
+                        {l(data.locale, "Luonnos", "Draft")}
+                      </span>
+                    )}
                   </span>
                 </span>
               </button>

@@ -263,11 +263,12 @@ function RestrictionList({
   notices: ReturnType<typeof restrictionsFor>;
 }) {
   const { t, data } = useApp();
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   const searchId = useId();
   const [filter, setFilter] = useState<RestrictionFilter>("all");
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(6);
-  const foldedQuery = query.trim().toLocaleLowerCase();
+  const foldedQuery = query.trim().toLocaleLowerCase(data.locale);
   const filtered = notices.filter((notice) => {
     if (filter !== "all" && notice.status !== filter) return false;
     if (!foldedQuery) return true;
@@ -279,10 +280,35 @@ function RestrictionList({
       notice.effectiveFrom,
     ]
       .join(" ")
-      .toLocaleLowerCase()
+      .toLocaleLowerCase(data.locale)
       .includes(foldedQuery);
   });
-  const visible = filtered.slice(0, visibleCount);
+  const current = filtered
+    .filter((notice) => notice.status === "active")
+    .sort((a, b) => b.effectiveFrom.localeCompare(a.effectiveFrom));
+  const upcoming = filtered
+    .filter((notice) => notice.status === "upcoming")
+    .sort((a, b) => a.effectiveFrom.localeCompare(b.effectiveFrom));
+  const ordered =
+    filter === "all"
+      ? [...current, ...upcoming]
+      : filter === "upcoming"
+        ? upcoming
+        : current;
+  const visible = ordered.slice(0, visibleCount);
+  const visibleGroups =
+    filter === "all"
+      ? [
+          {
+            status: "active" as const,
+            notices: visible.filter((notice) => notice.status === "active"),
+          },
+          {
+            status: "upcoming" as const,
+            notices: visible.filter((notice) => notice.status === "upcoming"),
+          },
+        ]
+      : [{ status: filter, notices: visible }];
   const filters: { value: RestrictionFilter; label: string }[] = [
     {
       value: "all",
@@ -295,12 +321,40 @@ function RestrictionList({
   useEffect(() => {
     setVisibleCount(6);
   }, [filter, foldedQuery]);
+  const countLabel =
+    filter === "all" && !foldedQuery && filtered.length === notices.length
+      ? data.locale === "fi"
+        ? `${filtered.length} ${filtered.length === 1 ? "rajoitus" : "rajoitusta"}`
+        : `${filtered.length} ${filtered.length === 1 ? "restriction" : "restrictions"}`
+      : data.locale === "fi"
+        ? `${filtered.length} / ${notices.length} rajoitusta`
+        : `${filtered.length} / ${notices.length} restrictions`;
 
   return (
     <section className="section restriction-panel">
-      <p className="caption restriction-coverage-note">
-        {t("restrictionMissing")}
-      </p>
+      <label className="restriction-search-label" htmlFor={searchId}>
+        {l("Hae rajoituksia", "Search restrictions")}
+      </label>
+      <span className="search-field">
+        <Search size={20} aria-hidden="true" />
+        <input
+          id={searchId}
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          aria-label={l("Hae rajoituksia", "Search restrictions")}
+        />
+        {query && (
+          <button
+            className="icon-button picker-clear-search"
+            type="button"
+            aria-label={t("clearSearch")}
+            onClick={() => setQuery("")}
+          >
+            <X size={18} />
+          </button>
+        )}
+      </span>
       <div
         className="restriction-filters"
         role="group"
@@ -318,33 +372,11 @@ function RestrictionList({
           </button>
         ))}
       </div>
-      <label className="restriction-search-label" htmlFor={searchId}>
-        {refinementText(data.locale, "restrictionSearch")}
-      </label>
-      <span className="search-field">
-        <Search size={20} aria-hidden="true" />
-        <input
-          id={searchId}
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          aria-label={refinementText(data.locale, "restrictionSearch")}
-        />
-        {query && (
-          <button
-            className="icon-button picker-clear-search"
-            type="button"
-            aria-label={t("clearSearch")}
-            onClick={() => setQuery("")}
-          >
-            <X size={18} />
-          </button>
-        )}
-      </span>
+      <p className="caption restriction-coverage-note">
+        {t("restrictionMissing")}
+      </p>
       <p className="caption restriction-count" aria-live="polite">
-        {refinementText(data.locale, "restrictionCount", {
-          count: filtered.length,
-        })}
+        {countLabel}
       </p>
       {filtered.length === 0 ? (
         <p className="empty">
@@ -352,73 +384,93 @@ function RestrictionList({
         </p>
       ) : (
         <>
-          <div className="restriction-list">
-            {visible.map((notice) => (
-              <details className="restriction" key={notice.id}>
-                <summary>
-                  <span className="restriction-summary-text">
-                    <span className="restriction-meta">
-                      <span
-                        className={
-                          notice.status === "active"
-                            ? "status-badge status-badge--success"
-                            : "status-badge status-badge--warning"
-                        }
-                      >
-                        {t(notice.status)}
-                      </span>
-                      <time
-                        className="mono restriction-date"
-                        dateTime={notice.effectiveFrom}
-                      >
-                        {formatDate(notice.effectiveFrom, data.locale)}
-                      </time>
-                    </span>
-                    <span className="restriction-title">
-                      {notice.title[data.locale]}
-                    </span>
-                  </span>
-                  <ChevronRight
-                    className="restriction-chevron"
-                    size={20}
-                    aria-hidden="true"
-                  />
-                </summary>
-                <div className="restriction-content">
-                  <p>{notice.summary[data.locale]}</p>
-                  <p className="caption">{notice.scope[data.locale]}</p>
-                  <p className="caption">{notice.caveats[data.locale]}</p>
-                  {!dataset.sources.some(
-                    (source) =>
-                      notice.sourceIds.includes(source.id) &&
-                      source.url === notice.sourceUrl,
-                  ) && (
-                    <a href={notice.sourceUrl} target="_blank" rel="noreferrer">
-                      {t("source")}
-                    </a>
-                  )}
-                  <SourceNote ids={notice.sourceIds} />
+          {visibleGroups.map(({ status, notices: groupedNotices }) =>
+            groupedNotices.length ? (
+              <section className="restriction-group" key={status}>
+                {filter === "all" && (
+                  <h3>
+                    {status === "active"
+                      ? l("Voimassa", "In force")
+                      : l("Tulossa", "Upcoming")}
+                  </h3>
+                )}
+                <div className="restriction-list">
+                  {groupedNotices.map((notice) => (
+                    <details className="restriction" key={notice.id}>
+                      <summary>
+                        <span className="restriction-summary-text">
+                          <span className="restriction-meta">
+                            <span
+                              className={
+                                notice.status === "active"
+                                  ? "status-badge status-badge--success"
+                                  : "status-badge status-badge--warning"
+                              }
+                            >
+                              {t(notice.status)}
+                            </span>
+                            <time
+                              className="mono restriction-date"
+                              dateTime={notice.effectiveFrom}
+                            >
+                              {formatDate(notice.effectiveFrom, data.locale)}
+                            </time>
+                          </span>
+                          <span className="restriction-title">
+                            {notice.title[data.locale]}
+                          </span>
+                        </span>
+                        <ChevronRight
+                          className="restriction-chevron"
+                          size={20}
+                          aria-hidden="true"
+                        />
+                      </summary>
+                      <div className="restriction-content">
+                        <p>{notice.summary[data.locale]}</p>
+                        <p className="caption">{notice.scope[data.locale]}</p>
+                        <p className="caption">{notice.caveats[data.locale]}</p>
+                        {!dataset.sources.some(
+                          (source) =>
+                            notice.sourceIds.includes(source.id) &&
+                            source.url === notice.sourceUrl,
+                        ) && (
+                          <a
+                            href={notice.sourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {t("source")}
+                          </a>
+                        )}
+                        <SourceNote ids={notice.sourceIds} />
+                      </div>
+                    </details>
+                  ))}
                 </div>
-              </details>
-            ))}
-          </div>
-          {filtered.length > 6 && (
+              </section>
+            ) : null,
+          )}
+          {filtered.length > visibleCount && (
             <button
               className="text-button restriction-more"
               type="button"
               onClick={() =>
-                setVisibleCount((count) =>
-                  count >= filtered.length
-                    ? 6
-                    : Math.min(count + 6, filtered.length),
-                )
+                setVisibleCount((count) => Math.min(count + 6, filtered.length))
               }
             >
-              {visibleCount >= filtered.length
-                ? refinementText(data.locale, "showFewerRestrictions")
-                : refinementText(data.locale, "showMoreRestrictions", {
-                    count: Math.min(6, filtered.length - visibleCount),
-                  })}
+              {refinementText(data.locale, "showMoreRestrictions", {
+                count: Math.min(6, filtered.length - visibleCount),
+              })}
+            </button>
+          )}
+          {visibleCount > 6 && filtered.length <= visibleCount && (
+            <button
+              className="text-button restriction-more"
+              type="button"
+              onClick={() => setVisibleCount(6)}
+            >
+              {refinementText(data.locale, "showFewerRestrictions")}
             </button>
           )}
         </>
@@ -596,36 +648,6 @@ export function RefrigerantDetail({
                   {r.cas ?? t(r.kind === "blend" ? "notApplicable" : "unknown")}
                 </FactRow>
               </dl>
-              <h3>{t("coverage")}</h3>
-              <p className="caption">{t("supportNote")}</p>
-              <dl className="facts">
-                {Object.entries(r.coverage).map(([key, value]) => (
-                  <FactRow
-                    key={key}
-                    label={t(
-                      (
-                        {
-                          identity: "identity",
-                          composition: "composition",
-                          safety: "safety",
-                          regulatory_eu_fi: "checkSupport",
-                          pt: "ptSupport",
-                        } as const
-                      )[key as keyof typeof r.coverage],
-                    )}
-                  >
-                    {t(value === "not_applicable" ? "notApplicable" : value)}
-                  </FactRow>
-                ))}
-              </dl>
-              <a
-                id="detail-coverage-link"
-                className="secondary-button coverage-report-link"
-                href={`#/coverage/${r.id}`}
-              >
-                {t("coverageReport")}{" "}
-                <ChevronRight size={18} aria-hidden="true" />
-              </a>
             </Group>
             {r.kind === "blend" && (
               <Group
@@ -727,6 +749,38 @@ export function RefrigerantDetail({
                 )}
               </Group>
             ))}
+            <section className="property-coverage">
+              <h2>{t("coverage")}</h2>
+              <p className="caption">{t("supportNote")}</p>
+              <dl className="facts">
+                {Object.entries(r.coverage).map(([key, value]) => (
+                  <FactRow
+                    key={key}
+                    label={t(
+                      (
+                        {
+                          identity: "identity",
+                          composition: "composition",
+                          safety: "safety",
+                          regulatory_eu_fi: "checkSupport",
+                          pt: "ptSupport",
+                        } as const
+                      )[key as keyof typeof r.coverage],
+                    )}
+                  >
+                    {t(value === "not_applicable" ? "notApplicable" : value)}
+                  </FactRow>
+                ))}
+              </dl>
+              <a
+                id="detail-coverage-link"
+                className="secondary-button coverage-report-link"
+                href={`#/coverage/${r.id}`}
+              >
+                {t("coverageReport")}{" "}
+                <ChevronRight size={18} aria-hidden="true" />
+              </a>
+            </section>
           </>
         )}
         {tab === "restrictions" && <RestrictionList notices={notices} />}

@@ -56,6 +56,7 @@ test("equipment history tolerates an imported legacy work-date value", async ({
     db.close();
   });
   await page.reload();
+  await page.locator(".equipment-history > summary").click();
   await expect(page.locator(".equipment-field-report-link")).toContainText(
     "Legacy site",
   );
@@ -123,6 +124,7 @@ test("equipment history opens reports and preserves final field records through 
   const frozen = await readReports();
   await page.goto("/#/equipment");
   const card = page.locator(".equipment-card");
+  await card.locator(".equipment-history > summary").click();
   const link = card.locator(".equipment-field-report-link");
   await expect(link).toContainText("Tyhjiöinti");
   await expect(link).toContainText("Työsali / KEUDA");
@@ -134,6 +136,7 @@ test("equipment history opens reports and preserves final field records through 
     "Työsali / KEUDA",
   );
   await page.goto("/#/equipment");
+  await card.locator(".equipment-actions > summary").click();
   await card.getByRole("button", { name: "Muokkaa", exact: true }).click();
   await page.getByLabel("Nimi", { exact: true }).fill("Kone #1 renamed");
   await page.getByLabel("Sijainti", { exact: true }).fill("New location");
@@ -141,6 +144,7 @@ test("equipment history opens reports and preserves final field records through 
   await expect(link).toContainText("Työsali / KEUDA");
   await expect.poll(readReports).toEqual(frozen);
   page.once("dialog", (dialog) => dialog.accept());
+  await card.locator(".equipment-actions > summary").click();
   await card.getByRole("button", { name: "Poista", exact: true }).click();
   await expect(card).toHaveCount(0);
   await page.goto("/#/reports");
