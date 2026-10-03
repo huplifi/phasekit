@@ -153,7 +153,7 @@ test('calculates and saves the R513A 50 kg component result',async({page})=>{
  const saved=page.locator('.saved-entry').first();
  await expect(saved).toContainText('R513A');
  await expect(saved).toContainText('50 kg');
- await saved.locator(':scope > summary').click();
+ await saved.click();
  await expect(saved).toContainText('Tallennettu alkuperäinen tulos. Nykyinen data ei muuta tätä laskelmaa.');
  await expect(saved.locator('.fact-row').filter({hasText:'Dataversio'})).toHaveText(resultVersion!.trim());
 

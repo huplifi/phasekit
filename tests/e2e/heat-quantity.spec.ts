@@ -382,7 +382,7 @@ test("rounded heating duration stays human-readable in calculation, saved report
   await expect(saved.locator(".report-summary")).toContainText(
     displayedDuration,
   );
-  await saved.locator(":scope > summary").click();
+  await saved.click();
   await expect(
     saved
       .getByRole("region", { name: "Päätulos", exact: true })
@@ -390,7 +390,7 @@ test("rounded heating duration stays human-readable in calculation, saved report
   ).toHaveText(displayedDuration);
   const popup = page.waitForEvent("popup");
   await saved
-    .getByRole("button", { name: "Tulosta / tallenna PDF", exact: true })
+    .getByRole("button", { name: "Tulosta / PDF", exact: true })
     .click();
   const printed = await popup;
   await expect(
@@ -456,7 +456,7 @@ test("long ideal durations use compact calendar units without narrow-screen over
   await expect(saved.locator(".report-summary")).toContainText(
     /≈\s*7 yr\s+5 mo/,
   );
-  await saved.locator(":scope > summary").click();
+  await saved.click();
   await expect(
     saved.getByRole("region", { name: "Main result", exact: true }),
   ).toContainText(/7 yr\s+5 mo/);

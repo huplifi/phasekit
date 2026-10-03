@@ -22,12 +22,12 @@ test("direct and saved leak-check printouts keep the same dated assessment", asy
     .getByRole("button", { name: "Tallenna laskelma", exact: true })
     .click();
   await page.goto("/#/saved");
-  await page.locator(".saved-entry > summary").first().click();
+  await page.locator(".saved-entry").first().click();
   const savedPopup = page.waitForEvent("popup");
   await page
     .locator(".saved-entry")
     .first()
-    .getByRole("button", { name: "Tulosta / tallenna PDF" })
+    .getByRole("button", { name: "Tulosta / PDF" })
     .click();
   const saved = await savedPopup;
   await expect(saved.locator(".hero")).toHaveText((await hero.textContent())!);

@@ -1,7 +1,13 @@
 import { Coverage } from "./views/Coverage";
 import { Symbols } from "./views/Symbols";
 import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   Snowflake,
@@ -50,6 +56,11 @@ export function App() {
   >("saved");
   const writeRevision = useRef(0);
   const [path, setPath] = useState(pathNow);
+  const historyIndexRef = useRef(
+    Number.isSafeInteger(window.history.state?.phasekitNavigationIndex)
+      ? (window.history.state.phasekitNavigationIndex as number)
+      : 0,
+  );
   const [online, setOnline] = useState(navigator.onLine);
   const [message, setMessage] = useState("");
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -221,7 +232,28 @@ export function App() {
     }
   }
   useEffect(() => {
-    const onHash = () => setPath(pathNow());
+    // Stamp existing and newly created hash entries so a guarded form can undo
+    // Back, Forward or a new hash navigation without overwriting history.
+    window.history.replaceState(
+      {
+        ...window.history.state,
+        phasekitNavigationIndex: historyIndexRef.current,
+      },
+      "",
+    );
+    const onHash = () => {
+      const storedIndex = window.history.state?.phasekitNavigationIndex;
+      const nextIndex = Number.isSafeInteger(storedIndex)
+        ? (storedIndex as number)
+        : historyIndexRef.current + 1;
+      if (!Number.isSafeInteger(storedIndex))
+        window.history.replaceState(
+          { ...window.history.state, phasekitNavigationIndex: nextIndex },
+          "",
+        );
+      historyIndexRef.current = nextIndex;
+      setPath(pathNow());
+    };
     const onOnline = () => setOnline(navigator.onLine);
     const media = matchMedia("(prefers-color-scheme: dark)");
     const onTheme = () => setSystemDark(media.matches);
@@ -394,10 +426,7 @@ export function App() {
               <span className="mono">{appVersion}</span>
             </div>
             <div className="beta-banner-actions">
-              <a
-                className="beta-release-link"
-                href="#/releases"
-              >
+              <a className="beta-release-link" href="#/releases">
                 {data.locale === "fi" ? "Versiohistoria" : "Release history"}
               </a>
               <a
@@ -509,7 +538,7 @@ export function App() {
           ) : section === "equipment" ? (
             <Equipment />
           ) : section === "saved" || section === "reports" ? (
-            <Saved />
+            <Saved path={path} historyIndex={historyIndexRef.current} />
           ) : section === "coverage" ? (
             <Coverage r={r} />
           ) : section === "releases" ? (

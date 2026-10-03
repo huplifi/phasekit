@@ -67,7 +67,7 @@ test("inverse CO2e calculation shows actual component masses and clears after ed
   await expect(breakdown).toHaveCount(0);
   await page.goto("/#/reports");
   const record = page.locator(".report-entry");
-  await record.locator(":scope > summary").click();
+  await record.click();
   await expect(record).toContainText("R32 · massa");
   await expect(record).toContainText("R125 · massa");
   await expect(record).toContainText("20,875 t CO₂e");
@@ -98,7 +98,7 @@ test("live conversion reports reset on edits and retain exact input and referenc
   ).toHaveCount(0);
   await page.goto("/#/reports");
   const entry = page.locator(".report-entry");
-  await entry.locator(":scope > summary").click();
+  await entry.click();
   await expect(entry).toContainText("2,5 bar");
   await expect(entry).toContainText("1,01325 bar(a)");
   await expect(entry).toContainText("351,325 kPa");
@@ -132,7 +132,7 @@ test("PT saves model precision and phase boundary and removes save for invalid i
   ).toHaveCount(0);
   await page.goto("/#/reports");
   const entry = page.locator(".report-entry");
-  await entry.locator(":scope > summary").click();
+  await entry.click();
   await expect(entry).toContainText("R134a (r134a)");
   await expect(entry).toContainText("20 °C");
   await expect(entry).toContainText("Kastepiste");

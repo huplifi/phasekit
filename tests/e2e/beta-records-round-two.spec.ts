@@ -31,10 +31,8 @@ test("saved calculation keeps its original identity while its equipment link cha
 
   await page.goto("/#/reports");
   const report = page.locator(".report-entry").first();
-  await expect(report.locator(":scope > summary")).toContainText(
-    "Laite: Unit A",
-  );
-  await report.locator(":scope > summary").click();
+  await expect(report).toContainText("Unit A");
+  await report.click();
   await expect(report).not.toContainText("Alkuperäinen laitenimi");
   await report.getByText("Vaihda laitetta", { exact: true }).click();
   await expect(report).toContainText("Unit A");
@@ -44,31 +42,40 @@ test("saved calculation keeps its original identity while its equipment link cha
   });
   await currentLink.selectOption({ label: "Unit B" });
   await expect(currentLink.locator("option:checked")).toHaveText("Unit B");
-  await expect(report.locator(":scope > summary")).toContainText(
-    "Laite: Unit B",
+  await expect(report.locator(".saved-report-header")).toContainText("Unit B");
+  await expect(
+    report.getByText("Laite: Unit B", { exact: true }),
+  ).toBeVisible();
+  await expect(report.getByText("Laite: Unit A", { exact: true })).toHaveCount(
+    0,
   );
-  await expect(report.locator(":scope > summary")).not.toContainText("Unit A");
   await expect(report).toContainText("Unit A");
 
   await page.goto("/#/equipment");
   const unitB = page.locator(".equipment-card", { hasText: "Unit B" });
+  await unitB.locator(".equipment-history > summary").click();
   await expect(unitB.locator(".equipment-record-link")).toHaveCount(1);
   await unitB.locator(".equipment-record-link").click();
   await expect(page).toHaveURL(/#\/reports\//);
-  await expect(page.locator(".report-entry[open]")).toContainText("20 mm");
+  const detail = page.locator(
+    "article.saved-report-detail.report-entry.saved-entry",
+  );
+  await expect(detail).toContainText("20 mm");
 
   await page
-    .locator(".report-entry[open]")
+    .locator("article.saved-report-detail.report-entry.saved-entry")
     .getByText("Vaihda laitetta", { exact: true })
     .click();
   await page
-    .locator(".report-entry[open]")
+    .locator("article.saved-report-detail.report-entry.saved-entry")
     .getByRole("combobox", { name: "Laite" })
     .selectOption("");
-  await expect(page.locator(".report-entry[open] > summary")).toContainText(
+  await expect(page.locator(".saved-report-header")).toContainText(
     "Ei liitetty",
   );
-  await expect(page.locator(".report-entry[open]")).toContainText("Unit A");
+  await expect(
+    page.locator("article.saved-report-detail.report-entry.saved-entry"),
+  ).toContainText("Unit A");
   await page.goto("/#/equipment");
   await expect(
     page

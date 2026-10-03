@@ -57,13 +57,12 @@ test("the supplied R134a paper example plots with gauge pressures", async ({
   ).toBeDisabled();
   await page.goto("/#/reports");
   const report = page.locator(".report-entry");
-  await report.locator(":scope > summary").click();
+  await report.click();
   await expect(report).toContainText("1,91 bar(g)");
   await expect(report).toContainText("Piste 4 · entalpia");
   await expect(report).toContainText("p–h-aineistoversio");
   await expect(report).toContainText("Tulistus");
   await page.reload();
-  await report.locator(":scope > summary").click();
   await expect(report).toContainText("Pisteen 4 oletus");
 });
 

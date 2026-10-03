@@ -36,7 +36,7 @@ import {
 import "./field-tools.css";
 import "./field-reports.css";
 import { appVersion } from "../release";
-import { byId, getFact, factKeys, dataset } from "../data";
+import { byId } from "../data";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import {
   buildCommissioningCycle,
@@ -44,6 +44,10 @@ import {
 } from "../commissioning-cycle";
 import { renderCycleChartSvg } from "../ph-chart-snapshot";
 import { evaluateCommissioningLeakCheck } from "../report-leak-check";
+import {
+  equipmentReportPatch,
+  refrigerantReportFields,
+} from "../equipment-report-defaults";
 
 const reportRow = (
   fi: string,
@@ -1747,36 +1751,12 @@ export function WorkChecklists() {
     )
       return null;
     const change = (value: string) => {
-      const refrigerant =
-        field.id === "refrigerantId" ? byId.get(value) : undefined;
-      const safety = refrigerant
-        ? getFact(refrigerant, ...factKeys.safety)
-        : undefined;
-      const gwp = refrigerant
-        ? getFact(refrigerant, ...factKeys.gwp)
-        : undefined;
-      const sourced = (fact: typeof safety) =>
-        fact?.state === "verified" &&
-        fact.value !== null &&
-        fact.sourceIds.length > 0;
       update({
         fields: {
           ...draft.fields,
           [field.id]: value,
           ...(field.id === "refrigerantId"
-            ? {
-                refrigerantDesignation: refrigerant?.designation ?? value,
-                refrigerantSafetyClass: sourced(safety)
-                  ? String(safety!.value)
-                  : "",
-                refrigerantGwp: sourced(gwp) ? String(gwp!.value) : "",
-                refrigerantGwpBasis: sourced(gwp)
-                  ? (gwp!.basis ?? "gwp_eu_2024_573_100yr")
-                  : "",
-                refrigerantSourceNote: sourced(gwp)
-                  ? `PhaseKit ${dataset.version} · ${[...new Set([...(sourced(safety) ? safety!.sourceIds : []), ...gwp!.sourceIds])].join(", ")}`
-                  : "",
-              }
+            ? refrigerantReportFields(value)
             : {}),
         },
       });
@@ -2196,32 +2176,41 @@ export function WorkChecklists() {
                     const equipment = data.equipment.find(
                       (item) => item.id === e.target.value,
                     );
-                    update({
-                      equipmentId: equipment?.id,
-                      ...(equipment
-                        ? {
-                            title: equipment.location || equipment.name,
-                            fields: {
-                              ...draft.fields,
-                              equipment: equipment.name,
-                              ...(draft.kind === "commissioning" &&
-                              equipment.location
-                                ? { installationLocation: equipment.location }
-                                : {}),
-                            },
-                          }
-                        : {}),
-                    });
+                    update(
+                      equipment
+                        ? equipmentReportPatch(
+                            draft,
+                            equipment,
+                            data.sites?.find(
+                              (site) => site.id === equipment.siteId,
+                            ),
+                          )
+                        : { equipmentId: undefined },
+                    );
                   }}
                 >
                   <option value="">{l("Ei liitetty", "Unlinked")}</option>
                   {data.equipment.map((item) => (
                     <option key={item.id} value={item.id}>
-                      {item.name}
+                      {[
+                        item.name,
+                        data.sites?.find((site) => site.id === item.siteId)
+                          ?.name,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </option>
                   ))}
                 </select>
               </label>
+            )}
+            {!final && draft.equipmentId && (
+              <p className="supporting-copy">
+                {l(
+                  "Laitteen tiedot esitäytetään vain tyhjiin kenttiin. Tarkista kylmäaine ja täyttömäärä tätä työtä varten.",
+                  "Equipment details fill empty fields only. Check the refrigerant and charge for this work.",
+                )}
+              </p>
             )}
             {reportFields
               .filter((field) => field.id === "commissioningPurpose")

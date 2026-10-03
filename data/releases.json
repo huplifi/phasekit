@@ -1,5 +1,26 @@
 [
   {
+    "version": "0.4.0-beta.7",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "Kohteet, laitteet ja yhtenäiset raportit",
+      "en": "Sites, equipment and consistent reports"
+    },
+    "changes": {
+      "fi": [
+        "Tallennetut laskelmat ja vuototarkastusarviot avautuvat omaan näkymäänsä. Raporttilistan rakenne ja vientitoiminnot ovat yhtenäisiä.",
+        "Kohteelle voi tallentaa useita laitteita. Laitteen valinnaisiin tietoihin kuuluvat kylmäaine, täytös, valmistaja ja malli sekä sarjanumero.",
+        "Laitteen valinta esitäyttää raportin tyhjät perustiedot. Aiemmat kirjaukset ja lukitut raportit säilyvät ennallaan. Kohteet ja laitetiedot sisältyvät varmuuskopioihin."
+      ],
+      "en": [
+        "Saved calculations and leak-check assessments open in dedicated views. Report list structure and export actions are consistent.",
+        "Sites can contain multiple devices. Optional device details include refrigerant, charge, manufacturer and model, and serial number.",
+        "Selecting equipment fills empty report fields. Existing entries and locked reports stay unchanged. Sites and device details are included in backups."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.6",
     "date": "2026-10-03",
     "channel": "beta",

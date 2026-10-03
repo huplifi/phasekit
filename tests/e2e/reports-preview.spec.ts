@@ -43,8 +43,8 @@ test("saved report keeps frozen provenance and equipment history after equipment
 
   await page.goto("/#/reports");
   const report = page.locator(".report-entry");
+  await report.click();
   await expect(report.locator(".report-summary")).toContainText("20 mm");
-  await report.locator(".report-summary").click();
   await expect(report).toContainText("Testikohde 4");
   await expect(report).toContainText("Lähtötiedot mitattu paikan päällä.");
   await expect(report).toContainText("Lähteet ja versiotiedot");
@@ -67,7 +67,7 @@ test("saved report keeps frozen provenance and equipment history after equipment
   expect(png.readUInt32BE(20)).toBeGreaterThan(500);
   const popupPromise = page.waitForEvent("popup");
   await report
-    .getByRole("button", { name: "Tulosta / tallenna PDF", exact: true })
+    .getByRole("button", { name: "Tulosta / PDF", exact: true })
     .click();
   const printPage = await popupPromise;
   await expect(printPage).toHaveTitle("Putken tilavuus ja virtaus");
@@ -80,6 +80,7 @@ test("saved report keeps frozen provenance and equipment history after equipment
 
   await page.goto("/#/equipment");
   page.once("dialog", (dialog) => dialog.accept());
+  await page.locator(".equipment-actions > summary").click();
   await page.getByRole("button", { name: "Poista", exact: true }).click();
   await expect(page.getByText("Testikohde 4", { exact: true })).toHaveCount(0);
   await page.goto("/#/reports");
