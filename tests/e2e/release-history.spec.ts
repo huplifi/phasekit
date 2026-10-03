@@ -4,13 +4,20 @@ import releases from "../../data/releases.json" with { type: "json" };
 
 test("release history is discoverable and bilingual", async ({ page }) => {
   await page.goto("/#/settings");
-  await expect(page.locator(".beta-banner .beta-release-link")).toHaveAttribute(
-    "href",
-    "#/releases",
-  );
-  await expect(page.locator(".beta-banner .beta-release-link")).toHaveText(
-    "Versiohistoria",
-  );
+  const beta =
+    packageInfo.version.includes("-beta.") ||
+    process.env.VITE_RELEASE_CHANNEL === "beta";
+  if (beta) {
+    await expect(
+      page.locator(".beta-banner .beta-release-link"),
+    ).toHaveAttribute("href", "#/releases");
+    await expect(page.locator(".beta-banner .beta-release-link")).toHaveText(
+      "Versiohistoria",
+    );
+  } else {
+    await expect(page.locator(".beta-banner")).toHaveCount(0);
+    await expect(page.getByText("Vakaa", { exact: true })).toBeVisible();
+  }
   await expect(
     page.getByRole("link", { name: "Anna palautetta", exact: true }),
   ).toHaveAttribute("href", "https://github.com/huplifi/phasekit/issues");
@@ -18,7 +25,8 @@ test("release history is discoverable and bilingual", async ({ page }) => {
     page.getByRole("link", { name: /kattavuusraportti/ }),
   ).toHaveAttribute("href", "#/coverage");
   const versionLink = page.getByRole("link", {
-    name: packageInfo.version, exact: true,
+    name: packageInfo.version,
+    exact: true,
   });
   await expect(versionLink).toContainText(packageInfo.version);
   await versionLink.click();
@@ -54,7 +62,7 @@ test("release history is discoverable and bilingual", async ({ page }) => {
     .getByRole("link", { name: packageInfo.version, exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Visible release history", exact: true }),
+    page.getByRole("heading", { name: "Release history", exact: true }),
   ).toBeVisible();
 });
 
