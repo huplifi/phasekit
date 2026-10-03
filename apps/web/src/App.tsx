@@ -242,6 +242,14 @@ export function App() {
       "",
     );
     const onHash = () => {
+      // Let detail guards synchronously cancel navigation before updating the
+      // route, which would unmount the form holding its unsaved notes.
+      if (
+        !window.dispatchEvent(
+          new Event("phasekit:before-navigation", { cancelable: true }),
+        )
+      )
+        return;
       const storedIndex = window.history.state?.phasekitNavigationIndex;
       const nextIndex = Number.isSafeInteger(storedIndex)
         ? (storedIndex as number)

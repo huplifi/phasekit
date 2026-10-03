@@ -4,6 +4,24 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.1 — 2026-10-03 · Beta
+
+A new beta series
+
+- The 0.5 beta series starts from stable 0.4.0 functionality. This initial beta adds no new features.
+- Existing beta reports, sites and equipment are retained. Beta and stable continue to use separate storage.
+
+## 0.4.0 — 2026-10-03 · Stable
+
+Reports, sites and PDF export
+
+- Improvements from the 0.3 and 0.4 beta series are now available in the stable release.
+- Sites group equipment together. Equipment details can prefill reports; reports, saved calculations and export actions use consistent views.
+- Report entry, finalisation and printouts are clearer. Previews can save or share PDF files in installed apps.
+- Refrigerant data and calculation models have expanded. Diagram symbols, heat calculators and clearer calculation notes also support offline use.
+- Existing records remain on their current site. Move beta records to stable using backup export and import in Settings.
+- The unsaved calculation-notes confirmation also protects browser Back navigation in Chromium.
+
 ## 0.4.0-beta.8 — 2026-10-03 · Beta
 
 PDF export in installed apps
@@ -136,6 +154,12 @@ Heat quantity, heating time and kiisseli
 - Material selection includes sourced reference properties for water, dry air, copper and aluminium, plus custom properties. The homework-inspired kiisseli option asks for the user’s own specific heat value.
 - Results can be saved as equipment-linked calculations and printed. Reports retain the properties used, sources and calculation assumptions.
 - The liquid thermal-power calculator shares the water reference properties. Calculations assume constant properties without phase change; heating time uses heat transferred to the material and excludes losses.
+
+## 0.2.1 — 2026-09-28 · Stable
+
+A clearer app icon
+
+- The app icon has a larger, centred mark, preserving the original waves with clearer tonal contrast.
 
 ## 0.3.0-beta.1 — 2026-09-27 · Beta
 

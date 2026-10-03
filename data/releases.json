@@ -1,5 +1,51 @@
 [
   {
+    "version": "0.5.0-beta.1",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "Uusi betasarja",
+      "en": "A new beta series"
+    },
+    "changes": {
+      "fi": [
+        "Betasarja 0.5 alkaa vakaan version 0.4.0 toiminnallisuudesta. Tässä avausversiossa ei ole uusia ominaisuuksia.",
+        "Betan aiemmat raportit, kohteet ja laitteet säilyvät. Betan ja vakaan version tallennustilat pysyvät erillään."
+      ],
+      "en": [
+        "The 0.5 beta series starts from stable 0.4.0 functionality. This initial beta adds no new features.",
+        "Existing beta reports, sites and equipment are retained. Beta and stable continue to use separate storage."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0",
+    "date": "2026-10-03",
+    "channel": "stable",
+    "title": {
+      "fi": "Raportit, kohteet ja PDF-vienti",
+      "en": "Reports, sites and PDF export"
+    },
+    "changes": {
+      "fi": [
+        "Betasarjojen 0.3 ja 0.4 parannukset julkaistaan vakaaseen versioon.",
+        "Kohteet kokoavat laitteet yhteen. Laitetietoja voi käyttää raporttien esitäyttöön; raportit, tallennetut laskelmat ja niiden vientitoiminnot ovat yhtenäisiä.",
+        "Raporttien täyttö, viimeistely ja tulosteet ovat selkeämpiä. Esikatselusta voi tallentaa tai jakaa PDF-tiedoston myös asennetussa sovelluksessa.",
+        "Kylmäainetietoja ja laskentamalleja on laajennettu. Kaaviosymbolit, lämpölaskurit ja laskentaperusteiden esitystapa tukevat työskentelyä myös offline-tilassa.",
+        "Aiemmat tallenteet säilyvät samalla sivustolla. Betan tietojen siirto vakaaseen tehdään asetusten varmuuskopion viennillä ja tuonnilla.",
+        "Tallentamattomien laskelmamuistiinpanojen poistumisvarmistus toimii myös Chromium-selaimen Takaisin-toiminnossa."
+      ],
+      "en": [
+        "Improvements from the 0.3 and 0.4 beta series are now available in the stable release.",
+        "Sites group equipment together. Equipment details can prefill reports; reports, saved calculations and export actions use consistent views.",
+        "Report entry, finalisation and printouts are clearer. Previews can save or share PDF files in installed apps.",
+        "Refrigerant data and calculation models have expanded. Diagram symbols, heat calculators and clearer calculation notes also support offline use.",
+        "Existing records remain on their current site. Move beta records to stable using backup export and import in Settings.",
+        "The unsaved calculation-notes confirmation also protects browser Back navigation in Chromium."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.8",
     "date": "2026-10-03",
     "channel": "beta",
@@ -342,6 +388,23 @@
         "Material selection includes sourced reference properties for water, dry air, copper and aluminium, plus custom properties. The homework-inspired kiisseli option asks for the user’s own specific heat value.",
         "Results can be saved as equipment-linked calculations and printed. Reports retain the properties used, sources and calculation assumptions.",
         "The liquid thermal-power calculator shares the water reference properties. Calculations assume constant properties without phase change; heating time uses heat transferred to the material and excludes losses."
+      ]
+    }
+  },
+  {
+    "version": "0.2.1",
+    "date": "2026-09-28",
+    "channel": "stable",
+    "title": {
+      "fi": "Selkeämpi sovelluskuvake",
+      "en": "A clearer app icon"
+    },
+    "changes": {
+      "fi": [
+        "Sovelluskuvakkeen tunnus on suurempi ja keskitetty. Alkuperäinen aaltotausta säilyy, ja sävyerot ovat aiempaa selkeämmät."
+      ],
+      "en": [
+        "The app icon has a larger, centred mark, preserving the original waves with clearer tonal contrast."
       ]
     }
   },
