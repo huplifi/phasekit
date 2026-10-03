@@ -2,7 +2,7 @@
 
 A source-attributed refrigerant reference and calculation app for refrigeration work. Built with React, strict TypeScript and Vite, with local IndexedDB storage and an installable offline PWA. The interface supports Finnish and English; project documentation is maintained in English.
 
-The stable release **0.2.1** includes the expanded field tools, refrigeration cycle and P–h chart, saved reports and equipment-linked history. The separate public beta is the testing channel for subsequent updates. Beta and stable retain independent browser storage.
+The stable release **0.4.0** includes field reports, sites and equipment, direct PDF export, expanded refrigeration models and offline field tools. The separate public beta is the testing channel for subsequent updates. Beta and stable retain independent browser storage.
 
 - **249 refrigerant records**, including legacy, ODS, natural and newer blends. Coverage is explicit: this is not a complete inventory of every refrigerant or property.
 - Bidirectional pressure–temperature conversion for **134 refrigerants**.

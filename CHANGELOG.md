@@ -147,6 +147,12 @@ Heat quantity, heating time and kiisseli
 - Results can be saved as equipment-linked calculations and printed. Reports retain the properties used, sources and calculation assumptions.
 - The liquid thermal-power calculator shares the water reference properties. Calculations assume constant properties without phase change; heating time uses heat transferred to the material and excludes losses.
 
+## 0.2.1 — 2026-09-28 · Stable
+
+A clearer app icon
+
+- The app icon has a larger, centred mark, preserving the original waves with clearer tonal contrast.
+
 ## 0.3.0-beta.1 — 2026-09-27 · Beta
 
 Start of the next update cycle

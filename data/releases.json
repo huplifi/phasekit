@@ -371,6 +371,23 @@
     }
   },
   {
+    "version": "0.2.1",
+    "date": "2026-09-28",
+    "channel": "stable",
+    "title": {
+      "fi": "Selkeämpi sovelluskuvake",
+      "en": "A clearer app icon"
+    },
+    "changes": {
+      "fi": [
+        "Sovelluskuvakkeen tunnus on suurempi ja keskitetty. Alkuperäinen aaltotausta säilyy, ja sävyerot ovat aiempaa selkeämmät."
+      ],
+      "en": [
+        "The app icon has a larger, centred mark, preserving the original waves with clearer tonal contrast."
+      ]
+    }
+  },
+  {
     "version": "0.3.0-beta.1",
     "date": "2026-09-27",
     "channel": "beta",
