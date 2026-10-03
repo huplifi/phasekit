@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.7 — 2026-10-03 · Beta
+
+Sites, equipment and consistent reports
+
+- Saved calculations and leak-check assessments open in dedicated views. Report list structure and export actions are consistent.
+- Sites can contain multiple devices. Optional device details include refrigerant, charge, manufacturer and model, and serial number.
+- Selecting equipment fills empty report fields. Existing entries and locked reports stay unchanged. Sites and device details are included in backups.
+
 ## 0.4.0-beta.6 — 2026-10-03 · Beta
 
 Clearer forms, details and printouts

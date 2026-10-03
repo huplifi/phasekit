@@ -71,7 +71,7 @@ test("print and saved cycle retain selected guides and view without losing repor
   await changed.printed.close();
   await page.goto("/#/reports");
   await page.reload();
-  await page.locator(".report-entry > summary").click();
+  await page.locator(".report-entry").click();
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Vie JSON", exact: true }).click();
   const file = await download;

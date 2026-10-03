@@ -79,10 +79,9 @@ test("next inspection and shareable explanation survive a saved snapshot", async
     page.getByRole("button", { name: "Laskelma tallennettu.", exact: true }),
   ).toBeDisabled();
   await page.goto("/#/reports");
-  await page.locator(".saved-entry > summary").first().click();
+  await page.locator(".saved-entry").first().click();
   await expect(page.locator(".check-schedule")).toContainText("31.1.2027");
   await page.reload();
-  await page.locator(".saved-entry > summary").first().click();
   await expect(page.locator(".check-schedule")).toContainText("31.1.2027");
 });
 

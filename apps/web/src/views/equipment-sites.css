@@ -1,0 +1,127 @@
+.equipment-create-actions,
+.equipment-site-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.equipment-site {
+  display: grid;
+  gap: 0.85rem;
+  min-width: 0;
+  border: 1px solid var(--divider, #d6dddf);
+  border-radius: 0.8rem;
+  padding: 1rem;
+}
+
+.equipment-site-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.equipment-site-heading > div:first-child {
+  min-width: 0;
+}
+
+.equipment-site h2,
+.equipment-site-heading p,
+.equipment-device-name {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.equipment-site h2 {
+  font-size: 1.1rem;
+}
+
+.equipment-site-heading p {
+  margin-top: 0.3rem;
+}
+
+.equipment-site-actions {
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.equipment-device-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.equipment-site-unassigned {
+  border-style: dashed;
+}
+
+.equipment-device-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.5rem 1rem;
+  margin: 0.85rem 0;
+  font-size: 0.875rem;
+}
+
+.equipment-device-details dt {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.equipment-device-details dd {
+  margin: 0.2rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.equipment-form select {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.equipment-optional-details > summary {
+  cursor: pointer;
+  min-height: 44px;
+  align-content: center;
+}
+
+.equipment-optional-details > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 0.3rem;
+}
+
+.equipment-optional-fields {
+  display: grid;
+  gap: 0.85rem;
+  padding-top: 0.5rem;
+}
+
+.equipment-refrigerant-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.equipment-refrigerant-field > p {
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .equipment-site-heading {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .equipment-site-actions {
+    justify-content: flex-start;
+    align-self: stretch;
+  }
+
+  .equipment-site-actions > details {
+    margin-left: auto;
+  }
+
+  .equipment-site {
+    padding: 0.75rem;
+  }
+}
