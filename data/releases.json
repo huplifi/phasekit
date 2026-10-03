@@ -1,5 +1,30 @@
 [
   {
+    "version": "0.4.0",
+    "date": "2026-10-03",
+    "channel": "stable",
+    "title": {
+      "fi": "Raportit, kohteet ja PDF-vienti",
+      "en": "Reports, sites and PDF export"
+    },
+    "changes": {
+      "fi": [
+        "Betasarjojen 0.3 ja 0.4 parannukset julkaistaan vakaaseen versioon.",
+        "Kohteet kokoavat laitteet yhteen. Laitetietoja voi käyttää raporttien esitäyttöön; raportit, tallennetut laskelmat ja niiden vientitoiminnot ovat yhtenäisiä.",
+        "Raporttien täyttö, viimeistely ja tulosteet ovat selkeämpiä. Esikatselusta voi tallentaa tai jakaa PDF-tiedoston myös asennetussa sovelluksessa.",
+        "Kylmäainetietoja ja laskentamalleja on laajennettu. Kaaviosymbolit, lämpölaskurit ja laskentaperusteiden esitystapa tukevat työskentelyä myös offline-tilassa.",
+        "Aiemmat tallenteet säilyvät samalla sivustolla. Betan tietojen siirto vakaaseen tehdään asetusten varmuuskopion viennillä ja tuonnilla."
+      ],
+      "en": [
+        "Improvements from the 0.3 and 0.4 beta series are now available in the stable release.",
+        "Sites group equipment together. Equipment details can prefill reports; reports, saved calculations and export actions use consistent views.",
+        "Report entry, finalisation and printouts are clearer. Previews can save or share PDF files in installed apps.",
+        "Refrigerant data and calculation models have expanded. Diagram symbols, heat calculators and clearer calculation notes also support offline use.",
+        "Existing records remain on their current site. Move beta records to stable using backup export and import in Settings."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.8",
     "date": "2026-10-03",
     "channel": "beta",
