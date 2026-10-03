@@ -8,6 +8,7 @@ import {
 import { useApp } from "../context";
 import { useDraftGuard } from "../useDraftGuard";
 import { Back } from "../components/Common";
+import { FormulaBlock } from "../components/FormulaBlock";
 import { ReportSave } from "../components/ReportSave";
 import type { ReportRow } from "../storage";
 import { heatMaterials, heatFormulaSource } from "../heat-materials";
@@ -193,10 +194,11 @@ export function HeatQuantityCalculator() {
         ? l("Koostumuksesta arvioitu", "Composition estimate")
         : l("Taulukkoarvo", "Reference value")
       : l("Käyttäjän syöttämä", "User-supplied");
-  const assumptions = l(
-    "Q = m · c · (T₂ − T₁). Vakio-ominaisuudet, ei olomuodon muutosta. Lämpöhäviöitä tai astian lämpenemistä ei huomioida. Teho tarkoittaa aineeseen siirtyvää tai siitä poistuvaa lämpötehoa, ei laitteen sähkötehoa.",
-    "Q = m · c · (T₂ − T₁). Constant properties, no phase change. Heat losses and container heating are excluded. Power is heat transferred to or from the material, not electrical input.",
+  const propertyAssumptions = l(
+    "Vakio-ominaisuudet, ei olomuodon muutosta. Lämpöhäviöitä tai astian lämpenemistä ei huomioida. Teho tarkoittaa aineeseen siirtyvää tai siitä poistuvaa lämpötehoa, ei laitteen sähkötehoa.",
+    "Constant properties, no phase change. Heat losses and container heating are excluded. Power is heat transferred to or from the material, not electrical input.",
   );
+  const assumptions = `Q = m · c · (T₂ − T₁). ${propertyAssumptions}`;
   const inputs: ReportRow[] = [
     row("Ratkaistava suure", "Solve for", input.mode),
     row("Aine", "Material", material.name[data.locale]),
@@ -604,39 +606,45 @@ export function HeatQuantityCalculator() {
             <summary>
               {l("Kaava ja sijoitus", "Formula and substitution")}
             </summary>
-            <p className="field-formula">Q = m · c · (T₂ − T₁)</p>
-            <p className="field-formula">
-              {number(result.energyKJ)} kJ = {number(result.massKg)} kg ×{" "}
-              {number(result.specificHeatKJkgK)} kJ/(kg·K) × (
-              {number(result.outletC)} − {number(result.inletC)}) K
-            </p>
-            {input.mode === "mass" && (
-              <p className="field-formula">m = Q / (c · ΔT)</p>
-            )}
-            {input.mode === "temperature" && (
-              <p className="field-formula">T₂ = T₁ + Q / (m · c)</p>
-            )}
-            {input.mode === "specific-heat" && (
-              <p className="field-formula">c = Q / (m · ΔT)</p>
-            )}
-            {input.mode === "time" &&
-              result.durationMinutes !== null &&
-              result.powerKW !== null && (
-                <p className="field-formula">
-                  t = |Q| / P = |{number(result.energyKJ)}| kJ /{" "}
-                  {number(result.powerKW)} kW / 60 ={" "}
-                  {number(result.durationMinutes)} min
-                </p>
-              )}
-            {input.mode === "power" &&
-              result.durationMinutes !== null &&
-              result.powerKW !== null && (
-                <p className="field-formula">
-                  P = |Q| / t = |{number(result.energyKJ)}| kJ / (
-                  {number(result.durationMinutes)} × 60) s ={" "}
-                  {number(result.powerKW)} kW
-                </p>
-              )}
+            <FormulaBlock
+              formula={
+                <>
+                  <p className="field-formula">Q = m · c · (T₂ − T₁)</p>
+                  <p className="field-formula">
+                    {number(result.energyKJ)} kJ = {number(result.massKg)} kg ×{" "}
+                    {number(result.specificHeatKJkgK)} kJ/(kg·K) × (
+                    {number(result.outletC)} − {number(result.inletC)}) K
+                  </p>
+                  {input.mode === "mass" && (
+                    <p className="field-formula">m = Q / (c · ΔT)</p>
+                  )}
+                  {input.mode === "temperature" && (
+                    <p className="field-formula">T₂ = T₁ + Q / (m · c)</p>
+                  )}
+                  {input.mode === "specific-heat" && (
+                    <p className="field-formula">c = Q / (m · ΔT)</p>
+                  )}
+                  {input.mode === "time" &&
+                    result.durationMinutes !== null &&
+                    result.powerKW !== null && (
+                      <p className="field-formula">
+                        t = |Q| / P = |{number(result.energyKJ)}| kJ /{" "}
+                        {number(result.powerKW)} kW / 60 ={" "}
+                        {number(result.durationMinutes)} min
+                      </p>
+                    )}
+                  {input.mode === "power" &&
+                    result.durationMinutes !== null &&
+                    result.powerKW !== null && (
+                      <p className="field-formula">
+                        P = |Q| / t = |{number(result.energyKJ)}| kJ / (
+                        {number(result.durationMinutes)} × 60) s ={" "}
+                        {number(result.powerKW)} kW
+                      </p>
+                    )}
+                </>
+              }
+            />
             <p className="supporting-copy">
               {l(
                 "Näytön arvot on pyöristetty. Tallennus säilyttää laskennan tarkat luvut.",
@@ -666,7 +674,21 @@ export function HeatQuantityCalculator() {
         <summary>
           {l("Laskentaperuste ja lähteet", "Calculation basis and sources")}
         </summary>
-        <p>{assumptions}</p>
+        <FormulaBlock
+          formula={
+            <>
+              Q = m · c · (T<sub>2</sub> − T<sub>1</sub>)
+            </>
+          }
+        >
+          <p>
+            {l(
+              "Q: lämpömäärä (kJ) · m: massa (kg) · c: ominaislämpökapasiteetti (kJ/(kg·K)) · T₁ ja T₂: alku- ja loppulämpötila (°C).",
+              "Q: heat energy (kJ) · m: mass (kg) · c: specific heat capacity (kJ/(kg·K)) · T₁ and T₂: initial and final temperature (°C).",
+            )}
+          </p>
+        </FormulaBlock>
+        <p>{propertyAssumptions}</p>
         <ul>
           {sources.map((source) => (
             <li key={source.id}>
@@ -677,14 +699,12 @@ export function HeatQuantityCalculator() {
           ))}
         </ul>
       </details>
-      <p className="supporting-copy">
+      <aside className="related-tool">
+        <h2>{l("Liittyvä työkalu", "Related tool")}</h2>
         <a href="#/thermal-power">
-          {l(
-            "Virtaavan nesteen lämpöteho →",
-            "Thermal power of a flowing liquid →",
-          )}
+          {l("Nesteen lämpöteho →", "Liquid thermal power →")}
         </a>
-      </p>
+      </aside>
     </div>
   );
 }

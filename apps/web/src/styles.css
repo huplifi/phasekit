@@ -173,8 +173,10 @@ strong.mono {
   border-radius: 8px;
 }
 .beta-banner {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 20px;
   margin: -16px 0 24px;
   padding: 10px 12px;
   border-inline-start: 3px solid var(--link);
@@ -210,6 +212,7 @@ strong.mono {
   text-underline-offset: 3px;
 }
 .beta-banner p {
+  flex-basis: 100%;
   margin: 0;
 }
 .offline-indicator {
@@ -1397,14 +1400,20 @@ pre.share-text {
 .release-history-link {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
+  vertical-align: top;
+  position: relative;
   width: fit-content;
-  padding-block: 6px;
-  min-height: 44px;
   text-decoration: underline;
   text-underline-offset: 3px;
-  font-size: 0.875rem;
+  font-size: inherit;
+}
+.release-history-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
 }
 
 .check-due-card > strong {

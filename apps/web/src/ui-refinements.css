@@ -162,6 +162,37 @@
   margin-bottom: 4px;
 }
 
+.property-coverage {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid var(--divider);
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--surface) 24%, var(--background));
+}
+.property-coverage h2 {
+  margin: 0 0 0.4rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.property-coverage > .caption {
+  max-width: 60ch;
+  margin-bottom: 0.5rem;
+}
+.property-coverage .facts {
+  margin-block: 0.5rem;
+}
+.property-coverage .fact-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.property-coverage .fact-row dt,
+.property-coverage .fact-row dd {
+  max-width: none;
+  font-size: 0.875rem;
+}
+
 .gwp-summary {
   display: inline-flex;
   max-width: 100%;
@@ -245,21 +276,30 @@
 }
 
 .restriction-coverage-note {
-  margin-bottom: 12px;
+  margin-block: 12px 8px;
 }
 .restriction-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 0 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 28rem);
+  margin: 14px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
 }
 .restriction-filter {
   min-height: 44px;
-  border: 1px solid var(--control-border);
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
   padding: 8px 12px;
   color: var(--text);
   background: var(--background);
   font-size: 0.875rem;
+  white-space: nowrap;
+}
+.restriction-filter + .restriction-filter {
+  border-inline-start: 1px solid var(--divider);
 }
 
 .checkbox input[type="checkbox"] {
@@ -332,6 +372,25 @@
 .restriction-search-label {
   font-size: 0.8125rem;
 }
+.restriction-panel > .search-field {
+  width: 100%;
+}
+.restriction-count {
+  margin-block: 8px 0;
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.restriction-group + .restriction-group {
+  margin-top: 1.25rem;
+}
+.restriction-group > h3 {
+  margin: 1rem 0 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
 .restriction {
   padding: 0;
 }
@@ -343,6 +402,12 @@
   min-height: 72px;
   padding: 12px 0;
   list-style: none;
+  cursor: pointer;
+}
+.restriction > summary:focus-visible {
+  border-radius: 6px;
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .restriction > summary::-webkit-details-marker {
   display: none;
@@ -412,8 +477,8 @@
     font-size: 1.125rem;
   }
   .restriction-filter {
-    padding-right: 8px;
-    padding-left: 8px;
+    padding-right: 4px;
+    padding-left: 4px;
     font-size: 0.8125rem;
   }
 }

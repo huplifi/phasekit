@@ -1,7 +1,14 @@
 import { useDraftGuard } from "../useDraftGuard";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Plus, Save, Trash2, X } from "lucide-react";
+import {
+  ChevronRight,
+  MoreVertical,
+  Plus,
+  Save,
+  Trash2,
+  X,
+} from "lucide-react";
 import { formatDate } from "../../../../packages/i18n/src";
 import { reportSummary } from "../report-summary";
 import { savedReportPath } from "../saved-report-route";
@@ -238,66 +245,115 @@ export function Equipment() {
                       <p className="supporting-copy">{item.location}</p>
                     )}
                   </div>
-                  <div className="button-group">
-                    <button
-                      className="text-button"
-                      type="button"
-                      onClick={() => beginEdit(item)}
+                  <details className="equipment-actions">
+                    <summary
+                      aria-label={
+                        data.locale === "fi"
+                          ? `Laitteen ${item.name} toiminnot`
+                          : `Actions for ${item.name}`
+                      }
                     >
-                      {t("Muokkaa", "Edit")}
-                    </button>
-                    <button
-                      className="text-button danger-text"
-                      type="button"
-                      onClick={() => remove(item)}
-                    >
-                      <Trash2 size={18} />
-                      {t("Poista", "Delete")}
-                    </button>
-                  </div>
+                      <MoreVertical size={20} aria-hidden="true" />
+                    </summary>
+                    <div className="equipment-actions-menu">
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.currentTarget
+                            .closest("details")
+                            ?.removeAttribute("open");
+                          beginEdit(item);
+                        }}
+                      >
+                        {t("Muokkaa", "Edit")}
+                      </button>
+                      <button
+                        className="danger-text"
+                        type="button"
+                        onClick={(event) => {
+                          event.currentTarget
+                            .closest("details")
+                            ?.removeAttribute("open");
+                          remove(item);
+                        }}
+                      >
+                        <Trash2 size={17} aria-hidden="true" />
+                        {t("Poista", "Delete")}
+                      </button>
+                    </div>
+                  </details>
                 </div>
                 {item.notes && <p className="equipment-notes">{item.notes}</p>}
-                <section className="equipment-history">
-                  <h3>
-                    {t("Raportit ja laskelmat", "Reports and calculations")}{" "}
-                    <span className="secondary">
-                      ({reports.length + fieldReports.length})
-                    </span>
-                  </h3>
+                <details className="equipment-history">
+                  <summary>
+                    <h3>
+                      {t("Raportit ja laskelmat", "Reports and calculations")}{" "}
+                      <span className="secondary">
+                        ({reports.length + fieldReports.length})
+                      </span>
+                    </h3>
+                    <ChevronRight size={18} aria-hidden="true" />
+                  </summary>
                   {reports.length + fieldReports.length ? (
                     <ul className="equipment-record-list">
-                      {fieldReports.map((record) => (
-                        <li key={`field-${record.id}`}>
-                          <button
-                            className="equipment-record-link equipment-field-report-link"
-                            type="button"
-                            onClick={() =>
-                              go(`/checklists/${encodeURIComponent(record.id)}`)
-                            }
-                          >
-                            <strong>
-                              {
-                                checklistDefinitions[record.kind].name[
-                                  data.locale
-                                ]
-                              }{" "}
-                              · {record.title || t("Nimetön", "Untitled")}
-                            </strong>
-                            <span className="secondary">
-                              {formatDate(
-                                isCalendarDate(record.fields.performedOn ?? "")
-                                  ? record.fields.performedOn
-                                  : record.updatedAt,
-                                data.locale,
-                              )}{" "}
-                              ·{" "}
-                              {record.status === "final"
-                                ? t("Valmis", "Final")
-                                : t("Luonnos", "Draft")}
-                            </span>
-                          </button>
-                        </li>
-                      ))}
+                      {fieldReports.map((record) => {
+                        const siteName = record.title.trim();
+                        const reportType =
+                          checklistDefinitions[record.kind].name[data.locale];
+                        const equipmentName = record.fields.equipment?.trim();
+                        const primaryLabel = siteName || reportType;
+                        const secondaryLabel = siteName
+                          ? [reportType, equipmentName]
+                              .filter(Boolean)
+                              .join(" · ")
+                          : [
+                              t("Kohde nimeämättä", "Site not named"),
+                              equipmentName,
+                            ]
+                              .filter(Boolean)
+                              .join(" · ");
+                        const performedOn = record.fields.performedOn ?? "";
+                        const reportDate = isCalendarDate(performedOn)
+                          ? performedOn
+                          : record.updatedAt;
+                        return (
+                          <li key={`field-${record.id}`}>
+                            <button
+                              className="equipment-record-link equipment-field-report-link"
+                              type="button"
+                              onClick={() =>
+                                go(
+                                  `/checklists/${encodeURIComponent(record.id)}`,
+                                )
+                              }
+                            >
+                              <span className="equipment-record-copy">
+                                <strong>{primaryLabel}</strong>
+                                <span className="equipment-record-secondary">
+                                  {secondaryLabel}
+                                </span>
+                                <span className="equipment-record-tertiary">
+                                  {formatDate(reportDate, data.locale)}
+                                  {record.status === "final" ? (
+                                    <span className="equipment-record-status">
+                                      {t("Valmis", "Final")}
+                                    </span>
+                                  ) : (
+                                    <span className="equipment-record-status status-badge status-badge--warning">
+                                      {t("Luonnos", "Draft")}
+                                    </span>
+                                  )}
+                                </span>
+                              </span>
+                              <ChevronRight
+                                className="equipment-record-chevron"
+                                size={18}
+                                aria-hidden="true"
+                              />
+                            </button>
+                          </li>
+                        );
+                      })}
                       {reports.map((record) => (
                         <li key={record.id}>
                           <button
@@ -305,12 +361,22 @@ export function Equipment() {
                             type="button"
                             onClick={() => go(savedReportPath(record.id))}
                           >
-                            <strong>
-                              {reportSummary(record, data.locale)}
-                            </strong>
-                            <span className="secondary">
-                              {formatDate(record.createdAt, data.locale)}
+                            <span className="equipment-record-copy">
+                              <strong>
+                                {reportSummary(record, data.locale)}
+                              </strong>
+                              <span className="equipment-record-secondary">
+                                {t("Laskelma", "Calculation")}
+                              </span>
+                              <span className="equipment-record-tertiary">
+                                {formatDate(record.createdAt, data.locale)}
+                              </span>
                             </span>
+                            <ChevronRight
+                              className="equipment-record-chevron"
+                              size={18}
+                              aria-hidden="true"
+                            />
                           </button>
                         </li>
                       ))}
@@ -323,7 +389,7 @@ export function Equipment() {
                       )}
                     </p>
                   )}
-                </section>
+                </details>
                 <p className="caption secondary">
                   {t("Päivitetty", "Updated")}:{" "}
                   {formatDate(item.updatedAt, data.locale)}

@@ -154,7 +154,7 @@
   border: 1px solid var(--divider, #d6dddf);
   border-radius: 0.8rem;
   padding: 1rem;
-  background: var(--surface, transparent);
+  background: var(--background, transparent);
 }
 .equipment-form {
   display: grid;
@@ -179,37 +179,149 @@
 .equipment-card h2 {
   margin-bottom: 0.2rem;
 }
-.equipment-card-heading .button-group {
-  margin: 0;
-  flex-wrap: wrap;
-}
 .equipment-history {
   margin-top: 1rem;
+}
+.equipment-history > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+}
+.equipment-history > summary::-webkit-details-marker {
+  display: none;
+}
+.equipment-history > summary > svg {
+  flex: 0 0 auto;
+  color: var(--text-secondary);
+  transition: transform 150ms ease;
+}
+.equipment-history[open] > summary > svg {
+  transform: rotate(90deg);
 }
 .equipment-history ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.equipment-history li {
-  margin-block: 0.45rem;
+.equipment-history > p {
+  margin: 0;
+  padding-block: 0.75rem;
 }
 .equipment-record-link {
   display: grid;
-  gap: 0.2rem;
+  grid-template-columns: minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 0.75rem;
   width: 100%;
   min-height: 48px;
-  padding: 0.65rem 0.8rem;
+  padding: 0.75rem 0;
   text-align: left;
-  border: 1px solid var(--divider, #d6dddf);
-  border-radius: 0.55rem;
-  background: var(--surface, transparent);
+  border: 0;
+  border-bottom: 1px solid var(--divider, #d6dddf);
+  border-radius: 0;
+  background: transparent;
   color: inherit;
   cursor: pointer;
 }
-.equipment-record-link:hover,
-.equipment-record-link:focus-visible {
-  border-color: var(--accent, #477d50);
+.equipment-record-list li:last-child .equipment-record-link {
+  border-bottom: 0;
+}
+.equipment-record-link:hover .equipment-record-copy > strong,
+.equipment-record-link:focus-visible .equipment-record-copy > strong {
+  color: var(--link);
+}
+.equipment-record-link:focus-visible,
+.equipment-history > summary:focus-visible,
+.equipment-actions > summary:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.equipment-record-copy {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+.equipment-record-copy > strong {
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+.equipment-record-secondary {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.equipment-record-tertiary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.equipment-record-status {
+  font-size: 0.6875rem;
+}
+.equipment-record-chevron {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  color: var(--text-secondary);
+}
+.equipment-actions {
+  position: relative;
+  flex: 0 0 auto;
+}
+.equipment-actions > summary {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  list-style: none;
+}
+.equipment-actions > summary::-webkit-details-marker {
+  display: none;
+}
+.equipment-actions-menu {
+  position: absolute;
+  z-index: 2;
+  top: calc(100% + 4px);
+  right: 0;
+  display: grid;
+  min-width: 10rem;
+  padding: 4px;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: var(--background);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 14%);
+}
+.equipment-actions-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  text-align: left;
+  font-size: 0.875rem;
+}
+.equipment-actions-menu button:hover,
+.equipment-actions-menu button:focus-visible {
+  background: var(--surface);
+}
+.equipment-card-heading > div:first-child {
+  min-width: 0;
 }
 .inline-link {
   padding-inline: 0.35rem;
@@ -222,6 +334,9 @@
   .equipment-heading,
   .equipment-card-heading {
     flex-direction: column;
+  }
+  .equipment-card-heading {
+    flex-direction: row;
   }
   .saved-heading-actions {
     align-items: flex-start;
@@ -451,6 +566,30 @@
   margin-top: 3px;
   font-size: 0.8125rem;
   font-weight: 400;
+}
+.report-field-secondary {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.report-row-tertiary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+.report-field-draft-status {
+  font-size: 0.6875rem;
+}
+.report-field-final-status {
+  color: var(--text-secondary);
 }
 .equipment-empty {
   padding: 24px;

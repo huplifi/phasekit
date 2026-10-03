@@ -37,8 +37,12 @@ test("mixed reports use aligned rows with clear type and field status labels on 
   const check = page.locator(
     ".report-timeline > .saved-entry:not(.report-entry)",
   );
-  await expect(field.locator(".report-kind")).toHaveText("Tyhjiöinti");
-  await expect(field.locator(".report-status")).toHaveText("Luonnos");
+  await expect(field.locator(".report-field-secondary")).toHaveText(
+    "Tyhjiöinti",
+  );
+  await expect(field.locator(".report-field-draft-status")).toHaveText(
+    "Luonnos",
+  );
   await expect(field.locator(".report-summary")).toHaveText(site);
   await expect(tool.locator(".report-kind")).toHaveText("Putkilaskelma");
   await expect(check.locator(".report-kind")).toHaveText("Vuototarkastusarvio");

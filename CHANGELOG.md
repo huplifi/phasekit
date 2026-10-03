@@ -4,6 +4,16 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.6 — 2026-10-03 · Beta
+
+Clearer forms, details and printouts
+
+- Data coverage sits at the end of Properties. Restriction search, status filters, result counts and date grouping form a coherent view.
+- The report list prioritises the site and separates report type from draft status. Equipment details and linked records have a quieter layout.
+- Report sections summarise recorded details. Review and finalise leads to missing fields, with regulatory context shown separately.
+- Calculation formulas have dedicated blocks. Links to related calculators are separated from Calculate. The beta notice and Settings version row are more compact.
+- Printouts identify the site and device immediately. Missing details and measurement context are grouped more clearly. Printouts use PhaseKit fonts, with reliable fallback fonts so printing remains available.
+
 ## 0.4.0-beta.5 — 2026-10-02 · Beta
 
 A lighter beta notice

@@ -1,6 +1,7 @@
 import type { FieldReport, ToolRecord } from "./storage";
 import packageInfo from "../../../package.json" with { type: "json" };
 import Decimal from "decimal.js";
+import { dataset } from "./data";
 import printControlsSource from "./print-controls.js?raw";
 import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
@@ -57,7 +58,54 @@ const APP_VERSION = packageInfo.version;
 
 // These rules belong to the new print document, not the application's theme.
 // Every key fact remains legible when backgrounds and colour are disabled.
-export const PRINT_DOCUMENT_CSS = `@page{size:A4;margin:14mm}*{box-sizing:border-box}html{color-scheme:light}body{font:12px/1.45 system-ui,sans-serif;max-width:850px;margin:26px auto;padding:0 22px;color:#182127}h1,h2{line-height:1.18}h1{font-size:25px;margin:5px 0 12px}h2{font-size:15px;margin:21px 0 8px;padding-bottom:5px;border-bottom:1px solid #929fa5}.brand{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 9px}.meta,.muted{color:#405158}.meta{margin:3px 0 9px}.hero{border:2px solid #283b42;border-radius:6px;padding:12px 15px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.hero-value{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0}.hero-context{margin:7px 0 0;font-size:12px}.date-pair{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:12px}.date-card{border-top:1px solid #87969d;padding-top:8px}.date-card strong{display:block;font-size:18px;margin-top:2px}.date-card-secondary strong{font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0;break-inside:avoid}.result-card{border:1px solid #829098;border-radius:6px;padding:10px 12px;break-inside:avoid}.result-card dt{font-size:11px;color:#405158}.result-card dd{font-size:20px;font-weight:700;line-height:1.18;margin:3px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;padding:5px 0;border-bottom:1px solid #d7dfe2;break-inside:avoid}.row dt{color:#405158}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.detail-list div{border-bottom:1px solid #d7dfe2;padding:5px 0;break-inside:avoid}.detail-list dt{font-weight:650}.detail-list dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.checklist-progress{font-size:17px;font-weight:700;margin:14px 0}.checklist-steps{list-style:none;padding:0}.checklist-steps li{display:flex;gap:9px;border-bottom:1px solid #d7dfe2;padding:7px 0;break-inside:avoid}.checkmark{font:19px/1 system-ui,sans-serif;min-width:22px}.sources{font-size:10px;line-height:1.4;columns:2;column-gap:18px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:inherit}.notice{border-top:1px solid #9aa8ae;margin-top:18px;padding-top:9px;color:#405158;font-size:10px}.chart{display:block;width:100%;max-height:340px;object-fit:contain;break-inside:avoid}p{overflow-wrap:anywhere;white-space:pre-wrap}@media print{body{margin:0 auto;padding:0}a{text-decoration:none}}`;
+export const PRINT_DOCUMENT_CSS = `@page{size:A4;margin:14mm}*{box-sizing:border-box}html{color-scheme:light;background:#fff}body{font:11.5px/1.45 Poppins,system-ui,sans-serif;background:#fff;max-width:850px;margin:26px auto;padding:0 22px;color:#182127}h1,h2{font-family:Unbounded,system-ui,sans-serif;line-height:1.3;overflow-wrap:anywhere}h1{font-size:22px;margin:5px 0 12px}h2{font-size:13px;margin:21px 0 8px;padding-bottom:5px;border-bottom:1px solid #929fa5}.brand{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 9px}.meta,.muted{color:#405158}.meta{margin:3px 0 9px}.hero{border:2px solid #283b42;border-radius:6px;padding:12px 15px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.hero-value{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0}.hero-context{margin:7px 0 0;font-size:12px}.date-pair{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:12px}.date-card{border-top:1px solid #87969d;padding-top:8px}.date-card strong{display:block;font-size:18px;margin-top:2px}.date-card-secondary strong{font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0;break-inside:avoid}.result-card{border:1px solid #829098;border-radius:6px;padding:10px 12px;break-inside:avoid}.result-card dt{font-size:11px;color:#405158}.result-card dd{font-size:20px;font-weight:700;line-height:1.18;margin:3px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;padding:5px 0;border-bottom:1px solid #d7dfe2;break-inside:avoid}.row dt{color:#405158}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.detail-list div{border-bottom:1px solid #d7dfe2;padding:5px 0;break-inside:avoid}.detail-list dt{font-weight:650}.detail-list dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.checklist-progress{font-size:17px;font-weight:700;margin:14px 0}.checklist-steps{list-style:none;padding:0}.checklist-steps li{display:flex;gap:9px;border-bottom:1px solid #d7dfe2;padding:7px 0;break-inside:avoid}.checkmark{font:19px/1 system-ui,sans-serif;min-width:22px}.sources{font-size:10px;line-height:1.4;columns:2;column-gap:18px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:inherit}.notice{border-top:1px solid #9aa8ae;margin-top:18px;padding-top:9px;color:#405158;font-size:10px}.chart{display:block;width:100%;max-height:340px;object-fit:contain;break-inside:avoid}p{overflow-wrap:anywhere;white-space:pre-wrap}@media print{body{margin:0 auto;padding:0}a{text-decoration:none}}`;
+
+async function embedPrintFonts(doc: Document) {
+  const fonts = [
+    ["Unbounded", "600 700", "/fonts/unbounded/Unbounded-Variable.ttf"],
+    ["Poppins", "400", "/fonts/poppins/Poppins-Regular.ttf"],
+    ["Poppins", "700", "/fonts/poppins/Poppins-Bold.ttf"],
+    ["Ioskeley Mono", "400", "/fonts/ioskeley-mono/IoskeleyMono-Regular.woff2"],
+    [
+      "Ioskeley Mono",
+      "600",
+      "/fonts/ioskeley-mono/IoskeleyMono-SemiBold.woff2",
+    ],
+  ];
+  const loaded = await Promise.allSettled(
+    fonts.map(async ([family, weight, path]) => {
+      const response = await fetch(new URL(path, window.location.href), {
+        signal: AbortSignal.timeout(1800),
+      });
+      if (!response.ok) throw new Error("print_font_unavailable");
+      const blob = await response.blob();
+      const data = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(blob);
+      });
+      return `@font-face{font-family:"${family}";font-weight:${weight};font-style:normal;font-display:swap;src:url("${data}")}`;
+    }),
+  );
+  const style = doc.createElement("style");
+  style.textContent = loaded
+    .flatMap((result) => (result.status === "fulfilled" ? [result.value] : []))
+    .join("\n");
+  doc.head.append(style);
+  // The self-contained controls have their own bounded wait if the opener stops.
+  doc.documentElement.dataset.printFonts = "embedded";
+  doc.dispatchEvent(new Event("phasekit-print-fonts"));
+}
+
+function appendDocumentIdentity(doc: Document, parts: string[]) {
+  const identity = parts.filter(Boolean).join(" · ");
+  if (!identity) return;
+  const subhead = doc.createElement("p");
+  subhead.className = "document-subhead";
+  subhead.textContent = identity;
+  doc.body.append(subhead);
+}
 
 export function createPrintDocument(
   win: Window,
@@ -81,7 +129,12 @@ export function createPrintDocument(
   style.textContent += `.commissioning-document h2{margin:9px 0 4px}.commissioning-document .field-summary-card{padding:5px 8px}.commissioning-document .field-summary-card dd{font-size:16px;margin-top:2px}.commissioning-document .checklist-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.commissioning-document .checklist-steps li{min-width:0}.commissioning-document .field-inline-note{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px solid #d7dfe2}.commissioning-document .cycle-input-line{font-size:11px;color:#405158;margin:4px 0 8px;line-height:1.35}.commissioning-document .cycle-details .row{padding:2px 0}`;
   style.textContent += `.print-toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:stretch;background:#fff;border-bottom:1px solid #929fa5;padding:10px 0;margin:0 0 16px}.print-toolbar a,.print-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:0;flex:1;padding:8px 12px;border:1px solid #283b42;border-radius:5px;background:#fff;color:#182127;font:600 14px/1.2 system-ui,sans-serif;text-align:center;text-decoration:none;cursor:pointer}.print-toolbar .print-action{background:#283b42;color:#fff}.print-toolbar button:disabled{opacity:.5;cursor:wait}.print-toolbar :focus-visible{outline:3px solid #276e9f;outline-offset:2px}@media screen and (max-width:500px){body{margin:0 auto;padding:0 16px 24px}.rows,.detail-list{grid-template-columns:minmax(0,1fr)}.row dt{overflow-wrap:anywhere}.sources,.source-list{columns:1}.print-toolbar{margin:0 -16px 16px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px}.print-toolbar a,.print-toolbar button{padding:8px 7px}}@media print{.print-toolbar{display:none!important}}`;
   style.textContent += `.field-report-document .detail-long{grid-column:1 / -1;break-inside:auto;page-break-inside:auto}.field-report-document .detail-long dd{orphans:3;widows:3}.protocol-manifest{font-size:11px;padding-left:18px}.protocol-manifest li{margin:4px 0;break-inside:avoid}.field-report-document p{orphans:3;widows:3}`;
+  style.textContent += `.document-subhead{font-size:15px;font-weight:700;line-height:1.35;border-left:3px solid #283b42;padding-left:10px;margin:5px 0 8px}.field-report-document .document-subhead{margin:5px 0 8px}.hero-value,.result-card dd,.field-summary-card dd,.numeric{font-family:"Ioskeley Mono",ui-monospace,monospace;font-weight:600;font-variant-numeric:tabular-nums}.measurement-context,.frozen-evidence{font-size:10.5px;color:#405158}.missing-items{padding-left:18px;margin:6px 0 12px}.missing-items li{margin:3px 0;break-inside:avoid}thead{display:table-header-group}h1,h2,.document-subhead{break-after:avoid;page-break-after:avoid}p,dd{orphans:3;widows:3}`;
   doc.head.append(style);
+  // Fetch through the opener's service worker, then embed in the new document.
+  // about:blank cannot rely on that worker to load its own font URLs offline.
+  doc.documentElement.dataset.printFonts = "pending";
+  void embedPrintFonts(doc).catch(() => undefined);
   const toolbar = doc.createElement("nav");
   toolbar.className = "print-toolbar";
   toolbar.setAttribute(
@@ -229,24 +282,27 @@ export function printToolRecord(
   const h1 = doc.createElement("h1");
   h1.textContent = displayTitle;
   body.append(h1);
+  appendDocumentIdentity(doc, [
+    record.equipmentName
+      ? `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${record.equipmentName}`
+      : record.lastLinkedEquipmentName
+        ? `${locale === "fi" ? "Aiempi laitelinkki (nimi poistettaessa)" : "Former equipment link (name at removal)"}: ${record.lastLinkedEquipmentName}`
+        : "",
+  ]);
   const meta = doc.createElement("p");
   meta.className = "meta";
   if (record.createdAt) {
-    meta.textContent = `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(record.createdAt, locale)}`;
+    meta.textContent = [
+      `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(record.createdAt, locale)}`,
+      record.equipmentName &&
+        (locale === "fi"
+          ? "Laitenimi tallennushetkellä"
+          : "Equipment name recorded when saved"),
+    ]
+      .filter(Boolean)
+      .join(" · ");
     body.append(meta);
   }
-  if (record.equipmentName)
-    appendText(
-      body,
-      "p",
-      `${record.createdAt ? (locale === "fi" ? "Alkuperäinen laitenimi" : "Equipment name when saved") : locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${record.equipmentName}`,
-    );
-  else if (record.lastLinkedEquipmentName)
-    appendText(
-      body,
-      "p",
-      `${locale === "fi" ? "Aiempi laitelinkki (nimi poistettaessa)" : "Former equipment link (name at removal)"}: ${record.lastLinkedEquipmentName}`,
-    );
   appendRows(
     doc,
     body,
@@ -376,6 +432,7 @@ export function printChecklistDraft(
   const installation =
     draft.kind === "commissioning" &&
     draft.fields.commissioningPurpose !== "technical";
+  const missing = installation ? commissioningMissingFields(draft.fields) : [];
   const title = installation
     ? locale === "fi"
       ? "Asennustodistus ja käyttöönottopöytäkirjat"
@@ -390,6 +447,20 @@ export function printChecklistDraft(
   if (draft.kind === "commissioning")
     doc.body.classList.add("commissioning-document");
   appendText(doc.body, "h1", title);
+  appendDocumentIdentity(doc, [
+    site && `${locale === "fi" ? "Kohde" : "Site"}: ${site}`,
+    draft.fields.equipment?.trim() &&
+      `${locale === "fi" ? "Laite / tunniste" : "Equipment / identifier"}: ${draft.fields.equipment.trim()}`,
+  ]);
+  const performedOn = draft.fields.performedOn?.trim();
+  const technician = draft.fields.technician?.trim();
+  const meta = doc.createElement("p");
+  meta.className = "meta";
+  meta.textContent = [
+    `${locale === "fi" ? "Suorituspäivä" : "Work date"}: ${performedOn ? displayDate(performedOn, locale) : "—"}`,
+    `${locale === "fi" ? "Tekijä" : "Technician"}: ${technician || "—"}`,
+  ].join(" · ");
+  doc.body.append(meta);
   const state = doc.createElement("p");
   state.className = "document-status";
   state.textContent =
@@ -402,7 +473,6 @@ export function printChecklistDraft(
         : "Draft / in progress";
   doc.body.append(state);
   if (installation) {
-    const missing = commissioningMissingFields(draft.fields);
     const preparation = doc.createElement("p");
     preparation.className = "meta";
     preparation.textContent =
@@ -410,36 +480,11 @@ export function printChecklistDraft(
         ? `Asennustodistus · VNa 1063/2025 § 9 · ${missing.length ? `${missing.length} täydennettävää` : "tietokentät täytetty"}. Vastuuhenkilön tarkastettava ja allekirjoitettava.`
         : `Installation certificate · Finnish Decree 1063/2025 § 9 · ${missing.length ? `${missing.length} items to complete` : "fields completed"}. Requires the responsible person’s review and signature.`;
     doc.body.append(preparation);
-    if (missing.length)
-      appendText(
-        doc.body,
-        "p",
-        `${locale === "fi" ? "Täydennettävät tiedot" : "Items to complete"}: ${missing.map((field) => field.label[locale]).join("; ")}.`,
-      );
   }
-  const subhead = doc.createElement("p");
-  subhead.className = "document-subhead";
-  subhead.textContent =
-    [
-      site && `${locale === "fi" ? "Kohde" : "Site"}: ${site}`,
-      draft.fields.equipment?.trim() &&
-        `${locale === "fi" ? "Laite / tunniste" : "Equipment / identifier"}: ${draft.fields.equipment.trim()}`,
-    ]
-      .filter(Boolean)
-      .join(" · ") || definition.name[locale];
-  doc.body.append(subhead);
-  const performedOn = draft.fields.performedOn?.trim();
-  const technician = draft.fields.technician?.trim();
-  const meta = doc.createElement("p");
-  meta.className = "meta";
-  meta.textContent = [
-    `${locale === "fi" ? "Suorituspäivä" : "Work date"}: ${performedOn ? displayDate(performedOn, locale) : "—"}`,
-    `${locale === "fi" ? "Tekijä" : "Technician"}: ${technician || "—"}`,
-  ].join(" · ");
-  doc.body.append(meta);
   if (draft.kind === "commissioning")
     appendProtocolManifest(doc, draft, locale);
   appendFieldSummary(doc, draft, locale);
+  appendMeasurementContext(doc, draft, locale);
   const complete = draft.checkedIds.filter((id) =>
     definition.steps.some((step) => step.id === id),
   ).length;
@@ -481,6 +526,22 @@ export function printChecklistDraft(
   const cycleImage = report.cycleReport
     ? appendFrozenCycleReport(doc, report.cycleReport, locale)
     : undefined;
+  appendFrozenLeakEvidence(doc, draft, locale);
+  if (missing.length) {
+    appendText(
+      doc.body,
+      "h2",
+      locale === "fi" ? "Täydennettävät tiedot" : "Items to complete",
+    );
+    const list = doc.createElement("ul");
+    list.className = "missing-items";
+    for (const field of missing) {
+      const item = doc.createElement("li");
+      item.textContent = field.label[locale];
+      list.append(item);
+    }
+    doc.body.append(list);
+  }
   const closing = doc.createElement("section");
   closing.className = "report-closing";
   appendText(
@@ -626,6 +687,16 @@ function fieldReportValue(
   if (!raw) return "—";
   if (field.id === "operatorDeclaration" && raw !== "confirmed")
     return `${locale === "fi" ? "Ei vahvistettu (tallennettu arvo)" : "Not confirmed (recorded value)"}: ${raw}`;
+  if (field.id === "refrigerantSourceNote")
+    return raw
+      .split(/(\s+|[,;])/)
+      .map((part) =>
+        availableSourceName(
+          part,
+          (draft as FieldReport).cycleReport?.sources ?? dataset.sources,
+        ),
+      )
+      .join("");
   if (field.id === "refrigerantId")
     return frozenRefrigerantDesignation(draft) ?? raw;
   if (field.type === "date") return displayDate(raw, locale);
@@ -660,6 +731,11 @@ export function fieldReportObservationFields(
     "signatureName",
     "finding",
     "leakCheckEvidence",
+    ...(["installation", "technical"].includes(
+      draft.fields.commissioningPurpose,
+    )
+      ? ["commissioningPurpose"]
+      : []),
     ...fieldReportSummary(draft, locale).map((metric) => metric.id),
     ...(draft.kind === "commissioning"
       ? evacuationMetrics(draft, locale).map((metric) => metric.id)
@@ -682,6 +758,181 @@ export function fieldReportObservationFields(
     (field) =>
       !represented.has(field.id) && Boolean(draft.fields[field.id]?.trim()),
   );
+}
+
+function appendMeasurementContext(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  const pressureReadings = ["lp", "hp", "pressures"].some((id) =>
+    draft.fields[id]?.trim(),
+  );
+  // New commissioning drafts carry these defaults before any measurements exist.
+  const defaults: Record<string, string> = {
+    pressureUnit: "bar",
+    pressureReference: "gauge",
+    atmosphericReference: "1.01325",
+  };
+  const fields = fieldReportObservationFields(draft, locale).filter(
+    (field) =>
+      ["pressureUnit", "pressureReference", "atmosphericReference"].includes(
+        field.id,
+      ) &&
+      (pressureReadings ||
+        draft.fields[field.id]?.trim().replace(",", ".") !==
+          defaults[field.id]),
+  );
+  if (!fields.length) return;
+  appendText(
+    doc.body,
+    "h2",
+    pressureReadings
+      ? locale === "fi"
+        ? "Mittausten paineviite"
+        : "Measurement pressure context"
+      : locale === "fi"
+        ? "Kirjatut mittausasetukset"
+        : "Recorded measurement settings",
+  );
+  const context = doc.createElement("p");
+  context.className = "measurement-context";
+  context.textContent = fields
+    .map(
+      (field) =>
+        `${field.label[locale]}: ${fieldReportValue(draft, field, locale)}`,
+    )
+    .join(" · ");
+  doc.body.append(context);
+}
+
+function availableSourceName(
+  id: string,
+  sources: Source[] = dataset.sources,
+): string {
+  const source =
+    sources.find((item) => item.id === id) ??
+    dataset.sources.find((item) => item.id === id);
+  return source ? `${source.title} (${id})` : id;
+}
+
+function appendFrozenLeakEvidence(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  const raw = draft.fields.leakCheckEvidence?.trim();
+  if (!raw) return;
+  appendText(
+    doc.body,
+    "h2",
+    locale === "fi"
+      ? "Tallennetun vuototarkastusarvion peruste"
+      : "Frozen leak-check assessment basis",
+  );
+  const evidence = doc.createElement("p");
+  evidence.className = "frozen-evidence";
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      throw new Error("invalid_evidence");
+    const labels: Record<string, [string, string]> = {
+      rulesetVersion: ["Sääntöversio", "Ruleset version"],
+      dataVersion: ["Aineistoversio", "Data version"],
+      asOf: ["Arviointipäivä", "Assessment date"],
+      input: ["Tallennetut lähtötiedot", "Frozen inputs"],
+      state: ["Tulos", "Outcome"],
+      months: ["Tarkastusväli · kk", "Inspection interval · months"],
+      decisiveRule: ["Ratkaiseva sääntö", "Decisive rule"],
+      reasonCodes: ["Perusteet", "Reasons"],
+      sourceIds: ["Lähdeviitteet", "Source references"],
+    };
+    evidence.textContent = Object.entries(parsed)
+      .map(([key, value]) => {
+        let display = typeof value === "string" ? value : JSON.stringify(value);
+        if (value === null) display = "—";
+        if (key === "asOf" && typeof value === "string")
+          display = displayDate(value, locale);
+        if (
+          key === "input" &&
+          value &&
+          typeof value === "object" &&
+          !Array.isArray(value)
+        ) {
+          const inputLabels: Record<string, [string, string]> = {
+            refrigerantId: ["Kylmäaineen tunnus", "Refrigerant ID"],
+            charge: ["Täyttömäärä", "Charge"],
+            unit: ["Yksikkö", "Unit"],
+            equipment: ["Laitetyyppi", "Equipment type"],
+            detection: ["Vuodonilmaisu", "Leak detection"],
+            hermetic: ["Hermeettinen", "Hermetic"],
+            hermeticLabel: ["Hermeettisyysmerkintä", "Hermetic label"],
+            residential: ["Asuinrakennus", "Residential"],
+            asOf: ["Arviointipäivä", "Assessment date"],
+          };
+          display = Object.entries(value)
+            .map(([inputKey, inputValue]) => {
+              let text =
+                typeof inputValue === "string"
+                  ? inputValue
+                  : JSON.stringify(inputValue);
+              if (typeof inputValue === "boolean")
+                text = translate(locale, inputValue ? "yes" : "no");
+              if (
+                inputKey === "equipment" &&
+                [
+                  "stationary_refrigeration",
+                  "stationary_ac",
+                  "stationary_heat_pump",
+                ].includes(String(inputValue))
+              )
+                text = translate(locale, inputValue as MessageKey);
+              return `${inputLabels[inputKey]?.[locale === "fi" ? 0 : 1] ?? inputKey}: ${text}`;
+            })
+            .join(" · ");
+        }
+        if (
+          key === "state" &&
+          [
+            "required",
+            "below_threshold",
+            "exempt",
+            "outside_rule_scope",
+            "unsupported",
+            "insufficient_data",
+          ].includes(String(value))
+        )
+          display = translate(locale, value as MessageKey);
+        if (key === "sourceIds" && Array.isArray(value))
+          display = value
+            .map((id) =>
+              typeof id === "string"
+                ? availableSourceName(id)
+                : JSON.stringify(id),
+            )
+            .join(" · ");
+        if (key === "reasonCodes" && Array.isArray(value))
+          display = value
+            .map((code) =>
+              typeof code === "string"
+                ? `${reasonMessages[code]?.[locale] ?? code} (${code})`
+                : JSON.stringify(code),
+            )
+            .join(" · ");
+        return `${labels[key]?.[locale === "fi" ? 0 : 1] ?? key}: ${display}`;
+      })
+      .join("\n");
+  } catch {
+    evidence.textContent = raw;
+  }
+  doc.body.append(evidence);
+  const sourceNote = doc.createElement("p");
+  sourceNote.className = "frozen-evidence";
+  sourceNote.textContent =
+    locale === "fi"
+      ? "Lähdenimet nykyisestä lähdeluettelosta. Tunnukset, lähtötiedot ja versiot säilyvät tallennushetken mukaisina."
+      : "Source names are from the current catalogue. IDs, inputs and versions remain as recorded.";
+  doc.body.append(sourceNote);
 }
 
 function selectedProtocolMode(
@@ -721,7 +972,12 @@ function appendObservationSections(
   draft: ChecklistDraft,
   locale: Locale,
 ) {
-  const observations = fieldReportObservationFields(draft, locale);
+  const observations = fieldReportObservationFields(draft, locale).filter(
+    (field) =>
+      !["pressureUnit", "pressureReference", "atmosphericReference"].includes(
+        field.id,
+      ),
+  );
   const vacuumMetrics =
     draft.kind === "commissioning" ? evacuationMetrics(draft, locale) : [];
   if (!observations.length && !vacuumMetrics.length) return;
@@ -1200,18 +1456,17 @@ export function printCheckResult({
   );
   doc.body.classList.add("leak-document");
   appendText(doc.body, "h1", doc.title);
-  if (createdAt)
-    appendText(
-      doc.body,
-      "p",
-      `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(createdAt, locale)}`,
-    );
-  if (equipmentName)
-    appendText(
-      doc.body,
-      "p",
-      `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${equipmentName}`,
-    );
+  appendDocumentIdentity(doc, [
+    equipmentName
+      ? `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${equipmentName}`
+      : "",
+  ]);
+  if (createdAt) {
+    const meta = doc.createElement("p");
+    meta.className = "meta";
+    meta.textContent = `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(createdAt, locale)}`;
+    doc.body.append(meta);
+  }
   const outcome = translate(locale, result.state);
   const interval =
     result.months !== null
@@ -1504,6 +1759,7 @@ function appendRows(
       dt.textContent = locale === "fi" ? row.label.fi : row.label.en;
       const dd = doc.createElement("dd");
       dd.textContent = formatReportRow(row, locale);
+      if (/^[≈+−-]?\s*\d/.test(dd.textContent)) dd.classList.add("numeric");
       card.append(dt, dd);
       hero.append(card);
     }
@@ -1519,6 +1775,7 @@ function appendRows(
     dt.textContent = locale === "fi" ? row.label.fi : row.label.en;
     const dd = doc.createElement("dd");
     dd.textContent = formatReportRow(row, locale);
+    if (/^[≈+−-]?\s*\d/.test(dd.textContent)) dd.classList.add("numeric");
     item.append(dt, dd);
     dl.append(item);
   }
