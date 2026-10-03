@@ -75,8 +75,11 @@ test("comparison print preserves two refrigerants, oil limits, GWP basis and sou
     printed.locator(".compare-table button, .compare-table details"),
   ).toHaveCount(0);
   await expect(
-    printed.getByRole("button", { name: "Tulosta / PDF", exact: true }),
+    printed.getByRole("button", { name: "Tulosta", exact: true }),
   ).toBeEnabled();
+  await expect(printed.locator(".pdf-action")).toHaveText(
+    /Tallenna PDF|Jaa \/ tallenna PDF/,
+  );
   await printed.emulateMedia({ media: "print" });
   await expect(printed.locator(".print-toolbar")).toBeHidden();
   if (info.project.name === "desktop-chromium") {
@@ -108,8 +111,11 @@ test("three-refrigerant print retains explicitly unavailable oil guidance", asyn
   const printed = await popup;
   await expect(printed.locator(".compare-table thead th")).toHaveCount(4);
   await expect(
-    printed.getByRole("row", { name: /Öljyohje ja rajaukset/ }),
-  ).toContainText("Varmennettua öljytietoa ei ole tietoaineistossa.");
+    printed
+      .getByRole("row", { name: /Öljyohje ja rajaukset/ })
+      .getByRole("cell")
+      .last(),
+  ).toHaveText("Tieto puuttuu");
   await expect(printed.locator(".compare-table")).toContainText("R13I1");
   await expect(printed.locator(".comparison-sources")).toContainText("R13I1");
   if (info.project.name === "desktop-chromium") {

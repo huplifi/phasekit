@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Nollajohdin N">
+  <title>Nollajohdin N</title>
+  <desc>Yksiviivaisen esityksen nollajohdin: vinoviiva ja täytetty piste.</desc>
+  <path d="M8 32H56"/><path d="M24 44L38 20"/><circle cx="38" cy="20" r="3" fill="currentColor" stroke="none"/>
+</svg>

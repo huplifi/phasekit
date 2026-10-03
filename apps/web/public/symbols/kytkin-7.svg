@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="7-kytkin, ristikytkin">
+  <title>7-kytkin, ristikytkin</title>
+  <desc>Vaihtokytkimien välissä käytettävä ristikytkin usean ohjauspaikan kytkennässä. PDF vahvistaa toiminnon ja grafiikan. Suomen numeronimitys on kirjaston käyttönimi, ei PDF:n IEC-tunnus.</desc>
+  <circle cx="32" cy="32" r="8"/><path d="M36 25L48 8L54 12M28 39L16 56L10 52M28 25L16 8L10 12M36 39L48 56L54 52"/>
+</svg>

@@ -1,6 +1,6 @@
 {
   "name": "phasekit",
-  "version": "0.2.1",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.19.0",
@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "verify": "pnpm data:validate && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm test:e2e",
     "data:add": "node --import tsx packages/refrigerant-data/scripts/cli.ts add",
     "data:validate": "node --import tsx packages/refrigerant-data/scripts/cli.ts validate",
     "data:build": "node --import tsx packages/refrigerant-data/scripts/cli.ts build",
@@ -32,6 +33,7 @@
     "decimal.js": "^10.6.0",
     "idb": "^8.0.3",
     "intl-messageformat": "^12.1.2",
+    "jspdf": "^4.2.1",
     "lucide-react": "^1.48.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",

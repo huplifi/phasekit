@@ -46,6 +46,42 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
         : "bubble"
       : side;
   const available = getPTAvailability(id, effectiveSide);
+  const formatLimit = (value: number) =>
+    new Intl.NumberFormat(data.locale === "fi" ? "fi-FI" : "en-GB", {
+      maximumSignificantDigits: 5,
+    }).format(value);
+  const temperatureRange = available.supported
+    ? [available.minimumTemperatureC!, available.maximumTemperatureC!]
+        .map((value) =>
+          formatLimit(
+            tempUnit === "F" ? (Number(value) * 9) / 5 + 32 : Number(value),
+          ),
+        )
+        .join("…") + ` °${tempUnit}`
+    : "";
+  let pressureRange = "";
+  if (available.supported) {
+    try {
+      pressureRange =
+        [
+          available.minimumPressureBarAbsolute!,
+          available.maximumPressureBarAbsolute!,
+        ]
+          .map((value) =>
+            formatLimit(
+              Number(
+                convertPressure({ value, unit: "bar(a)" }, pressureUnit, {
+                  value: atmosphere,
+                  unit: "bar(a)",
+                }),
+              ),
+            ),
+          )
+          .join("…") + ` ${pressureUnit}`;
+    } catch {
+      // The calculation below reports an invalid atmospheric reference.
+    }
+  }
   useEffect(() => () => setDraftDirty(false), [setDraftDirty]);
 
   let result: ReturnType<typeof calculatePT> | undefined;
@@ -77,8 +113,8 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
       error =
         code === "pt_out_of_range"
           ? l(
-              "Arvo on aineiston käyttöalueen ulkopuolella.",
-              "Value is outside the available data range.",
+              `Arvo on laskenta-aineiston ulkopuolella. Valitun lämpötilapisteen tuettu alue on noin ${temperatureRange}${pressureRange ? ` / ${pressureRange}` : ""}. Tämä ei ole laitteen käyttöraja.`,
+              `Value is outside the calculation data. The supported range for the selected phase boundary is approximately ${temperatureRange}${pressureRange ? ` / ${pressureRange}` : ""}. This is not an equipment operating limit.`,
             )
           : code === "negative_absolute_pressure" ||
               code === "nonpositive_absolute_pressure"
@@ -240,7 +276,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           setUnitError(false);
         }}
       />
-      <p className="caption secondary pt-instruction">
+      <p className="secondary pt-instruction">
         {l(
           "Muuta painetta tai lämpötilaa — toinen arvo päivittyy heti.",
           "Edit pressure or temperature — the other value updates immediately.",
@@ -483,17 +519,23 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           <summary>
             {l("Tietojen tausta ja käyttöalue", "Data provenance and range")}
           </summary>
+          <h3>{l("Laskentamalli", "Calculation model")}</h3>
           <p>
             {l(
               "CoolProp 7.2.0 -malliin perustuva offline-interpolointi neste–höyry-tasapainolle. Ei mittaustulos; kriittisen pisteen lähialue on rajattu pois.",
               "Offline interpolation of the CoolProp 7.2.0 liquid–vapour equilibrium model. Not a measurement; the near-critical region is excluded.",
             )}
           </p>
+          <h3>{l("Käyttöalue", "Supported range")}</h3>
           <p className="mono">
-            {available.minimumTemperatureC}…{available.maximumTemperatureC} °C
+            {l(
+              "Tuettu lämpötila-alue, noin",
+              "Supported temperature range, approximately",
+            )}{" "}
+            {temperatureRange}
             <br />
-            {available.minimumPressureBarAbsolute}…
-            {available.maximumPressureBarAbsolute} bar(a)
+            {formatLimit(Number(available.minimumPressureBarAbsolute))}…
+            {formatLimit(Number(available.maximumPressureBarAbsolute))} bar(a)
           </p>
           <p className="caption">
             {l(
@@ -502,9 +544,14 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             )}
           </p>
           <p className="caption mono">
+            {l("P–T-aineiston versio", "P–T dataset version")}:{" "}
             {offlinePTProvider.metadata.dataVersion}
           </p>
-          <SourceNote ids={offlinePTProvider.metadata.sourceIds} />
+          <h3>{l("Lähteet", "Sources")}</h3>
+          <SourceNote
+            ids={offlinePTProvider.metadata.sourceIds}
+            disclosure={false}
+          />
         </details>
       )}
     </>

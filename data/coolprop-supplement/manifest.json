@@ -1,0 +1,70 @@
+{
+  "sourceId": "coolprop-eos-supplement-afce86f",
+  "sourceCommit": "afce86ff977552663ca3a78d8ea318cc64dcbdfd",
+  "sourceUrl": "https://github.com/CoolProp/CoolProp/tree/afce86ff977552663ca3a78d8ea318cc64dcbdfd/dev/fluids",
+  "runtimeVersion": "7.2.0",
+  "runtimeGitRevision": "98b3523d5daa98454618d381d2ae53f7471d216b",
+  "license": "MIT; ../../licenses/CoolProp-MIT.txt",
+  "fluids": [
+    {
+      "refrigerantId": "r1123",
+      "file": "R1123.json",
+      "name": "R1123",
+      "cas": "359-11-5",
+      "sha256": "b015c9e2b9a0b6e60cdc8e9331506507080ba0dc363da5cd969ce6d183cf6afd",
+      "eosReferences": [
+        "Akasaka-IJR-2020-R1123"
+      ]
+    },
+    {
+      "refrigerantId": "r1130e",
+      "file": "R1130(E).json",
+      "name": "R1130(E)",
+      "cas": "156-60-5",
+      "sha256": "c0d3df88247742b0887ce6f91162e3ba794167ff385d98551847adefec3a79dc",
+      "eosReferences": [
+        "Huber-IJT-2025-R1130E"
+      ]
+    },
+    {
+      "refrigerantId": "r1132a",
+      "file": "R1132a.json",
+      "name": "R1132a",
+      "cas": "75-38-7",
+      "sha256": "9e9da96eaf79c756c8acc7ee50eca6cc2f671339bedd1bd24f51dfe13dabb0d5",
+      "eosReferences": [
+        "Akasaka-IJT-2026-R1132a"
+      ]
+    },
+    {
+      "refrigerantId": "r1132e",
+      "file": "R1132(E).json",
+      "name": "R1132(E)",
+      "cas": "1630-78-0",
+      "sha256": "65727bd385167e5a1a7a587f0331058a2139dd866d3b3966fc36debb6d5be7fc",
+      "eosReferences": [
+        "Akasaka-IJT-2024-R1132E"
+      ]
+    },
+    {
+      "refrigerantId": "r1224ydz",
+      "file": "R1224yd(Z).json",
+      "name": "R1224YDZ",
+      "cas": "111512-60-8",
+      "sha256": "56109aad8d5a45281616adc0201718de9aa03e164c46dfe8c1728bc502ceb1d3",
+      "eosReferences": [
+        "Akasaka-IJT-2023-R1224ydZ"
+      ]
+    },
+    {
+      "refrigerantId": "r1336mzzz",
+      "file": "R1336mzz(Z).json",
+      "name": "R1336mzz(Z)",
+      "cas": "692-49-9",
+      "sha256": "1f293dbb0e264ed90d0762d049826ccf25feea6e9fc996de52bb4a58dbc76a8f",
+      "eosReferences": [
+        "McLinden-JCED-2020-R1336mzzZ"
+      ]
+    }
+  ]
+}

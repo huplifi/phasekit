@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("mixed reports use aligned rows with clear type and field status labels on mobile", async ({
+test("mixed reports share rows and open dedicated details with reliable return navigation", async ({
   page,
 }, info) => {
   await page.goto("/#/checklists/new");
@@ -37,18 +37,20 @@ test("mixed reports use aligned rows with clear type and field status labels on 
   const check = page.locator(
     ".report-timeline > .saved-entry:not(.report-entry)",
   );
-  await expect(field.locator(".report-kind")).toHaveText("Tyhjiöinti");
-  await expect(field.locator(".report-status")).toHaveText("Luonnos");
+  await expect(field.locator(".report-field-secondary")).toHaveText(
+    "Tyhjiöinti",
+  );
+  await expect(field.locator(".report-field-draft-status")).toHaveText(
+    "Luonnos",
+  );
   await expect(field.locator(".report-summary")).toHaveText(site);
-  await expect(tool.locator(".report-kind")).toHaveText("Putkilaskelma");
-  await expect(check.locator(".report-kind")).toHaveText("Vuototarkastusarvio");
+  await expect(tool).toContainText("Putkilaskelma");
+  await expect(check).toContainText("Vuototarkastusarvio");
   await expect(check.locator(".report-summary")).not.toContainText(
     "Vuototarkastusarvio",
   );
   const leftEdges = await page
-    .locator(
-      ".report-timeline > .field-report-link .report-row-content, .report-timeline > .saved-entry > summary .report-row-content",
-    )
+    .locator(".report-timeline > .report-list-link .report-row-content")
     .evaluateAll((items) =>
       items.map((item) => Math.round(item.getBoundingClientRect().left)),
     );
@@ -62,12 +64,95 @@ test("mixed reports use aligned rows with clear type and field status labels on 
   await expect(page.locator(".live-message")).toBeEmpty();
   await page.locator(".report-timeline").scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath("report-list-mobile.png") });
-  await tool.locator(":scope > summary").click();
-  await expect(tool).toHaveAttribute("open", "");
-  await check.locator(":scope > summary").click();
-  await expect(check).toHaveAttribute("open", "");
+  await expect(page.locator(".report-timeline > details")).toHaveCount(0);
+  await page
+    .getByRole("combobox", { name: "Näytä", exact: true })
+    .selectOption("calculation");
+  await tool.click();
+  await expect(page).toHaveURL(/#\/reports\/(?!check\/).+/);
+  await expect(page.locator(".saved-report-detail")).toContainText("20 mm");
+  await expect(page.locator(".report-timeline")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Tulosta / PDF", exact: true }),
+  ).toHaveClass(/secondary-button/);
+  await expect(
+    page.getByRole("button", { name: "Vie JSON", exact: true }),
+  ).toHaveClass(/secondary-button/);
+  await expect(
+    page.getByRole("button", { name: "Lukitse raportti", exact: true }),
+  ).toHaveCount(0);
+  await page.screenshot({
+    path: info.outputPath("calculation-detail-mobile.png"),
+    fullPage: true,
+  });
+  await page
+    .getByRole("button", { name: "Muokkaa muistiinpanoja", exact: true })
+    .click();
+  await page
+    .getByRole("textbox", { name: "Muistiinpanot", exact: true })
+    .fill("Unsaved test note");
+  const detailUrl = page.url();
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.evaluate(() => {
+    window.location.hash = "/reports";
+  });
+  await expect(page).toHaveURL(detailUrl);
+  await expect(
+    page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
+  ).toHaveValue("Unsaved test note");
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.goForward();
+  await expect(page).toHaveURL(detailUrl);
+  await expect(
+    page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
+  ).toHaveValue("Unsaved test note");
+  page.once("dialog", (dialog) => dialog.dismiss());
+  await page.goBack();
+  await expect(page).toHaveURL(detailUrl);
+  await expect(
+    page.getByRole("textbox", { name: "Muistiinpanot", exact: true }),
+  ).toHaveValue("Unsaved test note");
+  page.once("dialog", (dialog) => dialog.accept());
+  await page.goBack();
+  await expect(page).toHaveURL(/#\/reports$/);
+  await expect(
+    page.getByRole("combobox", { name: "Näytä", exact: true }),
+  ).toHaveValue("calculation");
+  await page
+    .getByRole("combobox", { name: "Näytä", exact: true })
+    .selectOption("all");
+  await check.click();
+  await expect(page).toHaveURL(/#\/reports\/check\//);
+  await expect(page.locator(".saved-report-detail")).toContainText("R134a");
+  await page.reload();
+  await expect(page.locator(".saved-report-detail")).toContainText(
+    "Tallennettu alkuperäinen tulos",
+  );
+  await expect(
+    page.getByRole("button", { name: "Tulosta / PDF", exact: true }),
+  ).toHaveClass(/secondary-button/);
+  await page
+    .getByRole("button", { name: "Takaisin raportteihin", exact: true })
+    .click();
   await field.click();
   await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
     site,
   );
+});
+
+test("unknown saved detail provides an explicit route back to reports", async ({
+  page,
+}) => {
+  for (const route of ["/#/reports/missing", "/#/reports/check/missing"]) {
+    await page.goto(route);
+    await expect(
+      page.getByText("Tallennettua raporttia ei löytynyt tästä selaimesta.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Takaisin raportteihin", exact: true })
+      .click();
+    await expect(page).toHaveURL(/#\/reports$/);
+  }
 });

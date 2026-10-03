@@ -14,6 +14,17 @@ export interface EquipmentRecord {
   location: string;
   notes: string;
   updatedAt: string;
+  siteId?: string;
+  refrigerantId?: string;
+  chargeKg?: string;
+  model?: string;
+  serialNumber?: string;
+}
+export interface SiteRecord {
+  id: string;
+  name: string;
+  address: string;
+  updatedAt: string;
 }
 export interface ReportRow {
   label: { fi: string; en: string };
@@ -29,6 +40,7 @@ export interface ToolRecord {
     | "co2e"
     | "convert"
     | "thermal-power"
+    | "heat-quantity"
     | "electrical"
     | "pipe";
   title: string;
@@ -78,6 +90,7 @@ export interface UserData {
   checklistDrafts: FieldReport[];
   toolRecords: ToolRecord[];
   equipment: EquipmentRecord[];
+  sites?: SiteRecord[];
   locale: Locale;
   theme: "light" | "dark" | "system";
 }
@@ -89,6 +102,7 @@ export const emptyData = (): UserData => ({
   checklistDrafts: [],
   toolRecords: [],
   equipment: [],
+  sites: [],
   locale: "fi",
   theme: "system",
 });
@@ -268,6 +282,16 @@ const chartSnapshot = z.object({
   isolineDataVersion: z.string().min(1).max(200).optional(),
 });
 const boundedId = z.string().min(1).max(100);
+/** A user-entered mass in kg; accepts decimal commas without changing saved text. */
+export function isValidEquipmentCharge(value: string): boolean {
+  const normalized = value.trim().replace(",", ".");
+  return (
+    value.length <= 100 &&
+    /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(normalized) &&
+    Number.isFinite(Number(normalized)) &&
+    Number(normalized) >= 0
+  );
+}
 const toolRecord = z.object({
   id: boundedId,
   createdAt: z.iso.datetime(),
@@ -277,6 +301,7 @@ const toolRecord = z.object({
     "co2e",
     "convert",
     "thermal-power",
+    "heat-quantity",
     "electrical",
     "pipe",
   ]),
@@ -337,6 +362,17 @@ export const backupSchema = z.object({
     )
     .max(1000)
     .default([]),
+  sites: z
+    .array(
+      z.object({
+        id: boundedId,
+        name: z.string().min(1).max(200),
+        address: z.string().max(300),
+        updatedAt: z.iso.datetime(),
+      }),
+    )
+    .max(1000)
+    .default([]),
   toolRecords: z.array(toolRecord).max(1000).default([]),
   equipment: z
     .array(
@@ -346,6 +382,11 @@ export const backupSchema = z.object({
         location: z.string().max(300),
         notes: z.string().max(10000),
         updatedAt: z.iso.datetime(),
+        siteId: boundedId.optional(),
+        refrigerantId: boundedId.optional(),
+        chargeKg: z.string().refine(isValidEquipmentCharge).optional(),
+        model: z.string().max(200).optional(),
+        serialNumber: z.string().max(200).optional(),
       }),
     )
     .max(1000)
@@ -362,6 +403,7 @@ export function parseBackup(text: string): UserData {
     data.toolRecords,
     data.checklistDrafts,
     data.equipment,
+    data.sites,
   ])
     if (new Set(records.map((r) => r.id)).size !== records.length)
       throw new Error("Duplicate record");
@@ -432,6 +474,7 @@ export function mergeBackup(current: UserData, incoming: UserData): UserData {
         incoming.checklistDrafts,
       ),
       equipment: appendMissing(current.equipment, incoming.equipment),
+      sites: appendMissing(current.sites ?? [], incoming.sites ?? []),
       snapshots: [
         ...current.snapshots,
         ...incoming.snapshots.filter((s) => !ids.has(s.id)),

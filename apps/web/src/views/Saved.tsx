@@ -1,5 +1,14 @@
-import { Download, ImageDown, Printer, Trash2, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  ArrowLeft,
+  ChevronRight,
+  Download,
+  ImageDown,
+  Printer,
+  Trash2,
+  Plus,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useDraftGuard } from "../useDraftGuard";
 import { useApp } from "../context";
 import {
   checklistDefinitions,
@@ -17,12 +26,17 @@ import {
   formatReportRow,
   primaryReportOutputs,
   reportHasRoundedValues,
+  reportDurationNote,
   reportSummary,
 } from "../report-summary";
 import { downloadToolRecordImage } from "../report-image";
 import { renderCycleChartSvg } from "../ph-chart-snapshot";
-import { selectedSavedReportId } from "../saved-report-route";
-import type { ToolRecord } from "../storage";
+import {
+  savedReportPath,
+  savedCheckPath,
+  selectedSavedReport,
+} from "../saved-report-route";
+import type { Snapshot, ToolRecord, UserData } from "../storage";
 import "./reports.css";
 
 const l = (locale: "fi" | "en", fi: string, en: string) =>
@@ -42,12 +56,24 @@ const toolKindLabels: Record<ToolRecord["tool"], { fi: string; en: string }> = {
   co2e: { fi: "CO₂e", en: "CO₂e" },
   convert: { fi: "Yksikkömuunnos", en: "Unit conversion" },
   "thermal-power": { fi: "Lämpöteho", en: "Thermal power" },
+  "heat-quantity": { fi: "Lämpömäärä", en: "Heat quantity" },
   electrical: { fi: "Sähkölaskuri", en: "Electrical calculation" },
   pipe: { fi: "Putkilaskelma", en: "Pipe calculation" },
 };
 
-export function Saved() {
-  const { t, data, setData, go, notify } = useApp();
+function equipmentSiteName(data: UserData, equipmentId?: string) {
+  const siteId = data.equipment.find((item) => item.id === equipmentId)?.siteId;
+  return data.sites?.find((site) => site.id === siteId)?.name;
+}
+
+export function Saved({
+  path,
+  historyIndex,
+}: {
+  path: string;
+  historyIndex: number;
+}) {
+  const { t, data, setData, go } = useApp();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
   const matches = (...values: (string | undefined)[]) =>
@@ -71,6 +97,7 @@ export function Saved() {
           data.equipment.find((item) => item.id === record.equipmentId)
             ?.location,
           checklistDefinitions[record.kind].name[data.locale],
+          equipmentSiteName(data, record.equipmentId),
         ),
     )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
@@ -81,6 +108,7 @@ export function Saved() {
         reportSummary(record, data.locale),
         record.equipmentName,
         data.equipment.find((item) => item.id === record.equipmentId)?.name,
+        equipmentSiteName(data, record.equipmentId),
       ),
   );
   const snapshots = data.snapshots.filter(
@@ -108,15 +136,7 @@ export function Saved() {
       date: record.createdAt,
     })),
   ].sort((a, b) => b.date.localeCompare(a.date));
-  const selectedId = selectedSavedReportId(window.location.hash);
-  useEffect(() => {
-    if (selectedId)
-      requestAnimationFrame(() =>
-        document
-          .getElementById(`report-${selectedId}`)
-          ?.scrollIntoView({ block: "start" }),
-      );
-  }, [selectedId]);
+  const selected = selectedSavedReport(`#${path}`);
   const removeSnapshot = (id: string) => {
     if (
       !window.confirm(
@@ -132,6 +152,7 @@ export function Saved() {
       ...d,
       snapshots: d.snapshots.filter((item) => item.id !== id),
     }));
+    go("/reports");
   };
   const removeReport = (id: string) => {
     if (
@@ -143,12 +164,49 @@ export function Saved() {
         ),
       )
     )
-      return;
+      return false;
     setData((d) => ({
       ...d,
       toolRecords: d.toolRecords.filter((item) => item.id !== id),
     }));
+    go("/reports");
+    return true;
   };
+  if (selected) {
+    const record =
+      selected.kind === "tool"
+        ? data.toolRecords.find((item) => item.id === selected.id)
+        : data.snapshots.find((item) => item.id === selected.id);
+    if (!record)
+      return (
+        <section className="saved-report-detail">
+          <ReportBack />
+          <h1>{l(data.locale, "Raporttia ei löytynyt", "Report not found")}</h1>
+          <p role="status">
+            {l(
+              data.locale,
+              "Tallennettua raporttia ei löytynyt tästä selaimesta.",
+              "This saved report was not found in this browser.",
+            )}
+          </p>
+        </section>
+      );
+    return selected.kind === "tool" ? (
+      <ToolReport
+        key={`tool-${record.id}`}
+        record={record as ToolRecord}
+        historyIndex={historyIndex}
+        onDelete={() => removeReport(record.id)}
+        onEquipment={() => go("/equipment")}
+      />
+    ) : (
+      <CheckReport
+        key={`check-${record.id}`}
+        snapshot={record as Snapshot}
+        onDelete={() => removeSnapshot(record.id)}
+      />
+    );
+  }
   return (
     <>
       <header className="reports-header">
@@ -163,7 +221,7 @@ export function Saved() {
             type="button"
             onClick={() => go("/equipment")}
           >
-            {l(data.locale, "Hallitse laitteita", "Manage equipment")}
+            {l(data.locale, "Laitteet ja kohteet", "Equipment and sites")}
           </button>
         </div>
         <p className="supporting-copy">
@@ -241,136 +299,139 @@ export function Saved() {
         {entries.map((entry) => {
           if (entry.type === "field") {
             const record = entry.record;
+            const siteName = record.title.trim();
+            const reportType = fieldKindLabels[record.kind][data.locale];
+            const equipmentName =
+              record.fields.equipment?.trim() ||
+              data.equipment.find((item) => item.id === record.equipmentId)
+                ?.name;
+            const currentSiteName = equipmentSiteName(data, record.equipmentId);
+            const secondarySiteName =
+              currentSiteName !== siteName ? currentSiteName : undefined;
+            const primaryLabel = siteName || reportType;
+            const secondaryLabel = siteName
+              ? [reportType, equipmentName, secondarySiteName]
+                  .filter(Boolean)
+                  .join(" · ")
+              : [
+                  currentSiteName ||
+                    l(data.locale, "Kohde nimeämättä", "Site not named"),
+                  equipmentName,
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
             return (
               <button
                 key={record.id}
-                className="field-report-link"
+                className="field-report-link report-list-link"
                 onClick={() =>
                   go(`/checklists/${encodeURIComponent(record.id)}`)
                 }
               >
                 <span className="report-row-content">
-                  <span className="report-row-tags">
-                    <span className="report-kind">
-                      {fieldKindLabels[record.kind][data.locale]}
-                    </span>
-                    <span className="report-status">
-                      {record.status === "final"
-                        ? l(data.locale, "Viimeistelty", "Finalised")
-                        : l(data.locale, "Luonnos", "Draft")}
-                    </span>
+                  <strong className="report-summary">{primaryLabel}</strong>
+                  <span className="report-field-secondary">
+                    {secondaryLabel}
                   </span>
-                  <strong className="report-summary">
-                    {record.title ||
-                      l(data.locale, "Nimetön kohde", "Untitled site")}
-                  </strong>
-                  <span className="secondary">
-                    {formatDate(record.updatedAt, data.locale)}
-                    {record.fields.equipment
-                      ? ` · ${record.fields.equipment}`
-                      : ""}{" "}
-                    · {l(data.locale, "Versio", "Revision")}{" "}
-                    {record.revision ?? 1}
+                  <span className="report-row-tertiary">
+                    <time dateTime={record.updatedAt}>
+                      {formatDate(record.updatedAt, data.locale)}
+                    </time>
+                    {record.status === "final" ? (
+                      <span className="report-field-final-status">
+                        {l(data.locale, "Viimeistelty", "Finalised")}
+                      </span>
+                    ) : (
+                      <span className="report-field-draft-status status-badge status-badge--warning">
+                        {l(data.locale, "Luonnos", "Draft")}
+                      </span>
+                    )}
                   </span>
                 </span>
+                <ChevronRight
+                  className="report-list-chevron"
+                  size={20}
+                  aria-hidden="true"
+                />
               </button>
             );
           }
           if (entry.type === "tool") {
             const record = entry.record;
+            const equipmentName =
+              data.equipment.find((item) => item.id === record.equipmentId)
+                ?.name || record.equipmentName;
             return (
-              <ToolReport
-                key={record.id}
-                record={record}
-                onDelete={() => removeReport(record.id)}
-                onEquipment={() => go("/equipment")}
-                selected={record.id === selectedId}
-              />
-            );
-          }
-          const s = entry.record;
-          return (
-            <details className="saved-entry" key={s.id}>
-              <summary>
+              <button
+                key={`tool-${record.id}`}
+                type="button"
+                className="report-list-link saved-entry report-entry"
+                onClick={() => go(savedReportPath(record.id))}
+              >
                 <span className="report-row-content">
-                  <span className="report-row-tags">
-                    <span className="report-kind">
-                      {l(
-                        data.locale,
-                        "Vuototarkastusarvio",
-                        "Leak-check assessment",
-                      )}
-                    </span>
-                  </span>
                   <strong className="report-summary">
-                    {s.refrigerant.designation} ·{" "}
-                    {s.result.months !== null
-                      ? t("months", { count: s.result.months })
-                      : t(s.result.state)}
+                    {reportSummary(record, data.locale)}
                   </strong>
-                  <span className="secondary">
-                    {formatDate(s.createdAt, data.locale)} ·{" "}
-                    {s.result.input.charge} {s.result.input.unit}
+                  <span className="report-field-secondary">
+                    {[
+                      toolKindLabels[record.tool][data.locale],
+                      equipmentName,
+                      equipmentSiteName(data, record.equipmentId),
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                  <span className="report-row-tertiary">
+                    <time dateTime={record.createdAt}>
+                      {formatDate(record.createdAt, data.locale)}
+                    </time>
                   </span>
                 </span>
-              </summary>
-              <p className="notice caption">{t("savedSnapshot")}</p>
-              <p>
-                {t("equipment")}: {t(s.result.input.equipment)}
-                <br />
-                {t("asOf")}: {s.result.input.asOf}
-              </p>
-              <CheckResultView result={s.result} snapshot={s} />
-              <div className="button-group">
-                <button
-                  className="text-button"
-                  type="button"
-                  onClick={() => {
-                    if (
-                      !printCheckResult({
-                        result: s.result,
-                        locale: data.locale,
-                        designation: s.refrigerant.designation,
-                        sources: s.sources,
-                        createdAt: s.createdAt,
-                        lastInspectionDate: s.lastInspectionDate,
-                        componentDesignations: s.componentDesignations,
-                      })
-                    )
-                      notify(
-                        l(
-                          data.locale,
-                          "Tulostusikkuna estettiin. Salli ponnahdusikkuna ja yritä uudelleen.",
-                          "The print window was blocked. Allow pop-ups and try again.",
-                        ),
-                      );
-                  }}
-                >
-                  <Printer size={18} />
-                  {l(
-                    data.locale,
-                    "Tulosta / tallenna PDF",
-                    "Print / save as PDF",
-                  )}
-                </button>
-                <button
-                  className="text-button"
-                  onClick={() =>
-                    downloadJSON(s, `phasekit-${s.refrigerant.id}-${s.id}.json`)
-                  }
-                >
-                  <Download size={18} />
-                  {t("exportSnapshot")}
-                </button>
-                <button
-                  className="text-button danger-text"
-                  onClick={() => removeSnapshot(s.id)}
-                >
-                  <Trash2 size={18} />
-                  {t("delete")}
-                </button>
-              </div>
-            </details>
+                <ChevronRight
+                  className="report-list-chevron"
+                  size={20}
+                  aria-hidden="true"
+                />
+              </button>
+            );
+          }
+          const snapshot = entry.record;
+          return (
+            <button
+              key={`check-${snapshot.id}`}
+              type="button"
+              className="report-list-link saved-entry"
+              onClick={() => go(savedCheckPath(snapshot.id))}
+            >
+              <span className="report-row-content">
+                <strong className="report-summary">
+                  {snapshot.refrigerant.designation} ·{" "}
+                  {snapshot.result.months !== null
+                    ? t("months", { count: snapshot.result.months })
+                    : t(snapshot.result.state)}
+                </strong>
+                <span className="report-field-secondary">
+                  {[
+                    l(
+                      data.locale,
+                      "Vuototarkastusarvio",
+                      "Leak-check assessment",
+                    ),
+                    t(snapshot.result.input.equipment),
+                  ].join(" · ")}
+                </span>
+                <span className="report-row-tertiary">
+                  <time dateTime={snapshot.createdAt}>
+                    {formatDate(snapshot.createdAt, data.locale)}
+                  </time>
+                </span>
+              </span>
+              <ChevronRight
+                className="report-list-chevron"
+                size={20}
+                aria-hidden="true"
+              />
+            </button>
           );
         })}
       </section>
@@ -378,19 +439,119 @@ export function Saved() {
   );
 }
 
+function ReportBack({ onBack }: { onBack?: () => void }) {
+  const { data, go } = useApp();
+  return (
+    <button
+      type="button"
+      className="text-button back"
+      onClick={onBack || (() => go("/reports"))}
+    >
+      <ArrowLeft size={20} aria-hidden="true" />
+      {l(data.locale, "Takaisin raportteihin", "Back to Reports")}
+    </button>
+  );
+}
+
+function CheckReport({
+  snapshot: s,
+  onDelete,
+}: {
+  snapshot: Snapshot;
+  onDelete: () => void;
+}) {
+  const { data, t, notify } = useApp();
+  return (
+    <article className="saved-report-detail saved-entry report-entry">
+      <ReportBack />
+      <header className="saved-report-header">
+        <h1 className="report-summary">
+          {s.refrigerant.designation} ·{" "}
+          {s.result.months !== null
+            ? t("months", { count: s.result.months })
+            : t(s.result.state)}
+        </h1>
+        <p className="report-field-secondary">
+          {l(data.locale, "Vuototarkastusarvio", "Leak-check assessment")}
+        </p>
+        <p className="report-row-tertiary">
+          <time dateTime={s.createdAt}>
+            {formatDate(s.createdAt, data.locale)}
+          </time>
+        </p>
+        <p>
+          {t("equipment")}: {t(s.result.input.equipment)}
+          <br />
+          {t("asOf")}: {s.result.input.asOf}
+        </p>
+      </header>
+      <p className="notice caption">{t("savedSnapshot")}</p>
+      <CheckResultView result={s.result} snapshot={s} />
+      <div className="button-group report-actions">
+        <button
+          className="secondary-button"
+          type="button"
+          onClick={() => {
+            if (
+              !printCheckResult({
+                result: s.result,
+                locale: data.locale,
+                designation: s.refrigerant.designation,
+                sources: s.sources,
+                createdAt: s.createdAt,
+                lastInspectionDate: s.lastInspectionDate,
+                componentDesignations: s.componentDesignations,
+              })
+            )
+              notify(
+                l(
+                  data.locale,
+                  "Tulostusikkuna estettiin. Salli ponnahdusikkuna ja yritä uudelleen.",
+                  "The print window was blocked. Allow pop-ups and try again.",
+                ),
+              );
+          }}
+        >
+          <Printer size={18} />
+          {l(data.locale, "Tulosta / PDF", "Print / PDF")}
+        </button>
+        <button
+          className="secondary-button"
+          type="button"
+          onClick={() =>
+            downloadJSON(s, `phasekit-${s.refrigerant.id}-${s.id}.json`)
+          }
+        >
+          <Download size={18} />
+          {l(data.locale, "Vie JSON", "Export JSON")}
+        </button>
+        <button
+          className="text-button danger-text"
+          type="button"
+          onClick={onDelete}
+        >
+          <Trash2 size={18} />
+          {t("delete")}
+        </button>
+      </div>
+    </article>
+  );
+}
+
 function ToolReport({
   record,
+  historyIndex,
   onDelete,
   onEquipment,
-  selected,
 }: {
   record: ToolRecord;
-  onDelete: () => void;
+  historyIndex: number;
+  onDelete: () => boolean;
   onEquipment: () => void;
-  selected: boolean;
 }) {
-  const { data, setData, notify } = useApp();
+  const { data, setData, notify, go } = useApp();
   const [editingNotes, setEditingNotes] = useState(false);
+  const [editingEquipment, setEditingEquipment] = useState(false);
   const [draftNotes, setDraftNotes] = useState(record.notes);
   const lcl = (fi: string, en: string) => l(data.locale, fi, en);
   const sources = record.sources;
@@ -399,28 +560,106 @@ function ToolReport({
   const linkedEquipment = data.equipment.find(
     (item) => item.id === record.equipmentId,
   );
+  const setDraftDirty = useDraftGuard();
+  const notesDirty = editingNotes && draftNotes !== record.notes;
+  const notesDirtyRef = useRef(notesDirty);
+  const restoringNavigationRef = useRef(false);
+  notesDirtyRef.current = notesDirty;
+  const discardMessage = lcl(
+    "Hylätäänkö tallentamattomat muistiinpanot?",
+    "Discard unsaved notes?",
+  );
+  useEffect(() => {
+    setDraftDirty(notesDirty);
+  }, [notesDirty, setDraftDirty]);
+  useEffect(() => {
+    const guardNavigation = (event: Event) => {
+      if (restoringNavigationRef.current) {
+        restoringNavigationRef.current = false;
+        return;
+      }
+      if (!notesDirtyRef.current) return;
+      if (!window.confirm(discardMessage)) {
+        event.preventDefault();
+        const storedIndex = window.history.state?.phasekitNavigationIndex;
+        const destinationIndex = Number.isSafeInteger(storedIndex)
+          ? (storedIndex as number)
+          : historyIndex + 1;
+        restoringNavigationRef.current = true;
+        window.history.go(historyIndex - destinationIndex);
+      } else {
+        notesDirtyRef.current = false;
+        setEditingNotes(false);
+        setDraftDirty(false);
+      }
+    };
+    const guardReload = (event: BeforeUnloadEvent) => {
+      if (!notesDirtyRef.current) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("phasekit:before-navigation", guardNavigation);
+    window.addEventListener("beforeunload", guardReload);
+    return () => {
+      window.removeEventListener("phasekit:before-navigation", guardNavigation);
+      window.removeEventListener("beforeunload", guardReload);
+    };
+  }, [discardMessage, historyIndex, setDraftDirty]);
+  const leave = (action: () => void) => {
+    if (notesDirtyRef.current && !window.confirm(discardMessage)) return;
+    notesDirtyRef.current = false;
+    setEditingNotes(false);
+    setDraftDirty(false);
+    action();
+  };
   return (
-    <details
-      className="saved-entry report-entry"
+    <article
+      className="saved-report-detail saved-entry report-entry"
       id={`report-${record.id}`}
-      open={selected || undefined}
     >
-      <summary>
-        <span className="report-row-content">
-          <span className="report-row-tags">
-            <span className="report-kind">
-              {toolKindLabels[record.tool][data.locale]}
-            </span>
-          </span>
-          <strong className="report-summary">
-            {reportSummary(record, data.locale)}
-          </strong>
-          <span className="secondary">
+      <ReportBack onBack={() => leave(() => go("/reports"))} />
+      <header className="saved-report-header">
+        <h1 className="report-summary">{reportSummary(record, data.locale)}</h1>
+        <p className="report-field-secondary">
+          {toolKindLabels[record.tool][data.locale]}
+        </p>
+        <p className="report-row-tertiary">
+          <time dateTime={record.createdAt}>
             {formatDate(record.createdAt, data.locale)}
-            {` · ${linkedEquipment ? `${lcl("Laite", "Equipment")}: ${linkedEquipment.name}` : lcl("Ei liitetty", "Unlinked")}`}
-          </span>
-        </span>
-      </summary>
+          </time>
+        </p>
+        <p>
+          {lcl("Laite", "Equipment")}:{" "}
+          {linkedEquipment?.name || lcl("Ei liitetty", "Unlinked")}
+        </p>
+        {equipmentSiteName(data, record.equipmentId) && (
+          <p className="saved-report-site">
+            {lcl("Kohde", "Site")}:{" "}
+            {equipmentSiteName(data, record.equipmentId)}
+          </p>
+        )}
+        {record.equipmentName &&
+          record.equipmentName !== linkedEquipment?.name && (
+            <p>
+              <strong>
+                {lcl("Alkuperäinen laitenimi", "Equipment name when saved")}:
+              </strong>{" "}
+              {record.equipmentName}
+            </p>
+          )}
+        {!record.equipmentName && record.lastLinkedEquipmentName && (
+          <p>
+            <strong>
+              {lcl(
+                "Aiempi laitelinkki (nimi poistettaessa)",
+                "Former equipment link (name at removal)",
+              )}
+              :
+            </strong>{" "}
+            {record.lastLinkedEquipmentName}
+          </p>
+        )}
+      </header>
       <div className="report-detail">
         {headline.length > 0 && (
           <section
@@ -461,6 +700,11 @@ function ToolReport({
               )}
             </p>
           </section>
+        )}
+        {reportDurationNote(record, data.locale) && (
+          <p className="caption secondary">
+            {reportDurationNote(record, data.locale)}
+          </p>
         )}
         {reportHasRoundedValues(record) && (
           <p className="caption secondary">
@@ -517,74 +761,57 @@ function ToolReport({
             )}
           </section>
         )}
-        <details className="report-secondary-details report-equipment-details">
-          <summary>{lcl("Vaihda laitetta", "Change equipment")}</summary>
-          {record.equipmentName &&
-            record.equipmentName !== linkedEquipment?.name && (
-              <p>
-                <strong>
-                  {lcl("Alkuperäinen laitenimi", "Equipment name when saved")}:
-                </strong>{" "}
-                {record.equipmentName}
-              </p>
-            )}
-          {!record.equipmentName && record.lastLinkedEquipmentName && (
-            <p>
-              <strong>
-                {lcl(
-                  "Aiempi laitelinkki (nimi poistettaessa)",
-                  "Former equipment link (name at removal)",
-                )}
-                :
-              </strong>{" "}
-              {record.lastLinkedEquipmentName}
+        {editingEquipment && (
+          <section className="report-equipment-details">
+            <h3>{lcl("Vaihda laitetta", "Change equipment")}</h3>
+            <label className="report-linkage">
+              {lcl("Laite", "Equipment")}
+              <select
+                value={
+                  data.equipment.some((item) => item.id === record.equipmentId)
+                    ? record.equipmentId
+                    : ""
+                }
+                onChange={(event) =>
+                  setData((current) => ({
+                    ...current,
+                    toolRecords: current.toolRecords.map((item) =>
+                      item.id === record.id
+                        ? {
+                            ...item,
+                            equipmentId: event.target.value || undefined,
+                            lastLinkedEquipmentName: event.target.value
+                              ? undefined
+                              : !item.equipmentName && item.equipmentId
+                                ? (current.equipment.find(
+                                    (equipment) =>
+                                      equipment.id === item.equipmentId,
+                                  )?.name ?? item.lastLinkedEquipmentName)
+                                : item.lastLinkedEquipmentName,
+                          }
+                        : item,
+                    ),
+                  }))
+                }
+              >
+                <option value="">{lcl("Ei liitetty", "Unlinked")}</option>
+                {data.equipment.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {[item.name, equipmentSiteName(data, item.id)]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="caption secondary">
+              {lcl(
+                "Laitelinkin muuttaminen ei muuta alkuperäisiä laskentatietoja.",
+                "Changing the link leaves the original calculation unchanged.",
+              )}
             </p>
-          )}
-          <label className="report-linkage">
-            {lcl("Laite", "Equipment")}
-            <select
-              value={
-                data.equipment.some((item) => item.id === record.equipmentId)
-                  ? record.equipmentId
-                  : ""
-              }
-              onChange={(event) =>
-                setData((current) => ({
-                  ...current,
-                  toolRecords: current.toolRecords.map((item) =>
-                    item.id === record.id
-                      ? {
-                          ...item,
-                          equipmentId: event.target.value || undefined,
-                          lastLinkedEquipmentName: event.target.value
-                            ? undefined
-                            : !item.equipmentName && item.equipmentId
-                              ? (current.equipment.find(
-                                  (equipment) =>
-                                    equipment.id === item.equipmentId,
-                                )?.name ?? item.lastLinkedEquipmentName)
-                              : item.lastLinkedEquipmentName,
-                        }
-                      : item,
-                  ),
-                }))
-              }
-            >
-              <option value="">{lcl("Ei liitetty", "Unlinked")}</option>
-              {data.equipment.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <p className="caption secondary">
-            {lcl(
-              "Laitelinkin muuttaminen ei muuta alkuperäisiä laskentatietoja.",
-              "Changing the link leaves the original calculation unchanged.",
-            )}
-          </p>
-        </details>
+          </section>
+        )}
         <details className="report-provenance report-secondary-details">
           <summary>
             {lcl("Lähteet ja versiotiedot", "Sources and version information")}
@@ -632,20 +859,24 @@ function ToolReport({
         </details>
       </div>
       <div className="button-group report-actions">
-        {!editingNotes && (
-          <button
-            className="text-button"
-            type="button"
-            onClick={() => {
-              setDraftNotes(record.notes);
-              setEditingNotes(true);
-            }}
-          >
-            {lcl("Muokkaa muistiinpanoja", "Edit notes")}
-          </button>
-        )}
         <button
-          className="text-button"
+          className="secondary-button"
+          type="button"
+          onClick={() => {
+            if (!printToolRecord(record, data.locale))
+              notify(
+                lcl(
+                  "Tulostusikkuna estettiin. Salli ponnahdusikkuna ja yritä uudelleen.",
+                  "The print window was blocked. Allow pop-ups and try again.",
+                ),
+              );
+          }}
+        >
+          <Printer size={18} />
+          {lcl("Tulosta / PDF", "Print / PDF")}
+        </button>
+        <button
+          className="secondary-button"
           type="button"
           onClick={() => {
             void downloadToolRecordImage(record, data.locale).then((status) => {
@@ -670,45 +901,60 @@ function ToolReport({
           {lcl("Tallenna kuvana", "Save as image")}
         </button>
         <button
-          className="text-button"
+          className="secondary-button"
           type="button"
           onClick={() => downloadToolRecord(record)}
         >
           <Download size={18} />
           {lcl("Vie JSON", "Export JSON")}
         </button>
+        {!editingNotes && (
+          <button
+            className="text-button"
+            type="button"
+            onClick={() => {
+              setDraftNotes(record.notes);
+              setEditingNotes(true);
+            }}
+          >
+            {lcl("Muokkaa muistiinpanoja", "Edit notes")}
+          </button>
+        )}
         <button
           className="text-button"
           type="button"
-          onClick={() => {
-            if (!printToolRecord(record, data.locale))
-              notify(
-                lcl(
-                  "Tulostusikkuna estettiin. Salli ponnahdusikkuna ja yritä uudelleen.",
-                  "The print window was blocked. Allow pop-ups and try again.",
-                ),
-              );
-          }}
+          aria-expanded={editingEquipment}
+          onClick={() => setEditingEquipment(!editingEquipment)}
         >
-          <Printer size={18} />
-          {lcl("Tulosta / tallenna PDF", "Print / save as PDF")}
+          {editingEquipment
+            ? lcl("Sulje laitevalinta", "Close equipment selection")
+            : lcl("Vaihda laitetta", "Change equipment")}
         </button>
         {record.equipmentId &&
           data.equipment.some((item) => item.id === record.equipmentId) && (
-            <button className="text-button" type="button" onClick={onEquipment}>
+            <button
+              className="text-button"
+              type="button"
+              onClick={() => leave(onEquipment)}
+            >
               {lcl("Avaa laitteet", "Open equipment")}
             </button>
           )}
         <button
           className="text-button danger-text"
           type="button"
-          onClick={onDelete}
+          onClick={() => {
+            const wasDirty = notesDirtyRef.current;
+            notesDirtyRef.current = false;
+            if (onDelete()) setDraftDirty(false);
+            else notesDirtyRef.current = wasDirty;
+          }}
         >
           <Trash2 size={18} />
           {lcl("Poista", "Delete")}
         </button>
       </div>
-    </details>
+    </article>
   );
 }
 

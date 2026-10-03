@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Termostaattinen paisuntaventtiili">
+  <title>Termostaattinen paisuntaventtiili</title>
+  <desc>Säätelee kylmäaineen syöttöä höyrystimeen lämpötila-anturin avulla. Tiivistetty perusesitys: TC-toimilaite ja kapillaarianturi. Anturin sijoitus ja mahdollinen ulkoinen paineentasaus piirretään laitekohtaisesti; anturiyhteys ei ole kylmäaineputki.</desc>
+  <path d="M8 44H16M48 44H56M16 34L48 54V34L16 54ZM28 51L32 55L36 51M32 30V44"/>
+  <circle cx="32" cy="22" r="8"/>
+  <path d="M27 19H31M29 19V25M37 19C32 17 32 27 37 25M32 14V8H52V26"/>
+  <ellipse cx="52" cy="30" rx="3" ry="4"/>
+</svg>

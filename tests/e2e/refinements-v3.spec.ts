@@ -47,9 +47,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   );
   await t.fill("-999");
   await expect(p).toHaveValue("");
-  await expect(page.getByRole("alert")).toContainText(
-    "käyttöalueen ulkopuolella",
-  );
+  await expect(page.getByRole("alert")).toContainText("tuettu alue");
   await t.fill("68");
   await choose(page, "R514A");
   await expect(t).toHaveValue("68");
@@ -140,6 +138,32 @@ test("R142b uses sourced name, ODS GWP and one environmental provenance block", 
       .outputPath(`phasekit-v3-${info.project.name}-properties.png`),
     fullPage: true,
   });
+});
+
+test("property labels distinguish verified absence from missing classifications", async ({
+  page,
+}) => {
+  await page.goto("/#/refrigerants/r1243zf");
+  const overview = page.locator(".facts.overview");
+  await expect(overview).toContainText("HFO");
+  await expect(overview).toContainText("Tieto puuttuu");
+
+  await page.getByRole("tab", { name: "Ominaisuudet", exact: true }).click();
+  const panel = page.locator("#detail-panel");
+  await expect(panel.getByText("Ei liukumaa", { exact: true })).toBeVisible();
+  await expect(
+    panel.getByText("Tieto puuttuu", { exact: true }).first(),
+  ).toBeVisible();
+  await expect(
+    panel.getByRole("term").filter({ hasText: /^PED-fluidiryhmä$/ }),
+  ).toBeVisible();
+  await expect(
+    panel
+      .getByRole("term")
+      .filter({ hasText: /^PED-fluidiryhmä$/ })
+      .locator("+ dd"),
+  ).toHaveText("Tieto puuttuu");
+  await expect(panel).not.toContainText("Ei syty");
 });
 
 test("leak result exposes the controlling quantity and refrigerant family with styled checkboxes", async ({

@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Coverage } from "./views/Coverage";
+import { Symbols } from "./views/Symbols";
+import { HeatQuantityCalculator } from "./views/HeatQuantityCalculator";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   Snowflake,
@@ -8,6 +17,7 @@ import {
   WifiOff,
   RefreshCw,
   ArrowRight,
+  ExternalLink,
   X,
 } from "lucide-react";
 import { useRegisterSW } from "virtual:pwa-register/react";
@@ -35,7 +45,7 @@ import {
   WorkChecklists,
   PipeCalculator,
 } from "./views/FieldTools";
-import { appVersion, isBeta, buildRevision as buildVersion } from "./release";
+import { appVersion, isBeta } from "./release";
 const pathNow = () => window.location.hash.replace(/^#/, "") || "/";
 export function App() {
   const [data, setRenderedData] = useState(emptyData);
@@ -46,6 +56,11 @@ export function App() {
   >("saved");
   const writeRevision = useRef(0);
   const [path, setPath] = useState(pathNow);
+  const historyIndexRef = useRef(
+    Number.isSafeInteger(window.history.state?.phasekitNavigationIndex)
+      ? (window.history.state.phasekitNavigationIndex as number)
+      : 0,
+  );
   const [online, setOnline] = useState(navigator.onLine);
   const [message, setMessage] = useState("");
   const [compareIds, setCompareIds] = useState<string[]>([]);
@@ -217,7 +232,36 @@ export function App() {
     }
   }
   useEffect(() => {
-    const onHash = () => setPath(pathNow());
+    // Stamp existing and newly created hash entries so a guarded form can undo
+    // Back, Forward or a new hash navigation without overwriting history.
+    window.history.replaceState(
+      {
+        ...window.history.state,
+        phasekitNavigationIndex: historyIndexRef.current,
+      },
+      "",
+    );
+    const onHash = () => {
+      // Let detail guards synchronously cancel navigation before updating the
+      // route, which would unmount the form holding its unsaved notes.
+      if (
+        !window.dispatchEvent(
+          new Event("phasekit:before-navigation", { cancelable: true }),
+        )
+      )
+        return;
+      const storedIndex = window.history.state?.phasekitNavigationIndex;
+      const nextIndex = Number.isSafeInteger(storedIndex)
+        ? (storedIndex as number)
+        : historyIndexRef.current + 1;
+      if (!Number.isSafeInteger(storedIndex))
+        window.history.replaceState(
+          { ...window.history.state, phasekitNavigationIndex: nextIndex },
+          "",
+        );
+      historyIndexRef.current = nextIndex;
+      setPath(pathNow());
+    };
     const onOnline = () => setOnline(navigator.onLine);
     const media = matchMedia("(prefers-color-scheme: dark)");
     const onTheme = () => setSystemDark(media.matches);
@@ -249,9 +293,11 @@ export function App() {
           : "/phasekit-logo-light.svg",
       );
   }, [theme, data.locale]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     mainRef.current?.focus();
     window.scrollTo(0, 0);
+  }, [path, ready]);
+  useEffect(() => {
     const [section, id] = path.split("/").slice(1);
     if (!ready) return;
     if (section === "refrigerants" && byId.has(id))
@@ -301,7 +347,7 @@ export function App() {
       setData((d) => ({ ...d, favourites: [...d.favourites, id] }));
     }
   }
-  const [section, id] = path.split("/").slice(1);
+  const [section, id, detailTab] = path.split("/").slice(1);
   const r = id ? byId.get(id) : undefined;
   const nav = [
     { key: "refrigerants", path: "/", icon: Snowflake },
@@ -319,13 +365,17 @@ export function App() {
     "compare",
     "convert",
     "thermal-power",
+    "heat-quantity",
+    "symbols",
     "electrical",
     "pipe",
   ].includes(section)
     ? "tools"
     : ["saved", "reports", "equipment", "checklists"].includes(section)
       ? "saved"
-      : section === "settings" || section === "releases"
+      : section === "settings" ||
+          section === "releases" ||
+          (section === "coverage" && !r)
         ? "settings"
         : "refrigerants";
   return (
@@ -378,20 +428,29 @@ export function App() {
           )}
         </header>
         {isBeta && (
-          <p className="beta-banner caption">
-            <strong>
-              Beta {appVersion} · {buildVersion}
-            </strong>
-            {" · "}
-            {data.locale === "fi"
-              ? "Testiversio. Tallennukset säilyvät vain tässä selaimessa ja osoitteessa."
-              : "Test version. Records stay in this browser and site."}{" "}
-            <a href="https://phasekit.app">
+          <aside className="beta-banner caption" aria-label="Beta">
+            <div className="beta-banner-heading">
+              <strong>Beta</strong>
+              <span className="mono">{appVersion}</span>
+            </div>
+            <div className="beta-banner-actions">
+              <a className="beta-release-link" href="#/releases">
+                {data.locale === "fi" ? "Versiohistoria" : "Release history"}
+              </a>
+              <a
+                href="https://phasekit.app"
+                aria-describedby="beta-storage-note"
+              >
+                {data.locale === "fi" ? "Vakaa versio" : "Stable version"}
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            </div>
+            <p id="beta-storage-note">
               {data.locale === "fi"
-                ? "Avaa vakaa versio"
-                : "Open stable version"}
-            </a>
-          </p>
+                ? "Betan tallennukset ovat erillään vakaasta versiosta."
+                : "Beta records are separate from the stable version."}
+            </p>
+          </aside>
         )}
         {storageError && (
           <p role="alert" className="notice error">
@@ -456,7 +515,13 @@ export function App() {
             />
           ) : section === "refrigerants" ? (
             r ? (
-              <RefrigerantDetail key={r.id} r={r} />
+              <RefrigerantDetail
+                key={`${r.id}:${detailTab ?? ""}`}
+                r={r}
+                initialTab={
+                  detailTab === "properties" ? "properties" : "overview"
+                }
+              />
             ) : (
               <p className="notice">{t("unknownId")}</p>
             )
@@ -466,6 +531,10 @@ export function App() {
             <Tools />
           ) : section === "convert" ? (
             <UnitConverter />
+          ) : section === "symbols" ? (
+            <Symbols />
+          ) : section === "heat-quantity" ? (
+            <HeatQuantityCalculator />
           ) : section === "thermal-power" ? (
             <ThermalPowerCalculator />
           ) : section === "electrical" ? (
@@ -477,7 +546,9 @@ export function App() {
           ) : section === "equipment" ? (
             <Equipment />
           ) : section === "saved" || section === "reports" ? (
-            <Saved />
+            <Saved path={path} historyIndex={historyIndexRef.current} />
+          ) : section === "coverage" ? (
+            <Coverage r={r} />
           ) : section === "releases" ? (
             <ReleaseHistory />
           ) : section === "settings" ? (

@@ -1,11 +1,17 @@
 import type { FieldReport, ToolRecord } from "./storage";
 import packageInfo from "../../../package.json" with { type: "json" };
 import Decimal from "decimal.js";
+import { dataset } from "./data";
+import printControlsSource from "./print-controls.js?raw";
+import jsPdfSource from "jspdf/dist/jspdf.umd.min.js?raw";
+import reportPdfSource from "./report-pdf.js?raw";
 import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
   checklistDefinitions,
   checklistReportFields,
   commissioningMissingFields,
+  commissioningProtocolStatus,
+  combinedReportNotes,
   type ChecklistDraft,
   type ChecklistField,
   type ChecklistKind,
@@ -16,6 +22,7 @@ import {
   isCyclePrimaryOutput,
   primaryReportOutputs,
   reportHasRoundedValues,
+  reportDurationNote,
   reportName,
 } from "./report-summary";
 import type { CheckResult, Source } from "../../../packages/core/src/contracts";
@@ -53,7 +60,73 @@ const APP_VERSION = packageInfo.version;
 
 // These rules belong to the new print document, not the application's theme.
 // Every key fact remains legible when backgrounds and colour are disabled.
-export const PRINT_DOCUMENT_CSS = `@page{size:A4;margin:14mm}*{box-sizing:border-box}html{color-scheme:light}body{font:12px/1.45 system-ui,sans-serif;max-width:850px;margin:26px auto;padding:0 22px;color:#182127}h1,h2{line-height:1.18}h1{font-size:25px;margin:5px 0 12px}h2{font-size:15px;margin:21px 0 8px;padding-bottom:5px;border-bottom:1px solid #929fa5}.brand{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 9px}.meta,.muted{color:#405158}.meta{margin:3px 0 9px}.hero{border:2px solid #283b42;border-radius:6px;padding:12px 15px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.hero-value{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0}.hero-context{margin:7px 0 0;font-size:12px}.date-pair{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:12px}.date-card{border-top:1px solid #87969d;padding-top:8px}.date-card strong{display:block;font-size:18px;margin-top:2px}.date-card-secondary strong{font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0;break-inside:avoid}.result-card{border:1px solid #829098;border-radius:6px;padding:10px 12px;break-inside:avoid}.result-card dt{font-size:11px;color:#405158}.result-card dd{font-size:20px;font-weight:700;line-height:1.18;margin:3px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;padding:5px 0;border-bottom:1px solid #d7dfe2;break-inside:avoid}.row dt{color:#405158}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.detail-list div{border-bottom:1px solid #d7dfe2;padding:5px 0;break-inside:avoid}.detail-list dt{font-weight:650}.detail-list dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.checklist-progress{font-size:17px;font-weight:700;margin:14px 0}.checklist-steps{list-style:none;padding:0}.checklist-steps li{display:flex;gap:9px;border-bottom:1px solid #d7dfe2;padding:7px 0;break-inside:avoid}.checkmark{font:19px/1 system-ui,sans-serif;min-width:22px}.sources{font-size:10px;line-height:1.4;columns:2;column-gap:18px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:inherit}.notice{border-top:1px solid #9aa8ae;margin-top:18px;padding-top:9px;color:#405158;font-size:10px}.chart{display:block;width:100%;max-height:340px;object-fit:contain;break-inside:avoid}p{overflow-wrap:anywhere;white-space:pre-wrap}@media print{body{margin:0 auto;padding:0}a{text-decoration:none}}`;
+export const PRINT_DOCUMENT_CSS = `@page{size:A4;margin:14mm}*{box-sizing:border-box}html{color-scheme:light;background:#fff}body{font:11.5px/1.45 Poppins,system-ui,sans-serif;background:#fff;max-width:850px;margin:26px auto;padding:0 22px;color:#182127}h1,h2{font-family:Unbounded,system-ui,sans-serif;line-height:1.3;overflow-wrap:anywhere}h1{font-size:22px;margin:5px 0 12px}h2{font-size:13px;margin:21px 0 8px;padding-bottom:5px;border-bottom:1px solid #929fa5}.brand{font-size:10px;letter-spacing:.15em;text-transform:uppercase;font-weight:700;margin:0 0 9px}.meta,.muted{color:#405158}.meta{margin:3px 0 9px}.hero{border:2px solid #283b42;border-radius:6px;padding:12px 15px;margin:14px 0;break-inside:avoid;page-break-inside:avoid}.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.hero-value{font-size:24px;font-weight:700;line-height:1.15;margin:4px 0}.hero-context{margin:7px 0 0;font-size:12px}.date-pair{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-top:12px}.date-card{border-top:1px solid #87969d;padding-top:8px}.date-card strong{display:block;font-size:18px;margin-top:2px}.date-card-secondary strong{font-size:13px}.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0;break-inside:avoid}.result-card{border:1px solid #829098;border-radius:6px;padding:10px 12px;break-inside:avoid}.result-card dt{font-size:11px;color:#405158}.result-card dd{font-size:20px;font-weight:700;line-height:1.18;margin:3px 0 0}.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:8px;padding:5px 0;border-bottom:1px solid #d7dfe2;break-inside:avoid}.row dt{color:#405158}.row dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}.detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px}.detail-list div{border-bottom:1px solid #d7dfe2;padding:5px 0;break-inside:avoid}.detail-list dt{font-weight:650}.detail-list dd{margin:2px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}.checklist-progress{font-size:17px;font-weight:700;margin:14px 0}.checklist-steps{list-style:none;padding:0}.checklist-steps li{display:flex;gap:9px;border-bottom:1px solid #d7dfe2;padding:7px 0;break-inside:avoid}.checkmark{font:19px/1 system-ui,sans-serif;min-width:22px}.sources{font-size:10px;line-height:1.4;columns:2;column-gap:18px}.sources li{margin:0 0 6px;break-inside:avoid;overflow-wrap:anywhere}a{color:inherit}.notice{border-top:1px solid #9aa8ae;margin-top:18px;padding-top:9px;color:#405158;font-size:10px}.chart{display:block;width:100%;max-height:340px;object-fit:contain;break-inside:avoid}p{overflow-wrap:anywhere;white-space:pre-wrap}@media print{body{margin:0 auto;padding:0}a{text-decoration:none}}`;
+
+async function embedPrintFonts(doc: Document) {
+  const fonts = [
+    ["Unbounded", "600 700", "/fonts/unbounded/Unbounded-Variable.ttf"],
+    ["Poppins", "400", "/fonts/poppins/Poppins-Regular.ttf"],
+    ["Poppins", "700", "/fonts/poppins/Poppins-Bold.ttf"],
+    [
+      "PhaseKit PDF Symbols",
+      "400",
+      "/fonts/ioskeley-mono/IoskeleyMono-Regular.ttf",
+    ],
+    ["Ioskeley Mono", "400", "/fonts/ioskeley-mono/IoskeleyMono-Regular.woff2"],
+    [
+      "Ioskeley Mono",
+      "600",
+      "/fonts/ioskeley-mono/IoskeleyMono-SemiBold.woff2",
+    ],
+  ];
+  const loaded = await Promise.allSettled(
+    fonts.map(async ([family, weight, path]) => {
+      const url = new URL(path, window.location.href);
+      // Read the installed app's precache directly as well: an about:blank
+      // preview is not controlled by the worker, and offline fetch varies by host.
+      const cached =
+        "caches" in window
+          ? await window.caches
+              .match(url.href, { ignoreSearch: true })
+              .catch(() => undefined)
+          : undefined;
+      const response =
+        cached ??
+        (await fetch(url, {
+          signal: AbortSignal.timeout(1800),
+        }));
+      if (!response.ok) throw new Error("print_font_unavailable");
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      let binary = "";
+      for (let offset = 0; offset < bytes.length; offset += 8192)
+        binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+      const data = `data:${response.headers.get("content-type") || "font/ttf"};base64,${btoa(binary)}`;
+      return `@font-face{font-family:"${family}";font-weight:${weight};font-style:normal;font-display:swap;src:url("${data}")}`;
+    }),
+  );
+  doc.documentElement.dataset.printFontErrors = loaded
+    .flatMap((result) =>
+      result.status === "rejected" ? [String(result.reason)] : [],
+    )
+    .join("; ");
+  const style = doc.createElement("style");
+  style.textContent = loaded
+    .flatMap((result) => (result.status === "fulfilled" ? [result.value] : []))
+    .join("\n");
+  doc.head.append(style);
+  // The self-contained controls have their own bounded wait if the opener stops.
+  doc.documentElement.dataset.printFonts = "embedded";
+  doc.dispatchEvent(new Event("phasekit-print-fonts"));
+}
+
+function appendDocumentIdentity(doc: Document, parts: string[]) {
+  const identity = parts.filter(Boolean).join(" · ");
+  if (!identity) return;
+  const subhead = doc.createElement("p");
+  subhead.className = "document-subhead";
+  subhead.textContent = identity;
+  doc.body.append(subhead);
+}
 
 export function createPrintDocument(
   win: Window,
@@ -75,8 +148,15 @@ export function createPrintDocument(
   style.textContent += `h2{break-after:avoid;page-break-after:avoid}.field-report-document h2{margin:14px 0 6px;padding-bottom:4px}.field-report-document p{margin-top:6px;margin-bottom:6px}.field-report-document .checklist-progress{margin:8px 0}.field-report-document .checklist-steps li{padding:4px 0}.field-report-document .document-subhead{margin:3px 0 8px}.field-report-document .document-status{margin:2px 0 7px}.field-report-document .notice{margin-top:8px;padding-top:6px}.field-report-document .document-footer{margin-top:7px;padding-top:6px}.report-closing{break-inside:avoid;page-break-inside:avoid}`;
   style.textContent += `.field-report-document .field-summary-compact{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.field-report-document .field-summary-compact .field-summary-card{padding:7px 9px}.field-report-document .field-summary-compact .field-summary-card dd{font-size:17px}.field-report-document .meta{margin-bottom:4px}.field-report-document .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:7px 0}.field-report-document .signature-line{max-width:none;margin:9px 0 4px}.signature-caption{font-size:11px;color:#405158}.legacy-signature-name{font-size:11px;color:#405158}.source-list{list-style:none;margin:5px 0;padding:0;font-size:11px;line-height:1.25;columns:2;column-gap:18px}.source-list li{margin:0 0 4px;break-inside:avoid;overflow-wrap:anywhere}.source-meta{color:#405158;font-size:10.5px}.leak-document h2{margin:12px 0 5px}.leak-document .detail-list{gap:3px 15px}.leak-document .detail-list div{padding:3px 0}.leak-document .hero{margin:10px 0 8px}.hero-alert{font-weight:700;color:#84213b;border-top:1px solid #84213b;margin:9px 0 0;padding-top:8px}.compact-table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0 10px}.compact-table th{text-align:left;color:#405158;font-weight:650}.compact-table th,.compact-table td{padding:5px 6px;border-bottom:1px solid #d7dfe2;vertical-align:top;overflow-wrap:anywhere}.compact-table tr{break-inside:avoid;page-break-inside:avoid}.compact-table td:last-child,.compact-table th:last-child{text-align:right}.compact-table .subline{display:block;font-size:10px;color:#405158}.leak-document .source-version-line{font-size:11px;color:#405158;margin:4px 0}.leak-document .notice{margin-top:8px;padding-top:6px}.leak-document .document-footer{margin-top:6px;padding-top:6px}`;
   style.textContent += `.commissioning-document h2{margin:9px 0 4px}.commissioning-document .field-summary-card{padding:5px 8px}.commissioning-document .field-summary-card dd{font-size:16px;margin-top:2px}.commissioning-document .checklist-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.commissioning-document .checklist-steps li{min-width:0}.commissioning-document .field-inline-note{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px solid #d7dfe2}.commissioning-document .cycle-input-line{font-size:11px;color:#405158;margin:4px 0 8px;line-height:1.35}.commissioning-document .cycle-details .row{padding:2px 0}`;
-  style.textContent += `.print-toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:stretch;background:#fff;border-bottom:1px solid #929fa5;padding:10px 0;margin:0 0 16px}.print-toolbar a,.print-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:0;flex:1;padding:8px 12px;border:1px solid #283b42;border-radius:5px;background:#fff;color:#182127;font:600 14px/1.2 system-ui,sans-serif;text-align:center;text-decoration:none;cursor:pointer}.print-toolbar .print-action{background:#283b42;color:#fff}.print-toolbar button:disabled{opacity:.5;cursor:wait}.print-toolbar :focus-visible{outline:3px solid #276e9f;outline-offset:2px}@media screen and (max-width:500px){body{margin:0 auto;padding:0 16px 24px}.print-toolbar{margin:0 -16px 16px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px}.print-toolbar a,.print-toolbar button{padding:8px 7px}}@media print{.print-toolbar{display:none!important}}`;
+  style.textContent += `.print-toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:stretch;background:#fff;border-bottom:1px solid #929fa5;padding:10px 0;margin:0 0 16px}.print-toolbar a,.print-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:0;flex:1;padding:8px 12px;border:1px solid #283b42;border-radius:5px;background:#fff;color:#182127;font:600 14px/1.2 system-ui,sans-serif;text-align:center;text-decoration:none;cursor:pointer}.print-toolbar .print-action{background:#283b42;color:#fff}.print-toolbar button:disabled{opacity:.5;cursor:wait}.print-toolbar :focus-visible{outline:3px solid #276e9f;outline-offset:2px}@media screen and (max-width:500px){body{margin:0 auto;padding:0 16px 24px}.rows,.detail-list{grid-template-columns:minmax(0,1fr)}.row dt{overflow-wrap:anywhere}.sources,.source-list{columns:1}.print-toolbar{margin:0 -16px 16px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px}.print-toolbar a,.print-toolbar button{padding:8px 7px}}@media print{.print-toolbar{display:none!important}}`;
+  style.textContent += `.print-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}.print-toolbar .pdf-action{background:#283b42;color:#fff}.print-toolbar .print-action{background:#fff;color:#182127;grid-column:1 / -1;justify-self:end;border:0;text-decoration:underline;min-height:44px;padding:4px 0}.print-toolbar .pdf-status{grid-column:1 / -1;margin:0;font:12px/1.4 Poppins,system-ui,sans-serif;color:#405158}.print-toolbar .pdf-status:empty{display:none}.print-toolbar .pdf-download{grid-column:1 / -1;border:0;padding:4px 0;justify-self:start;text-decoration:underline}.print-toolbar [hidden]{display:none!important}`;
+  style.textContent += `.field-report-document .detail-long{grid-column:1 / -1;break-inside:auto;page-break-inside:auto}.field-report-document .detail-long dd{orphans:3;widows:3}.protocol-manifest{font-size:11px;padding-left:18px}.protocol-manifest li{margin:4px 0;break-inside:avoid}.field-report-document p{orphans:3;widows:3}`;
+  style.textContent += `.document-subhead{font-size:15px;font-weight:700;line-height:1.35;border-left:3px solid #283b42;padding-left:10px;margin:5px 0 8px}.field-report-document .document-subhead{margin:5px 0 8px}.hero-value,.result-card dd,.field-summary-card dd,.numeric{font-family:"Ioskeley Mono",ui-monospace,monospace;font-weight:600;font-variant-numeric:tabular-nums}.measurement-context,.frozen-evidence{font-size:10.5px;color:#405158}.missing-items{padding-left:18px;margin:6px 0 12px}.missing-items li{margin:3px 0;break-inside:avoid}thead{display:table-header-group}h1,h2,.document-subhead{break-after:avoid;page-break-after:avoid}p,dd{orphans:3;widows:3}`;
   doc.head.append(style);
+  // Fetch through the opener's service worker, then embed in the new document.
+  // about:blank cannot rely on that worker to load its own font URLs offline.
+  doc.documentElement.dataset.printFonts = "pending";
+  void embedPrintFonts(doc).catch(() => undefined);
   const toolbar = doc.createElement("nav");
   toolbar.className = "print-toolbar";
   toolbar.setAttribute(
@@ -87,33 +167,34 @@ export function createPrintDocument(
   const returnUrl = window.location.href;
   back.href = returnUrl;
   back.textContent = locale === "fi" ? "Takaisin raporttiin" : "Back to report";
-  back.addEventListener("click", (event) => {
-    event.preventDefault();
-    try {
-      window.focus();
-      win.close();
-      if (win.closed) return;
-    } catch {
-      /* Closing may be unavailable in an installed web app. */
-    }
-    // document.open() can inherit the original URL. A link to that exact URL
-    // then leaves the temporary print DOM in place; reload fetches the app.
-    const current = new URL(win.location.href, returnUrl);
-    const target = new URL(returnUrl);
-    const reloadRequired =
-      current.origin === target.origin &&
-      current.pathname === target.pathname &&
-      current.search === target.search;
-    win.location.replace(returnUrl);
-    if (reloadRequired) win.location.reload();
-  });
   const print = doc.createElement("button");
   print.type = "button";
   print.className = "print-action";
-  print.textContent = locale === "fi" ? "Tulosta / PDF" : "Print / PDF";
+  print.textContent = locale === "fi" ? "Tulosta" : "Print";
   print.disabled = true;
-  print.addEventListener("click", () => win.print());
-  toolbar.append(back, print);
+  // iOS Home Screen apps can expose window.print while doing nothing on tap.
+  // Use the prepared PDF and native share sheet as their visible export action.
+  print.hidden =
+    (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  const pdf = doc.createElement("button");
+  pdf.type = "button";
+  pdf.className = "pdf-action";
+  pdf.textContent =
+    locale === "fi" ? "Valmistellaan PDF:ää…" : "Preparing PDF…";
+  pdf.disabled = true;
+  toolbar.append(back, pdf, print);
+  const pdfStatus = doc.createElement("p");
+  pdfStatus.className = "pdf-status";
+  pdfStatus.dataset.pdfControl = "true";
+  pdfStatus.setAttribute("role", "status");
+  pdfStatus.setAttribute("aria-live", "polite");
+  const download = doc.createElement("a");
+  download.className = "pdf-download";
+  download.dataset.pdfControl = "true";
+  download.hidden = true;
+  download.textContent =
+    locale === "fi" ? "Lataa PDF-tiedosto" : "Download PDF file";
+  toolbar.append(download, pdfStatus);
   doc.body.append(toolbar);
   const brand = doc.createElement("p");
   brand.className = "brand";
@@ -245,24 +326,27 @@ export function printToolRecord(
   const h1 = doc.createElement("h1");
   h1.textContent = displayTitle;
   body.append(h1);
+  appendDocumentIdentity(doc, [
+    record.equipmentName
+      ? `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${record.equipmentName}`
+      : record.lastLinkedEquipmentName
+        ? `${locale === "fi" ? "Aiempi laitelinkki (nimi poistettaessa)" : "Former equipment link (name at removal)"}: ${record.lastLinkedEquipmentName}`
+        : "",
+  ]);
   const meta = doc.createElement("p");
   meta.className = "meta";
   if (record.createdAt) {
-    meta.textContent = `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(record.createdAt, locale)}`;
+    meta.textContent = [
+      `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(record.createdAt, locale)}`,
+      record.equipmentName &&
+        (locale === "fi"
+          ? "Laitenimi tallennushetkellä"
+          : "Equipment name recorded when saved"),
+    ]
+      .filter(Boolean)
+      .join(" · ");
     body.append(meta);
   }
-  if (record.equipmentName)
-    appendText(
-      body,
-      "p",
-      `${record.createdAt ? (locale === "fi" ? "Alkuperäinen laitenimi" : "Equipment name when saved") : locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${record.equipmentName}`,
-    );
-  else if (record.lastLinkedEquipmentName)
-    appendText(
-      body,
-      "p",
-      `${locale === "fi" ? "Aiempi laitelinkki (nimi poistettaessa)" : "Former equipment link (name at removal)"}: ${record.lastLinkedEquipmentName}`,
-    );
   appendRows(
     doc,
     body,
@@ -280,6 +364,8 @@ export function printToolRecord(
     record.inputs,
     locale,
   );
+  const durationNote = reportDurationNote(record, locale);
+  if (durationNote) appendText(body, "p", durationNote);
   if (reportHasRoundedValues(record)) {
     const roundingNote = doc.createElement("p");
     roundingNote.className = "muted";
@@ -387,7 +473,15 @@ export function printChecklistDraft(
   const report = draft as FieldReport;
   const definition = checklistDefinitions[draft.kind];
   const site = draft.title.trim();
-  const title = fieldReportTitle(draft.kind, locale);
+  const installation =
+    draft.kind === "commissioning" &&
+    draft.fields.commissioningPurpose !== "technical";
+  const missing = installation ? commissioningMissingFields(draft.fields) : [];
+  const title = installation
+    ? locale === "fi"
+      ? "Asennustodistus ja käyttöönottopöytäkirjat"
+      : "Installation certificate and commissioning records"
+    : fieldReportTitle(draft.kind, locale);
   const doc = createPrintDocument(
     win,
     `${title}${site ? ` · ${site}` : ""} · PhaseKit`,
@@ -397,6 +491,20 @@ export function printChecklistDraft(
   if (draft.kind === "commissioning")
     doc.body.classList.add("commissioning-document");
   appendText(doc.body, "h1", title);
+  appendDocumentIdentity(doc, [
+    site && `${locale === "fi" ? "Kohde" : "Site"}: ${site}`,
+    draft.fields.equipment?.trim() &&
+      `${locale === "fi" ? "Laite / tunniste" : "Equipment / identifier"}: ${draft.fields.equipment.trim()}`,
+  ]);
+  const performedOn = draft.fields.performedOn?.trim();
+  const technician = draft.fields.technician?.trim();
+  const meta = doc.createElement("p");
+  meta.className = "meta";
+  meta.textContent = [
+    `${locale === "fi" ? "Suorituspäivä" : "Work date"}: ${performedOn ? displayDate(performedOn, locale) : "—"}`,
+    `${locale === "fi" ? "Tekijä" : "Technician"}: ${technician || "—"}`,
+  ].join(" · ");
+  doc.body.append(meta);
   const state = doc.createElement("p");
   state.className = "document-status";
   state.textContent =
@@ -408,37 +516,19 @@ export function printChecklistDraft(
         ? "Luonnos / keskeneräinen"
         : "Draft / in progress";
   doc.body.append(state);
-  if (draft.kind === "commissioning") {
-    const missing = commissioningMissingFields(draft.fields);
+  if (installation) {
     const preparation = doc.createElement("p");
     preparation.className = "meta";
     preparation.textContent =
       locale === "fi"
-        ? `Asennustodistuksen valmistelu · VNa 1063/2025 § 9${missing.length ? ` · ${missing.length} täydennettävää` : ""}.`
-        : `Installation-certificate preparation · Finnish Decree 1063/2025 § 9${missing.length ? ` · ${missing.length} items to complete` : ""}.`;
+        ? `Asennustodistus · VNa 1063/2025 § 9 · ${missing.length ? `${missing.length} täydennettävää` : "tietokentät täytetty"}. Vastuuhenkilön tarkastettava ja allekirjoitettava.`
+        : `Installation certificate · Finnish Decree 1063/2025 § 9 · ${missing.length ? `${missing.length} items to complete` : "fields completed"}. Requires the responsible person’s review and signature.`;
     doc.body.append(preparation);
   }
-  const subhead = doc.createElement("p");
-  subhead.className = "document-subhead";
-  subhead.textContent =
-    [
-      site && `${locale === "fi" ? "Kohde" : "Site"}: ${site}`,
-      draft.fields.equipment?.trim() &&
-        `${locale === "fi" ? "Laite / tunniste" : "Equipment / identifier"}: ${draft.fields.equipment.trim()}`,
-    ]
-      .filter(Boolean)
-      .join(" · ") || definition.name[locale];
-  doc.body.append(subhead);
-  const performedOn = draft.fields.performedOn?.trim();
-  const technician = draft.fields.technician?.trim();
-  const meta = doc.createElement("p");
-  meta.className = "meta";
-  meta.textContent = [
-    `${locale === "fi" ? "Suorituspäivä" : "Work date"}: ${performedOn ? displayDate(performedOn, locale) : "—"}`,
-    `${locale === "fi" ? "Tekijä" : "Technician"}: ${technician || "—"}`,
-  ].join(" · ");
-  doc.body.append(meta);
+  if (draft.kind === "commissioning")
+    appendProtocolManifest(doc, draft, locale);
   appendFieldSummary(doc, draft, locale);
+  appendMeasurementContext(doc, draft, locale);
   const complete = draft.checkedIds.filter((id) =>
     definition.steps.some((step) => step.id === id),
   ).length;
@@ -469,13 +559,33 @@ export function printChecklistDraft(
   }
   doc.body.append(steps);
   appendObservationSections(doc, draft, locale);
-  if (draft.notes.trim()) {
-    appendText(doc.body, "h2", locale === "fi" ? "Muistiinpanot" : "Notes");
-    appendText(doc.body, "p", draft.notes);
+  if (combinedReportNotes(draft).trim()) {
+    appendText(
+      doc.body,
+      "h2",
+      locale === "fi" ? "Havainnot ja muistiinpanot" : "Observations and notes",
+    );
+    appendText(doc.body, "p", combinedReportNotes(draft));
   }
   const cycleImage = report.cycleReport
     ? appendFrozenCycleReport(doc, report.cycleReport, locale)
     : undefined;
+  appendFrozenLeakEvidence(doc, draft, locale);
+  if (missing.length) {
+    appendText(
+      doc.body,
+      "h2",
+      locale === "fi" ? "Täydennettävät tiedot" : "Items to complete",
+    );
+    const list = doc.createElement("ul");
+    list.className = "missing-items";
+    for (const field of missing) {
+      const item = doc.createElement("li");
+      item.textContent = field.label[locale];
+      list.append(item);
+    }
+    doc.body.append(list);
+  }
   const closing = doc.createElement("section");
   closing.className = "report-closing";
   appendText(
@@ -485,14 +595,13 @@ export function printChecklistDraft(
   );
   const signatureGrid = doc.createElement("div");
   signatureGrid.className = "signature-grid";
-  const signatureLabels =
-    draft.kind === "commissioning"
-      ? locale === "fi"
-        ? ["Vastuuhenkilön allekirjoitus", "Nimenselvennys"]
-        : ["Responsible person's signature", "Printed name"]
-      : locale === "fi"
-        ? ["Allekirjoitus", "Nimenselvennys"]
-        : ["Signature", "Printed name"];
+  const signatureLabels = installation
+    ? locale === "fi"
+      ? ["Vastuuhenkilön allekirjoitus", "Nimenselvennys"]
+      : ["Responsible person's signature", "Printed name"]
+    : locale === "fi"
+      ? ["Allekirjoitus", "Nimenselvennys"]
+      : ["Signature", "Printed name"];
   for (const label of signatureLabels) {
     const cell = doc.createElement("div");
     const line = doc.createElement("div");
@@ -504,6 +613,22 @@ export function printChecklistDraft(
     signatureGrid.append(cell);
   }
   closing.append(signatureGrid);
+  if (installation) {
+    appendText(
+      closing,
+      "p",
+      locale === "fi"
+        ? "Allekirjoituksellaan vastuuhenkilö vakuuttaa tehtyjen kokeiden riittävyyden ja oikeellisuuden."
+        : "By signing, the responsible person attests to the sufficiency and correctness of the tests performed.",
+    );
+    appendText(
+      closing,
+      "p",
+      locale === "fi"
+        ? "Allekirjoituspäivä: ____________________"
+        : "Date signed: ____________________",
+    );
+  }
   if (draft.fields.signatureName?.trim()) {
     const historicalName = doc.createElement("p");
     historicalName.className = "legacy-signature-name";
@@ -543,8 +668,8 @@ export function printChecklistDraft(
 function fieldReportTitle(kind: ChecklistKind, locale: Locale): string {
   const titles: Record<ChecklistKind, { fi: string; en: string }> = {
     tightness: {
-      fi: "Paine- ja tiiviyskoeraportti",
-      en: "Pressure and tightness test record",
+      fi: "Tiiviyskoeraportti",
+      en: "Tightness test record",
     },
     evacuation: {
       fi: "Tyhjiöinti- ja pitokoeraportti",
@@ -557,6 +682,46 @@ function fieldReportTitle(kind: ChecklistKind, locale: Locale): string {
   return titles[kind][locale];
 }
 
+function appendProtocolManifest(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  appendText(
+    doc.body,
+    "h2",
+    locale === "fi"
+      ? "Asiakirjan sisältö ja erilliset liitteet"
+      : "Document contents and separate attachments",
+  );
+  const list = doc.createElement("ul");
+  list.className = "protocol-manifest";
+  for (const protocol of commissioningProtocolStatus(draft.fields)) {
+    const row = doc.createElement("li");
+    const status =
+      protocol.mode === "internal"
+        ? locale === "fi"
+          ? "sisältyy tähän asiakirjaan"
+          : "included in this document"
+        : protocol.mode === "external"
+          ? locale === "fi"
+            ? "erillinen pöytäkirja, toimitettava erikseen"
+            : "separate record, supply separately"
+          : locale === "fi"
+            ? "kirjaus puuttuu tai on kesken"
+            : "record missing or incomplete";
+    row.textContent = `${protocol.label[locale]} — ${status}`;
+    if (protocol.mode === "internal") {
+      const link = doc.createElement("a");
+      link.href = `#protocol-${protocol.id}`;
+      link.textContent = locale === "fi" ? " · mittaukset" : " · readings";
+      row.append(link);
+    }
+    list.append(row);
+  }
+  doc.body.append(list);
+}
+
 function fieldReportValue(
   draft: ChecklistDraft,
   field: ChecklistField,
@@ -566,6 +731,16 @@ function fieldReportValue(
   if (!raw) return "—";
   if (field.id === "operatorDeclaration" && raw !== "confirmed")
     return `${locale === "fi" ? "Ei vahvistettu (tallennettu arvo)" : "Not confirmed (recorded value)"}: ${raw}`;
+  if (field.id === "refrigerantSourceNote")
+    return raw
+      .split(/(\s+|[,;])/)
+      .map((part) =>
+        availableSourceName(
+          part,
+          (draft as FieldReport).cycleReport?.sources ?? dataset.sources,
+        ),
+      )
+      .join("");
   if (field.id === "refrigerantId")
     return frozenRefrigerantDesignation(draft) ?? raw;
   if (field.type === "date") return displayDate(raw, locale);
@@ -598,6 +773,13 @@ export function fieldReportObservationFields(
     "performedOn",
     "technician",
     "signatureName",
+    "finding",
+    "leakCheckEvidence",
+    ...(["installation", "technical"].includes(
+      draft.fields.commissioningPurpose,
+    )
+      ? ["commissioningPurpose"]
+      : []),
     ...fieldReportSummary(draft, locale).map((metric) => metric.id),
     ...(draft.kind === "commissioning"
       ? evacuationMetrics(draft, locale).map((metric) => metric.id)
@@ -622,13 +804,227 @@ export function fieldReportObservationFields(
   );
 }
 
+function appendMeasurementContext(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  const pressureReadings = ["lp", "hp", "pressures"].some((id) =>
+    draft.fields[id]?.trim(),
+  );
+  // New commissioning drafts carry these defaults before any measurements exist.
+  const defaults: Record<string, string> = {
+    pressureUnit: "bar",
+    pressureReference: "gauge",
+    atmosphericReference: "1.01325",
+  };
+  const fields = fieldReportObservationFields(draft, locale).filter(
+    (field) =>
+      ["pressureUnit", "pressureReference", "atmosphericReference"].includes(
+        field.id,
+      ) &&
+      (pressureReadings ||
+        draft.fields[field.id]?.trim().replace(",", ".") !==
+          defaults[field.id]),
+  );
+  if (!fields.length) return;
+  appendText(
+    doc.body,
+    "h2",
+    pressureReadings
+      ? locale === "fi"
+        ? "Mittausten paineviite"
+        : "Measurement pressure context"
+      : locale === "fi"
+        ? "Kirjatut mittausasetukset"
+        : "Recorded measurement settings",
+  );
+  const context = doc.createElement("p");
+  context.className = "measurement-context";
+  context.textContent = fields
+    .map(
+      (field) =>
+        `${field.label[locale]}: ${fieldReportValue(draft, field, locale)}`,
+    )
+    .join(" · ");
+  doc.body.append(context);
+}
+
+function availableSourceName(
+  id: string,
+  sources: Source[] = dataset.sources,
+): string {
+  const source =
+    sources.find((item) => item.id === id) ??
+    dataset.sources.find((item) => item.id === id);
+  return source ? `${source.title} (${id})` : id;
+}
+
+function appendFrozenLeakEvidence(
+  doc: Document,
+  draft: ChecklistDraft,
+  locale: Locale,
+) {
+  const raw = draft.fields.leakCheckEvidence?.trim();
+  if (!raw) return;
+  appendText(
+    doc.body,
+    "h2",
+    locale === "fi"
+      ? "Tallennetun vuototarkastusarvion peruste"
+      : "Frozen leak-check assessment basis",
+  );
+  const evidence = doc.createElement("p");
+  evidence.className = "frozen-evidence";
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      throw new Error("invalid_evidence");
+    const labels: Record<string, [string, string]> = {
+      rulesetVersion: ["Sääntöversio", "Ruleset version"],
+      dataVersion: ["Aineistoversio", "Data version"],
+      asOf: ["Arviointipäivä", "Assessment date"],
+      input: ["Tallennetut lähtötiedot", "Frozen inputs"],
+      state: ["Tulos", "Outcome"],
+      months: ["Tarkastusväli · kk", "Inspection interval · months"],
+      decisiveRule: ["Ratkaiseva sääntö", "Decisive rule"],
+      reasonCodes: ["Perusteet", "Reasons"],
+      sourceIds: ["Lähdeviitteet", "Source references"],
+    };
+    evidence.textContent = Object.entries(parsed)
+      .map(([key, value]) => {
+        let display = typeof value === "string" ? value : JSON.stringify(value);
+        if (value === null) display = "—";
+        if (key === "asOf" && typeof value === "string")
+          display = displayDate(value, locale);
+        if (
+          key === "input" &&
+          value &&
+          typeof value === "object" &&
+          !Array.isArray(value)
+        ) {
+          const inputLabels: Record<string, [string, string]> = {
+            refrigerantId: ["Kylmäaineen tunnus", "Refrigerant ID"],
+            charge: ["Täyttömäärä", "Charge"],
+            unit: ["Yksikkö", "Unit"],
+            equipment: ["Laitetyyppi", "Equipment type"],
+            detection: ["Vuodonilmaisu", "Leak detection"],
+            hermetic: ["Hermeettinen", "Hermetic"],
+            hermeticLabel: ["Hermeettisyysmerkintä", "Hermetic label"],
+            residential: ["Asuinrakennus", "Residential"],
+            asOf: ["Arviointipäivä", "Assessment date"],
+          };
+          display = Object.entries(value)
+            .map(([inputKey, inputValue]) => {
+              let text =
+                typeof inputValue === "string"
+                  ? inputValue
+                  : JSON.stringify(inputValue);
+              if (typeof inputValue === "boolean")
+                text = translate(locale, inputValue ? "yes" : "no");
+              if (
+                inputKey === "equipment" &&
+                [
+                  "stationary_refrigeration",
+                  "stationary_ac",
+                  "stationary_heat_pump",
+                ].includes(String(inputValue))
+              )
+                text = translate(locale, inputValue as MessageKey);
+              return `${inputLabels[inputKey]?.[locale === "fi" ? 0 : 1] ?? inputKey}: ${text}`;
+            })
+            .join(" · ");
+        }
+        if (
+          key === "state" &&
+          [
+            "required",
+            "below_threshold",
+            "exempt",
+            "outside_rule_scope",
+            "unsupported",
+            "insufficient_data",
+          ].includes(String(value))
+        )
+          display = translate(locale, value as MessageKey);
+        if (key === "sourceIds" && Array.isArray(value))
+          display = value
+            .map((id) =>
+              typeof id === "string"
+                ? availableSourceName(id)
+                : JSON.stringify(id),
+            )
+            .join(" · ");
+        if (key === "reasonCodes" && Array.isArray(value))
+          display = value
+            .map((code) =>
+              typeof code === "string"
+                ? `${reasonMessages[code]?.[locale] ?? code} (${code})`
+                : JSON.stringify(code),
+            )
+            .join(" · ");
+        return `${labels[key]?.[locale === "fi" ? 0 : 1] ?? key}: ${display}`;
+      })
+      .join("\n");
+  } catch {
+    evidence.textContent = raw;
+  }
+  doc.body.append(evidence);
+  const sourceNote = doc.createElement("p");
+  sourceNote.className = "frozen-evidence";
+  sourceNote.textContent =
+    locale === "fi"
+      ? "Lähdenimet nykyisestä lähdeluettelosta. Tunnukset, lähtötiedot ja versiot säilyvät tallennushetken mukaisina."
+      : "Source names are from the current catalogue. IDs, inputs and versions remain as recorded.";
+  doc.body.append(sourceNote);
+}
+
+function selectedProtocolMode(
+  draft: ChecklistDraft,
+  group: string,
+): "internal" | "external" {
+  const keys = (
+    {
+      tightness: ["tightnessRecordMode", "tightnessTestReportReference"],
+      evacuation: ["evacuationRecordMode", "evacuationReportReference"],
+      "test-run": ["testRunRecordMode", "testRunReportReference"],
+    } as Record<string, string[]>
+  )[group];
+  return keys &&
+    (draft.fields[keys[0]] === "external" ||
+      (draft.fields[keys[0]] !== "internal" && draft.fields[keys[1]]?.trim()))
+    ? "external"
+    : "internal";
+}
+function isRetainedProtocolField(
+  draft: ChecklistDraft,
+  field: ChecklistField,
+): boolean {
+  if (
+    draft.kind !== "commissioning" ||
+    !["tightness", "evacuation", "test-run"].includes(field.group ?? "") ||
+    field.id.endsWith("RecordMode")
+  )
+    return false;
+  return field.id.endsWith("ReportReference")
+    ? selectedProtocolMode(draft, field.group!) === "internal"
+    : selectedProtocolMode(draft, field.group!) === "external";
+}
+
 function appendObservationSections(
   doc: Document,
   draft: ChecklistDraft,
   locale: Locale,
 ) {
-  const observations = fieldReportObservationFields(draft, locale);
-  if (!observations.length) return;
+  const observations = fieldReportObservationFields(draft, locale).filter(
+    (field) =>
+      !["pressureUnit", "pressureReference", "atmosphericReference"].includes(
+        field.id,
+      ),
+  );
+  const vacuumMetrics =
+    draft.kind === "commissioning" ? evacuationMetrics(draft, locale) : [];
+  if (!observations.length && !vacuumMetrics.length) return;
   const groups =
     draft.kind === "commissioning"
       ? [
@@ -648,8 +1044,33 @@ function appendObservationSections(
             id: "evacuation",
             title:
               locale === "fi"
-                ? "Tyhjiöinnin havainnot"
-                : "Evacuation observations",
+                ? "Tyhjiöinnin ja pitokokeen mittaukset"
+                : "Evacuation and standing-test readings",
+          },
+          {
+            id: "refrigerant",
+            title:
+              locale === "fi"
+                ? "Kylmäaine ja täyttö"
+                : "Refrigerant and charge",
+          },
+          {
+            id: "leak-check",
+            title:
+              locale === "fi"
+                ? "Vuototarkastusväli ja peruste"
+                : "Leak-check interval and basis",
+          },
+          {
+            id: "tightness",
+            title:
+              locale === "fi"
+                ? "Tiiviyskoepöytäkirja"
+                : "Tightness-test record",
+          },
+          {
+            id: "test-run",
+            title: locale === "fi" ? "Koekäyttöpöytäkirja" : "Test-run record",
           },
           {
             id: "other",
@@ -663,7 +1084,8 @@ function appendObservationSections(
         group.id === "all" ||
         (group.id === "other" ? !field.group : field.group === group.id),
     );
-    if (!fields.length) continue;
+    if (!fields.length && !(group.id === "evacuation" && vacuumMetrics.length))
+      continue;
     if (
       draft.kind === "commissioning" &&
       fields.length === 1 &&
@@ -678,9 +1100,14 @@ function appendObservationSections(
       continue;
     }
     appendText(doc.body, "h2", group.title);
+    if (["tightness", "evacuation", "test-run"].includes(group.id))
+      doc.body.lastElementChild!.id = `protocol-${group.id}`;
     if (
-      group.id === "test-reports" &&
-      fields.some((field) => field.id.endsWith("ReportReference"))
+      fields.some(
+        (field) =>
+          field.id.endsWith("ReportReference") &&
+          !isRetainedProtocolField(draft, field),
+      )
     )
       appendText(
         doc.body,
@@ -689,12 +1116,35 @@ function appendObservationSections(
           ? "Viitteet yksilöivät erilliset pöytäkirjat. Tämä PDF ei sisällä niitä liitteinä."
           : "References identify separate test reports. They are not attached to this PDF.",
       );
+    if (group.id === "evacuation" && vacuumMetrics.length) {
+      if (selectedProtocolMode(draft, "evacuation") === "external")
+        appendText(
+          doc.body,
+          "p",
+          locale === "fi"
+            ? "Säilytetyt aiemmat mittaukset. Valittu tyhjiöintipöytäkirja toimitetaan erikseen viitteen mukaisesti."
+            : "Retained earlier readings. Supply the selected external evacuation record according to its reference.",
+        );
+      appendMetricGrid(doc, vacuumMetrics, true, locale);
+      appendVacuumNote(doc, locale);
+    }
     const list = doc.createElement("dl");
     list.className = "detail-list";
     for (const field of fields) {
       const item = doc.createElement("div");
+      if (
+        (draft.fields[field.id]?.length ?? 0) > 180 ||
+        field.type === "textarea"
+      )
+        item.className = "detail-long";
       const dt = doc.createElement("dt");
-      dt.textContent = field.label[locale];
+      dt.textContent =
+        field.label[locale] +
+        (isRetainedProtocolField(draft, field)
+          ? locale === "fi"
+            ? " · aiempi tieto, ei valitun pöytäkirjan osa"
+            : " · retained earlier value, not part of the selected record"
+          : "");
       const dd = doc.createElement("dd");
       dd.textContent = fieldReportValue(draft, field, locale);
       item.append(dt, dd);
@@ -863,27 +1313,16 @@ function appendFieldSummary(
     );
     appendMetricGrid(doc, metrics, draft.kind === "commissioning", locale);
   }
-  const vacuumMetrics =
-    draft.kind === "commissioning" ? evacuationMetrics(draft, locale) : [];
-  if (vacuumMetrics.length) {
-    appendText(
-      doc.body,
-      "h2",
-      locale === "fi"
-        ? "Tyhjiöinnin ja pitokokeen mittaukset"
-        : "Evacuation and standing-test readings",
-    );
-    appendMetricGrid(doc, vacuumMetrics, true, locale);
-  }
-  if (draft.kind === "evacuation" || vacuumMetrics.length) {
-    const note = doc.createElement("p");
-    note.className = "field-summary-note";
-    note.textContent =
-      locale === "fi"
-        ? "Paineen muutos on kirjattujen absoluuttisten paineiden erotus. Vertaa arvoja kohteen omiin hyväksymisrajoihin."
-        : "Pressure change is the difference between recorded absolute pressures. Compare the readings with the equipment's acceptance criteria.";
-    doc.body.append(note);
-  }
+  if (draft.kind === "evacuation") appendVacuumNote(doc, locale);
+}
+function appendVacuumNote(doc: Document, locale: Locale) {
+  const note = doc.createElement("p");
+  note.className = "field-summary-note";
+  note.textContent =
+    locale === "fi"
+      ? "Paineen muutos on kirjattujen absoluuttisten paineiden erotus. Vertaa arvoja kohteen omiin hyväksymisrajoihin."
+      : "Pressure change is the difference between recorded absolute pressures. Compare the readings with the equipment's acceptance criteria.";
+  doc.body.append(note);
 }
 
 function appendMetricGrid(
@@ -1013,30 +1452,26 @@ export function printWhenReady(
   locale: Locale,
   image?: HTMLImageElement,
 ) {
-  const action = doc.querySelector<HTMLButtonElement>(".print-action");
-  if (!action) return;
-  if (!image) {
-    action.disabled = false;
-    return;
-  }
-  const failed = () => {
+  if (image) image.dataset.printChart = "true";
+  const script = doc.createElement("script");
+  // Bundle this trusted static code with the app: a new about:blank preview
+  // cannot rely on the opener's service worker to fetch a script offline.
+  // Inserting a script also keeps its handlers in the preview's own realm.
+  // Keep PDF generation and share handlers in the preview realm too. No CDN,
+  // opener callbacks or network request is needed after the document is ready.
+  script.textContent = `${jsPdfSource}\n${reportPdfSource}\n${printControlsSource}`;
+  script.addEventListener("error", () => {
     const warning = doc.createElement("p");
     warning.className = "notice";
     warning.setAttribute("role", "alert");
     warning.textContent =
       locale === "fi"
-        ? "Tallennetun kaavion lataus epäonnistui. Tulostusta ei aloitettu."
-        : "The saved chart could not load. Printing was cancelled.";
-    image.replaceWith(warning);
-    win.focus();
-  };
-  const ready = () =>
-    image.naturalWidth > 0 ? (action.disabled = false) : failed();
-  if (image.complete) ready();
-  else {
-    image.onload = ready;
-    image.onerror = failed;
-  }
+        ? "Tulostustoiminto ei latautunut. Palaa raporttiin ja avaa esikatselu uudelleen."
+        : "Print controls could not load. Return to the report and reopen the preview.";
+    doc.querySelector(".print-toolbar")?.after(warning);
+  });
+  doc.body.append(script);
+  win.focus();
 }
 
 export function printCheckResult({
@@ -1067,18 +1502,17 @@ export function printCheckResult({
   );
   doc.body.classList.add("leak-document");
   appendText(doc.body, "h1", doc.title);
-  if (createdAt)
-    appendText(
-      doc.body,
-      "p",
-      `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(createdAt, locale)}`,
-    );
-  if (equipmentName)
-    appendText(
-      doc.body,
-      "p",
-      `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${equipmentName}`,
-    );
+  appendDocumentIdentity(doc, [
+    equipmentName
+      ? `${locale === "fi" ? "Laite / kohde" : "Equipment / site"}: ${equipmentName}`
+      : "",
+  ]);
+  if (createdAt) {
+    const meta = doc.createElement("p");
+    meta.className = "meta";
+    meta.textContent = `${locale === "fi" ? "Tallennettu" : "Saved"}: ${displayDate(createdAt, locale)}`;
+    doc.body.append(meta);
+  }
   const outcome = translate(locale, result.state);
   const interval =
     result.months !== null
@@ -1371,6 +1805,7 @@ function appendRows(
       dt.textContent = locale === "fi" ? row.label.fi : row.label.en;
       const dd = doc.createElement("dd");
       dd.textContent = formatReportRow(row, locale);
+      if (/^[≈+−-]?\s*\d/.test(dd.textContent)) dd.classList.add("numeric");
       card.append(dt, dd);
       hero.append(card);
     }
@@ -1386,6 +1821,7 @@ function appendRows(
     dt.textContent = locale === "fi" ? row.label.fi : row.label.en;
     const dd = doc.createElement("dd");
     dd.textContent = formatReportRow(row, locale);
+    if (/^[≈+−-]?\s*\d/.test(dd.textContent)) dd.classList.add("numeric");
     item.append(dt, dd);
     dl.append(item);
   }

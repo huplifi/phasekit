@@ -30,10 +30,10 @@ export interface PTProvider {
 }
 
 interface Curve { coolPropFluid: string; sides: Partial<Record<SaturationSide, number[][]>> }
-interface CurveFile { schema: string; dataVersion: string; curves: Record<string, Curve> }
+interface CurveFile { schema: string; dataVersion: string; sourceIds: string[]; curves: Record<string, Curve> }
 const table = rawCurves as CurveFile;
 const metadata: PTProviderMetadata = {
-  id: 'coolprop-heos-offline', sourceIds: ['coolprop-pt-7.2.0'], version: '7.2.0',
+  id: 'coolprop-heos-offline', sourceIds: table.sourceIds, version: '7.2.0',
   dataVersion: table.dataVersion, pressureConvention: 'absolute',
   minimumTemperatureC: '', maximumTemperatureC: '', toleranceTemperatureC: '0.1',
   toleranceRelativePressure: '0.003', method: 'equation_of_state_interpolation',

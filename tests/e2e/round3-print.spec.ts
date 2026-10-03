@@ -22,12 +22,12 @@ test("direct and saved leak-check printouts keep the same dated assessment", asy
     .getByRole("button", { name: "Tallenna laskelma", exact: true })
     .click();
   await page.goto("/#/saved");
-  await page.locator(".saved-entry > summary").first().click();
+  await page.locator(".saved-entry").first().click();
   const savedPopup = page.waitForEvent("popup");
   await page
     .locator(".saved-entry")
     .first()
-    .getByRole("button", { name: "Tulosta / tallenna PDF" })
+    .getByRole("button", { name: "Tulosta / PDF" })
     .click();
   const saved = await savedPopup;
   await expect(saved.locator(".hero")).toHaveText((await hero.textContent())!);
@@ -113,7 +113,7 @@ test("commissioning print keeps marked steps, blank steps and written measuremen
         `Havainto ${index + 1}: Mittaus kirjattu ja tarkistettava ennen hyväksyntää.`,
     ).join("\n");
   await page
-    .getByRole("textbox", { name: "Muistiinpanot", exact: true })
+    .getByRole("textbox", { name: "Havainnot ja muistiinpanot", exact: true })
     .fill(longNotes);
   const firstStep = page.getByRole("checkbox", {
     name: "Kohteen käyttöönotto-ohje ja perustiedot tarkistettu",

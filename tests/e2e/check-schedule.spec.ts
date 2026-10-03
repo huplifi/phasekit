@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
 
+test("initial navigation does not steal focus from an available input", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    // Focus at the first opportunity after the form enters the DOM. A deferred
+    // navigation effect used to steal this focus before WebKit inserted text.
+    const observer = new MutationObserver(() => {
+      const input =
+        document.querySelector<HTMLInputElement>(".charge-grid input");
+      if (!input) return;
+      observer.disconnect();
+      input.focus();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  });
+  await page.goto("/#/check/r134a");
+  const charge = page.getByLabel("Täytös", { exact: true });
+  await expect(charge).toBeVisible();
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      }),
+  );
+  await expect(charge).toBeFocused();
+  await page.keyboard.type("10");
+  await expect(charge).toHaveValue("10");
+});
+
 test("next inspection and shareable explanation survive a saved snapshot", async ({
   page,
 }) => {
@@ -8,6 +37,18 @@ test("next inspection and shareable explanation survive a saved snapshot", async
   await page.locator("#check-date").fill("2026-09-26");
   await page.locator("#check-last-inspection").fill("2026-01-31");
   await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
+  await expect(
+    page.locator(".notice.caption").filter({
+      hasText: "Arvio koskee vuototarkastusväliä",
+    }),
+  ).toBeVisible();
+  const basisLink = page.getByRole("button", {
+    name: "Lähteet ja laskentaperusteet",
+    exact: true,
+  });
+  await expect(basisLink).toBeVisible();
+  await basisLink.click();
+  await expect(page.locator("#check-calculation")).toHaveAttribute("open", "");
   const schedule = page.locator(".check-schedule");
   await expect(schedule).toContainText("31.1.2027");
   await schedule.getByText("Näytä jaettava selite", { exact: true }).click();
@@ -38,10 +79,9 @@ test("next inspection and shareable explanation survive a saved snapshot", async
     page.getByRole("button", { name: "Laskelma tallennettu.", exact: true }),
   ).toBeDisabled();
   await page.goto("/#/reports");
-  await page.locator(".saved-entry > summary").first().click();
+  await page.locator(".saved-entry").first().click();
   await expect(page.locator(".check-schedule")).toContainText("31.1.2027");
   await page.reload();
-  await page.locator(".saved-entry > summary").first().click();
   await expect(page.locator(".check-schedule")).toContainText("31.1.2027");
 });
 
@@ -50,6 +90,7 @@ test("assessment date alone never creates a completed inspection or due date", a
 }) => {
   await page.goto("/#/check/r134a");
   await page.getByLabel("Täytös", { exact: true }).fill("10");
+  await expect(page.getByLabel("Täytös", { exact: true })).toHaveValue("10");
   await page.getByRole("button", { name: "Laske tarkastusväli" }).click();
   await expect(page.locator(".check-schedule")).toContainText(
     "Syötä viimeksi tehdyn tarkastuksen",

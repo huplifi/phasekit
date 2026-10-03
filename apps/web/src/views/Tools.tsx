@@ -2,9 +2,10 @@ import {
   ArrowRightLeft,
   ChevronRight,
   Thermometer,
+  Waves,
   Zap,
   Ruler,
-  ListChecks,
+  BookOpen,
 } from "lucide-react";
 import { useApp } from "../context";
 import { ToolMenu } from "../components/Common";
@@ -16,8 +17,8 @@ export function Tools() {
       <h1>{t("tools")}</h1>
       <p className="secondary">
         {data.locale === "fi"
-          ? "Valitse laskuri. Työmaakirjaukset löydät Raportit-osiosta."
-          : "Choose a calculator. Field records are in Reports."}
+          ? "Valitse työkalu. Työmaakirjaukset löydät Raportit-osiosta."
+          : "Choose a tool. Field records are in Reports."}
       </p>
       <ToolMenu />
       <section className="section">
@@ -35,10 +36,16 @@ export function Tools() {
               icon: ArrowRightLeft,
             },
             {
+              path: "heat-quantity",
+              fi: "Lämpömäärä ja lämmitysaika",
+              en: "Heat quantity and heating time",
+              icon: Thermometer,
+            },
+            {
               path: "thermal-power",
               fi: "Lämpöteho",
               en: "Thermal power",
-              icon: Thermometer,
+              icon: Waves,
             },
             {
               path: "electrical",
@@ -52,12 +59,6 @@ export function Tools() {
               en: "Pipe calculators",
               icon: Ruler,
             },
-            {
-              path: "reports",
-              fi: "Työmaaraportit",
-              en: "Field reports",
-              icon: ListChecks,
-            },
           ].map(({ path, fi, en, icon: Icon }) => (
             <button
               className="tool-row"
@@ -69,6 +70,18 @@ export function Tools() {
               <ChevronRight size={20} aria-hidden="true" />
             </button>
           ))}
+        </div>
+      </section>
+      <section className="section">
+        <h2>{data.locale === "fi" ? "Pikaoppaat" : "Quick reference"}</h2>
+        <div className="tool-list">
+          <button className="tool-row" onClick={() => go("/symbols")}>
+            <BookOpen size={22} aria-hidden="true" />
+            <span>
+              {data.locale === "fi" ? "Kaaviosymbolit" : "Schematic symbols"}
+            </span>
+            <ChevronRight size={20} aria-hidden="true" />
+          </button>
         </div>
       </section>
     </>

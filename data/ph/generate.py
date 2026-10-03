@@ -7,11 +7,17 @@ samples. No CoolProp code is used by the browser.
 import hashlib
 import json
 import math
+import sys
+from datetime import date
 from pathlib import Path
 
 import CoolProp.CoolProp as cp
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "data"))
+from coolprop_runtime import load_supplement
+
+MODEL_SUPPLEMENT = load_supplement()
 PT = json.loads((ROOT / "packages/core/generated/pt-curves.json").read_text())
 PT_COVERAGE = json.loads((ROOT / "data/pt/coverage-manifest.json").read_text())
 assert cp.get_global_param_string("version") == "7.2.0"
@@ -153,11 +159,13 @@ for index, (rid, curve) in enumerate(PT["curves"].items(), 1):
             run = []
     if run:
         runs.append(run)
-    planes = max(runs, key=len) if runs else []
-    if len(planes) < 6:
+    if not runs or max(map(len, runs)) < 6:
         unavailable[rid] = "no_continuous_phase_aware_enthalpy_grid"
         continue
-    planes = validated_run(curve["coolPropFluid"], planes)
+    # Validate all coarse runs before selection; a long invalid first run must
+    # not hide a later usable pressure region.
+    checked_runs = [validated_run(curve["coolPropFluid"], run) for run in runs if len(run) >= 6]
+    planes = max(checked_runs, key=lambda run: math.log(run[-1]["pressureBarAbsolute"] / run[0]["pressureBarAbsolute"]))
     if len(planes) < 6:
         unavailable[rid] = "no_continuous_validated_enthalpy_grid"
         continue
@@ -166,15 +174,18 @@ for index, (rid, curve) in enumerate(PT["curves"].items(), 1):
         print(f"{index}/{len(PT['curves'])} P–h candidates scanned; {len(grids)} usable", flush=True)
 
 digest = hashlib.sha256(json.dumps(grids, sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:16]
-data_version = f"ph-2026-09-25.{digest}"
+generated_date = date.today().isoformat()
+data_version = f"ph-{generated_date}.{digest}"
 output = {
     "schema": "phasekit-ph-1",
     "dataVersion": data_version,
     "gridSha256Prefix": digest,
     "sourceId": "coolprop-ph-7.2.0",
     "sourceUrl": PT["sourceUrl"],
+    "modelSupplement": MODEL_SUPPLEMENT,
     "coolPropGitRevision": PT["coolPropGitRevision"],
-    "generatedAt": "2026-09-25",
+    "generatedAt": generated_date,
+    "ptDataVersion": PT["dataVersion"],
     "vapourOffsetRangeK": [VAPOUR_OFFSETS[0], VAPOUR_OFFSETS[-1]],
     "liquidOffsetRangeK": [LIQUID_OFFSETS[0], LIQUID_OFFSETS[-1]],
     "interpolation": "linear in temperature offset and log absolute pressure, within the same phase only",
@@ -186,6 +197,7 @@ path.write_text(json.dumps(output, separators=(",", ":")) + "\n")
     "dataVersion": data_version,
     "datasetRecords": PT_COVERAGE["datasetRecords"],
     "ptCandidates": len(PT["curves"]),
+    "ptDataVersion": PT["dataVersion"],
     "supportedRecords": len(grids),
     "unsupportedRecords": unavailable,
     "sourceId": output["sourceId"],

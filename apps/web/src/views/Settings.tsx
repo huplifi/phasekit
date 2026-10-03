@@ -2,7 +2,7 @@ import releases from "../../../../data/releases.json";
 import { appVersion, buildRevision, isBeta } from "../release";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
-import { Download, Upload, Trash2 } from "lucide-react";
+import { Download, Upload, Trash2, ExternalLink } from "lucide-react";
 import { useApp } from "../context";
 import { dataset } from "../data";
 import { downloadJSON, emptyData, mergeBackup, parseBackup } from "../storage";
@@ -64,42 +64,44 @@ export function Settings() {
         <h2>{t("localData")}</h2>
         <p className="secondary">{t("privacy")}</p>
         <div className="settings-actions">
+          <div className="settings-backup-actions">
+            <button
+              className="secondary-button"
+              onClick={() =>
+                downloadJSON(
+                  data,
+                  `phasekit-backup-${new Date().toISOString().slice(0, 10)}.json`,
+                )
+              }
+            >
+              <Download size={20} />
+              {t("export")}
+            </button>
+            <label className="secondary-button upload">
+              <Upload size={20} />
+              {t("import")}
+              <input
+                aria-label={t("import")}
+                type="file"
+                accept="application/json,.json"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  try {
+                    if (file.size > 10_000_000) throw new Error("Too large");
+                    const incoming = parseBackup(await file.text());
+                    setData((d) => mergeBackup(d, incoming));
+                    notify(t("importSuccess"));
+                  } catch {
+                    notify(t("importError"));
+                  }
+                  e.target.value = "";
+                }}
+              />
+            </label>
+          </div>
           <button
-            className="secondary-button"
-            onClick={() =>
-              downloadJSON(
-                data,
-                `phasekit-backup-${new Date().toISOString().slice(0, 10)}.json`,
-              )
-            }
-          >
-            <Download size={20} />
-            {t("export")}
-          </button>
-          <label className="secondary-button upload">
-            <Upload size={20} />
-            {t("import")}
-            <input
-              aria-label={t("import")}
-              type="file"
-              accept="application/json,.json"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-                try {
-                  if (file.size > 10_000_000) throw new Error("Too large");
-                  const incoming = parseBackup(await file.text());
-                  setData((d) => mergeBackup(d, incoming));
-                  notify(t("importSuccess"));
-                } catch {
-                  notify(t("importError"));
-                }
-                e.target.value = "";
-              }}
-            />
-          </label>
-          <button
-            className="text-button danger-text"
+            className="text-button danger-text settings-delete-action"
             onClick={() => setConfirm(true)}
           >
             <Trash2 size={18} />
@@ -140,13 +142,9 @@ export function Settings() {
           <summary>{t("dataHash")}</summary>
           <p className="mono wrap caption">{dataset.sha256}</p>
         </details>
-        <a
-          className="text-button"
-          href="/coverage.html"
-          target="_blank"
-          rel="noreferrer"
-        >
-          {t("coverageReport")}
+        <a className="secondary-button coverage-report-link" href="#/coverage">
+          {l("Avaa kattavuusraportti", "Open coverage report")}{" "}
+          <span aria-hidden="true">→</span>
         </a>
         <h3>{t("install")}</h3>
         <p className="secondary">{t("installHelp")}</p>
@@ -170,10 +168,8 @@ export function Settings() {
           <div>
             <dt>{l("Sovellusversio", "App version")}</dt>
             <dd>
-              <span className="mono">{appVersion}</span>
               <a className="release-history-link" href="#/releases">
-                {l("Versiohistoria ja uutta", "Release history and what’s new")}{" "}
-                <span aria-hidden="true">→</span>
+                <span className="mono">{appVersion}</span>
               </a>
             </dd>
           </div>
@@ -245,16 +241,21 @@ export function Settings() {
           </a>
         </p>
         <a
-          className="text-button"
+          className="secondary-button feedback-action"
+          aria-describedby="feedback-destination"
           href="https://github.com/huplifi/phasekit/issues"
           target="_blank"
           rel="noreferrer"
         >
-          {l(
-            "Anna palautetta tai ilmoita virheestä",
-            "Share feedback or report an issue",
-          )}
+          {l("Anna palautetta", "Give feedback")}
+          <ExternalLink size={18} aria-hidden="true" />
         </a>
+        <p id="feedback-destination" className="caption secondary feedback-description">
+          {l(
+            "Palaute ja virheilmoitukset GitHubissa. Avautuu uuteen välilehteen.",
+            "Feedback and bug reports on GitHub. Opens in a new tab.",
+          )}
+        </p>
       </section>
     </>
   );

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Vikavirtasuoja, toimintolohko">
+  <title>Vikavirtasuoja, toimintolohko</title>
+  <desc>RCD-kirjaimilla merkitty toimintolohko alustavaan hahmotteluun. Tarkistettava: Erillistä vikavirtasuojan merkkiä ei löytynyt PDF:stä. Lohko ei kuvaa napoja, testipiiriä, tyyppiä tai laukaisua eikä ole varmennettu IEC-piirrosmerkki.</desc>
+  <path d="M32 8V16M32 48V56"/><rect x="8" y="16" width="48" height="32"/><path d="M16 39V25H20Q26 25 26 29Q26 33 20 33H16M20 33L26 39M37 26Q29 22 29 32Q29 42 37 38M41 25V39H44Q50 39 50 32Q50 25 44 25Z"/>
+</svg>

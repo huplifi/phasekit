@@ -6,6 +6,7 @@ import {
   formatReportRow,
   primaryReportOutputs,
   reportHasRoundedValues,
+  reportDurationNote,
   reportName,
 } from "./report-summary";
 
@@ -126,6 +127,8 @@ export function planReportImage(
       8,
     );
   }
+  const durationNote = reportDurationNote(record, locale);
+  if (durationNote) add(durationNote, 21, 400, MUTED, 12);
   if (reportHasRoundedValues(record))
     add(
       label(

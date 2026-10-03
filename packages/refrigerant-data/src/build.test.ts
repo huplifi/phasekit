@@ -122,6 +122,48 @@ it("retains the distinct legal and product evidence for R514A", () => {
   ).toMatchObject({ value: "0", basis: "EU-2024/573-Annex-VI" });
 });
 
+it("attributes the reviewed critical-point additions to exact manufacturer sources", () => {
+  const data = buildDataset(validateCanonical(rows()));
+  for (const [id, temperature, pressure, source] of [
+    ["r407c", "86.03", "46.29", "honeywell-r407c-product-2026"],
+    ["r410a", "71.36", "49.02", "honeywell-r410a-product-2026"],
+    ["r515b", "108.7", "35.8", "honeywell-r515b-metric-2026"],
+  ]) {
+    const facts = data.refrigerants.find((r) => r.id === id)!.facts;
+    expect(facts.critical_temp_c).toMatchObject({
+      value: temperature,
+      sourceIds: [source],
+    });
+    expect(facts.critical_pressure_bar_abs).toMatchObject({
+      value: pressure,
+      sourceIds: [source],
+    });
+  }
+  const r455a = data.refrigerants.find((r) => r.id === "r455a")!.facts;
+  expect(r455a.critical_temp_c).toMatchObject({
+    value: "85.6",
+    sourceIds: ["honeywell-r455a-tds-2016"],
+  });
+  expect(r455a.critical_pressure_bar_abs.state).toBe("unknown");
+});
+
+it("distinguishes the physical R1132(E) triple point from the 240 K model minimum", () => {
+  const data = buildDataset(validateCanonical(rows()));
+  expect(
+    data.refrigerants.find((r) => r.id === "r1132e")!.facts.triple_point_c,
+  ).toMatchObject({
+    value: "-88.25",
+    sourceIds: ["nist-r1132e-eos-958728"],
+  });
+  expect(
+    data.refrigerants.find((r) => r.id === "r1123")!.facts.normal_boiling_c,
+  ).toMatchObject({
+    value: "-61.239",
+    sourceIds: ["nist-r1123-eos-930091"],
+    conditions: { pressureKPaAbsolute: 101.325, phase: "saturation" },
+  });
+});
+
 it("keeps conditional physical and nonflammability facts explicit", () => {
   const data = buildDataset(validateCanonical(rows()));
   const r407c = data.refrigerants.find((r) => r.id === "r407c")!;

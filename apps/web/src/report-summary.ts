@@ -1,5 +1,6 @@
 import type { ReportRow, ToolRecord } from "./storage";
 import Decimal from "decimal.js";
+import { durationPresentation, durationCalendarNote } from "./duration";
 import { formatDecimal } from "../../../packages/i18n/src";
 
 type Locale = "fi" | "en";
@@ -11,6 +12,7 @@ const names: Record<ToolRecord["tool"], [string, string]> = {
   co2e: ["CO₂e", "CO₂e"],
   convert: ["Yksikkömuunnos", "Unit conversion"],
   "thermal-power": ["Lämpöteho", "Thermal power"],
+  "heat-quantity": ["Lämpömäärä", "Heat quantity"],
   electrical: ["Sähkölaskuri", "Electrical calculator"],
   pipe: ["Putken tilavuus ja virtaus", "Pipe volume and flow"],
 };
@@ -40,6 +42,22 @@ export function reportName(report: Report, locale: Locale): string {
 
 export function reportSummary(report: Report, locale: Locale): string {
   const name = reportName(report, locale);
+  if (
+    report.tool === "electrical" &&
+    findRow(report.inputs, "Ratkaistava suure", "Electrical solve for")
+  ) {
+    const primary = primaryReportOutputs(report)[0];
+    return [name, primary?.label[locale], formatReportRow(primary, locale)]
+      .filter(Boolean)
+      .join(" · ");
+  }
+  if (report.tool === "heat-quantity") {
+    const material = findRow(report.inputs, "Aine", "Material");
+    const primary = primaryReportOutputs(report)[0];
+    return [name, material?.value, formatReportRow(primary, locale)]
+      .filter(Boolean)
+      .join(" · ");
+  }
   if (report.tool === "convert") {
     const quantity = findRow(report.inputs, "Suure", "Quantity")?.value;
     const localizedQuantity = quantity?.split(" / ")[locale === "fi" ? 0 : 1];
@@ -120,6 +138,10 @@ export function formatReportRow(
   locale: Locale,
 ): string {
   if (!row?.value?.trim()) return "";
+  if (row.unit === "min" && row.label.en === "Duration") {
+    const duration = durationPresentation(row.value, locale);
+    if (duration) return duration.text;
+  }
   const enums: Record<string, Record<string, [string, string]>> = {
     "Breakdown status": {
       reconciled: [
@@ -130,6 +152,36 @@ export function formatReportRow(
         "Komponenttien summa poikkeaa kokonaistuloksesta",
         "Component sum differs from the total",
       ],
+    },
+    Calculation: {
+      dc: ["Tasavirta", "DC"],
+      single_phase: ["1-vaihe", "Single phase"],
+      three_phase: ["3-vaihe", "Three phase"],
+      ohm: ["Ohmin laki · tasavirta", "Ohm’s law · DC"],
+    },
+    Assumption: {
+      "Sinusoidal load; RMS quantities": [
+        "Sinimuotoinen kuorma; RMS-arvot",
+        "Sinusoidal load; RMS quantities",
+      ],
+      "Balanced sinusoidal three-phase load; RMS line quantities": [
+        "Tasapainoinen sinimuotoinen 3-vaihekuorma; pääjännite ja johdinvirta RMS-arvoina",
+        "Balanced sinusoidal three-phase load; RMS line quantities",
+      ],
+    },
+    "Electrical solve for": {
+      power: ["Pätöteho", "Real power"],
+      current: ["Virta", "Current"],
+      voltage: ["Jännite", "Voltage"],
+      resistance: ["Resistanssi", "Resistance"],
+    },
+    "Solve for": {
+      energy: ["Lämpömäärä", "Heat quantity"],
+      time: ["Aika", "Time"],
+      power: ["Lämpöteho", "Thermal power"],
+      mass: ["Massa", "Mass"],
+      temperature: ["Loppulämpötila", "Final temperature"],
+      "specific-heat": ["Ominaislämpökapasiteetti", "Specific heat capacity"],
     },
     "Entered quantity": {
       pressure: ["Paine", "Pressure"],
@@ -189,7 +241,7 @@ export function reportHasRoundedValues(
   report: Pick<ToolRecord, "inputs" | "outputs">,
 ): boolean {
   return [...report.inputs, ...report.outputs].some((row) =>
-    formatReportValue(row.value, "en").startsWith("≈"),
+    formatReportRow(row, "en").startsWith("≈"),
   );
 }
 
@@ -218,6 +270,40 @@ function firstValue(
 export function primaryReportOutputs(
   report: Pick<ToolRecord, "tool" | "inputs" | "outputs">,
 ): ReportRow[] {
+  if (report.tool === "electrical") {
+    const target = findRow(
+      report.inputs,
+      "Ratkaistava suure",
+      "Electrical solve for",
+    )?.value;
+    const label = (
+      {
+        power: "Real power",
+        current: "Current",
+        voltage: "Voltage",
+        resistance: "Resistance",
+      } as Record<string, string>
+    )[target ?? ""];
+    if (label) return report.outputs.filter((row) => row.label.en === label);
+  }
+  if (report.tool === "heat-quantity") {
+    const mode = findRow(
+      report.inputs,
+      "Ratkaistava suure",
+      "Solve for",
+    )?.value;
+    const labels: Record<string, string> = {
+      energy: "Energy",
+      time: "Duration",
+      power: "Thermal power",
+      mass: "Mass",
+      temperature: "Final temperature",
+      "specific-heat": "Specific heat capacity",
+    };
+    return report.outputs.filter(
+      (row) => row.label.en === (labels[mode ?? ""] ?? "Energy"),
+    );
+  }
   if (report.tool === "cycle")
     return report.outputs.filter(isCyclePrimaryOutput);
   if (report.tool === "pt") {
@@ -250,4 +336,18 @@ export function primaryReportOutputs(
   return rows.length
     ? rows
     : report.outputs.filter((row) => row.unit).slice(0, 1);
+}
+
+export function reportDurationNote(
+  report: Pick<ToolRecord, "inputs" | "outputs">,
+  locale: Locale,
+): string | null {
+  return [...report.inputs, ...report.outputs].some(
+    (row) =>
+      row.unit === "min" &&
+      row.label.en === "Duration" &&
+      durationPresentation(row.value, locale)?.calendar,
+  )
+    ? durationCalendarNote(locale)
+    : null;
 }

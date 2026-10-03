@@ -56,6 +56,7 @@ test("equipment history tolerates an imported legacy work-date value", async ({
     db.close();
   });
   await page.reload();
+  await page.locator(".equipment-history > summary").click();
   await expect(page.locator(".equipment-field-report-link")).toContainText(
     "Legacy site",
   );
@@ -90,7 +91,7 @@ test("equipment history opens reports and preserves final field records through 
     "Tallennettu automaattisesti",
   );
   await page
-    .getByRole("button", { name: "Merkitse raportti valmiiksi", exact: true })
+    .getByRole("button", { name: "Lukitse raportti", exact: true })
     .click();
   await expect(
     page.getByRole("button", { name: "Luo uusi versio", exact: true }),
@@ -123,6 +124,7 @@ test("equipment history opens reports and preserves final field records through 
   const frozen = await readReports();
   await page.goto("/#/equipment");
   const card = page.locator(".equipment-card");
+  await card.locator(".equipment-history > summary").click();
   const link = card.locator(".equipment-field-report-link");
   await expect(link).toContainText("Tyhjiöinti");
   await expect(link).toContainText("Työsali / KEUDA");
@@ -134,6 +136,7 @@ test("equipment history opens reports and preserves final field records through 
     "Työsali / KEUDA",
   );
   await page.goto("/#/equipment");
+  await card.locator(".equipment-actions > summary").click();
   await card.getByRole("button", { name: "Muokkaa", exact: true }).click();
   await page.getByLabel("Nimi", { exact: true }).fill("Kone #1 renamed");
   await page.getByLabel("Sijainti", { exact: true }).fill("New location");
@@ -141,6 +144,7 @@ test("equipment history opens reports and preserves final field records through 
   await expect(link).toContainText("Työsali / KEUDA");
   await expect.poll(readReports).toEqual(frozen);
   page.once("dialog", (dialog) => dialog.accept());
+  await card.locator(".equipment-actions > summary").click();
   await card.getByRole("button", { name: "Poista", exact: true }).click();
   await expect(card).toHaveCount(0);
   await page.goto("/#/reports");
@@ -153,4 +157,92 @@ test("equipment history opens reports and preserves final field records through 
     "Tämä raportti on viimeistelty",
   );
   expect(await readReports()).toEqual(frozen);
+});
+
+test("site devices supply empty report fields and survive site deletion", async ({
+  page,
+}, info) => {
+  await page.goto("/#/equipment");
+  await page.getByRole("button", { name: "Lisää kohde", exact: true }).click();
+  await page.getByLabel("Kohteen nimi", { exact: true }).fill("Torpanmäki 2");
+  await page.getByLabel("Osoite", { exact: true }).fill("Katu 1");
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  const site = page.locator(".equipment-site").filter({
+    has: page.getByRole("heading", { name: "Torpanmäki 2", exact: true }),
+  });
+  await site.getByRole("button", { name: "Lisää laite", exact: true }).click();
+  await page.getByLabel("Nimi", { exact: true }).fill("LN25");
+  await page.getByText("Laitetiedot (valinnainen)", { exact: true }).click();
+  await page.getByLabel("Valmistaja ja malli", { exact: true }).fill("Model A");
+  await page.getByLabel("Sarjanumero", { exact: true }).fill("SN1");
+  await page
+    .locator(".equipment-refrigerant-field .picker-compact-trigger")
+    .click();
+  await page
+    .getByRole("button", {
+      name: "Valitse kylmäaine työkalulle R134a",
+      exact: true,
+    })
+    .click();
+  await page.getByLabel("Täytös (kg)", { exact: true }).fill("2,5");
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  await expect(site).toContainText("R134a");
+  await site.getByRole("button", { name: "Lisää laite", exact: true }).click();
+  await page.getByLabel("Nimi", { exact: true }).fill("LN50");
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  await expect(site).toContainText("2 laitetta");
+  await page.screenshot({
+    path: info.outputPath("site-devices.png"),
+    fullPage: true,
+  });
+  await page.goto("/#/checklists/new");
+  await page.locator(".checklist-create select").selectOption("commissioning");
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
+  await page
+    .getByRole("combobox", { name: "Liitä laitteeseen", exact: true })
+    .selectOption({ label: "LN25 · Torpanmäki 2" });
+  await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
+    "Torpanmäki 2",
+  );
+  await expect(
+    page.getByLabel("Laite / tunniste", { exact: true }),
+  ).toHaveValue("LN25 · Model A · SN1");
+  const reportUrl = page.url();
+  const refrigerantSection = page
+    .locator(".field-report-optional")
+    .filter({
+      has: page.locator("summary").filter({ hasText: "Kylmäaine ja täyttö" }),
+    });
+  if (!(await page.getByLabel("Täyttömäärä · kg", { exact: true }).isVisible()))
+    await refrigerantSection.locator("summary").first().click();
+  await expect(
+    page.getByLabel("Täyttömäärä · kg", { exact: true }),
+  ).toHaveValue("2,5");
+  await page.getByLabel("Täyttömäärä · kg", { exact: true }).fill("3");
+  await page
+    .getByRole("combobox", { name: "Liitä laitteeseen", exact: true })
+    .selectOption({ label: "LN50 · Torpanmäki 2" });
+  await expect(
+    page.getByLabel("Täyttömäärä · kg", { exact: true }),
+  ).toHaveValue("3");
+  await expect(page.locator(".field-report-save-state").last()).toContainText(
+    "Tallennettu",
+  );
+  await page.goto("/#/equipment");
+  await site.locator(".equipment-site-actions > details > summary").click();
+  page.once("dialog", (dialog) => dialog.accept());
+  await site.getByRole("button", { name: "Poista kohde", exact: true }).click();
+  await expect(page.locator(".equipment-site-unassigned")).toContainText(
+    "LN25",
+  );
+  await expect(page.locator(".equipment-site-unassigned")).toContainText(
+    "LN50",
+  );
+  await page.goto(reportUrl);
+  await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
+    "Torpanmäki 2",
+  );
+  await expect(
+    page.getByLabel("Laite / tunniste", { exact: true }),
+  ).toHaveValue("LN25 · Model A · SN1");
 });

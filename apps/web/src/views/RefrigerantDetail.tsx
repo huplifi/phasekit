@@ -9,7 +9,16 @@ import {
   oilTypeText,
   refinementText,
 } from "../../../../packages/i18n/src/refinements";
-import { formatDate } from "../../../../packages/i18n/src";
+import {
+  describeRefrigerantFact,
+  type RefrigerantFactDescription,
+  type RefrigerantFactKey,
+} from "../../../../packages/refrigerant-data/src/fact-status";
+import {
+  formatDate,
+  formatNumber,
+  formatDecimal,
+} from "../../../../packages/i18n/src";
 import { useApp } from "../context";
 import { byId, dataset, getFact, factKeys } from "../data";
 import type { Fact } from "../../../../packages/core/src/contracts";
@@ -18,7 +27,9 @@ import {
   ChemicalFormula,
   CompareButton,
   FactRow,
+  FactValue,
   GwpFacts,
+  GwpBasisHelp,
   GwpSummary,
   Group,
   OilGuidanceHelp,
@@ -44,6 +55,121 @@ const groups: { title: MessageKey; fields: (keyof typeof factKeys)[] }[] = [
   { title: "use", fields: ["oils"] },
 ];
 
+const statusFactKeys: Partial<
+  Record<keyof typeof factKeys, RefrigerantFactKey>
+> = {
+  glide: "glide",
+  density: "density",
+  safety: "safety",
+  ped: "ped",
+  lfl: "lfl",
+  autoignition: "autoignition",
+};
+
+function PropertyFactValue({
+  description,
+  showFactValue = true,
+}: {
+  description: RefrigerantFactDescription;
+  showFactValue?: boolean;
+}) {
+  if (showFactValue && description.state === "known" && description.fact)
+    return <FactValue fact={description.fact} />;
+  const known =
+    description.state === "known" || description.state === "known_absent";
+  return (
+    <span className={known ? undefined : "missing"}>{description.text}</span>
+  );
+}
+
+function conditionSummary(
+  conditions: NonNullable<Fact["conditions"]>,
+  locale: "fi" | "en",
+) {
+  const phases: Record<string, [string, string]> = {
+    bubble: ["Kuplapiste", "Bubble point"],
+    gas_in_air: ["Kaasu ilmassa", "Gas in air"],
+    saturation: ["Kyllästystila", "Saturation"],
+    triple_point: ["Kolmoispiste", "Triple point"],
+    two_phase: ["Neste ja höyry", "Liquid and vapour"],
+  };
+  return [
+    conditions.temperatureC !== undefined
+      ? `${formatNumber(conditions.temperatureC, locale)} °C`
+      : null,
+    conditions.pressureKPaAbsolute !== undefined
+      ? `${formatNumber(conditions.pressureKPaAbsolute, locale)} kPa(a)`
+      : null,
+    conditions.phase
+      ? (phases[conditions.phase]?.[locale === "fi" ? 0 : 1] ??
+        conditions.phase)
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
+function PropertyBackground({
+  r,
+  fields,
+}: {
+  r: Refrigerant;
+  fields: (keyof typeof factKeys)[];
+}) {
+  const { data, t } = useApp();
+  const entries = fields.flatMap((key) => {
+    const statusKey = statusFactKeys[key];
+    const description = statusKey
+      ? describeRefrigerantFact(r, statusKey, data.locale)
+      : undefined;
+    const fact = description?.fact ?? factForLocale(r, key, data.locale);
+    // Conditions are rendered from their structured fields; do not repeat the descriptor's copy.
+    const detail = description?.detail?.match(/^(Olosuhteet|Conditions):/)
+      ? undefined
+      : description?.detail;
+    return detail || fact?.conditions?.method || fact?.basis
+      ? [{ key, fact, detail }]
+      : [];
+  });
+  if (!entries.length) return null;
+  return (
+    <details className="source-disclosure property-background">
+      <summary>
+        <ChevronRight size={16} aria-hidden="true" />
+        {data.locale === "fi"
+          ? "Olosuhteet ja lisätiedot"
+          : "Conditions and details"}{" "}
+        ({entries.length})
+      </summary>
+      <div className="source-disclosure-content">
+        {entries.map(({ key, fact, detail }) => (
+          <div key={key}>
+            <h3>
+              {key === "ped"
+                ? data.locale === "fi"
+                  ? "PED-fluidiryhmä"
+                  : "PED fluid group"
+                : t(key)}
+            </h3>
+            {detail && <p className="caption">{detail}</p>}
+            {fact?.conditions && (
+              <p className="caption">
+                {conditionSummary(fact.conditions, data.locale)}
+              </p>
+            )}
+            {fact?.conditions?.method && (
+              <p className="caption">{fact.conditions.method}</p>
+            )}
+            {fact?.basis && fact.basis !== fact.conditions?.method && (
+              <p className="caption">{fact.basis}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </details>
+  );
+}
+
 function oilCodes(fact?: Fact): string[] {
   if (!fact || fact.state !== "verified" || typeof fact.value !== "string")
     return [];
@@ -57,9 +183,11 @@ function OilCodeList({ codes }: { codes: string[] }) {
   return (
     <span className="oil-code-list">
       {codes.map((code) => (
-        <span className="oil-code" key={code}>
-          <span className="mono">{code}</span>
-          <span>{oilTypeText(data.locale, code)}</span>
+        <span className="oil-type" key={code}>
+          <strong>{code}</strong>
+          <span>
+            ({oilTypeText(data.locale, code).toLocaleLowerCase(data.locale)})
+          </span>
         </span>
       ))}
     </span>
@@ -73,9 +201,9 @@ function OilGuidance({ r }: { r: Refrigerant }) {
   const typicalCodes = oilCodes(typical);
   const possibleCodes = oilCodes(possible);
   const knownTypical =
-    typical?.state === "not_applicable" || typicalCodes.length;
+    typical?.state === "not_applicable" || typicalCodes.length > 0;
   const knownPossible =
-    possible?.state === "not_applicable" || possibleCodes.length;
+    possible?.state === "not_applicable" || possibleCodes.length > 0;
   const hasStructured = Boolean(knownTypical || knownPossible);
   const note = factForLocale(r, "oils", data.locale);
 
@@ -83,7 +211,7 @@ function OilGuidance({ r }: { r: Refrigerant }) {
     return (
       <dl className="facts oil-facts">
         {knownTypical && (
-          <FactRow label={refinementText(data.locale, "oilTypical")}>
+          <FactRow label={data.locale === "fi" ? "Öljytyyppi" : "Oil type"}>
             {typical?.state === "not_applicable" ? (
               <span className="missing">{t("notApplicable")}</span>
             ) : (
@@ -135,11 +263,12 @@ function RestrictionList({
   notices: ReturnType<typeof restrictionsFor>;
 }) {
   const { t, data } = useApp();
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
   const searchId = useId();
   const [filter, setFilter] = useState<RestrictionFilter>("all");
   const [query, setQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(6);
-  const foldedQuery = query.trim().toLocaleLowerCase();
+  const foldedQuery = query.trim().toLocaleLowerCase(data.locale);
   const filtered = notices.filter((notice) => {
     if (filter !== "all" && notice.status !== filter) return false;
     if (!foldedQuery) return true;
@@ -151,10 +280,35 @@ function RestrictionList({
       notice.effectiveFrom,
     ]
       .join(" ")
-      .toLocaleLowerCase()
+      .toLocaleLowerCase(data.locale)
       .includes(foldedQuery);
   });
-  const visible = filtered.slice(0, visibleCount);
+  const current = filtered
+    .filter((notice) => notice.status === "active")
+    .sort((a, b) => b.effectiveFrom.localeCompare(a.effectiveFrom));
+  const upcoming = filtered
+    .filter((notice) => notice.status === "upcoming")
+    .sort((a, b) => a.effectiveFrom.localeCompare(b.effectiveFrom));
+  const ordered =
+    filter === "all"
+      ? [...current, ...upcoming]
+      : filter === "upcoming"
+        ? upcoming
+        : current;
+  const visible = ordered.slice(0, visibleCount);
+  const visibleGroups =
+    filter === "all"
+      ? [
+          {
+            status: "active" as const,
+            notices: visible.filter((notice) => notice.status === "active"),
+          },
+          {
+            status: "upcoming" as const,
+            notices: visible.filter((notice) => notice.status === "upcoming"),
+          },
+        ]
+      : [{ status: filter, notices: visible }];
   const filters: { value: RestrictionFilter; label: string }[] = [
     {
       value: "all",
@@ -167,12 +321,40 @@ function RestrictionList({
   useEffect(() => {
     setVisibleCount(6);
   }, [filter, foldedQuery]);
+  const countLabel =
+    filter === "all" && !foldedQuery && filtered.length === notices.length
+      ? data.locale === "fi"
+        ? `${filtered.length} ${filtered.length === 1 ? "rajoitus" : "rajoitusta"}`
+        : `${filtered.length} ${filtered.length === 1 ? "restriction" : "restrictions"}`
+      : data.locale === "fi"
+        ? `${filtered.length} / ${notices.length} rajoitusta`
+        : `${filtered.length} / ${notices.length} restrictions`;
 
   return (
     <section className="section restriction-panel">
-      <p className="caption restriction-coverage-note">
-        {t("restrictionMissing")}
-      </p>
+      <label className="restriction-search-label" htmlFor={searchId}>
+        {l("Hae rajoituksia", "Search restrictions")}
+      </label>
+      <span className="search-field">
+        <Search size={20} aria-hidden="true" />
+        <input
+          id={searchId}
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          aria-label={l("Hae rajoituksia", "Search restrictions")}
+        />
+        {query && (
+          <button
+            className="icon-button picker-clear-search"
+            type="button"
+            aria-label={t("clearSearch")}
+            onClick={() => setQuery("")}
+          >
+            <X size={18} />
+          </button>
+        )}
+      </span>
       <div
         className="restriction-filters"
         role="group"
@@ -190,33 +372,11 @@ function RestrictionList({
           </button>
         ))}
       </div>
-      <label className="restriction-search-label" htmlFor={searchId}>
-        {refinementText(data.locale, "restrictionSearch")}
-      </label>
-      <span className="search-field">
-        <Search size={20} aria-hidden="true" />
-        <input
-          id={searchId}
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          aria-label={refinementText(data.locale, "restrictionSearch")}
-        />
-        {query && (
-          <button
-            className="icon-button picker-clear-search"
-            type="button"
-            aria-label={t("clearSearch")}
-            onClick={() => setQuery("")}
-          >
-            <X size={18} />
-          </button>
-        )}
-      </span>
+      <p className="caption restriction-coverage-note">
+        {t("restrictionMissing")}
+      </p>
       <p className="caption restriction-count" aria-live="polite">
-        {refinementText(data.locale, "restrictionCount", {
-          count: filtered.length,
-        })}
+        {countLabel}
       </p>
       {filtered.length === 0 ? (
         <p className="empty">
@@ -224,59 +384,93 @@ function RestrictionList({
         </p>
       ) : (
         <>
-          <div className="restriction-list">
-            {visible.map((notice) => (
-              <details className="restriction" key={notice.id}>
-                <summary>
-                  <span className="restriction-summary-text">
-                    <span className="restriction-meta">
-                      {t(notice.status)} <span aria-hidden="true">·</span>{" "}
-                      <time
-                        className="mono restriction-date"
-                        dateTime={notice.effectiveFrom}
-                      >
-                        {formatDate(notice.effectiveFrom, data.locale)}
-                      </time>
-                    </span>
-                    <span className="restriction-title">
-                      {notice.title[data.locale]}
-                    </span>
-                  </span>
-                  <ChevronRight
-                    className="restriction-chevron"
-                    size={20}
-                    aria-hidden="true"
-                  />
-                </summary>
-                <div className="restriction-content">
-                  <p>{notice.summary[data.locale]}</p>
-                  <p className="caption">{notice.scope[data.locale]}</p>
-                  <p className="caption">{notice.caveats[data.locale]}</p>
-                  <a href={notice.sourceUrl} target="_blank" rel="noreferrer">
-                    {t("source")}
-                  </a>
-                  <SourceNote ids={notice.sourceIds} />
+          {visibleGroups.map(({ status, notices: groupedNotices }) =>
+            groupedNotices.length ? (
+              <section className="restriction-group" key={status}>
+                {filter === "all" && (
+                  <h3>
+                    {status === "active"
+                      ? l("Voimassa", "In force")
+                      : l("Tulossa", "Upcoming")}
+                  </h3>
+                )}
+                <div className="restriction-list">
+                  {groupedNotices.map((notice) => (
+                    <details className="restriction" key={notice.id}>
+                      <summary>
+                        <span className="restriction-summary-text">
+                          <span className="restriction-meta">
+                            <span
+                              className={
+                                notice.status === "active"
+                                  ? "status-badge status-badge--success"
+                                  : "status-badge status-badge--warning"
+                              }
+                            >
+                              {t(notice.status)}
+                            </span>
+                            <time
+                              className="mono restriction-date"
+                              dateTime={notice.effectiveFrom}
+                            >
+                              {formatDate(notice.effectiveFrom, data.locale)}
+                            </time>
+                          </span>
+                          <span className="restriction-title">
+                            {notice.title[data.locale]}
+                          </span>
+                        </span>
+                        <ChevronRight
+                          className="restriction-chevron"
+                          size={20}
+                          aria-hidden="true"
+                        />
+                      </summary>
+                      <div className="restriction-content">
+                        <p>{notice.summary[data.locale]}</p>
+                        <p className="caption">{notice.scope[data.locale]}</p>
+                        <p className="caption">{notice.caveats[data.locale]}</p>
+                        {!dataset.sources.some(
+                          (source) =>
+                            notice.sourceIds.includes(source.id) &&
+                            source.url === notice.sourceUrl,
+                        ) && (
+                          <a
+                            href={notice.sourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {t("source")}
+                          </a>
+                        )}
+                        <SourceNote ids={notice.sourceIds} />
+                      </div>
+                    </details>
+                  ))}
                 </div>
-              </details>
-            ))}
-          </div>
-          {filtered.length > 6 && (
+              </section>
+            ) : null,
+          )}
+          {filtered.length > visibleCount && (
             <button
               className="text-button restriction-more"
               type="button"
               onClick={() =>
-                setVisibleCount((count) =>
-                  count >= filtered.length
-                    ? 6
-                    : Math.min(count + 6, filtered.length),
-                )
+                setVisibleCount((count) => Math.min(count + 6, filtered.length))
               }
             >
-              {visibleCount >= filtered.length
-                ? refinementText(data.locale, "showFewerRestrictions")
-                : refinementText(data.locale, "showMoreRestrictions", {
-                    count: Math.min(6, filtered.length - visibleCount),
-                  })}
+              {refinementText(data.locale, "showMoreRestrictions", {
+                count: Math.min(6, filtered.length - visibleCount),
+              })}
+            </button>
+          )}
+          {visibleCount > 6 && filtered.length <= visibleCount && (
+            <button
+              className="text-button restriction-more"
+              type="button"
+              onClick={() => setVisibleCount(6)}
+            >
+              {refinementText(data.locale, "showFewerRestrictions")}
             </button>
           )}
         </>
@@ -293,9 +487,23 @@ const detailTabs = [
 ] as const;
 type DetailTab = (typeof detailTabs)[number];
 
-export function RefrigerantDetail({ r }: { r: Refrigerant }) {
+export function RefrigerantDetail({
+  r,
+  initialTab = "overview",
+}: {
+  r: Refrigerant;
+  initialTab?: DetailTab;
+}) {
   const { t, data } = useApp();
-  const [tab, setTab] = useState<DetailTab>("overview");
+  const l = (fi: string, en: string) => (data.locale === "fi" ? fi : en);
+  const [tab, setTab] = useState<DetailTab>(initialTab);
+  useEffect(() => {
+    if (initialTab !== "properties") return;
+    const frame = requestAnimationFrame(() =>
+      document.getElementById("detail-coverage-link")?.focus(),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [initialTab]);
   const notices = restrictionsFor(r, dataset, today());
   const chemicalName =
     r.name[data.locale] === r.designation ? null : r.name[data.locale];
@@ -364,14 +572,33 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
           <>
             <dl className="facts overview">
               <FactRow label={t("family")}>
-                {familyText(data.locale, r.family)}
+                {describeRefrigerantFact(r, "family", data.locale).state ===
+                "known" ? (
+                  familyText(data.locale, r.family)
+                ) : (
+                  <span className="missing">
+                    {describeRefrigerantFact(r, "family", data.locale).text}
+                  </span>
+                )}
+              </FactRow>
+              <FactRow label={t("safety")}>
+                <PropertyFactValue
+                  description={describeRefrigerantFact(
+                    r,
+                    "safety",
+                    data.locale,
+                  )}
+                />
               </FactRow>
               <FactRow
-                label={t("safety")}
-                fact={getFact(r, ...factKeys.safety)}
-              />
-              <FactRow label={t("gwp")}>
-                <GwpSummary r={r} />
+                label={
+                  <span className="gwp-heading">
+                    {t("gwp")}
+                    <GwpBasisHelp r={r} />
+                  </span>
+                }
+              >
+                <GwpSummary r={r} showBasis={false} />
               </FactRow>
             </dl>
             <SourceNote
@@ -414,74 +641,42 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                     t(r.kind === "blend" ? "notApplicable" : "unknown")
                   )}
                 </FactRow>
+                {r.kind === "pure" && (
+                  <FactRow label={t("composition")}>{t("pure")}</FactRow>
+                )}
                 <FactRow label="CAS">
                   {r.cas ?? t(r.kind === "blend" ? "notApplicable" : "unknown")}
                 </FactRow>
               </dl>
-              <h3>{t("coverage")}</h3>
-              <p className="caption">{t("supportNote")}</p>
-              <dl className="facts">
-                {Object.entries(r.coverage).map(([key, value]) => (
-                  <FactRow
-                    key={key}
-                    label={t(
-                      (
-                        {
-                          identity: "identity",
-                          composition: "composition",
-                          safety: "safety",
-                          regulatory_eu_fi: "checkSupport",
-                          pt: "ptSupport",
-                        } as const
-                      )[key as keyof typeof r.coverage],
-                    )}
-                  >
-                    {t(value === "not_applicable" ? "notApplicable" : value)}
-                  </FactRow>
-                ))}
-              </dl>
-              <a
-                className="text-button"
-                href="/coverage.html"
-                target="_blank"
-                rel="noreferrer"
+            </Group>
+            {r.kind === "blend" && (
+              <Group
+                title="composition"
+                ids={r.components.flatMap((c) => c.sourceIds)}
               >
-                {t("coverageReport")}
-              </a>
-            </Group>
-            <Group
-              title="composition"
-              ids={
-                r.kind === "pure"
-                  ? r.sourceIds
-                  : r.components.flatMap((c) => c.sourceIds)
-              }
-            >
-              {r.kind === "pure" ? (
-                <p>{t("pure")}</p>
-              ) : r.components.length ? (
-                <dl className="facts">
-                  {r.components.map((c) => (
-                    <FactRow
-                      key={c.refrigerantId}
-                      label={
-                        byId.get(c.refrigerantId)?.designation ??
-                        c.refrigerantId
-                      }
-                    >
-                      <a
-                        href={`#/refrigerants/${c.refrigerantId}`}
-                        className="mono"
+                {r.components.length ? (
+                  <dl className="facts">
+                    {r.components.map((c) => (
+                      <FactRow
+                        key={c.refrigerantId}
+                        label={
+                          <a href={`#/refrigerants/${c.refrigerantId}`}>
+                            {byId.get(c.refrigerantId)?.designation ??
+                              c.refrigerantId}
+                          </a>
+                        }
                       >
-                        {c.massPercent} %
-                      </a>
-                    </FactRow>
-                  ))}
-                </dl>
-              ) : (
-                <p>{t("unknown")}</p>
-              )}
-            </Group>
+                        <span className="mono">
+                          {formatDecimal(c.massPercent, data.locale)} %
+                        </span>
+                      </FactRow>
+                    ))}
+                  </dl>
+                ) : (
+                  <p>{t("unknown")}</p>
+                )}
+              </Group>
+            )}
             {groups.map((group) => (
               <Group
                 key={group.title}
@@ -512,41 +707,80 @@ export function RefrigerantDetail({ r }: { r: Refrigerant }) {
                     <OilGuidance r={r} />
                   </>
                 ) : (
-                  <dl className="facts">
-                    {group.fields.map((key) => {
-                      const fact = factForLocale(r, key, data.locale);
-                      return (
-                        <div key={key}>
-                          <FactRow label={t(key)} fact={fact} />
-                          {fact?.conditions && (
-                            <p className="caption">
-                              {t("condition")}:{" "}
-                              {[
-                                fact.conditions.temperatureC !== undefined
-                                  ? `${fact.conditions.temperatureC} °C`
-                                  : null,
-                                fact.conditions.pressureKPaAbsolute !==
-                                undefined
-                                  ? `${fact.conditions.pressureKPaAbsolute} kPa(a)`
-                                  : null,
-                                fact.conditions.phase,
-                                fact.conditions.method,
-                              ]
-                                .filter(Boolean)
-                                .join(" · ")}
-                            </p>
-                          )}
-                          {fact?.basis && (
-                            <p className="caption">{fact.basis}</p>
-                          )}
-                        </div>
-                      );
-                    })}
-                    {group.title === "environment" && <GwpFacts r={r} />}
-                  </dl>
+                  <>
+                    <dl className="facts">
+                      {group.fields.map((key) => {
+                        const statusKey = statusFactKeys[key];
+                        const description = statusKey
+                          ? describeRefrigerantFact(r, statusKey, data.locale)
+                          : undefined;
+                        const fact =
+                          description?.fact ??
+                          factForLocale(r, key, data.locale);
+                        return (
+                          <FactRow
+                            key={key}
+                            label={
+                              key === "ped"
+                                ? l("PED-fluidiryhmä", "PED fluid group")
+                                : t(key)
+                            }
+                          >
+                            {description ? (
+                              <PropertyFactValue
+                                description={description}
+                                showFactValue={key !== "ped"}
+                              />
+                            ) : (
+                              <FactValue fact={fact} />
+                            )}
+                            {fact?.conditions && (
+                              <span className="caption property-context">
+                                {conditionSummary(fact.conditions, data.locale)}
+                              </span>
+                            )}
+                          </FactRow>
+                        );
+                      })}
+                      {group.title === "environment" && <GwpFacts r={r} />}
+                    </dl>
+                    <PropertyBackground r={r} fields={group.fields} />
+                  </>
                 )}
               </Group>
             ))}
+            <section className="property-coverage">
+              <h2>{t("coverage")}</h2>
+              <p className="caption">{t("supportNote")}</p>
+              <dl className="facts">
+                {Object.entries(r.coverage).map(([key, value]) => (
+                  <FactRow
+                    key={key}
+                    label={t(
+                      (
+                        {
+                          identity: "identity",
+                          composition: "composition",
+                          safety: "safety",
+                          regulatory_eu_fi: "checkSupport",
+                          pt: "ptSupport",
+                        } as const
+                      )[key as keyof typeof r.coverage],
+                    )}
+                  >
+                    {t(value === "not_applicable" ? "notApplicable" : value)}
+                  </FactRow>
+                ))}
+              </dl>
+              <a
+                id="detail-coverage-link"
+                className="secondary-button coverage-report-link"
+                href={`#/coverage/${r.id}`}
+              >
+                {t("coverageReport")}{" "}
+                <ChevronRight size={18} aria-hidden="true" />
+              </a>
+            </section>
           </>
         )}
         {tab === "restrictions" && <RestrictionList notices={notices} />}

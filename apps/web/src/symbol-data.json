@@ -1,0 +1,1584 @@
+{
+  "schema_version": 1,
+  "viewBox": "0 0 64 64",
+  "stroke_width": 2,
+  "grid": 4,
+  "source_documents": {
+    "iec-pdf": {
+      "title": "IEC 60617 SYMBOLS",
+      "pages": 53,
+      "sha256": "4b927a3589c38ff0518b23eeb50ec18539c81755cf1b53e1748e5547f2dd9a66",
+      "note": "Käyttäjän toimittama vertailukooste; päiväystä, julkaisijaa ja symbolien ajantasaista statusta ei ole vahvistettu. Sivunumerot ovat PDF:n 1-alkuisia sivuja, eivät IEC-tunnuksia."
+    },
+    "gunt-refrigeration": {
+      "title": "GUNT: Refrigeration and air conditioning technology (2019)",
+      "url": "https://gunt.fr/doc/catalogues/GU3a-GUNT-GB.pdf",
+      "pages": 128,
+      "sha256": "7d3824a3db831786ba6dcd70e8d6a1bb9c20eab9171023ba11a8e90ed3369290",
+      "retrieved": "2026-09-28",
+      "note": "PDF s. 123 on painettu aukeama 244–245: Symbols and terms. PDF s. 64 ja 66 ovat painetut aukeamat 126–127 ja 130–131. Valmistajan esityksiä; standardinmukaisuutta ei väitetä."
+    },
+    "danfoss-acc": {
+      "title": "Danfoss: Instructions AN399635986435en-000202 (2024.07)",
+      "url": "https://assets.danfoss.com/documents/latest/408244/AN399635986435en-000202.pdf",
+      "pages": 8,
+      "sha256": "053f6c1b9c564495232fe4b839aa52e7762112912f1f7e290fda0694d931a9cc",
+      "retrieved": "2026-09-28",
+      "note": "PDF s. 6, PID ja English Legend. Käytetään vain ACC-imuvaraajan esityksen vertailuun; kaavion laitearvoja ei siirretä symboleihin."
+    }
+  },
+  "symbols": [
+    {
+      "id": "johdin",
+      "file": "johdin.svg",
+      "name_fi": "Johdin tai kaapeli, yleismerkki",
+      "name_en": "Conductor or cable, general symbol",
+      "aliases_fi": ["kaapeli", "johdotusreitti"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Sähköinen yhteys; yksiviivaisessa esityksessä myös kaapeli tai johdotusreitti.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [1],
+          "labels": ["Connection, General Symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kaapeli-3-johdinta",
+      "file": "kaapeli-3-johdinta.svg",
+      "name_fi": "Kolmen johtimen ryhmä",
+      "name_en": "Group of three conductors",
+      "aliases_fi": ["kolmijohdinkaapeli"],
+      "category": "johtimet",
+      "representation": "yksiviivainen",
+      "purpose": "Kolme johdinta yhdellä reitillä. Viivat kertovat määrän, eivät yksin johdinten tehtäviä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [1],
+          "labels": ["Group of Connections (form 1)"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "joustava-johdin",
+      "file": "joustava-johdin.svg",
+      "name_fi": "Joustava johdin",
+      "name_en": "Flexible connection",
+      "aliases_fi": ["liitäntäjohto"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Joustavan yhteyden tai liitäntäkaapelin merkintä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [1],
+          "labels": ["Flexible Connection"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "suojattu-johdin",
+      "file": "suojattu-johdin.svg",
+      "name_fi": "Suojattu johdin",
+      "name_en": "Screened conductor",
+      "aliases_fi": ["häiriösuojattu johdin"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Johdin, jonka suojavaippa osoitetaan katkoviivaympyrällä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [1],
+          "labels": ["Screened Conductor"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "liitoskohta",
+      "file": "liitoskohta.svg",
+      "name_fi": "Johtimien liitoskohta",
+      "name_en": "Junction of conductors",
+      "aliases_fi": ["liitos"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Täytetty piste osoittaa neljän johdinhaaran sähköisen liitoksen.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [2],
+          "labels": ["Double junction of conductors (form 2)"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "haaroitus",
+      "file": "haaroitus.svg",
+      "name_fi": "T-haaroitus",
+      "name_en": "T-connection",
+      "aliases_fi": ["haara"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Täytetty piste osoittaa kolmen johdinhaaran sähköisen liitoksen.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [2],
+          "labels": ["T-Connection (form 2)"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "risteys-ei-liitosta",
+      "file": "risteys-ei-liitosta.svg",
+      "name_fi": "Johtimien risteys ilman liitosta",
+      "name_en": "Crossing without connection",
+      "aliases_fi": ["johtimien risteys"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Kaksi toisistaan sähköisesti erillistä johdinta; pystylinjassa on kuvallinen katkos.",
+      "status": "tarkistettava",
+      "sources": [],
+      "notes": "PDF:n sivut 1–2 eivät esitä tätä risteysvarianttia. Kirjaston oma havainnollistus; varmista kohdepiirustuksen käytäntö.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "vaihejohdin",
+      "file": "vaihejohdin.svg",
+      "name_fi": "Vaihejohdin L",
+      "name_en": "Line conductor L",
+      "aliases_fi": ["L", "vaihe"],
+      "category": "johtimet",
+      "representation": "piirikaavio",
+      "purpose": "Vaihejohtimen kirjaintunnus L on piirretty polkuna johtimen yläpuolelle.",
+      "status": "sovellettu",
+      "sources": [],
+      "notes": "L-nimitys perustuu muistion 14 perusmerkintöihin. PDF ei esitä erillistä L-grafiikkaa; kirjain on laitekaavion lisämerkintä.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "nollajohdin",
+      "file": "nollajohdin.svg",
+      "name_fi": "Nollajohdin N",
+      "name_en": "Neutral conductor",
+      "aliases_fi": ["N", "nolla"],
+      "category": "johtimet",
+      "representation": "yksiviivainen",
+      "purpose": "Yksiviivaisen esityksen nollajohdin: vinoviiva ja täytetty piste.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [20],
+          "labels": ["Neutral conductor"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "suojajohdin",
+      "file": "suojajohdin.svg",
+      "name_fi": "Suojajohdin PE",
+      "name_en": "Protective conductor",
+      "aliases_fi": ["PE"],
+      "category": "johtimet",
+      "representation": "yksiviivainen",
+      "purpose": "Yksiviivaisen esityksen suojajohdin: vinoviiva ja pääteviiva.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [20],
+          "labels": ["Protective conductor"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "pen-johdin",
+      "file": "pen-johdin.svg",
+      "name_fi": "Yhdistetty suoja- ja nollajohdin PEN",
+      "name_en": "Combined protective and neutral conductor",
+      "aliases_fi": ["PEN", "PEN-johdin"],
+      "category": "johtimet",
+      "representation": "yksiviivainen",
+      "purpose": "Yksiviivaisen esityksen PEN-merkki yhdistää pisteen ja pääteviivan.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [20],
+          "labels": ["Combined protective & neutral conductor"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "maadoitus",
+      "file": "maadoitus.svg",
+      "name_fi": "Maadoitus, yleismerkki",
+      "name_en": "Earth, general symbol",
+      "aliases_fi": ["maa", "maadoitusliitin"],
+      "category": "maadoitus",
+      "representation": "piirikaavio",
+      "purpose": "Maadoitusyhteyden yleinen merkki.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [11],
+          "labels": ["Earth, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "potentiaalintasaus-toiminnallinen",
+      "file": "potentiaalintasaus-toiminnallinen.svg",
+      "name_fi": "Toiminnallinen potentiaalintasaus",
+      "name_en": "Functional equipotential bonding",
+      "aliases_fi": [],
+      "category": "maadoitus",
+      "representation": "piirikaavio",
+      "purpose": "Toiminnallinen potentiaalintasaus; ei suojapotentiaalintasauksen merkki.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [11, 52],
+          "labels": ["Functional equipotential bonding"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "potentiaalintasaus-suoja",
+      "file": "potentiaalintasaus-suoja.svg",
+      "name_fi": "Suojapotentiaalintasaus",
+      "name_en": "Protective equipotential bonding",
+      "aliases_fi": ["suojaava potentiaalintasaus"],
+      "category": "maadoitus",
+      "representation": "piirikaavio",
+      "purpose": "Suojapotentiaalintasauksen liitin tai yhteys.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [11],
+          "labels": ["Protective equipotential bonding"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "liitin",
+      "file": "liitin.svg",
+      "name_fi": "Liitin",
+      "name_en": "Terminal",
+      "aliases_fi": ["liitäntäpiste"],
+      "category": "liitynnat",
+      "representation": "piirikaavio",
+      "purpose": "Avoin ympyrä osoittaa liittimen. Lisätyt johdinpäät ovat kirjaston liitäntäpaikat.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [2],
+          "labels": ["Terminal"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "liitinrima",
+      "file": "liitinrima.svg",
+      "name_fi": "Liitinrima",
+      "name_en": "Terminal strip",
+      "aliases_fi": ["riviliitinryhmä"],
+      "category": "liitynnat",
+      "representation": "asennuspiirustus",
+      "purpose": "Neljän liittimen rima, jonka erilliset osat eivät tarkoita sähköistä siltausta.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [2],
+          "labels": ["Terminal Strip"]
+        }
+      ],
+      "notes": "Riman johdotus ja liitinnumerot esitetään erikseen; tämä on ryhmän yleisesitys.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "jakorasia",
+      "file": "jakorasia.svg",
+      "name_fi": "Jakorasia",
+      "name_en": "Junction box",
+      "aliases_fi": ["liitosrasia"],
+      "category": "liitynnat",
+      "representation": "asennuspiirustus",
+      "purpose": "Asennuspiirustuksen jakorasian sijaintimerkki.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [21],
+          "labels": ["Connection box; Junction box"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "pistorasia",
+      "file": "pistorasia.svg",
+      "name_fi": "Pistorasia, yleismerkki",
+      "name_en": "Socket outlet, general symbol",
+      "aliases_fi": [],
+      "category": "liitynnat",
+      "representation": "asennuspiirustus",
+      "purpose": "Asennuspiirustuksen pistorasia. Suojakosketinta ei ole osoitettu.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [21],
+          "labels": ["Socket outlet (power) general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "pistorasia-suojakosketin",
+      "file": "pistorasia-suojakosketin.svg",
+      "name_fi": "Suojakoskettimellinen pistorasia",
+      "name_en": "Socket outlet with protective contact",
+      "aliases_fi": ["maadoitettu pistorasia"],
+      "category": "liitynnat",
+      "representation": "asennuspiirustus",
+      "purpose": "Asennuspiirustuksen pistorasia, johon on merkitty suojakosketin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [21],
+          "labels": ["Socket outlet (power) with protective contact"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "pistorasia-kaksois",
+      "file": "pistorasia-kaksois.svg",
+      "name_fi": "Kaksiosainen pistorasia, yleismerkki",
+      "name_en": "Double socket outlet, general symbol",
+      "aliases_fi": ["kaksoispistorasia"],
+      "category": "liitynnat",
+      "representation": "asennuspiirustus",
+      "purpose": "Kahden pistorasian ryhmä; suojakosketinta ei ole osoitettu.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [21],
+          "labels": ["Multiple socket outlet (power), Form 2"]
+        }
+      ],
+      "notes": "Lähteen kolmen kaaren ryhmästä sovellettu kahdelle pistorasialle.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kytkin-1",
+      "file": "kytkin-1.svg",
+      "name_fi": "1-kytkin, yksinapainen kytkin",
+      "name_en": "One-way single-pole switch",
+      "aliases_fi": ["1-kytkin", "yksinapainen kytkin"],
+      "category": "asennuskytkimet",
+      "representation": "asennuspiirustus",
+      "purpose": "Yhden valaisinryhmän ohjaus yhdestä paikasta; asennuspiirustuksen merkki.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [22],
+          "labels": ["Switch, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kytkin-5-kruunu",
+      "file": "kytkin-5-kruunu.svg",
+      "name_fi": "5-kytkin, sarjakytkin",
+      "name_en": "Two-gang one-way switch",
+      "aliases_fi": ["5-kytkin", "sarjakytkin", "kruunukytkin"],
+      "category": "asennuskytkimet",
+      "representation": "asennuspiirustus",
+      "purpose": "Kaksi erikseen käytettävää kytkintä kahdelle valaisinryhmälle.",
+      "status": "tarkistettava",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [22],
+          "labels": ["Multiposition single pole switch"]
+        }
+      ],
+      "notes": "Aiemman kirjaston grafiikka on säilytetty. Suomen nimitys ja toiminta on kirjattu muistioon 14 oppitunnilta. PDF s. 22 ei yksiselitteisesti vahvista tätä grafiikkaa; vastaavuus varmistetaan oppituntikuvasta tai suomalaisesta ensisijaislähteestä.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kytkin-6",
+      "file": "kytkin-6.svg",
+      "name_fi": "6-kytkin, vaihtokytkin",
+      "name_en": "Two-way single-pole switch",
+      "aliases_fi": ["6-kytkin", "vaihtokytkin", "porraskytkin"],
+      "category": "asennuskytkimet",
+      "representation": "asennuspiirustus",
+      "purpose": "Valaisinryhmän ohjaus kahdesta paikasta kahden vaihtokytkimen avulla.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [22],
+          "labels": ["2 way single pole switch"]
+        }
+      ],
+      "notes": "PDF vahvistaa toiminnon ja grafiikan. Suomen numeronimitys on kirjaston käyttönimi, ei PDF:n IEC-tunnus.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kytkin-7",
+      "file": "kytkin-7.svg",
+      "name_fi": "7-kytkin, ristikytkin",
+      "name_en": "Intermediate switch",
+      "aliases_fi": ["7-kytkin", "ristikytkin"],
+      "category": "asennuskytkimet",
+      "representation": "asennuspiirustus",
+      "purpose": "Vaihtokytkimien välissä käytettävä ristikytkin usean ohjauspaikan kytkennässä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [22],
+          "labels": ["Intermediate switch"]
+        }
+      ],
+      "notes": "PDF vahvistaa toiminnon ja grafiikan. Suomen numeronimitys on kirjaston käyttönimi, ei PDF:n IEC-tunnus.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "painike",
+      "file": "painike.svg",
+      "name_fi": "Painike, asennusmerkki",
+      "name_en": "Push-button, installation symbol",
+      "aliases_fi": ["painonappi"],
+      "category": "asennuskytkimet",
+      "representation": "asennuspiirustus",
+      "purpose": "Painikkeen sijainti asennuspiirustuksessa; kosketintoiminto esitetään erikseen.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [23],
+          "labels": ["Push-button"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "sulake",
+      "file": "sulake.svg",
+      "name_fi": "Sulake",
+      "name_en": "Fuse",
+      "aliases_fi": [],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Sulakkeen yleismerkki; nimellisvirta ja tyyppi lisätään kaavioon.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [17],
+          "labels": ["Fuse, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "katkaisija",
+      "file": "katkaisija.svg",
+      "name_fi": "Katkaisija, yleismerkki",
+      "name_en": "Circuit breaker, general symbol",
+      "aliases_fi": [],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Katkaisijan toiminto. Merkki ei yksin kerro laukaisutapaa tai suojauksen arvoja.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Circuit Breaker"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "johdonsuojakatkaisija",
+      "file": "johdonsuojakatkaisija.svg",
+      "name_fi": "Johdonsuojakatkaisija, yleisesitys",
+      "name_en": "Miniature circuit breaker, generic representation",
+      "aliases_fi": ["automaattisulake", "MCB"],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Katkaisijan yleismerkki johdonsuojakatkaisijan käyttötarkoituksessa.",
+      "status": "tarkistettava",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Circuit Breaker"]
+        }
+      ],
+      "notes": "PDF vahvistaa vain katkaisijan yleismerkin. Johdonsuojan tarkennus, laukaisutapa, napaluku ja nimellisarvot on lisättävä laitetietojen mukaan.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "katkaisija"
+    },
+    {
+      "id": "vikavirtasuoja",
+      "file": "vikavirtasuoja.svg",
+      "name_fi": "Vikavirtasuoja, toimintolohko",
+      "name_en": "Residual current device, functional block",
+      "aliases_fi": ["vikavirtakytkin", "RCD"],
+      "category": "suojaus-erotus",
+      "representation": "toimintolohko",
+      "purpose": "RCD-kirjaimilla merkitty toimintolohko alustavaan hahmotteluun.",
+      "status": "tarkistettava",
+      "sources": [],
+      "notes": "Erillistä vikavirtasuojan merkkiä ei löytynyt PDF:stä. Lohko ei kuvaa napoja, testipiiriä, tyyppiä tai laukaisua eikä ole varmennettu IEC-piirrosmerkki.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "erotin",
+      "file": "erotin.svg",
+      "name_fi": "Erotin",
+      "name_en": "Disconnector / isolator",
+      "aliases_fi": [],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Erottimen toiminto. Kuormankatkaisukykyä ei voi päätellä tästä merkistä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Disconnector, Isolator"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "erotuskytkin",
+      "file": "erotuskytkin.svg",
+      "name_fi": "Kuormanerotuskytkin",
+      "name_en": "Switch-disconnector",
+      "aliases_fi": ["kytkinerotin", "kuormanerotin", "erotuskytkin"],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Kytkemisen ja erottamisen yhdistävä toiminto.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [15],
+          "labels": ["Switch-disconnector, On-load isolating switch"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "paakytkin",
+      "file": "paakytkin.svg",
+      "name_fi": "Pääkytkin, kuormanerotuskytkimen esitys",
+      "name_en": "Main switch, switch-disconnector representation",
+      "aliases_fi": ["pääkytkin"],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Pääkytkimen käyttötarkoitus kuormanerotuskytkimen yleismerkillä.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [15],
+          "labels": ["Switch-disconnector, On-load isolating switch"]
+        }
+      ],
+      "notes": "Pääkytkin on käyttötarkoitus. PDF ei nimeä erillistä pääkytkinsymbolia. Esitys ei määritä napalukua.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "erotuskytkin"
+    },
+    {
+      "id": "turvakytkin",
+      "file": "turvakytkin.svg",
+      "name_fi": "Turvakytkin, kuormanerotuskytkimen esitys",
+      "name_en": "Local safety isolating switch, generic representation",
+      "aliases_fi": ["paikallinen erotuskytkin"],
+      "category": "suojaus-erotus",
+      "representation": "piirikaavio",
+      "purpose": "Paikallisen erotuksen käyttötarkoitus kuormanerotuskytkimen yleismerkillä.",
+      "status": "tarkistettava",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [15],
+          "labels": ["Switch-disconnector, On-load isolating switch"]
+        }
+      ],
+      "notes": "PDF ei vahvista erillistä turvakytkinmerkkiä. Grafiikka ei osoita lukittavuutta, napalukua tai laitteen soveltuvuutta. Varmista piirustuksen selite ja laitteen tiedot.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "erotuskytkin"
+    },
+    {
+      "id": "rele-kela",
+      "file": "rele-kela.svg",
+      "name_fi": "Releen tai kontaktorin kela",
+      "name_en": "Relay or contactor coil",
+      "aliases_fi": ["rele", "releen kela", "kontaktorin kela"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Sähkömagneettinen ohjauskela; yhdistä saman laitteen koskettimiin laitetunnuksella.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [16],
+          "labels": [
+            "Operating device, general symbol; Relay coil, general symbol"
+          ]
+        }
+      ],
+      "notes": "Liitintunnukset ja kelajännite merkitään erikseen. Kela ja kosketin voivat sijaita kaaviossa erillään.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kosketin-no",
+      "file": "kosketin-no.svg",
+      "name_fi": "Sulkeutuva kosketin NO",
+      "name_en": "Normally open contact",
+      "aliases_fi": ["NO", "sulkeutuva apukosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Avoin perustilassa, sulkeutuu käytettäessä; releen tai kontaktorin apukosketin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [12],
+          "labels": ["Make contact, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kosketin-nc",
+      "file": "kosketin-nc.svg",
+      "name_fi": "Avautuva kosketin NC",
+      "name_en": "Normally closed contact",
+      "aliases_fi": ["NC", "avautuva apukosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Kiinni perustilassa, avautuu käytettäessä; releen tai kontaktorin apukosketin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [12],
+          "labels": ["Break contact"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "vaihtokosketin",
+      "file": "vaihtokosketin.svg",
+      "name_fi": "Vaihtokosketin",
+      "name_en": "Change-over contact, break before make",
+      "aliases_fi": ["releen vaihtokosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Yhteinen kosketin vaihtaa kahden lähdön välillä; katkaisee ennen sulkemista.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [12],
+          "labels": ["Change-over break before make contact"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kontaktori",
+      "file": "kontaktori.svg",
+      "name_fi": "Kontaktorin sulkeutuva pääkosketin",
+      "name_en": "Contactor main make contact",
+      "aliases_fi": ["kontaktori", "kontaktorin pääkosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Kontaktorin yhden navan pääkosketin; kela ja apukoskettimet esitetään erikseen.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Contactor; Main make contact of a contactor"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kontaktori-nc",
+      "file": "kontaktori-nc.svg",
+      "name_fi": "Kontaktorin avautuva pääkosketin",
+      "name_en": "Contactor main break contact",
+      "aliases_fi": [],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Kontaktorin pääkosketin, joka avautuu käytettäessä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Contactor, main break contact of a contactor"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kontaktori-3p",
+      "file": "kontaktori-3p.svg",
+      "name_fi": "Kolminapainen kontaktori",
+      "name_en": "Three-pole contactor",
+      "aliases_fi": ["3-napainen kontaktori"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Kolme mekaanisesti yhteen kytkettyä sulkeutuvaa pääkosketinta.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14, 15],
+          "labels": [
+            "Contactor; Main make contact of a contactor",
+            "Mechanical switching device, three-pole"
+          ]
+        }
+      ],
+      "notes": "Koottu pääkosketinmerkistä ja mekaanisesta yhteydestä; katkoviiva ei ole johdin.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "painike-no",
+      "file": "painike-no.svg",
+      "name_fi": "Sulkeutuva palautuva painike",
+      "name_en": "Normally open push-button, automatic return",
+      "aliases_fi": [],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Painettaessa sulkeutuva ja vapautettaessa palautuva kosketin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [13],
+          "labels": ["Switch, manually operated, push-button, automatic return"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "termostaatti-no",
+      "file": "termostaatti-no.svg",
+      "name_fi": "Lämpötilakytkin, sulkeutuva",
+      "name_en": "Temperature-sensitive make contact",
+      "aliases_fi": ["termostaatti NO"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Lämpötilan ohjaama sulkeutuva kosketin; toimintaraja ja toimintasuunta täsmennetään kaaviossa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Temperature sensitive switch, make contact"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "termostaatti-nc",
+      "file": "termostaatti-nc.svg",
+      "name_fi": "Lämpötilakytkin, avautuva",
+      "name_en": "Temperature-sensitive break contact",
+      "aliases_fi": ["termostaatti", "lämpötilakytkin", "termostaatti NC"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Lämpötilan ohjaama avautuva kosketin; toimintaraja ja toimintasuunta täsmennetään kaaviossa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [14],
+          "labels": ["Temperature sensitive switch, break contact"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "lamporele",
+      "file": "lamporele.svg",
+      "name_fi": "Lämpöreleen toimilaite",
+      "name_en": "Operating device of a thermal relay",
+      "aliases_fi": ["lämpörele", "ylikuormitusrele"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Lämpövaikutuksella toimiva releosa; laukaisukosketin esitetään erikseen.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [17],
+          "labels": ["Operating device of a thermal relay"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "moottori",
+      "file": "moottori.svg",
+      "name_fi": "Moottori, yleisesitys",
+      "name_en": "Motor, general representation",
+      "aliases_fi": ["M", "sähkömoottori"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Moottoriksi nimetty pyörivä sähkökone; ei määritä vaiheita, liittimiä tai käyttökohdetta.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [31, 33],
+          "labels": [
+            "Machine, general symbol",
+            "Induction motor, three-phase, squirrel cage"
+          ]
+        }
+      ],
+      "notes": "Sivun 31 koneen yleismerkki ja sivun 33 M-kirjaintunnus. Tunnus on käsin piirretty vektoripolku.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "moottori-1v",
+      "file": "moottori-1v.svg",
+      "name_fi": "Yksivaiheinen oikosulkumoottori",
+      "name_en": "Single-phase squirrel-cage induction motor",
+      "aliases_fi": ["1-vaihemoottori", "1~ moottori"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Yksivaiheinen oikosulkumoottori, jonka pää- ja apukäämin päät on tuotu esiin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [33],
+          "labels": ["Induction motor, single-phase, squirrel-cage"]
+        }
+      ],
+      "notes": "Liittimien käyttötapa ja mahdollinen kondensaattori määräytyvät moottorin omasta kaaviosta.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "moottori-3v",
+      "file": "moottori-3v.svg",
+      "name_fi": "Kolmivaiheinen oikosulkumoottori",
+      "name_en": "Three-phase squirrel-cage induction motor",
+      "aliases_fi": ["3-vaihemoottori", "3~ moottori"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Kolmivaiheinen oikosulkumoottori kolmen syöttöliitännän esityksenä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [33],
+          "labels": ["Induction motor, three-phase, squirrel cage"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kompressori",
+      "file": "kompressori.svg",
+      "name_fi": "Kompressori, moottorin yleisesitys",
+      "name_en": "Compressor, generic motor representation",
+      "aliases_fi": ["kompressorin moottori"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Kompressorin sähkömoottorin yleisesitys; lisää aina kompressorin laitetunnus ja selite.",
+      "status": "tarkistettava",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [31, 33],
+          "labels": ["Machine, general symbol"]
+        }
+      ],
+      "notes": "PDF ei sisällä erillistä kompressorimerkkiä. M-merkki kuvaa vain moottoria; se ei osoita kompressorin tyyppiä, C/R/S-liittimiä eikä invertterikäyttöä.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "moottori"
+    },
+    {
+      "id": "puhallin",
+      "file": "puhallin.svg",
+      "name_fi": "Puhallin, johdotettu esitys",
+      "name_en": "Fan with wiring",
+      "aliases_fi": ["tuuletin"],
+      "category": "kuormat",
+      "representation": "toimintolohko",
+      "purpose": "Puhallin laitelohkona ja sähköisenä liitäntänä; ei roottorin lapapiirros.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [52],
+          "labels": ["Fan"]
+        }
+      ],
+      "notes": "Lähteessä puhaltimen merkki on laiterajauksen sisällä. Yksi viiva on yleisyhteys, ei napaluku.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "lammitin",
+      "file": "lammitin.svg",
+      "name_fi": "Lämmitysvastus",
+      "name_en": "Heating element",
+      "aliases_fi": ["lämmitin", "sulatusvastus", "kampikammion lämmitin"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Sähköinen lämmitin, esimerkiksi sulatusvastus tai kampikammion lämmitin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [25],
+          "labels": ["Heating element"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "valaisin",
+      "file": "valaisin.svg",
+      "name_fi": "Lamppu / valaisin, aiempi yleisesitys",
+      "name_en": "Lamp / luminaire, legacy representation",
+      "aliases_fi": ["valaisin", "lamppu"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Aiemman valaisin-linkin säilyttävä lampun yleismerkki.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [46],
+          "labels": ["Lamp, general symbol"]
+        }
+      ],
+      "notes": "Ympyräristi vastaa PDF:n lampun merkkiä (s. 46). Asennuspiirustuksen valaisimen yleismerkki on erikseen tiedostossa valaisin-asennus.svg (s. 23).",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "merkkilamppu",
+      "file": "merkkilamppu.svg",
+      "name_fi": "Merkkilamppu",
+      "name_en": "Signal lamp",
+      "aliases_fi": ["merkkivalo"],
+      "category": "kuormat",
+      "representation": "piirikaavio",
+      "purpose": "Piirikaavion merkkilamppu; väri ja ilmoitettava tila lisätään selitteeseen.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [46],
+          "labels": ["signal lamp, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "valaisin-asennus",
+      "file": "valaisin-asennus.svg",
+      "name_fi": "Valaisin, asennuspiirustuksen yleismerkki",
+      "name_en": "Luminaire, installation general symbol",
+      "aliases_fi": [],
+      "category": "kuormat",
+      "representation": "asennuspiirustus",
+      "purpose": "Asennuspiirustuksen valaisin, lähteessä myös loistelampun yleismerkki.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [23],
+          "labels": [
+            "Luminaire, general symbol; Flourescent lamp, general symbol"
+          ]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "muuntaja",
+      "file": "muuntaja.svg",
+      "name_fi": "Kaksikäämimuuntaja, yksiviivainen",
+      "name_en": "Two-winding transformer, single-line",
+      "aliases_fi": ["muuntaja"],
+      "category": "tehonmuunto",
+      "representation": "yksiviivainen",
+      "purpose": "Kaksikäämimuuntajan yleisesitys; yksi viiva kummallakin puolella edustaa käämipiiriä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [34],
+          "labels": ["Transformer with two windings, general symbol (form 1)"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "tasasuuntaaja",
+      "file": "tasasuuntaaja.svg",
+      "name_fi": "Tasasuuntaaja",
+      "name_en": "Rectifier",
+      "aliases_fi": ["AC/DC-muunnin"],
+      "category": "tehonmuunto",
+      "representation": "toimintolohko",
+      "purpose": "Vaihtosähkön muuntaminen tasasähköksi, yksiviivainen toimintoesitys.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [42],
+          "labels": ["Rectifier"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "virtalahde",
+      "file": "virtalahde.svg",
+      "name_fi": "AC/DC-virtalähde, toimintoesitys",
+      "name_en": "AC/DC power supply, functional representation",
+      "aliases_fi": ["virtalähde", "teholähde"],
+      "category": "tehonmuunto",
+      "representation": "toimintolohko",
+      "purpose": "Verkkokäyttöisen tasasähkövirtalähteen AC/DC-toiminto.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [42],
+          "labels": ["Rectifier"]
+        }
+      ],
+      "notes": "PDF nimeää merkin tasasuuntaajaksi. Virtalähteen käyttö on sovellus; tämä ei osoita vakavointia, erotusta, jännitettä tai liitinjärjestystä.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "tasasuuntaaja"
+    },
+    {
+      "id": "invertteri",
+      "file": "invertteri.svg",
+      "name_fi": "Vaihtosuuntaaja",
+      "name_en": "Inverter",
+      "aliases_fi": ["invertteri", "DC/AC-muunnin"],
+      "category": "tehonmuunto",
+      "representation": "toimintolohko",
+      "purpose": "Tasasähkön muuntaminen vaihtosähköksi, esimerkiksi invertterikäytön toiminnallinen osa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [42],
+          "labels": ["Inverter"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "vastus",
+      "file": "vastus.svg",
+      "name_fi": "Vastus",
+      "name_en": "Resistor",
+      "aliases_fi": [],
+      "category": "passiiviset",
+      "representation": "piirikaavio",
+      "purpose": "Vastuksen yleismerkki elektroniikka- ja ohjauspiireissä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [25],
+          "labels": ["Resistor, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kondensaattori",
+      "file": "kondensaattori.svg",
+      "name_fi": "Kondensaattori",
+      "name_en": "Capacitor",
+      "aliases_fi": ["käyntikondensaattori"],
+      "category": "passiiviset",
+      "representation": "piirikaavio",
+      "purpose": "Kondensaattorin yleismerkki; esimerkiksi moottorin käyntikondensaattori.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-pdf",
+          "pages": [25],
+          "labels": ["Capacitor, general symbol"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-putki",
+      "file": "kylma-putki.svg",
+      "name_fi": "Kylmäaineputki",
+      "name_en": "Refrigerant pipe",
+      "aliases_fi": [
+        "kylmäaineputki",
+        "imuputki",
+        "nesteputki",
+        "kuumakaasuputki"
+      ],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Kylmäaineen virtausreitti kylmäkaaviossa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [64],
+          "labels": ["MT 210: process schematic"]
+        }
+      ],
+      "notes": "Olomuoto ja virtaussuunta annetaan kaavion selitteessä. Sama viivamuoto kuin sähköjohtimella, mutta liitäntätyyppi on refrigerant.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "johdin"
+    },
+    {
+      "id": "kylma-kompressori",
+      "file": "kylma-kompressori.svg",
+      "name_fi": "Kompressori, kylmäkierron merkki",
+      "name_en": "Compressor, refrigerant circuit",
+      "aliases_fi": ["kylmäainekompressori"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Nostaa kylmäainehöyryn painetta ja ylläpitää kiertoa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Compressor, general"]
+        }
+      ],
+      "notes": "Imu alhaalta, painepuoli ylhäällä. Ei ota kantaa kompressorityyppiin tai sähköliitäntään; sähköinen moottoriesitys on kompressori.svg.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-lauhdutin",
+      "file": "kylma-lauhdutin.svg",
+      "name_fi": "Lauhdutin",
+      "name_en": "Condenser",
+      "aliases_fi": ["lauhdutinpatteri"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Luovuttaa lämpöä ja lauhduttaa kylmäainetta.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123, 64],
+          "labels": ["Finned tube heat exchanger", "MT 210: condenser"]
+        }
+      ],
+      "notes": "Lamellilämmönsiirtimen perusmerkki ilman puhallinta ja suuntanuolta. Sama geometria kuin höyrystimellä: laitetunnus ja sijainti kierrossa määräävät tehtävän.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-hoyrystin",
+      "file": "kylma-hoyrystin.svg",
+      "name_fi": "Höyrystin",
+      "name_en": "Evaporator",
+      "aliases_fi": ["höyrystinpatteri"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Ottaa lämpöä jäähdytettävästä kohteesta kylmäaineen höyrystyessä.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123, 64],
+          "labels": ["Finned tube heat exchanger", "MT 210: evaporator"]
+        }
+      ],
+      "notes": "Lamellilämmönsiirtimen perusmerkki ilman puhallinta ja suuntanuolta. Sama geometria kuin lauhduttimella; nimeä käyttötarkoitus kaaviossa.",
+      "visual_review": "2026-09-28",
+      "same_geometry_as": "kylma-lauhdutin"
+    },
+    {
+      "id": "kylma-kuivain",
+      "file": "kylma-kuivain.svg",
+      "name_fi": "Suodatinkuivain",
+      "name_en": "Filter drier",
+      "aliases_fi": ["kuivain", "suodatin-kuivain", "suodatinkuivain"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Poistaa kylmäaineesta kosteutta ja epäpuhtauksia.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Fixed bed filter, e.g. filter/drier"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-nestesailio",
+      "file": "kylma-nestesailio.svg",
+      "name_fi": "Nestesäiliö",
+      "name_en": "Liquid receiver",
+      "aliases_fi": ["nestevaraaja", "varaaja", "kylmäainevaraaja"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Varastoi nestemäistä kylmäainetta korkeapainepuolella.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123, 66],
+          "labels": ["Collector, pressure vessel", "ET 422: receiver"]
+        }
+      ],
+      "notes": "Painesäiliön perusmerkki nestesäiliön käyttötarkoituksessa. Putkien korkeudet ovat kaavion liitäntäpaikkoja, eivät todellisen säiliön rakenteen kuvaus.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-imuvaraaja",
+      "file": "kylma-imuvaraaja.svg",
+      "name_fi": "Imuvaraaja / nesteenerotin",
+      "name_en": "Suction accumulator",
+      "aliases_fi": ["imuvaraaja", "imupuolen nesteenerotin", "nesteenerotin"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Erottaa nestemäistä kylmäainetta imukaasusta ennen kompressoria.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "danfoss-acc",
+          "pages": [6],
+          "labels": ["ACC — Suction accumulator"]
+        }
+      ],
+      "notes": "Danfossin ACC-merkin yksinkertaistettu säiliöesitys. Ei kuvaa sisäistä öljynpalautusta, rakennetta tai mitoitusta.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-sulkuventtiili",
+      "file": "kylma-sulkuventtiili.svg",
+      "name_fi": "Sulkuventtiili, yleismerkki",
+      "name_en": "Shut-off valve, general symbol",
+      "aliases_fi": ["sulku", "sulkuventtiili"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Katkaisee kylmäaineen virtausreitin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Valve, general"]
+        }
+      ],
+      "notes": "Yleinen venttiilimerkki sulkukäytössä; ei ilmaise asentoa tai venttiilin rakennetyyppiä.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-palloventtiili",
+      "file": "kylma-palloventtiili.svg",
+      "name_fi": "Palloventtiili",
+      "name_en": "Ball valve",
+      "aliases_fi": ["pallosulku"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Pallorakenteinen sulkuventtiili.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Ball valve"]
+        }
+      ],
+      "notes": "",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-takaiskuventtiili",
+      "file": "kylma-takaiskuventtiili.svg",
+      "name_fi": "Takaiskuventtiili",
+      "name_en": "Non-return valve",
+      "aliases_fi": ["vastaventtiili", "takaisku", "NRV"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Sallii virtauksen yhteen suuntaan.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Non-return valve"]
+        }
+      ],
+      "notes": "Käännä koko merkki halutun estosuunnan mukaan ja lisää virtaussuunta kaavioon. Ei venttiilin asennusohje.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-magneettiventtiili",
+      "file": "kylma-magneettiventtiili.svg",
+      "name_fi": "Magneettiventtiili",
+      "name_en": "Solenoid valve",
+      "aliases_fi": ["solenoidiventtiili", "magneettiventtiili"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Sähkömagneetilla käytettävä kylmäaineventtiili.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [66],
+          "labels": ["ET 422: solenoid valves"]
+        }
+      ],
+      "notes": "Kelan toimilaite on putkikaavion lisämerkki. Ei sähköliittimiä eikä tietoa NC/NO-perustilasta.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-paisuntaventtiili",
+      "file": "kylma-paisuntaventtiili.svg",
+      "name_fi": "Termostaattinen paisuntaventtiili",
+      "name_en": "Thermostatic expansion valve",
+      "aliases_fi": ["paisuntaventtiili", "TEV", "TXV"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Säätelee kylmäaineen syöttöä höyrystimeen lämpötila-anturin avulla.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Thermostatic expansion valve with capillary sensor"]
+        }
+      ],
+      "notes": "Tiivistetty perusesitys: TC-toimilaite ja kapillaarianturi. Anturin sijoitus ja mahdollinen ulkoinen paineentasaus piirretään laitekohtaisesti; anturiyhteys ei ole kylmäaineputki.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-nakolasi",
+      "file": "kylma-nakolasi.svg",
+      "name_fi": "Näkölasi, kosteusindikaattorilla",
+      "name_en": "Sight glass with moisture indicator",
+      "aliases_fi": ["näkölasi", "tarkastuslasi", "nestelasi"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Näyttää kylmäaineen tilaa ja sisältää kosteusindikaattorin.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Sight glass with humidity indicator"]
+        }
+      ],
+      "notes": "Täytetty keskus kuvaa indikaattoria, ei kosteuslukemaa. Käyttötilanne ja indikaattorin värit tulkitaan valmistajan ohjeesta.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-psh",
+      "file": "kylma-psh.svg",
+      "name_fi": "Korkeapainekytkin PSH",
+      "name_en": "High-pressure switch PSH",
+      "aliases_fi": ["PSH", "ylipainekytkin"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Korkeapaineen kytkintoiminnon merkintä kylmäkaaviossa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": [
+            "Pressure switches for high pressure (PSH) and low pressure (PSL)"
+          ]
+        }
+      ],
+      "notes": "Paineyhteys alhaalla. Tämä ei ole sähköinen kosketinmerkki eikä kerro laukaisuarvoa, kuittaustapaa tai turvaluokitusta.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-psl",
+      "file": "kylma-psl.svg",
+      "name_fi": "Matalapainekytkin PSL",
+      "name_en": "Low-pressure switch PSL",
+      "aliases_fi": ["PSL", "alipainekytkin"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Matalapaineen kytkintoiminnon merkintä kylmäkaaviossa.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": [
+            "Pressure switches for high pressure (PSH) and low pressure (PSL)"
+          ]
+        }
+      ],
+      "notes": "Paineyhteys alhaalla. Tämä ei ole sähköinen kosketinmerkki eikä kerro laukaisuarvoa, kuittaustapaa tai turvaluokitusta.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-pshl",
+      "file": "kylma-pshl.svg",
+      "name_fi": "Kaksoispainekytkin PSHL",
+      "name_en": "Dual high/low pressure switch PSHL",
+      "aliases_fi": ["PSHL", "PSH/L", "kaksoispressostaatti"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Yhdistää korkea- ja matalapaineen valvonnan yhteen laitteeseen.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": [
+            "Pressure switches for high pressure (PSH) and low pressure (PSL)"
+          ]
+        }
+      ],
+      "notes": "Kirjaston yhdistelmä PSH- ja PSL-merkinnöistä; PSHL-nimi on muistiossa 10. Kaksi erillistä paineyhteyttä. HP/LP-puoli nimetään kaaviossa, eikä kuvan vasen/oikea sijainti määrää laitteen liitinjärjestystä.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-painemittari",
+      "file": "kylma-painemittari.svg",
+      "name_fi": "Painemittauspiste P",
+      "name_en": "Pressure measuring point P",
+      "aliases_fi": ["painemittari", "manometri", "painemittaus"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Paineen mittauskohta, esimerkiksi painemittarin liitäntä.",
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123],
+          "labels": ["Measuring points for: Pressure (P)"]
+        }
+      ],
+      "notes": "P on lähteen mittauspisteen tunnus. Merkki ei määritä mittarityyppiä, mitta-aluetta tai sähköistä lähtöä.",
+      "visual_review": "2026-09-28"
+    },
+    {
+      "id": "kylma-oljynerotin",
+      "file": "kylma-oljynerotin.svg",
+      "name_fi": "Öljynerotin",
+      "name_en": "Oil separator",
+      "aliases_fi": ["öljynerotin"],
+      "category": "kylmakierto",
+      "representation": "kylmakaavio",
+      "purpose": "Erottaa öljyä kompressorin painepuolen kylmäainehöyrystä.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "gunt-refrigeration",
+          "pages": [123, 66],
+          "labels": ["Separator, general", "ET 422: oil separator"]
+        }
+      ],
+      "notes": "Erottimen yleismerkki öljynerotuksen käyttötarkoituksessa. Alaliitäntä on öljyn paluu; säätö- tai uimurimekanismia ei ole kuvattu.",
+      "visual_review": "2026-09-28"
+    }
+  ],
+  "source_revision": "8dcd1803052ad4e7db189d4ecea7200c2190ff85",
+  "library_url": "https://huplifi.github.io/kylmasentaja-keuda-public/"
+}

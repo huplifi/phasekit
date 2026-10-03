@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Vaihtosuuntaaja">
+  <title>Vaihtosuuntaaja</title>
+  <desc>Tasasähkön muuntaminen vaihtosähköksi, esimerkiksi invertterikäytön toiminnallinen osa.</desc>
+  <rect x="12" y="12" width="40" height="40"/><path d="M12 52L52 12M8 32H12M52 32H56"/><path d="M18 20H30M18 25H21M24 25H27M30 25H32M34 42C38 34 42 50 46 42"/>
+</svg>

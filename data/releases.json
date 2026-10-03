@@ -1,5 +1,378 @@
 [
   {
+    "version": "0.4.0",
+    "date": "2026-10-03",
+    "channel": "stable",
+    "title": {
+      "fi": "Raportit, kohteet ja PDF-vienti",
+      "en": "Reports, sites and PDF export"
+    },
+    "changes": {
+      "fi": [
+        "Betasarjojen 0.3 ja 0.4 parannukset julkaistaan vakaaseen versioon.",
+        "Kohteet kokoavat laitteet yhteen. Laitetietoja voi käyttää raporttien esitäyttöön; raportit, tallennetut laskelmat ja niiden vientitoiminnot ovat yhtenäisiä.",
+        "Raporttien täyttö, viimeistely ja tulosteet ovat selkeämpiä. Esikatselusta voi tallentaa tai jakaa PDF-tiedoston myös asennetussa sovelluksessa.",
+        "Kylmäainetietoja ja laskentamalleja on laajennettu. Kaaviosymbolit, lämpölaskurit ja laskentaperusteiden esitystapa tukevat työskentelyä myös offline-tilassa.",
+        "Aiemmat tallenteet säilyvät samalla sivustolla. Betan tietojen siirto vakaaseen tehdään asetusten varmuuskopion viennillä ja tuonnilla.",
+        "Tallentamattomien laskelmamuistiinpanojen poistumisvarmistus toimii myös Chromium-selaimen Takaisin-toiminnossa."
+      ],
+      "en": [
+        "Improvements from the 0.3 and 0.4 beta series are now available in the stable release.",
+        "Sites group equipment together. Equipment details can prefill reports; reports, saved calculations and export actions use consistent views.",
+        "Report entry, finalisation and printouts are clearer. Previews can save or share PDF files in installed apps.",
+        "Refrigerant data and calculation models have expanded. Diagram symbols, heat calculators and clearer calculation notes also support offline use.",
+        "Existing records remain on their current site. Move beta records to stable using backup export and import in Settings.",
+        "The unsaved calculation-notes confirmation also protects browser Back navigation in Chromium."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.8",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "PDF-vienti myös sovellustilassa",
+      "en": "PDF export in installed apps"
+    },
+    "changes": {
+      "fi": [
+        "Tulostusesikatselusta voi tallentaa tai jakaa oikean PDF-tiedoston suoraan. Vienti toimii erillään selaimen tulostusikkunasta ja käyttää paikallisia fontteja myös offline-tilassa.",
+        "Raporttien hallintapainike on nimeltään Laitteet ja kohteet. Lisää kohde ja Lisää laite ovat tasaleveät ja linjassa kohdekorttien kanssa. Pistevalikoiden kuvakkeet on keskitetty."
+      ],
+      "en": [
+        "Print previews can save or share a real PDF file directly, independently of the browser print dialog, using local fonts offline.",
+        "The report management entry is now Equipment and sites. Add site and Add equipment have equal widths aligned with the site cards. More-menu icons are centred."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.7",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "Kohteet, laitteet ja yhtenäiset raportit",
+      "en": "Sites, equipment and consistent reports"
+    },
+    "changes": {
+      "fi": [
+        "Tallennetut laskelmat ja vuototarkastusarviot avautuvat omaan näkymäänsä. Raporttilistan rakenne ja vientitoiminnot ovat yhtenäisiä.",
+        "Kohteelle voi tallentaa useita laitteita. Laitteen valinnaisiin tietoihin kuuluvat kylmäaine, täytös, valmistaja ja malli sekä sarjanumero.",
+        "Laitteen valinta esitäyttää raportin tyhjät perustiedot. Aiemmat kirjaukset ja lukitut raportit säilyvät ennallaan. Kohteet ja laitetiedot sisältyvät varmuuskopioihin."
+      ],
+      "en": [
+        "Saved calculations and leak-check assessments open in dedicated views. Report list structure and export actions are consistent.",
+        "Sites can contain multiple devices. Optional device details include refrigerant, charge, manufacturer and model, and serial number.",
+        "Selecting equipment fills empty report fields. Existing entries and locked reports stay unchanged. Sites and device details are included in backups."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.6",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämpi täyttö, tiedot ja tulosteet",
+      "en": "Clearer forms, details and printouts"
+    },
+    "changes": {
+      "fi": [
+        "Ainetietojen kattavuus on Ominaisuudet-välilehden lopussa. Rajoitusten haku, tilasuodatin, lukumäärä ja ajallinen ryhmittely muodostavat yhden kokonaisuuden.",
+        "Raporttilista korostaa kohdetta ja erottaa raporttityypin luonnostilasta. Laitteiden tiedot ja niihin liittyvät raportit ovat rauhallisemmassa näkymässä.",
+        "Raportin osiot näyttävät kirjattujen tietojen yhteenvedon. Tarkista ja viimeistele ohjaa puuttuviin kenttiin; asiakirjan säädöstausta on erikseen.",
+        "Laskentakaavoilla on omat selkeät laatikot. Muihin laskureihin siirtyminen on erotettu laskentapainikkeesta. Beta-ilmoitus ja asetusten versiorivi ovat kompaktimpia.",
+        "Tulosteissa kohde ja laite erottuvat heti. Täydennettävät tiedot ja mittausperusteet on ryhmitelty selkeämmin. Tuloste käyttää PhaseKitin fontteja, ja tulostus säilyy käytettävissä myös varafonteilla."
+      ],
+      "en": [
+        "Data coverage sits at the end of Properties. Restriction search, status filters, result counts and date grouping form a coherent view.",
+        "The report list prioritises the site and separates report type from draft status. Equipment details and linked records have a quieter layout.",
+        "Report sections summarise recorded details. Review and finalise leads to missing fields, with regulatory context shown separately.",
+        "Calculation formulas have dedicated blocks. Links to related calculators are separated from Calculate. The beta notice and Settings version row are more compact.",
+        "Printouts identify the site and device immediately. Missing details and measurement context are grouped more clearly. Printouts use PhaseKit fonts, with reliable fallback fonts so printing remains available."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.5",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Kevyempi beta-ilmoitus",
+      "en": "A lighter beta notice"
+    },
+    "changes": {
+      "fi": [
+        "Beta-ilmoituksen Versiohistoria ja Vakaa versio ovat yhtenäisiä tekstilinkkejä. Napautusalueet säilyvät riittävän suurina."
+      ],
+      "en": [
+        "Release history and Stable version use matching text links in the beta notice, retaining generous touch targets."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.4",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Yhtenäiset ainetiedot ja toimivat info-ohjeet",
+      "en": "Consistent refrigerant details and contextual help"
+    },
+    "changes": {
+      "fi": [
+        "Seoksen kemiallinen nimi näkyy muodossa Kylmäaineseos. Puuttuvien ominaisuustietojen merkintä on yhtenäisesti Tieto puuttuu.",
+        "Lisätieto- ja lähdehaitarien sisältö on linjattu otsikkotekstin kanssa.",
+        "Öljyosion infoteksti avautuu otsikon alle. Infoikonit ovat kautta sovelluksen lähempänä tekstiä, ja napautusalueen koko säilyy ennallaan.",
+        "Asetusten toimintopainikkeet ovat vasemmassa linjassa. Kattavuusraportin painikkeesta poistettiin linkkialleviivaus, ja versiohistoriaan johtaa pelkkä versionumero.",
+        "Palautteen antamiselle on oma selkeä painike ja tieto GitHubiin siirtymisestä.",
+        "Beta-ilmoituksessa on versionumero, yhtenäiset Versiohistoria- ja Vakaa versio -painikkeet sekä lyhyt huomio tallennusten erillisyydestä. Build-tunniste löytyy asetuksista."
+      ],
+      "en": [
+        "Blend chemical names use Refrigerant blend. Missing property values consistently show Data unavailable.",
+        "Property and source disclosure content aligns with the heading text.",
+        "Oil guidance opens below its heading. Information icons sit closer to their labels throughout the app while retaining their touch target size.",
+        "Settings actions align to the left. Coverage buttons no longer have link underlines, and the version number alone links to release history.",
+        "Feedback has a distinct button with a clear GitHub destination.",
+        "The beta notice shows its version, matching Release history and Stable version buttons, and a brief note about separate records. The build revision remains in Settings."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.3",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Tulostuspainike toimii myös offline-tilassa",
+      "en": "Print controls work offline"
+    },
+    "changes": {
+      "fi": [
+        "Tulostusnäkymän ohjaus sisältyy nyt sovellukseen, joten Tulosta / PDF -painike ja paluu raporttiin toimivat myös ilman verkkoyhteyttä.",
+        "Tulostusnäkymä toimii edelleen itsenäisesti avaavan sivun ollessa pysäytettynä. Fyysisen iPhonen tulostusvalinta on vielä varmennettava laitteella."
+      ],
+      "en": [
+        "Print controls are bundled with the app, so Print / PDF and return-to-report controls also work without a network connection.",
+        "The preview remains independent of a suspended opener. The physical iPhone print dialog still needs device verification."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.2",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Tiiviimmät ainetiedot ja itsenäinen tulostusnäkymä",
+      "en": "Compact refrigerant details and independent print controls"
+    },
+    "changes": {
+      "fi": [
+        "GWP:n laskentaperuste avautuu infopainikkeesta. Pitkät aineominaisuuksien menetelmätekstit on koottu lisätietohaitariin, ja lyhyet olosuhdetiedot säilyvät arvon vieressä.",
+        "Puhtaan aineen koostumus näkyy perustiedoissa. Seoksissa aineosan nimi on linkki ja prosenttiosuus tavallinen arvo.",
+        "Öljytyyppi-riviä on tiivistetty ja tyhjän vaihtoehtolistan aiheuttama irrallinen nolla poistettu. Päällekkäiset rajoitusten lähdelinkit on yhdistetty.",
+        "Kattavuusraportti avautuu nyt sovelluksen omaan näkymään, jossa on ainekohtaiset tiedot ja paluupainike.",
+        "Kylmäkierron lämpötilakentät ovat puhelimessa vasemmalla. Otsikon infopainikkeen kohdistus on korjattu.",
+        "Tulostusnäkymän painikkeet ja kaavion latauksen odotus toimivat omassa ikkunassaan myös avaavan sivun ollessa pysäytettynä. Fyysisen iPhonen tulostusvalinnan toiminta on vielä testattava.",
+        "CO₂e-laskurin Laske-painikkeelle jää enemmän tilaa puhelimessa. Sivun avautuminen ei enää siirrä kohdistusta kesken ensimmäisen kentän täytön."
+      ],
+      "en": [
+        "GWP calculation bases open from an information button. Longer property methods are grouped in a disclosure while brief conditions remain beside each value.",
+        "Pure-substance composition is shown in basic information. Blend component names are links and mass percentages are plain values.",
+        "The oil-type row is shorter and the stray zero from an empty alternatives list is removed. Duplicate restriction source links are consolidated.",
+        "Coverage opens in an app view with refrigerant-specific details and a back button.",
+        "Cycle temperature inputs sit on the left on phones. The heading information button is aligned correctly.",
+        "Print controls and chart loading run in the preview window independently of a suspended opener. The physical iPhone print dialog still needs device testing.",
+        "The CO₂e calculator leaves more room for Calculate on phones. Initial navigation no longer takes focus away while the first input is being filled."
+      ]
+    }
+  },
+  {
+    "version": "0.4.0-beta.1",
+    "date": "2026-10-02",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät työmaaraportit ja aineominaisuudet",
+      "en": "Clearer field reports and refrigerant properties"
+    },
+    "changes": {
+      "fi": [
+        "Raporttilomakkeet on ryhmitelty osiin. Puuttuvan tiedon linkki avaa oikean kohdan, ja havainnoille sekä muistiinpanoille on yhteinen kirjoitusalue.",
+        "Käyttöönoton tiedot ja kirjatut koepöytäkirjat voidaan koota samaan tulosteeseen. Sisäiset pöytäkirjaosat ja erikseen toimitettavat liitteet erottuvat toisistaan.",
+        "Käyttöönottoraportin vuototarkastusväli hyödyntää sovelluksen laskentaa. Puuttuvat lähtötiedot pyydetään täydentämään.",
+        "Vanhojen raporttien tiedot säilyvät myös uudistettujen kenttien yhteydessä. Raportin lukitseminen erotetaan hyväksynnästä ja allekirjoittamisesta.",
+        "Aineominaisuuksien puuttuvat tiedot ja selitteet, öljyjen nimet, rajoitustunnisteet sekä asetusten linkit on selkeytetty. Raportit löytyvät omasta pääosiostaan.",
+        "Paine–lämpötilalaskurin välilehtiä muistuttavat viivat on poistettu ja taustatietojen haitareita tiivistetty."
+      ],
+      "en": [
+        "Field forms are grouped into sections. Missing-item links open the relevant field, and observations and notes share one writing area.",
+        "Commissioning details and recorded test protocols can share one printout. Included protocol sections are distinguished from attachments supplied separately.",
+        "The commissioning leak-check interval uses the existing calculation engine and requests missing inputs.",
+        "Existing report content is retained alongside the revised fields. Locking a record is distinguished from technical acceptance and signing.",
+        "Property availability and explanations, oil names, restriction badges and Settings links are clearer. Reports are accessed through their main navigation section.",
+        "Removed tab-like lines from the pressure–temperature calculator and reduced spacing and nesting in supporting disclosures."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.9",
+    "date": "2026-09-30",
+    "channel": "beta",
+    "title": {
+      "fi": "Laajemmat kylmäainemallit ja tarkistetut laskenta-alueet",
+      "en": "Broader refrigerant models and checked calculation ranges"
+    },
+    "changes": {
+      "fi": [
+        "R410A:n lämpöpumppumittaukset toimivat myös 56 °C:ssa. Kaikkien tuettujen aineiden laskenta-alueet on tarkistettu, ja rajailmoitus kertoo käytettävissä olevan alueen.",
+        "Paine–lämpötila- ja log(p)–h-tukea on laajennettu uusilla aineilla. Mallit, seoskoostumukset ja lähdeversiot kulkevat laskennan mukana.",
+        "Seitsemän puuttuvaa kriittisen lämpötilan tai paineen tietoa on täydennetty valmistajalähteistä.",
+        "R1123:n kiehumispiste lisätty tutkimuslähteestä. R1132(E):n kolmoispiste korjattu erilleen mallin alimmasta laskentalämpötilasta."
+      ],
+      "en": [
+        "R410A heat-pump measurements now work at 56 °C. Calculation ranges have been checked for every supported fluid, and out-of-range messages show the supported interval.",
+        "Pressure–temperature and log(p)–h coverage extends to additional refrigerants, with model, mixture composition and source versions retained.",
+        "Seven missing critical-temperature or pressure facts have been added from manufacturer sources.",
+        "Added a research-sourced R1123 boiling point and corrected the R1132(E) physical triple point, keeping it separate from the model lower limit."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.8",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Yhtenäinen sovelluskuvake",
+      "en": "A consistent app icon"
+    },
+    "changes": {
+      "fi": [
+        "Betan sovelluskuvake käyttää jälleen alkuperäisiä aaltoja. Tunnuksen ja taustan sävyerot ovat selkeämmät.",
+        "Beta- ja vakaan version kuvakkeille on valmisteltu sama sommittelu; beta erottuu BETA-merkistä."
+      ],
+      "en": [
+        "The beta app icon restores the original waves with clearer tonal separation between the mark and background.",
+        "Matching artwork is prepared for beta and stable, with only a BETA badge distinguishing the channels."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.7",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Kaaviosymbolit avuksi työmaalle ja opiskeluun",
+      "en": "Schematic symbols for field work and study"
+    },
+    "changes": {
+      "fi": [
+        "Uusi Kaaviosymbolit-työkalu: omat Kylmä- ja Sähkö-välilehdet, kuvallinen selaus ja nimihaku.",
+        "77 symbolin merkitykset, esitystavat ja lähdetiedot ovat käytettävissä myös ilman verkkoyhteyttä."
+      ],
+      "en": [
+        "New Schematic symbols reference with separate Refrigeration and Electrical tabs, visual browsing and name search.",
+        "77 symbols with meanings, representation types and source notes are available offline."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.6",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Lämmitysaika luettavana kestona",
+      "en": "Readable heating durations"
+    },
+    "changes": {
+      "fi": [
+        "Lämpölaskurin aika näkyy tunteina, minuutteina ja sekunteina. Pitkissä kestoissa käytetään myös vuorokausia sekä erikseen selitettyjä likimääräisiä kuukausia ja vuosia.",
+        "Sama esitystapa toimii tuloskortissa, tallennetuissa laskelmissa ja tulosteissa. Tarkat minuuttiarvot säilyvät tallennuksessa ja JSON-viennissä."
+      ],
+      "en": [
+        "Heat-calculation durations use hours, minutes and seconds. Long durations also use days and explicitly explained approximate months and years.",
+        "The result card, saved calculations and printouts share this presentation. Exact minute values remain unchanged in storage and JSON exports."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.5",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Selkeämmät sovelluskuvakkeet",
+      "en": "Clearer app icons"
+    },
+    "changes": {
+      "fi": [
+        "Sovelluskuvakkeen tuttu merkki erottuu nyt tummansiniseltä pohjalta ilman koristeaaltoja. Beta-tunniste säilyy luettavana myös harmaasävyisenä.",
+        "Jokaisella työkalulla on oma kuvake. Automaattinen tarkistus estää saman tunnuskuvakkeen käyttämisen kahdella työkalulla."
+      ],
+      "en": [
+        "The familiar app mark now stands out against a navy background without decorative waves. The beta badge remains legible in greyscale.",
+        "Every tool has its own icon. An automated check prevents duplicate tool identity icons."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.4",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Kiisselille ominaislämpöarvio ja työkaluille omat kuvakkeet",
+      "en": "A heat-capacity estimate for kiisseli and distinct tool icons"
+    },
+    "changes": {
+      "fi": [
+        "Kiisselillä on nyt muokattava ominaislämpökapasiteetin arvio 3,9 kJ/(kg·K). Arvio olettaa 90 mass-% vettä ja 10 mass-% hiilihydraatteja; koostumusoletus ja lähteet säilyvät tallenteessa ja tulosteessa.",
+        "Lämpöteholaskurin virtausta kuvaava kuvake erottaa sen lämpömäärälaskurista."
+      ],
+      "en": [
+        "Kiisseli now has an editable specific-heat estimate of 3.9 kJ/(kg·K), assuming 90% water and 10% carbohydrate by mass. The composition assumption and sources are retained in saved and printed results.",
+        "The thermal-power tool now uses a flow icon to distinguish it from the heat-quantity calculator."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.3",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Sähkölaskuri myös käänteisiin laskuihin",
+      "en": "Electrical calculations in either direction"
+    },
+    "changes": {
+      "fi": [
+        "Sähkölaskurissa voi ratkaista tehon, virran tai jännitteen tunnetuista arvoista. Yksi- ja kolmivaiheiset vaihtovirtalaskut huomioivat syötetyn tehokertoimen.",
+        "Ohmin laissa voi ratkaista virran, jännitteen tai resistanssin. Lomake näyttää vain valittuun laskuun tarvittavat lähtötiedot.",
+        "Valittu suure nousee tuloskortin, tallennetun laskelman ja tulosteen päätulokseksi. Aiemmat sähkölaskelmat säilyvät luettavina."
+      ],
+      "en": [
+        "The electrical calculator can solve power, current or voltage from known values. Single- and three-phase AC calculations use the entered power factor.",
+        "Ohm’s law can solve current, voltage or resistance. The form shows only the inputs needed for the selected calculation.",
+        "The selected quantity becomes the main result on screen, in saved calculations and in print. Existing electrical records remain readable."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.2",
+    "date": "2026-09-28",
+    "channel": "beta",
+    "title": {
+      "fi": "Lämpömäärä, lämmitysaika ja kiisseli",
+      "en": "Heat quantity, heating time and kiisseli"
+    },
+    "changes": {
+      "fi": [
+        "Uusi lämpömäärälaskuri ratkaisee energian, lämmitys- tai jäähdytysajan, tarvittavan lämpötehon, massan, loppulämpötilan tai ominaislämpökapasiteetin.",
+        "Ainevalinnassa on lähteistetyt veden, kuivan ilman, kuparin ja alumiinin taulukkoarvot sekä omat arvot. Kotitehtävistä tuttu kiisseli pyytää käyttäjän oman ominaislämpöarvon.",
+        "Tulokset voi tallentaa laitteeseen liitettäviksi laskelmiksi ja tulostaa. Käytetyt ominaisuudet, lähteet ja laskennan oletukset säilyvät raportissa.",
+        "Nesteen lämpöteholaskuri käyttää samaa veden taulukkoarvoa. Laskenta olettaa vakio-ominaisuudet ja saman olomuodon; lämmitysaika perustuu aineeseen siirtyvään lämpötehoon ilman häviöitä."
+      ],
+      "en": [
+        "A new heat calculator solves energy, heating/cooling time, required thermal power, mass, final temperature or specific heat capacity.",
+        "Material selection includes sourced reference properties for water, dry air, copper and aluminium, plus custom properties. The homework-inspired kiisseli option asks for the user’s own specific heat value.",
+        "Results can be saved as equipment-linked calculations and printed. Reports retain the properties used, sources and calculation assumptions.",
+        "The liquid thermal-power calculator shares the water reference properties. Calculations assume constant properties without phase change; heating time uses heat transferred to the material and excludes losses."
+      ]
+    }
+  },
+  {
     "version": "0.2.1",
     "date": "2026-09-28",
     "channel": "stable",
@@ -13,6 +386,25 @@
       ],
       "en": [
         "The app icon has a larger, centred mark, preserving the original waves with clearer tonal contrast."
+      ]
+    }
+  },
+  {
+    "version": "0.3.0-beta.1",
+    "date": "2026-09-27",
+    "channel": "beta",
+    "title": {
+      "fi": "Seuraavan päivityskierroksen aloitus",
+      "en": "Start of the next update cycle"
+    },
+    "changes": {
+      "fi": [
+        "Uuden betakierroksen lähtökohtana on vakaa 0.2.0. Tässä versiossa ei vielä ole uusia laskentatoimintoja.",
+        "Tulevat muutokset testataan ensin erillisessä betassa. BETA-kuvake ja PhaseKit Beta -asennusnimi erottavat sen vakaasta sovelluksesta."
+      ],
+      "en": [
+        "The new beta cycle starts from stable 0.2.0. This version introduces no new calculation features.",
+        "Upcoming changes will be tested in the separate beta first. The BETA icon and PhaseKit Beta installation name distinguish it from the stable app."
       ]
     }
   },

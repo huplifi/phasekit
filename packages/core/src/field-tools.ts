@@ -32,40 +32,110 @@ export function calculateThermalPower(input: {
   };
 }
 export type ElectricalMode = "dc" | "single_phase" | "three_phase" | "ohm";
-/** AC inputs are RMS; three-phase assumes a balanced sinusoidal load. */
-export function calculateElectrical(input: {
+export type ElectricalSolveFor = "power" | "current" | "voltage" | "resistance";
+export interface ElectricalInput {
   mode: ElectricalMode;
-  voltageV: string;
+  solveFor?: ElectricalSolveFor;
+  voltageV?: string;
   currentA?: string;
+  powerW?: string;
   resistanceOhm?: string;
   powerFactor?: string;
-}) {
-  const voltage = parseDecimal(input.voltageV);
-  if (voltage.lt(0)) throw new Error("negative_electrical_quantity");
+}
+/** AC inputs are RMS; three-phase assumes a balanced sinusoidal load. */
+export function calculateElectrical(input: ElectricalInput) {
   if (!["dc", "single_phase", "three_phase", "ohm"].includes(input.mode))
     throw new Error("invalid_mode");
+  const target =
+    input.solveFor === undefined
+      ? input.mode === "ohm"
+        ? "current"
+        : "power"
+      : input.solveFor;
+  const allowed =
+    input.mode === "ohm"
+      ? ["current", "voltage", "resistance"]
+      : ["power", "current", "voltage"];
+  if (!allowed.includes(target)) throw new Error("invalid_electrical_target");
+  const quantity = (value: string | undefined) => {
+    const parsed = parseDecimal(value ?? "");
+    if (parsed.lt(0)) throw new Error("negative_electrical_quantity");
+    return parsed;
+  };
+  const positive = (value: ReturnType<typeof parseDecimal>, error: string) => {
+    if (value.lte(0)) throw new Error(error);
+    return value;
+  };
+  let voltage: ReturnType<typeof parseDecimal>;
+  let current: ReturnType<typeof parseDecimal>;
+  let power: ReturnType<typeof parseDecimal>;
+  let apparent: ReturnType<typeof parseDecimal> | null = null;
+  let resistance: ReturnType<typeof parseDecimal> | null = null;
+
   if (input.mode === "ohm") {
-    const resistance = parseDecimal(input.resistanceOhm ?? "");
-    if (resistance.lte(0)) throw new Error("positive_resistance_required");
-    const current = voltage.div(resistance);
-    return {
-      currentA: current.toString(),
-      powerW: voltage.mul(current).toString(),
-      apparentVA: null,
-    };
+    if (target === "resistance") {
+      voltage = positive(quantity(input.voltageV), "positive_voltage_required");
+      current = positive(quantity(input.currentA), "positive_current_required");
+      resistance = voltage.div(current);
+    } else {
+      resistance = positive(
+        parseDecimal(input.resistanceOhm ?? ""),
+        "positive_resistance_required",
+      );
+      if (target === "voltage") {
+        current = quantity(input.currentA);
+        voltage = current.mul(resistance);
+      } else {
+        voltage = quantity(input.voltageV);
+        current = voltage.div(resistance);
+      }
+    }
+    power = voltage.mul(current);
+  } else {
+    const ac = input.mode !== "dc";
+    const pf = parseDecimal(ac ? (input.powerFactor ?? "") : "1");
+    if (pf.lt(0) || pf.gt(1)) throw new Error("invalid_power_factor");
+    const factor =
+      input.mode === "three_phase"
+        ? parseDecimal("3").sqrt()
+        : parseDecimal("1");
+    if (target === "power") {
+      voltage = quantity(input.voltageV);
+      current = quantity(input.currentA);
+      const voltAmperes = voltage.mul(current).mul(factor);
+      power = voltAmperes.mul(pf);
+      apparent = ac ? voltAmperes : null;
+    } else {
+      power = quantity(input.powerW);
+      positive(pf, "positive_power_factor_required");
+      if (target === "current") {
+        voltage = positive(
+          quantity(input.voltageV),
+          "positive_voltage_required",
+        );
+        current = power.div(factor.mul(voltage).mul(pf));
+      } else {
+        current = positive(
+          quantity(input.currentA),
+          "positive_current_required",
+        );
+        voltage = power.div(factor.mul(current).mul(pf));
+      }
+      apparent = ac ? power.div(pf) : null;
+    }
   }
-  const current = parseDecimal(input.currentA ?? "");
-  if (current.lt(0)) throw new Error("negative_electrical_quantity");
-  const ac = input.mode !== "dc";
-  const pf = parseDecimal(ac ? (input.powerFactor ?? "") : "1");
-  if (pf.lt(0) || pf.gt(1)) throw new Error("invalid_power_factor");
-  const apparent = voltage
-    .mul(current)
-    .mul(input.mode === "three_phase" ? parseDecimal("3").sqrt() : 1);
+  if (
+    [voltage, current, power, apparent, resistance].some(
+      (value) => value !== null && !value.isFinite(),
+    )
+  )
+    throw new Error("nonfinite_result");
   return {
+    voltageV: voltage.toString(),
     currentA: current.toString(),
-    powerW: apparent.mul(pf).toString(),
-    apparentVA: ac ? apparent.toString() : null,
+    powerW: power.toString(),
+    apparentVA: apparent?.toString() ?? null,
+    resistanceOhm: resistance?.toString() ?? null,
   };
 }
 
@@ -84,11 +154,19 @@ type Text = { fi: string; en: string };
 export interface ChecklistField {
   id: string;
   label: Text;
-  type?: "date" | "decimal" | "select" | "refrigerant" | "declaration";
+  type?:
+    "date" | "decimal" | "select" | "refrigerant" | "declaration" | "textarea";
   options?: { value: string; label: Text }[];
   help?: Text;
   legacy?: boolean;
-  group?: "evacuation" | "installation" | "test-reports";
+  group?:
+    | "evacuation"
+    | "installation"
+    | "test-reports"
+    | "tightness"
+    | "test-run"
+    | "refrigerant"
+    | "leak-check";
 }
 const text = (fi: string, en: string): Text => ({ fi, en });
 export const checklistDefinitions: Record<
@@ -100,7 +178,7 @@ export const checklistDefinitions: Record<
   }
 > = {
   tightness: {
-    name: text("Paine- ja tiiviyskoe", "Pressure and tightness test"),
+    name: text("Tiiviyskoe", "Tightness test"),
     steps: [
       {
         id: "instructions",
@@ -460,7 +538,13 @@ const decimalField = (
   ...(help ? { help } : {}),
 });
 const legacyIds: Partial<Record<ChecklistKind, string[]>> = {
-  evacuation: ["instrument", "vacuum", "hold"],
+  evacuation: [
+    "criterion",
+    "instrument",
+    "vacuum",
+    "hold",
+    "evacuationMinutes",
+  ],
   commissioning: ["charge", "pressures", "temperatures"],
 };
 for (const kind of ["evacuation", "commissioning"] as const) {
@@ -482,6 +566,17 @@ checklistDefinitions.evacuation.fields.unshift(
     })),
   },
   decimalField("targetPressure", "Tavoitepaine", "Target pressure"),
+  {
+    id: "holdAcceptanceCriterion",
+    label: text(
+      "Ohjeen pitokokeen hyväksymisraja",
+      "Specified standing-test acceptance limit",
+    ),
+    help: text(
+      "Kirjaa kohteen valmistajan ohjeen mukainen raja ja ohjeen tunniste. Yleistä rajaa ei oleteta.",
+      "Record the equipment-specific limit and instruction reference. No universal limit is assumed.",
+    ),
+  },
   decimalField(
     "achievedPressure",
     "Saavutettu paine",
@@ -491,11 +586,14 @@ checklistDefinitions.evacuation.fields.unshift(
       "Pressure while the pump is running, before isolating it from the system.",
     ),
   ),
-  decimalField(
-    "evacuationMinutes",
-    "Tyhjiöinnin kesto tavoitepaineeseen · min",
-    "Evacuation duration to target pressure · min",
-  ),
+  {
+    ...decimalField(
+      "evacuationMinutes",
+      "Tyhjiöinnin kesto tavoitepaineeseen · min",
+      "Evacuation duration to target pressure · min",
+    ),
+    legacy: true,
+  },
   decimalField(
     "holdStartPressure",
     "Pitokokeen alkupaine",
@@ -515,19 +613,44 @@ checklistDefinitions.evacuation.fields.unshift(
     "Pitokokeen kesto · min",
     "Standing-test duration · min",
   ),
-  { id: "instrumentName", label: text("Mittari", "Instrument") },
+  {
+    id: "instrumentName",
+    label: text("Mittarin merkki ja malli", "Gauge make and model"),
+  },
   {
     id: "measurementLocation",
-    label: text("Mittauspaikka", "Measurement location"),
+    label: text("Mittarin liitäntäkohta", "Gauge connection point"),
   },
 );
 checklistDefinitions.commissioning.fields.unshift(
   {
+    id: "commissioningPurpose",
+    label: text("Asiakirjan tarkoitus", "Document purpose"),
+    type: "select",
+    options: [
+      {
+        value: "installation",
+        label: text(
+          "Asennustodistus ja käyttöönotto",
+          "Installation certificate and commissioning",
+        ),
+      },
+      {
+        value: "technical",
+        label: text("Tekninen käyttöönotto", "Technical commissioning"),
+      },
+    ],
+  },
+  {
     id: "refrigerantId",
+    group: "refrigerant",
     label: text("Kylmäaine", "Refrigerant"),
     type: "refrigerant",
   },
-  decimalField("chargeKg", "Täyttömäärä · kg", "Charge · kg"),
+  {
+    ...decimalField("chargeKg", "Täyttömäärä · kg", "Charge · kg"),
+    group: "refrigerant",
+  },
   {
     id: "pressureUnit",
     label: text("Paineyksikkö", "Pressure unit"),
@@ -567,6 +690,11 @@ checklistDefinitions.commissioning.fields.unshift(
 );
 checklistDefinitions.commissioning.fields.push(
   {
+    id: "installationLocation",
+    group: "installation",
+    label: text("Laitteen käyttöpaikka", "Equipment installation location"),
+  },
+  {
     id: "installerCompany",
     group: "installation",
     label: text("Asennusliike", "Installation company"),
@@ -595,14 +723,14 @@ checklistDefinitions.commissioning.fields.push(
   },
   {
     id: "leakCheckInterval",
-    group: "test-reports",
+    group: "leak-check",
     label: text(
       "Lakisääteinen vuototarkastusväli ja peruste",
       "Statutory leak-check interval and basis",
     ),
     help: text(
-      "Kirjaa kohteelle arvioitu tarkastusväli tai perusteltu tieto siitä, ettei velvoitetta sovelleta.",
-      "Record the assessed interval or the reason why the obligation does not apply.",
+      "Laskettu soveltuvasta sääntöpaketista työn päivämäärälle. Arvion lähtötiedot, sääntöversio ja peruste säilyvät raportissa.",
+      "Calculated from the applicable ruleset for the work date. Inputs, rule version and reasoning are retained with the report.",
     ),
   },
   {
@@ -621,13 +749,50 @@ checklistDefinitions.commissioning.fields.push(
         label: text("Ei vielä arvioitu", "Not yet assessed"),
       },
     ],
+    help: text(
+      "Selvitä soveltuvuus laitteen ja asennuksen suunnittelu- tai vaatimustenmukaisuusasiakirjoista. Painekoe ja tiiviyskoe ovat eri tarkastuksia; pelkkä kylmäaine ja täytös eivät ratkaise koetarvetta.",
+      "Check the equipment and installation design or conformity documents. A pressure test and a tightness test are distinct; refrigerant and charge alone do not determine the requirement.",
+    ),
+  },
+  {
+    id: "pressureAssessmentBasis",
+    group: "test-reports",
+    type: "select",
+    label: text(
+      "Painekoetarpeen arvioinnin lähde",
+      "Source for pressure-test applicability assessment",
+    ),
+    options: [
+      {
+        value: "equipment_documents",
+        label: text(
+          "Laitteen tai asennuksen asiakirjat",
+          "Equipment or installation documents",
+        ),
+      },
+      {
+        value: "expert_assessment",
+        label: text(
+          "Suunnittelijan tai tarkastuslaitoksen arvio",
+          "Designer or inspection body assessment",
+        ),
+      },
+      {
+        value: "other_documented",
+        label: text("Muu dokumentoitu peruste", "Other documented basis"),
+      },
+      {
+        value: "unresolved",
+        label: text("Arvio kesken", "Assessment unresolved"),
+      },
+    ],
   },
   {
     id: "pressureTestExemptionReason",
     group: "test-reports",
     label: text(
-      "Peruste sille, ettei painekoetta edellytetä",
-      "Reason why a pressure test is not required",
+      "Arvioinnin asiakirja tai asiantuntijan perustelu",
+      "Assessment document or expert rationale",
     ),
   },
   {
@@ -640,7 +805,7 @@ checklistDefinitions.commissioning.fields.push(
   },
   {
     id: "tightnessTestReportReference",
-    group: "test-reports",
+    group: "tightness",
     label: text(
       "Tiiviyskoepöytäkirjan viite / liite",
       "Tightness-test report reference / attachment",
@@ -648,7 +813,7 @@ checklistDefinitions.commissioning.fields.push(
   },
   {
     id: "evacuationReportReference",
-    group: "test-reports",
+    group: "evacuation",
     label: text(
       "Tyhjiöintipöytäkirjan viite / liite",
       "Evacuation report reference / attachment",
@@ -660,7 +825,7 @@ checklistDefinitions.commissioning.fields.push(
   },
   {
     id: "testRunReportReference",
-    group: "test-reports",
+    group: "test-run",
     label: text(
       "Koekäyttöpöytäkirjan viite / liite",
       "Test-run report reference / attachment",
@@ -711,6 +876,7 @@ checklistDefinitions.commissioning.fields.splice(
   { id: "refrigerantGwpBasis", label: text("GWP-peruste", "GWP basis") },
   {
     id: "refrigerantSourceNote",
+    group: "refrigerant",
     label: text("GWP-lähdeviite", "GWP source reference"),
   },
 );
@@ -730,6 +896,181 @@ checklistDefinitions.commissioning.fields.push(
     group: "evacuation" as const,
   })),
 );
+for (const field of checklistDefinitions.commissioning.fields) {
+  if (
+    [
+      "refrigerantSafetyClass",
+      "refrigerantGwp",
+      "refrigerantGwpBasis",
+    ].includes(field.id)
+  )
+    field.group = "refrigerant";
+}
+checklistDefinitions.commissioning.fields.push(
+  ...(
+    [
+      [
+        "tightnessRecordMode",
+        "tightness",
+        "Tiiviyskokeen kirjaustapa",
+        "Tightness-test record mode",
+      ],
+      [
+        "evacuationRecordMode",
+        "evacuation",
+        "Tyhjiöinnin kirjaustapa",
+        "Evacuation record mode",
+      ],
+      [
+        "testRunRecordMode",
+        "test-run",
+        "Koekäytön kirjaustapa",
+        "Test-run record mode",
+      ],
+    ] as const
+  ).map(([id, group, fi, en]) => ({
+    id,
+    group,
+    type: "select" as const,
+    label: text(fi, en),
+    options: [
+      {
+        value: "internal",
+        label: text("Kirjaan tähän raporttiin", "Record in this report"),
+      },
+      {
+        value: "external",
+        label: text(
+          "Erillinen pöytäkirja tai liite",
+          "Separate report or attachment",
+        ),
+      },
+    ],
+  })),
+  {
+    id: "leakEquipment",
+    group: "leak-check",
+    label: text(
+      "Laitetyyppi vuototarkastusta varten",
+      "Equipment type for leak-check assessment",
+    ),
+    type: "select",
+    options: [
+      {
+        value: "stationary_refrigeration",
+        label: text("Kiinteä jäähdytys", "Stationary refrigeration"),
+      },
+      {
+        value: "stationary_ac",
+        label: text("Kiinteä ilmastointi", "Stationary air conditioning"),
+      },
+      {
+        value: "stationary_heat_pump",
+        label: text("Kiinteä lämpöpumppu", "Stationary heat pump"),
+      },
+      {
+        value: "other",
+        label: text("Muu / arvioitava erikseen", "Other / assess separately"),
+      },
+    ],
+  },
+  ...(
+    [
+      "leakDetection",
+      "leakHermetic",
+      "leakHermeticLabel",
+      "leakResidential",
+    ] as const
+  ).map((id) => ({
+    id,
+    group: "leak-check" as const,
+    type: "select" as const,
+    label: {
+      leakDetection: text(
+        "Vuodonilmaisujärjestelmä asennettu",
+        "Leak detection system installed",
+      ),
+      leakHermetic: text(
+        "Laite ilmatiiviisti suljettu",
+        "Equipment hermetically sealed",
+      ),
+      leakHermeticLabel: text(
+        "Laite merkitty ilmatiiviisti suljetuksi",
+        "Equipment labelled hermetically sealed",
+      ),
+      leakResidential: text(
+        "Laite asuinrakennuksessa",
+        "Equipment in a residential building",
+      ),
+    }[id],
+    options: [
+      { value: "yes", label: text("Kyllä", "Yes") },
+      { value: "no", label: text("Ei", "No") },
+    ],
+  })),
+  ...(
+    [
+      ["tightnessMedium", "Koekaasu / koeväliaine", "Test gas / medium"],
+      [
+        "tightnessCriterion",
+        "Ohjeen koepaine, kesto ja hyväksymisrajat",
+        "Specified test pressure, duration and limits",
+      ],
+      [
+        "tightnessStart",
+        "Alku: aika, paine ja lämpötila yksiköineen",
+        "Start: time, pressure and temperature with units",
+      ],
+      [
+        "tightnessEnd",
+        "Loppu: aika, paine ja lämpötila yksiköineen",
+        "End: time, pressure and temperature with units",
+      ],
+      [
+        "tightnessFinding",
+        "Tiiviyskokeen havainnot",
+        "Tightness-test findings",
+      ],
+    ] as const
+  ).map(([id, fi, en]) => ({
+    id,
+    group: "tightness" as const,
+    label: text(fi, en),
+  })),
+  {
+    id: "testRunFinding",
+    group: "test-run",
+    label: text(
+      "Koekäytön toimintakokeet ja havainnot",
+      "Test-run functional checks and findings",
+    ),
+  },
+  {
+    id: "testRunMeasurements",
+    group: "test-run",
+    label: text(
+      "Koekäytön mittaukset olosuhteineen",
+      "Test-run measurements with conditions",
+    ),
+    type: "textarea",
+  },
+);
+for (const kind of Object.keys(checklistDefinitions) as ChecklistKind[]) {
+  for (const field of checklistDefinitions[kind].fields) {
+    if (
+      [
+        "finding",
+        "evacuationFinding",
+        "tightnessFinding",
+        "testRunFinding",
+        "workPerformed",
+        "initialCondition",
+        "measurements",
+      ].includes(field.id)
+    )
+      field.type = "textarea";
+  }
+}
 export const commonChecklistFields: ChecklistField[] = [
   {
     id: "equipment",
@@ -761,6 +1102,7 @@ export const commonChecklistFields: ChecklistField[] = [
   },
   {
     id: "instructions",
+    legacy: true,
     label: text(
       "Valmistajan ohje / versio",
       "Manufacturer instructions / version",
@@ -773,6 +1115,213 @@ export function checklistReportFields(draft: ChecklistDraft): ChecklistField[] {
     ...commonChecklistFields,
     ...checklistDefinitions[draft.kind].fields,
   ].filter((field) => !field.legacy || Boolean(draft.fields[field.id]));
+}
+/** Form visibility may change; the export always uses checklistReportFields. */
+export function checklistEditorFields(draft: ChecklistDraft): ChecklistField[] {
+  const fields = checklistReportFields(draft);
+  if (draft.kind !== "commissioning")
+    return fields.filter((field) => field.id !== "finding");
+  const technical = draft.fields.commissioningPurpose === "technical";
+  const certificateOnly = new Set([
+    "installationLocation",
+    "installerCompany",
+    "installerQualificationNumber",
+    "responsiblePerson",
+    "responsibleQualificationNumber",
+    "refrigerantSafetyClass",
+    "refrigerantGwp",
+    "refrigerantGwpBasis",
+    "refrigerantSourceNote",
+    "leakCheckInterval",
+    "leakEquipment",
+    "leakDetection",
+    "leakHermetic",
+    "leakHermeticLabel",
+    "leakResidential",
+    "pressureTestRequired",
+    "pressureAssessmentBasis",
+    "pressureTestExemptionReason",
+    "pressureTestReportReference",
+    "operatorDeclaration",
+  ]);
+  const protocolMode = (group: "tightness" | "evacuation" | "test-run") => {
+    const config = {
+      tightness: ["tightnessRecordMode", "tightnessTestReportReference"],
+      evacuation: ["evacuationRecordMode", "evacuationReportReference"],
+      "test-run": ["testRunRecordMode", "testRunReportReference"],
+    }[group];
+    return draft.fields[config[0]] === "external" ||
+      (draft.fields[config[0]] !== "internal" &&
+        Boolean(draft.fields[config[1]]?.trim()))
+      ? "external"
+      : "internal";
+  };
+  return fields.filter((field) => {
+    if (field.id === "finding") return false;
+    if (technical && certificateOnly.has(field.id)) return false;
+    if (
+      field.group === "tightness" ||
+      field.group === "evacuation" ||
+      field.group === "test-run"
+    ) {
+      if (field.id.endsWith("RecordMode")) return true;
+      const isReference = field.id.endsWith("ReportReference");
+      if (protocolMode(field.group) === "external") return isReference;
+      if (isReference) return false;
+    }
+    if (field.id === "pressureTestExemptionReason")
+      return draft.fields.pressureTestRequired === "no";
+    if (field.id === "pressureTestReportReference")
+      return draft.fields.pressureTestRequired === "yes";
+    if (field.id === "leakHermeticLabel")
+      return draft.fields.leakHermetic === "yes";
+    if (field.id === "leakResidential")
+      return (
+        draft.fields.leakHermetic === "yes" &&
+        draft.fields.leakHermeticLabel === "yes"
+      );
+    return true;
+  });
+}
+/** Legacy findings remain in place until the user edits the combined note. */
+export function combinedReportNotes(draft: ChecklistDraft): string {
+  const finding = draft.fields.finding ?? "";
+  return finding && draft.notes
+    ? `${finding}\n\n${draft.notes}`
+    : finding || draft.notes;
+}
+
+export function updateCombinedReportNotes(
+  draft: ChecklistDraft,
+  value: string,
+): ChecklistDraft {
+  if (value === combinedReportNotes(draft)) return draft;
+  if (value.length > 10000) throw new RangeError("notes_too_long");
+  return { ...draft, fields: { ...draft.fields, finding: "" }, notes: value };
+}
+
+export type CommissioningProtocolStatus = {
+  id: "tightness" | "evacuation" | "test-run";
+  mode: "internal" | "external" | "missing";
+  label: Text;
+  missing: ChecklistField[];
+};
+
+/** A reference identifies an outside report; an internal report needs actual observations. */
+export function commissioningProtocolStatus(
+  fields: Record<string, string>,
+): CommissioningProtocolStatus[] {
+  const all = checklistDefinitions.commissioning.fields;
+  const field = (id: string) => all.find((entry) => entry.id === id)!;
+  const has = (id: string) => Boolean(fields[id]?.trim());
+  const validPositive = (id: string) => {
+    try {
+      return parseDecimal(fields[id] ?? "").gt(0);
+    } catch {
+      return false;
+    }
+  };
+  const definitions = [
+    {
+      id: "tightness" as const,
+      label: text("Tiiviyskoepöytäkirja", "Tightness-test report"),
+      reference: "tightnessTestReportReference",
+      modeField: "tightnessRecordMode",
+      required: [
+        "tightnessMedium",
+        "tightnessCriterion",
+        "tightnessStart",
+        "tightnessEnd",
+        "tightnessFinding",
+      ],
+      numerical: [] as string[],
+    },
+    {
+      id: "evacuation" as const,
+      label: text("Tyhjiöintipöytäkirja", "Evacuation report"),
+      reference: "evacuationReportReference",
+      modeField: "evacuationRecordMode",
+      required: [
+        "vacuumUnit",
+        "targetPressure",
+        "holdAcceptanceCriterion",
+        "instrumentName",
+        "holdStartPressure",
+        "holdEndPressure",
+        "holdMinutes",
+        "evacuationFinding",
+      ],
+      numerical: [
+        "targetPressure",
+        "holdStartPressure",
+        "holdEndPressure",
+        "holdMinutes",
+      ],
+    },
+    {
+      id: "test-run" as const,
+      label: text("Koekäyttöpöytäkirja", "Test-run report"),
+      reference: "testRunReportReference",
+      modeField: "testRunRecordMode",
+      required: ["conditions", "testRunMeasurements", "testRunFinding"],
+      numerical: [] as string[],
+    },
+  ];
+  return definitions.map((definition) => {
+    const missing = definition.required.filter((id) => {
+      if (id === "holdAcceptanceCriterion" && has("criterion")) return false;
+      if (
+        id === "testRunMeasurements" &&
+        [
+          "lp",
+          "hp",
+          "suctionC",
+          "dischargeC",
+          "liquidC",
+          "pressures",
+          "temperatures",
+        ].some(has)
+      )
+        return false;
+      if (id === "vacuumUnit")
+        return !["mbar", "micron", "Pa"].includes(fields[id]);
+      if (id === "pressureReference")
+        return !["gauge", "absolute"].includes(fields[id]);
+      if (id === "pressureUnit")
+        return !["bar", "kPa", "MPa", "psi"].includes(fields[id]);
+      return definition.numerical.includes(id) ? !validPositive(id) : !has(id);
+    });
+    const selectedMode =
+      fields[definition.modeField] === "internal" ||
+      fields[definition.modeField] === "external"
+        ? fields[definition.modeField]
+        : has(definition.reference)
+          ? "external"
+          : "internal";
+    const mode =
+      selectedMode === "external"
+        ? has(definition.reference)
+          ? "external"
+          : "missing"
+        : missing.length === 0
+          ? "internal"
+          : "missing";
+    const attempted = definition.required.some(has);
+    return {
+      id: definition.id,
+      mode,
+      label: definition.label,
+      missing:
+        mode === "missing"
+          ? (selectedMode === "external"
+              ? [definition.reference]
+              : attempted
+                ? missing
+                : [definition.required[0]]
+            ).map(field)
+          : [],
+    };
+  });
 }
 /** Carry only still-applicable confirmations when a commissioning field changes. */
 export function updateCommissioningFields(
@@ -790,9 +1339,19 @@ export function updateCommissioningFields(
     updated.refrigerantId !== previous.refrigerantId ||
     updated.chargeKg !== previous.chargeKg ||
     updated.refrigerantGwp !== previous.refrigerantGwp ||
-    updated.refrigerantGwpBasis !== previous.refrigerantGwpBasis
-  )
+    updated.refrigerantGwpBasis !== previous.refrigerantGwpBasis ||
+    [
+      "leakEquipment",
+      "leakDetection",
+      "leakHermetic",
+      "leakHermeticLabel",
+      "leakResidential",
+      "performedOn",
+    ].some((id) => updated[id] !== previous[id])
+  ) {
     updated.leakCheckInterval = "";
+    updated.leakCheckEvidence = "";
+  }
   if (updated.refrigerantId !== previous.refrigerantId)
     updated.pressureTestRequired = "not_assessed";
   return updated;
@@ -801,9 +1360,12 @@ export function updateCommissioningFields(
 export function commissioningMissingFields(
   fields: Record<string, string>,
 ): ChecklistField[] {
+  if (fields.commissioningPurpose === "technical") return [];
   const required = [
     "equipment",
+    "performedOn",
     "technician",
+    "installationLocation",
     "installerCompany",
     "installerQualificationNumber",
     "responsiblePerson",
@@ -815,8 +1377,6 @@ export function commissioningMissingFields(
     "refrigerantSourceNote",
     "chargeKg",
     "leakCheckInterval",
-    "tightnessTestReportReference",
-    "testRunReportReference",
     "operatorDeclaration",
   ];
   const missing = required.filter((id) => !fields[id]?.trim());
@@ -838,6 +1398,12 @@ export function commissioningMissingFields(
       missing.push(id);
   if (!["yes", "no"].includes(fields.pressureTestRequired))
     missing.push("pressureTestRequired");
+  if (
+    !["equipment_documents", "expert_assessment", "other_documented"].includes(
+      fields.pressureAssessmentBasis,
+    )
+  )
+    missing.push("pressureAssessmentBasis");
   else if (
     fields.pressureTestRequired === "yes" &&
     !fields.pressureTestReportReference?.trim()
@@ -848,22 +1414,9 @@ export function commissioningMissingFields(
     !fields.pressureTestExemptionReason?.trim()
   )
     missing.push("pressureTestExemptionReason");
-  const inlineEvacuationComplete =
-    [
-      "criterion",
-      "instrumentName",
-      "measurementLocation",
-      "evacuationFinding",
-    ].every((id) => fields[id]?.trim()) &&
-    ["mbar", "micron", "Pa"].includes(fields.vacuumUnit) &&
-    [
-      "achievedPressure",
-      "holdStartPressure",
-      "holdEndPressure",
-      "holdMinutes",
-    ].every((id) => positive(id));
-  if (!fields.evacuationReportReference?.trim() && !inlineEvacuationComplete)
-    missing.push("evacuationReportReference");
+  for (const status of commissioningProtocolStatus(fields))
+    if (status.mode === "missing")
+      missing.push(...status.missing.map((item) => item.id));
   const all = [
     ...commonChecklistFields,
     ...checklistDefinitions.commissioning.fields,

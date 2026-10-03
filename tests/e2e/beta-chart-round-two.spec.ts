@@ -223,7 +223,7 @@ test("saved cycle retains its vector chart across reload and prints the stored c
   await page.goto("/#/reports");
   const report = page.locator(".report-entry");
   await expect(report).toHaveCount(1);
-  await report.locator(":scope > summary").click();
+  await report.click();
   const savedChart = report.locator(".report-chart img");
   await expect(savedChart).toBeVisible();
   await expect
@@ -249,14 +249,12 @@ test("saved cycle retains its vector chart across reload and prints the stored c
   );
 
   await page.reload();
-  if (!(await report.evaluate((details: HTMLDetailsElement) => details.open)))
-    await report.locator(":scope > summary").click();
-  await expect(report.locator(".report-chart img")).toHaveAttribute(
+  await expect(page.locator(".saved-report-detail .report-chart img")).toHaveAttribute(
     "src",
     chartSource!,
   );
   const popup = page.waitForEvent("popup");
-  await report.getByRole("button", { name: "Tulosta / tallenna PDF" }).click();
+  await page.getByRole("button", { name: "Tulosta / PDF" }).click();
   const printPage = await popup;
   const printedChart = printPage.locator("img.chart");
   await expect(printedChart).toHaveCount(1);

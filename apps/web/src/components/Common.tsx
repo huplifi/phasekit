@@ -84,7 +84,26 @@ function preferredGwp(r: Refrigerant) {
   );
 }
 
-export function GwpSummary({ r }: { r: Refrigerant }) {
+export function GwpBasisHelp({ r }: { r: Refrigerant }) {
+  const { data } = useApp();
+  const selected = preferredGwp(r);
+  if (!selected?.fact) return null;
+  return (
+    <InfoHelp
+      label={data.locale === "fi" ? "GWP-laskentaperuste" : "GWP basis"}
+    >
+      {refinementText(data.locale, selected.label)}
+    </InfoHelp>
+  );
+}
+
+export function GwpSummary({
+  r,
+  showBasis = true,
+}: {
+  r: Refrigerant;
+  showBasis?: boolean;
+}) {
   const { data } = useApp();
   const selected = preferredGwp(r);
   if (!selected?.fact) {
@@ -97,16 +116,26 @@ export function GwpSummary({ r }: { r: Refrigerant }) {
   return (
     <span className="gwp-summary">
       <FactValue fact={selected.fact} />
-      <span className="caption">
-        {refinementText(data.locale, selected.label)}
-      </span>
+      {showBasis && (
+        <span className="caption">
+          {refinementText(data.locale, selected.label)}
+        </span>
+      )}
     </span>
   );
 }
 
 export function GwpFacts({ r }: { r: Refrigerant }) {
   const { data } = useApp();
-  if (!gwpFacts.some(({ key }) => r.facts[key]?.state === "verified")) {
+  const available = gwpFacts.filter(
+    ({ key }) => r.facts[key]?.state === "verified",
+  );
+  const shortLabels = {
+    gwpFgas: data.locale === "fi" ? "F-kaasu" : "F-gas",
+    gwpOds: "ODS",
+    gwpIpccAr4: "AR4",
+  };
+  if (!available.length) {
     return (
       <p className="caption secondary">
         {refinementText(data.locale, "gwpUnavailable")}
@@ -115,15 +144,20 @@ export function GwpFacts({ r }: { r: Refrigerant }) {
   }
   return (
     <>
-      {gwpFacts
-        .filter(({ key }) => r.facts[key]?.state === "verified")
-        .map(({ key, label }) => (
-          <FactRow
-            key={key}
-            label={refinementText(data.locale, label)}
-            fact={r.facts[key]}
-          />
-        ))}
+      {available.map(({ key, label }) => (
+        <FactRow
+          key={key}
+          label={
+            <span className="gwp-heading">
+              {available.length > 1 ? `GWP (${shortLabels[label]})` : "GWP"}
+              <InfoHelp label={refinementText(data.locale, label)}>
+                {refinementText(data.locale, label)}
+              </InfoHelp>
+            </span>
+          }
+          fact={r.facts[key]}
+        />
+      ))}
     </>
   );
 }
@@ -294,7 +328,7 @@ export function FactRow({
   fact,
   children,
 }: {
-  label: string;
+  label: ReactNode;
   fact?: Fact;
   children?: ReactNode;
 }) {
@@ -305,11 +339,32 @@ export function FactRow({
     </div>
   );
 }
-export function SourceNote({ ids }: { ids: string[] }) {
+export function SourceNote({
+  ids,
+  disclosure = true,
+}: {
+  ids: string[];
+  disclosure?: boolean;
+}) {
   const { t, data } = useApp();
   const sourceIds = new Set(ids);
   const sources = dataset.sources.filter((s) => sourceIds.has(s.id));
   if (!sources.length) return <p className="caption">{t("sourceMissing")}</p>;
+  if (!disclosure)
+    return (
+      <div className="source-note-list">
+        {sources.map((s) => (
+          <p className="caption" key={s.id}>
+            <a href={s.url} target="_blank" rel="noreferrer">
+              {s.title}
+            </a>
+            <br />
+            {t("checked", { date: formatDate(s.checkedAt, data.locale) })}
+            {s.version ? " · " + t("version") + ": " + s.version : ""}
+          </p>
+        ))}
+      </div>
+    );
   return (
     <details className="source-disclosure">
       <summary>

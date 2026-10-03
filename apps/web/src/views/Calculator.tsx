@@ -622,7 +622,7 @@ export function Calculator({
       )}
       <RefrigerantPicker value={id} onChange={selectId} />
       <form
-        className="calculator-form"
+        className={`calculator-form${tool === "co2e" ? " co2e-form" : ""}`}
         onSubmit={(e) => {
           e.preventDefault();
           calculate();
@@ -825,7 +825,7 @@ export function Calculator({
                 />
               </label>
             </div>
-            <div className="help-heading">
+            <div className="help-heading temperature-heading">
               <h2>{l("Lämpötilat", "Temperatures")}</h2>
               <InfoHelp label={l("Mittauspisteet", "Measurement points")}>
                 {l(
@@ -1023,12 +1023,14 @@ export function Calculator({
             <summary>
               {l("Tietojen tausta ja käyttöalue", "Data provenance and range")}
             </summary>
+            <h3>{l("Laskentamalli", "Calculation model")}</h3>
             <p className="caption">
               {l(
                 "CoolProp 7.2.0 -malliin perustuva offline-interpolointi. Ei mittaustulos; vain neste–höyry-tasapainolle. Kriittisen pisteen lähialue on rajattu pois.",
                 "Offline interpolation from the CoolProp 7.2.0 model. Not a measurement; liquid–vapour equilibrium only. The near-critical region is excluded.",
               )}
             </p>
+            <h3>{l("Käyttöalue", "Supported range")}</h3>
             <p className="mono">
               {formatNumber(
                 Number(available.minimumTemperatureC),
@@ -1061,9 +1063,11 @@ export function Calculator({
               )}
             </p>
             <p className="caption mono">
+              {l("P–T-aineiston versio", "P–T dataset version")}:{" "}
               {offlinePTProvider.metadata.dataVersion}
             </p>
-            <SourceNote ids={["coolprop-pt-7.2.0"]} />
+            <h3>{l("Lähteet", "Sources")}</h3>
+            <SourceNote ids={["coolprop-pt-7.2.0"]} disclosure={false} />
           </details>
         ) : (
           <p className="notice">

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Imuvaraaja / nesteenerotin">
+  <title>Imuvaraaja / nesteenerotin</title>
+  <desc>Erottaa nestemäistä kylmäainetta imukaasusta ennen kompressoria. Danfossin ACC-merkin yksinkertaistettu säiliöesitys. Ei kuvaa sisäistä öljynpalautusta, rakennetta tai mitoitusta.</desc>
+  <path d="M16 24A16 12 0 0 1 48 24V40A16 12 0 0 1 16 40Z"/>
+  <path d="M32 8V12M32 52V56"/>
+  <g transform="translate(21 26)">
+  <path d="M0 12L3.5 0L7 12M1.2 8H5.8"/>
+  </g>
+  <g transform="translate(29 26)">
+  <path d="M7 1C-2 -3 -2 15 7 11"/>
+  </g>
+  <g transform="translate(37 26)">
+  <path d="M7 1C-2 -3 -2 15 7 11"/>
+  </g>
+</svg>

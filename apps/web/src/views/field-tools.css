@@ -191,3 +191,28 @@
 .field-formula {
   font-family: var(--font-data);
 }
+
+@media (max-width: 500px) {
+  .field-tools .field-electrical-choices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.related-tool {
+  margin-block: 28px;
+  padding-block: 16px;
+  border-top: 1px solid var(--divider);
+}
+.field-tools .related-tool h2 {
+  margin: 0 0 4px;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.related-tool > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 0.875rem;
+}
