@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.0-beta.8 — 2026-10-03 · Beta
+
+PDF export in installed apps
+
+- Print previews can save or share a real PDF file directly, independently of the browser print dialog, using local fonts offline.
+- The report management entry is now Equipment and sites. Add site and Add equipment have equal widths aligned with the site cards. More-menu icons are centred.
+
 ## 0.4.0-beta.7 — 2026-10-03 · Beta
 
 Sites, equipment and consistent reports

@@ -221,7 +221,7 @@ export function Saved({
             type="button"
             onClick={() => go("/equipment")}
           >
-            {l(data.locale, "Hallitse laitteita", "Manage equipment")}
+            {l(data.locale, "Laitteet ja kohteet", "Equipment and sites")}
           </button>
         </div>
         <p className="supporting-copy">

@@ -3,6 +3,8 @@ import packageInfo from "../../../package.json" with { type: "json" };
 import Decimal from "decimal.js";
 import { dataset } from "./data";
 import printControlsSource from "./print-controls.js?raw";
+import jsPdfSource from "jspdf/dist/jspdf.umd.min.js?raw";
+import reportPdfSource from "./report-pdf.js?raw";
 import { renderCycleChartSvg } from "./ph-chart-snapshot";
 import {
   checklistDefinitions,
@@ -65,6 +67,11 @@ async function embedPrintFonts(doc: Document) {
     ["Unbounded", "600 700", "/fonts/unbounded/Unbounded-Variable.ttf"],
     ["Poppins", "400", "/fonts/poppins/Poppins-Regular.ttf"],
     ["Poppins", "700", "/fonts/poppins/Poppins-Bold.ttf"],
+    [
+      "PhaseKit PDF Symbols",
+      "400",
+      "/fonts/ioskeley-mono/IoskeleyMono-Regular.ttf",
+    ],
     ["Ioskeley Mono", "400", "/fonts/ioskeley-mono/IoskeleyMono-Regular.woff2"],
     [
       "Ioskeley Mono",
@@ -74,20 +81,34 @@ async function embedPrintFonts(doc: Document) {
   ];
   const loaded = await Promise.allSettled(
     fonts.map(async ([family, weight, path]) => {
-      const response = await fetch(new URL(path, window.location.href), {
-        signal: AbortSignal.timeout(1800),
-      });
+      const url = new URL(path, window.location.href);
+      // Read the installed app's precache directly as well: an about:blank
+      // preview is not controlled by the worker, and offline fetch varies by host.
+      const cached =
+        "caches" in window
+          ? await window.caches
+              .match(url.href, { ignoreSearch: true })
+              .catch(() => undefined)
+          : undefined;
+      const response =
+        cached ??
+        (await fetch(url, {
+          signal: AbortSignal.timeout(1800),
+        }));
       if (!response.ok) throw new Error("print_font_unavailable");
-      const blob = await response.blob();
-      const data = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result));
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(blob);
-      });
+      const bytes = new Uint8Array(await response.arrayBuffer());
+      let binary = "";
+      for (let offset = 0; offset < bytes.length; offset += 8192)
+        binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
+      const data = `data:${response.headers.get("content-type") || "font/ttf"};base64,${btoa(binary)}`;
       return `@font-face{font-family:"${family}";font-weight:${weight};font-style:normal;font-display:swap;src:url("${data}")}`;
     }),
   );
+  doc.documentElement.dataset.printFontErrors = loaded
+    .flatMap((result) =>
+      result.status === "rejected" ? [String(result.reason)] : [],
+    )
+    .join("; ");
   const style = doc.createElement("style");
   style.textContent = loaded
     .flatMap((result) => (result.status === "fulfilled" ? [result.value] : []))
@@ -128,6 +149,7 @@ export function createPrintDocument(
   style.textContent += `.field-report-document .field-summary-compact{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.field-report-document .field-summary-compact .field-summary-card{padding:7px 9px}.field-report-document .field-summary-compact .field-summary-card dd{font-size:17px}.field-report-document .meta{margin-bottom:4px}.field-report-document .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:7px 0}.field-report-document .signature-line{max-width:none;margin:9px 0 4px}.signature-caption{font-size:11px;color:#405158}.legacy-signature-name{font-size:11px;color:#405158}.source-list{list-style:none;margin:5px 0;padding:0;font-size:11px;line-height:1.25;columns:2;column-gap:18px}.source-list li{margin:0 0 4px;break-inside:avoid;overflow-wrap:anywhere}.source-meta{color:#405158;font-size:10.5px}.leak-document h2{margin:12px 0 5px}.leak-document .detail-list{gap:3px 15px}.leak-document .detail-list div{padding:3px 0}.leak-document .hero{margin:10px 0 8px}.hero-alert{font-weight:700;color:#84213b;border-top:1px solid #84213b;margin:9px 0 0;padding-top:8px}.compact-table{width:100%;border-collapse:collapse;font-size:11px;margin:6px 0 10px}.compact-table th{text-align:left;color:#405158;font-weight:650}.compact-table th,.compact-table td{padding:5px 6px;border-bottom:1px solid #d7dfe2;vertical-align:top;overflow-wrap:anywhere}.compact-table tr{break-inside:avoid;page-break-inside:avoid}.compact-table td:last-child,.compact-table th:last-child{text-align:right}.compact-table .subline{display:block;font-size:10px;color:#405158}.leak-document .source-version-line{font-size:11px;color:#405158;margin:4px 0}.leak-document .notice{margin-top:8px;padding-top:6px}.leak-document .document-footer{margin-top:6px;padding-top:6px}`;
   style.textContent += `.commissioning-document h2{margin:9px 0 4px}.commissioning-document .field-summary-card{padding:5px 8px}.commissioning-document .field-summary-card dd{font-size:16px;margin-top:2px}.commissioning-document .checklist-steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}.commissioning-document .checklist-steps li{min-width:0}.commissioning-document .field-inline-note{font-size:11px;margin:4px 0;padding:3px 0;border-bottom:1px solid #d7dfe2}.commissioning-document .cycle-input-line{font-size:11px;color:#405158;margin:4px 0 8px;line-height:1.35}.commissioning-document .cycle-details .row{padding:2px 0}`;
   style.textContent += `.print-toolbar{position:sticky;top:0;z-index:10;display:flex;gap:8px;align-items:stretch;background:#fff;border-bottom:1px solid #929fa5;padding:10px 0;margin:0 0 16px}.print-toolbar a,.print-toolbar button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:0;flex:1;padding:8px 12px;border:1px solid #283b42;border-radius:5px;background:#fff;color:#182127;font:600 14px/1.2 system-ui,sans-serif;text-align:center;text-decoration:none;cursor:pointer}.print-toolbar .print-action{background:#283b42;color:#fff}.print-toolbar button:disabled{opacity:.5;cursor:wait}.print-toolbar :focus-visible{outline:3px solid #276e9f;outline-offset:2px}@media screen and (max-width:500px){body{margin:0 auto;padding:0 16px 24px}.rows,.detail-list{grid-template-columns:minmax(0,1fr)}.row dt{overflow-wrap:anywhere}.sources,.source-list{columns:1}.print-toolbar{margin:0 -16px 16px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px}.print-toolbar a,.print-toolbar button{padding:8px 7px}}@media print{.print-toolbar{display:none!important}}`;
+  style.textContent += `.print-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}.print-toolbar .pdf-action{background:#283b42;color:#fff}.print-toolbar .print-action{background:#fff;color:#182127;grid-column:1 / -1;justify-self:end;border:0;text-decoration:underline;min-height:44px;padding:4px 0}.print-toolbar .pdf-status{grid-column:1 / -1;margin:0;font:12px/1.4 Poppins,system-ui,sans-serif;color:#405158}.print-toolbar .pdf-status:empty{display:none}.print-toolbar .pdf-download{grid-column:1 / -1;border:0;padding:4px 0;justify-self:start;text-decoration:underline}.print-toolbar [hidden]{display:none!important}`;
   style.textContent += `.field-report-document .detail-long{grid-column:1 / -1;break-inside:auto;page-break-inside:auto}.field-report-document .detail-long dd{orphans:3;widows:3}.protocol-manifest{font-size:11px;padding-left:18px}.protocol-manifest li{margin:4px 0;break-inside:avoid}.field-report-document p{orphans:3;widows:3}`;
   style.textContent += `.document-subhead{font-size:15px;font-weight:700;line-height:1.35;border-left:3px solid #283b42;padding-left:10px;margin:5px 0 8px}.field-report-document .document-subhead{margin:5px 0 8px}.hero-value,.result-card dd,.field-summary-card dd,.numeric{font-family:"Ioskeley Mono",ui-monospace,monospace;font-weight:600;font-variant-numeric:tabular-nums}.measurement-context,.frozen-evidence{font-size:10.5px;color:#405158}.missing-items{padding-left:18px;margin:6px 0 12px}.missing-items li{margin:3px 0;break-inside:avoid}thead{display:table-header-group}h1,h2,.document-subhead{break-after:avoid;page-break-after:avoid}p,dd{orphans:3;widows:3}`;
   doc.head.append(style);
@@ -148,9 +170,31 @@ export function createPrintDocument(
   const print = doc.createElement("button");
   print.type = "button";
   print.className = "print-action";
-  print.textContent = locale === "fi" ? "Tulosta / PDF" : "Print / PDF";
+  print.textContent = locale === "fi" ? "Tulosta" : "Print";
   print.disabled = true;
-  toolbar.append(back, print);
+  // iOS Home Screen apps can expose window.print while doing nothing on tap.
+  // Use the prepared PDF and native share sheet as their visible export action.
+  print.hidden =
+    (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  const pdf = doc.createElement("button");
+  pdf.type = "button";
+  pdf.className = "pdf-action";
+  pdf.textContent =
+    locale === "fi" ? "Valmistellaan PDF:ää…" : "Preparing PDF…";
+  pdf.disabled = true;
+  toolbar.append(back, pdf, print);
+  const pdfStatus = doc.createElement("p");
+  pdfStatus.className = "pdf-status";
+  pdfStatus.dataset.pdfControl = "true";
+  pdfStatus.setAttribute("role", "status");
+  pdfStatus.setAttribute("aria-live", "polite");
+  const download = doc.createElement("a");
+  download.className = "pdf-download";
+  download.dataset.pdfControl = "true";
+  download.hidden = true;
+  download.textContent =
+    locale === "fi" ? "Lataa PDF-tiedosto" : "Download PDF file";
+  toolbar.append(download, pdfStatus);
   doc.body.append(toolbar);
   const brand = doc.createElement("p");
   brand.className = "brand";
@@ -1413,7 +1457,9 @@ export function printWhenReady(
   // Bundle this trusted static code with the app: a new about:blank preview
   // cannot rely on the opener's service worker to fetch a script offline.
   // Inserting a script also keeps its handlers in the preview's own realm.
-  script.textContent = printControlsSource;
+  // Keep PDF generation and share handlers in the preview realm too. No CDN,
+  // opener callbacks or network request is needed after the document is ready.
+  script.textContent = `${jsPdfSource}\n${reportPdfSource}\n${printControlsSource}`;
   script.addEventListener("error", () => {
     const warning = doc.createElement("p");
     warning.className = "notice";

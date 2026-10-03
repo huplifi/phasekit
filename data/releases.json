@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.4.0-beta.8",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "PDF-vienti myös sovellustilassa",
+      "en": "PDF export in installed apps"
+    },
+    "changes": {
+      "fi": [
+        "Tulostusesikatselusta voi tallentaa tai jakaa oikean PDF-tiedoston suoraan. Vienti toimii erillään selaimen tulostusikkunasta ja käyttää paikallisia fontteja myös offline-tilassa.",
+        "Raporttien hallintapainike on nimeltään Laitteet ja kohteet. Lisää kohde ja Lisää laite ovat tasaleveät ja linjassa kohdekorttien kanssa. Pistevalikoiden kuvakkeet on keskitetty."
+      ],
+      "en": [
+        "Print previews can save or share a real PDF file directly, independently of the browser print dialog, using local fonts offline.",
+        "The report management entry is now Equipment and sites. Add site and Add equipment have equal widths aligned with the site cards. More-menu icons are centred."
+      ]
+    }
+  },
+  {
     "version": "0.4.0-beta.7",
     "date": "2026-10-03",
     "channel": "beta",
