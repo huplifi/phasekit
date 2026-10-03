@@ -17,3 +17,7 @@ Relevant storage, report-default, route and release-history unit tests; TypeScri
 Runtime results and exact release revision are recorded after verification below.
 
 Verified locally: 33 relevant unit tests passed; TypeScript and ESLint for all changed TypeScript files passed; production build passed (existing large-bundle warning). Eight distinct mobile-WebKit flows passed, including the two existing legacy/final equipment-history flows; the site/device flow also passed desktop WebKit. The new mixed-list flow covers cancelled then accepted browser Back with dirty notes. Two test assumptions were corrected (an already open accordion and the location of preserved original equipment identity); these were test issues, not suppressed product failures. Mobile list/detail/site screenshots were inspected.
+
+## Published beta
+
+PR #27 merged to beta as `cc8b4219e4f92ac804eeff5d63d752b53ac603e9`; the merged tree exactly matched verified candidate `db255d04da00bb21a45b5076955291f898ffbce0`. The public HTTPS asset and a fresh mobile-WebKit visit to Settings confirmed **0.4.0-beta.7 / cc8b421** at https://beta.phasekit.app. The live equipment view exposes both site and equipment creation. This is browser-emulated WebKit evidence, not a physical iPhone test. Redundant full CI run `37135999359` was deliberately cancelled after tree comparison; the actual deployment completed. No paid Deploy Preview was requested. Stable was unchanged.
