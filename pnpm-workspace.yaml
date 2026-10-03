@@ -3,5 +3,6 @@ packages:
   - packages/*
   - packages/rulesets/*
 allowBuilds:
+  core-js: false
   esbuild: true
 enableGlobalVirtualStore: false
