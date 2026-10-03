@@ -23,7 +23,7 @@ The owner gave GO for the collected screenshots and requested Sol/Luna implement
 
 Finlex's official original VNa 1063/2025 §9 was re-read on 3 October 2026: https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf. Its eleven content categories are not identical to a count of missing input fields in the app. The existing completeness model also captures supporting records and applicability. This presentation work does not amend the model or claim legal/technical approval from filled fields. No exhaustive amendment-history audit is claimed.
 
-The actual beta URL, https://beta.phasekit.app, serves beta.5/revision `9cdcffb`. The user's screenshots show beta.4 under a different Sites hostname; those screenshots are not evidence that the Netlify beta publication failed.
+At the start of this round, the actual beta URL, https://beta.phasekit.app, served beta.5/revision `9cdcffb`. The user's screenshots show beta.4 under a different Sites hostname; those screenshots are not evidence that the Netlify beta publication failed.
 
 ## Verification plan
 
@@ -41,3 +41,7 @@ Run one integrated type/lint/build check, affected behaviour tests only, and ins
 No full browser suite, dependency installation or paid Deploy Preview was requested. Following the owner's explicit minimal-test/build-cost preference, this beta round uses the relevant local checks above instead of the generic full-CI release recipe. The candidate commit/PR skips duplicate CI and preview builds; one merge into `beta` triggers the actual deployment. A redundant merge-triggered full CI run may be cancelled only after the merged tree matches the verified candidate. This is not a claim that the full CI suite passed.
 
 Physical iPhone AirPrint/dialog behaviour remains a device check. Automated WebKit checks verify browser control dispatch and navigation, not a printer or iOS system dialog. The separate Sites URL is not republished by this Netlify beta release, and no browser storage is cleared.
+
+## Publication
+
+PR #26 merged into beta as `2b5b8f977fb60d09b7b6d6ca49efaef162553b06` on 3 October 2026. The merged tree exactly matched tested candidate `4803a1e`. The published HTTPS bundle and a fresh mobile-WebKit Settings visit both confirmed `0.4.0-beta.6` / `2b5b8f9` at https://beta.phasekit.app. The redundant full CI run `37130332710` was deliberately cancelled; it did not fail validation. No Deploy Preview was requested, and stable was not changed.
