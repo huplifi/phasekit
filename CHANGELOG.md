@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.1 — 2026-10-03 · Beta
+
+A new beta series
+
+- The 0.5 beta series starts from stable 0.4.0 functionality. This initial beta adds no new features.
+- Existing beta reports, sites and equipment are retained. Beta and stable continue to use separate storage.
+
 ## 0.4.0 — 2026-10-03 · Stable
 
 Reports, sites and PDF export

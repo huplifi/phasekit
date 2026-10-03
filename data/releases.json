@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.5.0-beta.1",
+    "date": "2026-10-03",
+    "channel": "beta",
+    "title": {
+      "fi": "Uusi betasarja",
+      "en": "A new beta series"
+    },
+    "changes": {
+      "fi": [
+        "Betasarja 0.5 alkaa vakaan version 0.4.0 toiminnallisuudesta. Tässä avausversiossa ei ole uusia ominaisuuksia.",
+        "Betan aiemmat raportit, kohteet ja laitteet säilyvät. Betan ja vakaan version tallennustilat pysyvät erillään."
+      ],
+      "en": [
+        "The 0.5 beta series starts from stable 0.4.0 functionality. This initial beta adds no new features.",
+        "Existing beta reports, sites and equipment are retained. Beta and stable continue to use separate storage."
+      ]
+    }
+  },
+  {
     "version": "0.4.0",
     "date": "2026-10-03",
     "channel": "stable",
