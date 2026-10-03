@@ -111,8 +111,11 @@ test("three-refrigerant print retains explicitly unavailable oil guidance", asyn
   const printed = await popup;
   await expect(printed.locator(".compare-table thead th")).toHaveCount(4);
   await expect(
-    printed.getByRole("row", { name: /Öljyohje ja rajaukset/ }),
-  ).toContainText("Varmennettua öljytietoa ei ole tietoaineistossa.");
+    printed
+      .getByRole("row", { name: /Öljyohje ja rajaukset/ })
+      .getByRole("cell")
+      .last(),
+  ).toHaveText("Tieto puuttuu");
   await expect(printed.locator(".compare-table")).toContainText("R13I1");
   await expect(printed.locator(".comparison-sources")).toContainText("R13I1");
   if (info.project.name === "desktop-chromium") {
