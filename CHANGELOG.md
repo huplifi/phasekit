@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.4.1 — 2026-10-04 · Stable
+
+Meet PhaseKit
+
+- A new introduction presents PhaseKit’s tools, reports and site and equipment workflows in Finnish and English.
+- The shareable page brings together the project’s story, principles of openness, Home Screen instructions and links to stable and beta.
+- The About PhaseKit link in Settings opens the introduction in the selected language.
+
 ## 0.4.0 — 2026-10-03 · Stable
 
 Reports, sites and PDF export

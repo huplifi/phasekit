@@ -57,9 +57,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,json,svg,png,woff2,ttf,txt}"],
+        globIgnores: ["about/**", "tietoa/**"],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         cleanupOutdatedCaches: true,
         navigateFallback: "/index.html",
+        navigateFallbackDenylist: [/^\/(?:about|tietoa)(?:\/|$)/],
       },
     }),
   ],

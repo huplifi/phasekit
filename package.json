@@ -1,12 +1,13 @@
 {
   "name": "phasekit",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@11.19.0",
   "scripts": {
     "dev": "vite --config apps/web/vite.config.ts --host 127.0.0.1",
-    "build": "pnpm data:build && pnpm tokens:build && pnpm release:build && tsc --noEmit && vite build --config apps/web/vite.config.ts",
+    "build": "pnpm data:build && pnpm tokens:build && pnpm release:build && tsc --noEmit && vite build --config apps/web/vite.config.ts && pnpm about:build",
+    "about:build": "node --import tsx scripts/about-build.ts",
     "preview": "vite preview --config apps/web/vite.config.ts --host 127.0.0.1",
     "lint": "eslint apps packages scripts tests --max-warnings 0",
     "typecheck": "tsc --noEmit",
