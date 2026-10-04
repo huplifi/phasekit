@@ -156,7 +156,7 @@ export function renderAboutPage(locale: "fi" | "en") {
 <section class="release-section wrap section" aria-labelledby="release-title"><div><p class="section-number" aria-hidden="true">05 / ${l("KEHITTYY KÄYTÖSSÄ", "BUILT TO KEEP IMPROVING")}</p><h2 id="release-title">${l("Pieni työkalu.\nJatkuva kehitys.", "A practical tool.\nAlways improving.").replace("\n", "<br>")}</h2><p>${l("PhaseKit kasvaa todellisista käyttötarpeista. Lähdekoodi, muutokset ja keskustelu ovat avoimesti GitHubissa.", "PhaseKit grows from real needs. Its source code, changes and discussion are open on GitHub.")}</p><a class="text-link" href="${github}">${t.githubLink}${external}</a></div><article class="release-note"><div class="release-meta"><span>${t.releaseTitle}</span><time datetime="${stable.date}">${new Intl.DateTimeFormat(fi ? "fi-FI" : "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(stable.date + "T12:00:00Z"))}</time></div><p class="release-version">${stable.version}</p><h3>${escape(stable.title[locale])}</h3><ul>${stable.changes[
     locale
   ]
-    .slice(1, 4)
+    .slice(0, 3)
     .map((text) => `<li>${escape(text)}</li>`)
     .join(
       "",

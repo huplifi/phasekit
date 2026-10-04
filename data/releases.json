@@ -1,5 +1,26 @@
 [
   {
+    "version": "0.4.1",
+    "date": "2026-10-04",
+    "channel": "stable",
+    "title": {
+      "fi": "PhaseKit tutuksi",
+      "en": "Meet PhaseKit"
+    },
+    "changes": {
+      "fi": [
+        "Uusi esittelysivu kertoo PhaseKitin työkaluista, raporteista sekä kohteiden ja laitteiden hyödyntämisestä suomeksi ja englanniksi.",
+        "Jaettava sivu kokoaa sovelluksen taustan, avoimuuden periaatteet, kotinäytölle lisäämisen ohjeet ja linkit vakaaseen versioon sekä betaan.",
+        "Asetusten Tietoa PhaseKitistä -linkki avaa esittelyn valitulla kielellä."
+      ],
+      "en": [
+        "A new introduction presents PhaseKit’s tools, reports and site and equipment workflows in Finnish and English.",
+        "The shareable page brings together the project’s story, principles of openness, Home Screen instructions and links to stable and beta.",
+        "The About PhaseKit link in Settings opens the introduction in the selected language."
+      ]
+    }
+  },
+  {
     "version": "0.4.0",
     "date": "2026-10-03",
     "channel": "stable",
