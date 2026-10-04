@@ -66,7 +66,7 @@ export const copy = {
       "Kun olet avannut sovelluksen verkossa, se ja sen aineistot ovat käytettävissä myös offline-tilassa. Raportit ja laskelmat pysyvät tässä selaimessa.",
     privacyTitle: "Tallennukset pysyvät laitteellasi",
     privacyBody:
-      "PhaseKit ei käytä käyttäjätilejä, analytiikkaa tai pilvitallennusta. Vie varmuuskopio asetuksista, jos haluat siirtää tietoja toiseen selaimeen.",
+      "PhaseKit ei vaadi käyttäjätiliä eikä lähetä raporttejasi pilveen. Vie varmuuskopio asetuksista, jos haluat siirtää tietoja toiseen selaimeen. Sivuston käyntitilastot perustuvat palvelinpyyntöihin.",
     installTitle: "Ota PhaseKit mukaan",
     installIntro:
       "Avaa ensin PhaseKitin vakaa versio. Lisää se sitten puhelimen kotinäyttöön, niin saat sovelluksen auki nopeasti myös kentällä.",
@@ -173,7 +173,7 @@ export const copy = {
       "After you first open the app online, it and its datasets are available offline too. Reports and calculations stay in that browser.",
     privacyTitle: "Your records stay on your device",
     privacyBody:
-      "PhaseKit uses no user accounts, analytics or cloud storage. Export a backup in Settings if you want to move data to another browser.",
+      "PhaseKit requires no account and does not upload your reports to the cloud. Export a backup in Settings to move data to another browser. Site visit statistics are based on server requests.",
     installTitle: "Take PhaseKit with you",
     installIntro:
       "Open the stable version first, then add it to your phone’s Home Screen for quick access in the field.",
