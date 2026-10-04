@@ -8,6 +8,16 @@
   PNPM_FLAGS = "--frozen-lockfile"
 
 [[redirects]]
+  from = "/about"
+  to = "/about/"
+  status = 301
+
+[[redirects]]
+  from = "/tietoa"
+  to = "/tietoa/"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

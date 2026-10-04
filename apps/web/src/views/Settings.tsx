@@ -194,8 +194,8 @@ export function Settings() {
           <div>
             <dt>{l("Verkkosivusto", "Website")}</dt>
             <dd>
-              <a href="https://phasekit.app" target="_blank" rel="noreferrer">
-                phasekit.app
+              <a href={data.locale === "fi" ? "/tietoa/" : "/about/"}>
+                {l("Tietoa PhaseKitistä", "About PhaseKit")}
               </a>
             </dd>
           </div>
@@ -250,7 +250,10 @@ export function Settings() {
           {l("Anna palautetta", "Give feedback")}
           <ExternalLink size={18} aria-hidden="true" />
         </a>
-        <p id="feedback-destination" className="caption secondary feedback-description">
+        <p
+          id="feedback-destination"
+          className="caption secondary feedback-description"
+        >
           {l(
             "Palaute ja virheilmoitukset GitHubissa. Avautuu uuteen välilehteen.",
             "Feedback and bug reports on GitHub. Opens in a new tab.",
