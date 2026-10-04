@@ -901,9 +901,13 @@ details[open] summary > span {
 .author-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 88px;
+  gap: 28px 88px;
+  align-items: start;
   border-top: 1px solid var(--divider);
   padding-block: 56px 88px;
+}
+.author-heading {
+  grid-column: 1 / -1;
 }
 .author-section h2 {
   font-size: 30px;
@@ -946,14 +950,15 @@ details[open] summary > span {
 .license-links {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 .license-links .text-link {
   font-size: 13px;
 }
 .author-portrait {
+  display: block;
   width: 100%;
-  margin-top: 28px;
+  margin-top: 0;
   border-radius: 16px;
 }
 .author-values {
@@ -962,13 +967,16 @@ details[open] summary > span {
 }
 @media (max-width: 900px) {
   .author-section {
-    gap: 40px;
+    gap: 28px 40px;
   }
 }
 @media (max-width: 600px) {
   .license-note {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+  .license-links {
+    align-items: flex-start;
   }
   .author-section {
     gap: 28px;
@@ -1145,10 +1153,11 @@ details[open] summary > span {
   font-size: 17px;
 }
 .calculator-example {
-  max-width: 780px;
+  max-width: 720px;
   margin: 56px auto 0;
 }
 .calculator-example img {
+  padding: 20px;
   display: block;
   width: 100%;
   height: auto;
@@ -1175,5 +1184,22 @@ details[open] summary > span {
 @media (max-width: 600px) {
   .knowledge-intro {
     font-size: 15px;
+  }
+}
+
+.principle-grid .line-icon {
+  width: 40px;
+  height: 40px;
+}
+@media (max-width: 600px) {
+  .principle-grid .line-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .calculator-example img {
+    padding: 12px;
   }
 }

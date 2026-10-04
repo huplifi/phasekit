@@ -41,3 +41,11 @@ The primary message is now “Tieto käyttöön. Työ talteen.” / “Knowledge
 `report-desktop.webp` (1220 × 850), `report-mobile.webp` (390 × 760) and `equipment-mobile.webp` (390 × 850) use the same fictional Esimerkkikohde / Lämpöpumppu 1 record, R32 and 2 kg, dated 2026-10-04. The equipment view includes its linked completed service report. Reproduce with `node scripts/about-capture-workflow.mjs`.
 
 The toolkit uses four equal text entries, followed by the log(p)–h screenshot as a separate centred example. This prevents one image from stretching a single grid row on desktop. Privacy copy distinguishes browser-local records from hosting request statistics.
+
+## Final publication refinements
+
+The hero uses `commissioning-desktop.webp`, a real print preview populated with clearly fictional commissioning data. The service-report and equipment images remain paired in the workflow section. Regenerate the hero alone with `node scripts/about-capture-workflow.mjs --commissioning-only`.
+
+`cycle-desktop.webp` is now a 664 × 766 capture of the actual diagram section, including axes, controls, legend and model limitations, without desktop gutters or navigation. Regenerate using `node scripts/about-capture-cycle.mjs`.
+
+The author heading spans both columns; portrait and body text start together below it. Licence links align to the right on desktop and below the text on mobile. MIT is also named in the development section. Principle icons are 40 px on desktop and 32 px on mobile. The beta action deliberately omits a version number that could become stale independently of the stable page.
