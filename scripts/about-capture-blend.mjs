@@ -13,8 +13,8 @@ try {
     colorScheme: "dark",
     deviceScaleFactor: 1,
   });
-  await page.goto(`${baseURL}/#/check/r454b`);
-  await page.getByLabel("Täytös", { exact: true }).fill("20");
+  await page.goto(`${baseURL}/#/check/r513a`);
+  await page.getByLabel("Täytös", { exact: true }).fill("25");
   await page.locator("#check-date").fill("2026-10-04");
   await page
     .getByRole("button", { name: "Laske tarkastusväli", exact: true })
@@ -34,6 +34,9 @@ try {
   if (theme.applied !== "dark")
     throw new Error("Application dark theme did not apply");
   console.log("Verified application theme:", theme);
+  const result = await page.locator(".result-card").innerText();
+  for (const required of ["R513A · 25 kg", "6 kuukauden välein", "14 kg", "R1234yf"])
+    if (!result.includes(required)) throw new Error(`Unexpected blend result: missing ${required}`);
   const screenshot = await page.screenshot();
   // Convert the genuine screenshot using Chromium's native WebP encoder.
   const webp = await page.evaluate(

@@ -32,7 +32,7 @@ Portrait `samu-hupli.jpg` was supplied by Samu for this page and copied without 
 
 The opening now states the memory/learning benefit and explicitly identifies refrigeration work and study across phone, tablet and computer. A short explanation of visible formulas, sources, limits and export precedes a three-step illustrative service workflow. Refrigerant data and report imagery share the workflow; the full feature inventory follows it.
 
-`blend-check-mobile.webp` is a real app screenshot: R454B, 20 kg, assessment date 2026-10-04, stationary refrigeration, no leak detection, not hermetically sealed, no previous inspection date. The displayed result and its limitations are preserved. It is an illustrative calculation, not a customer record. Reproduce with `node scripts/about-capture-blend.mjs` against local preview4184.
+`blend-check-mobile.webp` is a real app screenshot: R513A, 25 kg, assessment date 2026-10-04, stationary refrigeration, no leak detection, not hermetically sealed, no previous inspection date. The displayed result is six months, governed by 14 kg of R1234yf (Annex II group 1); its limitations are preserved. It is an illustrative calculation, not a customer record. Reproduce with `node scripts/about-capture-blend.mjs` against local preview4184.
 
 ## Professional workflow emphasis
 
