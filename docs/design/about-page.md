@@ -1,6 +1,6 @@
 # PhaseKit public introduction
 
-Review branch: `codex/about-page`. This change prepares the pages; it does not publish them.
+Published as stable 0.4.1 on 4 October 2026 via PR #31, production commit `d159ce53dc575bdcf9cd52ddd8dfe00c84c1aef2` and tag `v0.4.1`. Netlify deployment `6ac224f36a629500093d6115` was confirmed Published.
 
 - Finnish `/tietoa/`, English `/about/`; the app remains at `/`.
 - Complete static HTML from `apps/web/about/render.ts` and `copy.ts`, generated after Vite by `scripts/about-build.ts`. Language navigation and installation disclosures work without JavaScript.
@@ -49,3 +49,11 @@ The hero uses `commissioning-desktop.webp`, a real print preview populated with 
 `cycle-desktop.webp` is now a 664 × 766 capture of the actual diagram section, including axes, controls, legend and model limitations, without desktop gutters or navigation. Regenerate using `node scripts/about-capture-cycle.mjs`.
 
 The author heading spans both columns; portrait and body text start together below it. Licence links align to the right on desktop and below the text on mobile. MIT is also named in the development section. Principle icons are 40 px on desktop and 32 px on mobile. The beta action deliberately omits a version number that could become stale independently of the stable page.
+
+## Publication verification
+
+CI run `37193337907` passed 453 unit tests and 466 browser tests (two existing WebKit skips). The merged tree was byte-for-byte identical to the tested candidate; the redundant post-merge run was cancelled. Production HTTP checks confirmed both language pages, canonical/indexing metadata, sitemap, robots, social images and latest captures. Browser language navigation passed.
+
+An already controlled browser initially used the old service worker fallback and displayed the app at `/tietoa/`. Accepting the normal offered update activated the new route exclusions and loaded the introduction successfully, without clearing storage. Fresh visitors receive the static pages directly.
+
+Unknown server paths still return the application HTML with HTTP 200. That separately requested audit is recorded in `docs/BETA-FEEDBACK-2026-10-04.md`; routing changes await the next authorised update.
