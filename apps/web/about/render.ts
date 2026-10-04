@@ -114,9 +114,11 @@ export function renderAboutPage(locale: "fi" | "en") {
   )
     .map(
       ([name, title, body, route]) =>
-        `<article>${icon(name)}<h3>${title}</h3><p>${body}</p>${name === "chart" ? `<img class="calculator-preview" src="/about/images/cycle-desktop.webp" width="1220" height="850" alt="${l("Kylmäkierron log(p)–h-kaavio PhaseKitissä", "A refrigeration cycle log(p)–h diagram in PhaseKit")}" loading="lazy">` : ""}<a class="text-link" href="${app}${route}">${l("Tutustu sovelluksessa", "Explore in the app")}${arrow}</a></article>`,
+        `<article>${icon(name)}<h3>${title}</h3><p>${body}</p><a class="text-link" href="${app}${route}">${l("Tutustu sovelluksessa", "Explore in the app")}${arrow}</a></article>`,
     )
-    .join("")}</div></section>
+    .join(
+      "",
+    )}</div><figure class="calculator-example"><img src="/about/images/cycle-desktop.webp" width="1220" height="850" alt="${l("Kylmäkierron log(p)–h-kaavio PhaseKitissä", "A refrigeration cycle log(p)–h diagram in PhaseKit")}" loading="lazy"><figcaption>${l("Kylmäkierto näkyviin log(p)–h-kaaviossa — ilman paperia ja kynää.", "See the refrigeration cycle on a log(p)–h diagram — without pen and paper.")}</figcaption></figure></section>
 <section id="story" class="story-band"><div class="wrap story-grid"><div><p class="section-number" aria-hidden="true">03 / ${l("ALKUSYSÄYS", "THE STARTING POINT")}</p><h2>${t.whyTitle}</h2><div class="story-text"><p>${t.whyBody}</p><p>${t.whyFollowup}</p></div><div class="story-signature"><span class="signature-rule"></span><span>Samu Hupli<br><small>${l("PhaseKitin tekijä", "Creator of PhaseKit")}</small></span></div></div><figure class="story-example"><div class="phone-frame"><img src="/about/images/blend-check-mobile.webp" width="390" height="850" alt="${l("Vuototarkastusarvion tulos ja laskentaperusteet R513A-seokselle, 25 kg", "Leak-check assessment result and basis for a 25 kg R513A blend charge")}" loading="lazy"></div><figcaption>${l("Esimerkkilaskelma: R513A, 25 kg. Seoksen HFO-komponentti määrää tarkastusvälin.", "Example: R513A, 25 kg. The blend’s HFO component determines the inspection interval.")}</figcaption></figure></div></section>
 <section class="principles wrap section" aria-labelledby="principles-title"><div class="section-heading"><p class="section-number" aria-hidden="true">04 / ${l("PERIAATTEET", "PRINCIPLES")}</p><h2 id="principles-title">${t.principlesTitle}</h2><p class="principles-intro">${escape(t.principlesIntro)}</p></div><div class="principle-grid">${(
     [

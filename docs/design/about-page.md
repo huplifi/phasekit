@@ -39,3 +39,5 @@ The opening now states the memory/learning benefit and explicitly identifies ref
 The primary message is now “Tieto käyttöön. Työ talteen.” / “Knowledge at hand. Work on record.” Reporting and saved sites/equipment lead the first walkthrough. The memory/learning message is retained alongside the data and calculator toolkit. The blend assessment screenshot uses the app’s actual dark theme; the install section mentions light, dark and system theme choices.
 
 `report-desktop.webp` (1220 × 850), `report-mobile.webp` (390 × 760) and `equipment-mobile.webp` (390 × 850) use the same fictional Esimerkkikohde / Lämpöpumppu 1 record, R32 and 2 kg, dated 2026-10-04. The equipment view includes its linked completed service report. Reproduce with `node scripts/about-capture-workflow.mjs`.
+
+The toolkit uses four equal text entries, followed by the log(p)–h screenshot as a separate centred example. This prevents one image from stretching a single grid row on desktop. Privacy copy distinguishes browser-local records from hosting request statistics.

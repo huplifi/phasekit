@@ -1144,12 +1144,22 @@ details[open] summary > span {
   max-width: 660px;
   font-size: 17px;
 }
-.calculator-preview {
+.calculator-example {
+  max-width: 780px;
+  margin: 56px auto 0;
+}
+.calculator-example img {
+  display: block;
   width: 100%;
-  max-width: 440px;
-  margin-top: 24px;
+  height: auto;
   border: 1px solid var(--divider);
   border-radius: 12px;
+}
+.calculator-example figcaption {
+  margin-top: 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  text-align: center;
 }
 .install-intro > .theme-note {
   font-size: 14px;
