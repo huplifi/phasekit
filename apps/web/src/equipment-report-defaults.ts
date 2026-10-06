@@ -2,6 +2,15 @@ import { checklistDefinitions } from "../../../packages/core/src/field-tools";
 import { byId, getFact, factKeys, dataset } from "./data";
 import type { EquipmentRecord, FieldReport, SiteRecord } from "./storage";
 
+export function equipmentInstallationLocation(
+  equipment: EquipmentRecord,
+  site?: SiteRecord,
+): string {
+  return [site?.address || site?.name, equipment.location]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 /** Use the same sourced fields as an explicit refrigerant selection in a report. */
 export function refrigerantReportFields(id: string): Record<string, string> {
   const refrigerant = byId.get(id);
@@ -54,9 +63,7 @@ export function equipmentReportPatch(
   if (availableFields.has("installationLocation")) {
     fill(
       "installationLocation",
-      [site?.address || site?.name, equipment.location]
-        .filter(Boolean)
-        .join(" · "),
+      equipmentInstallationLocation(equipment, site),
     );
   }
   const deviceRefrigerant = equipment.refrigerantId?.trim();

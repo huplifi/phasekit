@@ -9,6 +9,7 @@ test("saved calculation keeps its original identity while its equipment link cha
       .getByRole("button", { name: "Lisää laite", exact: true })
       .click();
     await page.getByLabel("Nimi", { exact: true }).fill(name);
+    await page.getByLabel("Sijainti", { exact: true }).fill("Konehuone");
     await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   }
 
@@ -26,7 +27,7 @@ test("saved calculation keeps its original identity while its equipment link cha
   await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page
     .getByRole("combobox", { name: "Laite / kohde", exact: true })
-    .selectOption({ label: "Unit A" });
+    .selectOption({ label: "Unit A · Konehuone" });
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
 
   await page.goto("/#/reports");
@@ -40,8 +41,10 @@ test("saved calculation keeps its original identity while its equipment link cha
   const currentLink = report.getByRole("combobox", {
     name: "Laite",
   });
-  await currentLink.selectOption({ label: "Unit B" });
-  await expect(currentLink.locator("option:checked")).toHaveText("Unit B");
+  await currentLink.selectOption({ label: "Unit B · Konehuone" });
+  await expect(currentLink.locator("option:checked")).toHaveText(
+    "Unit B · Konehuone",
+  );
   await expect(report.locator(".saved-report-header")).toContainText("Unit B");
   await expect(
     report.getByText("Laite: Unit B", { exact: true }),

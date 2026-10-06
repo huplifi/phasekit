@@ -797,7 +797,11 @@ function ToolReport({
                 <option value="">{lcl("Ei liitetty", "Unlinked")}</option>
                 {data.equipment.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {[item.name, equipmentSiteName(data, item.id)]
+                    {[
+                      item.name,
+                      item.location,
+                      equipmentSiteName(data, item.id),
+                    ]
                       .filter(Boolean)
                       .join(" · ")}
                   </option>

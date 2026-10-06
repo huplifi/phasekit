@@ -168,6 +168,18 @@ describe("structured field reports", () => {
       pressureTestExemptionReason: "Documented equipment assessment",
     };
     expect(commissioningMissingFields(complete)).toEqual([]);
+    // The company number is supplementary; it cannot replace either personal number.
+    expect(
+      commissioningMissingFields({
+        ...complete,
+        installerCompanyQualificationNumber: "COMPANY-1",
+        installerQualificationNumber: "",
+        responsibleQualificationNumber: "",
+      }).map((field) => field.id),
+    ).toEqual([
+      "installerQualificationNumber",
+      "responsibleQualificationNumber",
+    ]);
     expect(
       commissioningMissingFields({
         ...complete,
@@ -281,9 +293,19 @@ describe("structured field reports", () => {
   it("technical commissioning does not ask for installation certificate declarations", () => {
     const record = draft("commissioning", {
       commissioningPurpose: "technical",
+      installerCompanyQualificationNumber: "COMPANY-1",
       operatorDeclaration: "confirmed",
     });
     expect(commissioningMissingFields(record.fields)).toEqual([]);
+    expect(
+      checklistEditorFields(record).map((field) => field.id),
+    ).not.toContain("installerCompanyQualificationNumber");
+    expect(checklistText(record, "fi")).toContain(
+      "Yrityksen lupanumero: COMPANY-1",
+    );
+    expect(checklistText(record, "en")).toContain(
+      "Company licence number: COMPANY-1",
+    );
     expect(
       checklistEditorFields(record).some(
         (field) => field.id === "operatorDeclaration",

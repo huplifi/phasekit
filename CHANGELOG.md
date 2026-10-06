@@ -4,6 +4,15 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.2 — 2026-10-06 · Beta
+
+Equipment identification and report details
+
+- Equipment selectors show the name, location and site to distinguish identically named devices at the same site.
+- Report installation locations can be filled from a saved site or restored from the linked equipment.
+- A separate field records the company licence number. Guidance clarifies the installer’s and responsible person’s personal licence numbers.
+- Existing reports and recorded values are retained. Licence numbers are not automatically moved from a person to a company.
+
 ## 0.5.0-beta.1 — 2026-10-03 · Beta
 
 A new beta series

@@ -84,7 +84,7 @@ test("equipment history opens reports and preserves final field records through 
   await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
   await page
     .getByRole("combobox", { name: "Liitä laitteeseen", exact: true })
-    .selectOption({ label: "Kone #1" });
+    .selectOption({ label: "Kone #1 · Työsali / KEUDA" });
   await page.getByLabel("Suorituspäivä", { exact: true }).fill("2026-09-26");
   await page.getByLabel("Tekijä", { exact: true }).fill("Testaaja");
   await expect(page.locator(".field-report-save-state").last()).toContainText(
@@ -171,7 +171,8 @@ test("site devices supply empty report fields and survive site deletion", async 
     has: page.getByRole("heading", { name: "Torpanmäki 2", exact: true }),
   });
   await site.getByRole("button", { name: "Lisää laite", exact: true }).click();
-  await page.getByLabel("Nimi", { exact: true }).fill("LN25");
+  await page.getByLabel("Nimi", { exact: true }).fill("Ilmalämpöpumppu");
+  await page.getByLabel("Sijainti", { exact: true }).fill("Autotalli");
   await page.getByText("Laitetiedot (valinnainen)", { exact: true }).click();
   await page.getByLabel("Valmistaja ja malli", { exact: true }).fill("Model A");
   await page.getByLabel("Sarjanumero", { exact: true }).fill("SN1");
@@ -188,7 +189,8 @@ test("site devices supply empty report fields and survive site deletion", async 
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(site).toContainText("R134a");
   await site.getByRole("button", { name: "Lisää laite", exact: true }).click();
-  await page.getByLabel("Nimi", { exact: true }).fill("LN50");
+  await page.getByLabel("Nimi", { exact: true }).fill("Ilmalämpöpumppu");
+  await page.getByLabel("Sijainti", { exact: true }).fill("Olohuone");
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(site).toContainText("2 laitetta");
   await page.screenshot({
@@ -198,21 +200,61 @@ test("site devices supply empty report fields and survive site deletion", async 
   await page.goto("/#/checklists/new");
   await page.locator(".checklist-create select").selectOption("commissioning");
   await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
+  const equipmentSelect = page.getByRole("combobox", {
+    name: "Liitä laitteeseen",
+    exact: true,
+  });
+  for (const label of [
+    "Ei liitetty",
+    "Ilmalämpöpumppu · Autotalli · Torpanmäki 2",
+    "Ilmalämpöpumppu · Olohuone · Torpanmäki 2",
+  ]) {
+    await expect(
+      equipmentSelect.getByRole("option", { name: label, exact: true }),
+    ).toHaveCount(1);
+  }
   await page
     .getByRole("combobox", { name: "Liitä laitteeseen", exact: true })
-    .selectOption({ label: "LN25 · Torpanmäki 2" });
+    .selectOption({ label: "Ilmalämpöpumppu · Autotalli · Torpanmäki 2" });
   await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
     "Torpanmäki 2",
   );
   await expect(
     page.getByLabel("Laite / tunniste", { exact: true }),
-  ).toHaveValue("LN25 · Model A · SN1");
-  const reportUrl = page.url();
-  const refrigerantSection = page
-    .locator(".field-report-optional")
+  ).toHaveValue("Ilmalämpöpumppu · Model A · SN1");
+  const garageId = await equipmentSelect.inputValue();
+  const installation = page.locator("#report-field-installationLocation input");
+  const installerSection = page
+    .locator("details.field-report-optional")
     .filter({
-      has: page.locator("summary").filter({ hasText: "Kylmäaine ja täyttö" }),
+      has: page
+        .locator("summary")
+        .filter({ hasText: "Asentaja ja vastuuhenkilö" }),
     });
+  await installerSection.locator("summary").click();
+  await expect(installation).toHaveValue("Katu 1 · Autotalli");
+  await installation.fill("");
+  const locationSelect = page.getByRole("combobox", {
+    name: "Valitse tallennettu käyttöpaikka",
+    exact: true,
+  });
+  await locationSelect.selectOption({ label: "Torpanmäki 2 · Katu 1" });
+  await expect(installation).toHaveValue("Katu 1");
+  await installation.fill("");
+  await locationSelect.selectOption("linked-equipment");
+  await expect(installation).toHaveValue("Katu 1 · Autotalli");
+  await expect(equipmentSelect).toHaveValue(garageId);
+  await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
+    "Torpanmäki 2",
+  );
+  await expect(
+    page.getByLabel("Laite / tunniste", { exact: true }),
+  ).toHaveValue("Ilmalämpöpumppu · Model A · SN1");
+
+  const reportUrl = page.url();
+  const refrigerantSection = page.locator(".field-report-optional").filter({
+    has: page.locator("summary").filter({ hasText: "Kylmäaine ja täyttö" }),
+  });
   if (!(await page.getByLabel("Täyttömäärä · kg", { exact: true }).isVisible()))
     await refrigerantSection.locator("summary").first().click();
   await expect(
@@ -221,7 +263,9 @@ test("site devices supply empty report fields and survive site deletion", async 
   await page.getByLabel("Täyttömäärä · kg", { exact: true }).fill("3");
   await page
     .getByRole("combobox", { name: "Liitä laitteeseen", exact: true })
-    .selectOption({ label: "LN50 · Torpanmäki 2" });
+    .selectOption({ label: "Ilmalämpöpumppu · Olohuone · Torpanmäki 2" });
+  const livingRoomId = await equipmentSelect.inputValue();
+  expect(livingRoomId).not.toBe(garageId);
   await expect(
     page.getByLabel("Täyttömäärä · kg", { exact: true }),
   ).toHaveValue("3");
@@ -233,16 +277,17 @@ test("site devices supply empty report fields and survive site deletion", async 
   page.once("dialog", (dialog) => dialog.accept());
   await site.getByRole("button", { name: "Poista kohde", exact: true }).click();
   await expect(page.locator(".equipment-site-unassigned")).toContainText(
-    "LN25",
+    "Autotalli",
   );
   await expect(page.locator(".equipment-site-unassigned")).toContainText(
-    "LN50",
+    "Olohuone",
   );
   await page.goto(reportUrl);
+  await expect(equipmentSelect).toHaveValue(livingRoomId);
   await expect(page.getByLabel("Kohteen nimi", { exact: true })).toHaveValue(
     "Torpanmäki 2",
   );
   await expect(
     page.getByLabel("Laite / tunniste", { exact: true }),
-  ).toHaveValue("LN25 · Model A · SN1");
+  ).toHaveValue("Ilmalämpöpumppu · Model A · SN1");
 });

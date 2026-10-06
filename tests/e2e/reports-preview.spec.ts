@@ -32,7 +32,7 @@ test("saved report keeps frozen provenance and equipment history after equipment
   await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page
     .getByRole("combobox", { name: "Laite / kohde", exact: true })
-    .selectOption({ label: "Testikohde 4" });
+    .selectOption({ label: "Testikohde 4 · Konehuone" });
   await page
     .getByLabel("Muistiinpanot", { exact: true })
     .fill("Lähtötiedot mitattu paikan päällä.");
