@@ -1276,6 +1276,18 @@ export function fieldReportSummary(
         numeric("hp", `${unit}(${reference})`, reference === "g"),
       );
     }
+    add(
+      "outdoorC",
+      "Ulkolämpötila",
+      "Outdoor temperature",
+      numeric("outdoorC", "°C", true),
+    );
+    add(
+      "indoorC",
+      "Sisälämpötila",
+      "Indoor temperature",
+      numeric("indoorC", "°C", true),
+    );
     add("suctionC", "Imukaasu", "Suction", numeric("suctionC", "°C", true));
     add(
       "dischargeC",

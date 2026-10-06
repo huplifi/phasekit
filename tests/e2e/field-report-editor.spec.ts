@@ -129,3 +129,94 @@ test("commissioning cycle remains frozen through notes and finalisation", async 
   await page.getByLabel("LP · imupaine", { exact: true }).fill("3.1");
   await expect(chart).toHaveCount(0);
 });
+
+test("commissioning retains air temperatures and finalises without a liquid reading or chart", async ({
+  page,
+}) => {
+  await page.goto("/#/checklists/new");
+  await page
+    .getByRole("combobox", { name: "Raporttipohja", exact: true })
+    .selectOption("commissioning");
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
+  await page
+    .getByLabel("Kohteen nimi", { exact: true })
+    .fill("ILP / testikohde");
+  await page.getByLabel("Laite / tunniste", { exact: true }).fill("ILP-TEST-1");
+  await page.getByLabel("Suorituspäivä", { exact: true }).fill("2026-10-06");
+  await page.getByLabel("Tekijä", { exact: true }).fill("Testiasentaja");
+  await page
+    .getByRole("button", { name: "Valitse kylmäaine", exact: true })
+    .click();
+  await page.getByPlaceholder("R-numero, nimi, CAS tai kauppanimi").fill("R32");
+  await page
+    .getByRole("button", {
+      name: "Valitse kylmäaine työkalulle R32",
+      exact: true,
+    })
+    .click();
+  await page.getByLabel("Täyttömäärä · kg", { exact: true }).fill("1");
+  for (const name of ["Ulkolämpötila · °C", "Sisälämpötila · °C"])
+    await expect(page.getByLabel(name, { exact: true })).toHaveAttribute(
+      "inputmode",
+      "text",
+    );
+  await page.getByLabel("Ulkolämpötila · °C", { exact: true }).fill("-7,5");
+  await page.getByLabel("Sisälämpötila · °C", { exact: true }).fill("21");
+  await page
+    .getByRole("button", { name: "Muodosta log(p)–h-kaavio", exact: true })
+    .click();
+  await expect(page.getByRole("alert")).toContainText(
+    "voit tehdä raportin ilman kaaviota",
+  );
+  await expect(page.locator(".field-report-cycle")).toHaveCount(0);
+  await completeExternalCertificate(page);
+  await openReportSection(page, "Koekäyttö");
+  await page
+    .locator("#report-field-testRunRecordMode select")
+    .selectOption("internal");
+  await page
+    .getByLabel("Käyttöolosuhteet ja kuormitus", { exact: true })
+    .fill("Lämmityskäyttö, puhallus valmistajan ohjeen mukaan");
+  await page
+    .getByLabel("Koekäytön mittaukset olosuhteineen", { exact: true })
+    .fill("Puhallusilma 38 °C. Nesteputken lämpötila ei mitattavissa.");
+  await page
+    .locator("#report-field-testRunFinding textarea")
+    .fill("Koekäyttö kirjattu; kaaviota ei muodostettu.");
+  await page
+    .getByRole("checkbox", {
+      name: "Toiminnanharjoittajan vakuutus",
+      exact: true,
+    })
+    .check();
+  await page
+    .getByRole("button", { name: "Lukitse raportti", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Luo uusi versio", exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByLabel("Ulkolämpötila · °C", { exact: true }),
+  ).toHaveValue("-7,5");
+  await expect(
+    page.getByLabel("Sisälämpötila · °C", { exact: true }),
+  ).toHaveValue("21");
+  await expect(
+    page.getByLabel("Nesteen lämpötila · °C", { exact: true }),
+  ).toHaveValue("");
+  await expect(page.locator(".field-report-cycle")).toHaveCount(0);
+  const pending = page.waitForEvent("popup");
+  await page
+    .getByRole("button", { name: "Tulosta / PDF", exact: true })
+    .click();
+  const printed = await pending;
+  await expect(printed.locator("body")).toContainText("Ulkolämpötila");
+  await expect(printed.locator("body")).toContainText("Sisälämpötila");
+  await expect(printed.locator("body")).toContainText("21 °C");
+  expect(
+    (await printed.locator("body").innerText()).replaceAll("−", "-"),
+  ).toContain("-7,5 °C");
+  await expect(printed.locator("img.chart")).toHaveCount(0);
+  await expect(printed.locator("body")).toContainText("tietokentät täytetty");
+});

@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.4 — 2026-10-06 · Beta
+
+Outdoor and indoor commissioning temperatures
+
+- Commissioning reports have dedicated outdoor and indoor temperature fields. Readings are saved with the report and included in print.
+- The liquid-line reading and log(p)–h chart can be omitted when the required measurements are unavailable. Guidance is clearer; missing readings are not replaced with assumed values.
+
 ## 0.5.0-beta.3 — 2026-10-06 · Beta
 
 Clear installation certificate naming
