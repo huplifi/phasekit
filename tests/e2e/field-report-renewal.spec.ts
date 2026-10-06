@@ -77,7 +77,7 @@ test("retired company licence field preserves recorded values without asking for
     await page.goto(`/#/checklists/${report.id}`);
     await openReportSection(page, "Asentaja ja vastuuhenkilö");
     const historical = page.getByLabel(
-      "Aiemmin kirjattu yrityksen lupanumero",
+      "Aiemmin kirjattu yrityksen lupanumero · aiempi vapaateksti",
       { exact: true },
     );
     if (report.status === "draft")
