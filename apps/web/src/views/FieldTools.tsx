@@ -46,6 +46,7 @@ import { renderCycleChartSvg } from "../ph-chart-snapshot";
 import { evaluateCommissioningLeakCheck } from "../report-leak-check";
 import {
   equipmentReportPatch,
+  equipmentInstallationLocation,
   refrigerantReportFields,
 } from "../equipment-report-defaults";
 
@@ -1743,6 +1744,15 @@ export function WorkChecklists() {
             )}
     </p>
   );
+  const linkedEquipment = data.equipment.find(
+    (item) => item.id === draft?.equipmentId,
+  );
+  const linkedInstallationLocation = linkedEquipment
+    ? equipmentInstallationLocation(
+        linkedEquipment,
+        data.sites?.find((site) => site.id === linkedEquipment.siteId),
+      )
+    : "";
   const renderField = (field: ChecklistField) => {
     if (!draft) return null;
     if (
@@ -1882,6 +1892,41 @@ export function WorkChecklists() {
             )}
           </label>
         )}
+        {field.id === "installationLocation" &&
+          !final &&
+          (linkedInstallationLocation || (data.sites?.length ?? 0) > 0) && (
+            <label>
+              {l("Valitse tallennettu käyttöpaikka", "Choose a saved location")}
+              <select
+                value=""
+                onChange={(event) => {
+                  if (event.target.value === "linked-equipment") {
+                    change(linkedInstallationLocation);
+                  } else {
+                    const site = data.sites?.find(
+                      (item) => `site:${item.id}` === event.target.value,
+                    );
+                    if (site) change(site.address || site.name);
+                  }
+                }}
+              >
+                <option value="">
+                  {l("Valitse käyttöpaikka…", "Choose a location…")}
+                </option>
+                {linkedInstallationLocation && (
+                  <option value="linked-equipment">
+                    {l("Liitetty laite", "Linked equipment")} ·{" "}
+                    {linkedInstallationLocation}
+                  </option>
+                )}
+                {data.sites?.map((site) => (
+                  <option key={site.id} value={`site:${site.id}`}>
+                    {[site.name, site.address].filter(Boolean).join(" · ")}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
         {field.help && <p className="supporting-copy">{field.help[locale]}</p>}
       </div>
     );
@@ -2194,6 +2239,7 @@ export function WorkChecklists() {
                     <option key={item.id} value={item.id}>
                       {[
                         item.name,
+                        item.location,
                         data.sites?.find((site) => site.id === item.siteId)
                           ?.name,
                       ]

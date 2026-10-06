@@ -32,6 +32,16 @@ The eleven items in **1063/2025, 9 §** are:
 
 This minimum does not specify a universal vacuum target or holding duration. The decree's scope and detail above are sourced from the [official text, 9 §](https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf?timestamp=2025-12-02T08%3A13%3A03.151Z).
 
+## Company and personal licence numbers (rechecked 2026-10-06)
+
+The company record in the [Tukes refrigeration company register](https://tukes.fi/asiointi/rekisterit-ja-patevyydet/kylmaalan-rekisterit) is distinct from a person's qualification record. Section 9(9) of the official decree above requires the installer's and the business responsible person's names and licence numbers. Do not replace either personal field with the company licence number or remove the installer number from certificate completeness checks.
+
+PhaseKit provides a separate supplementary `installerCompanyQualificationNumber` field. Existing `installerQualificationNumber` and `responsibleQualificationNumber` keys and values remain unchanged, including in imported and final reports. No number is inferred, copied or moved between roles. A user who previously entered a company number in a personal field must correct that draft explicitly (or create a revision of a final report). Adding the company field does not add a new mandatory item to the section 9 minimum. Technical commissioning continues to hide certificate-only inputs while retaining previously recorded values in exports.
+
+Section 4 also allows a person in qualifying training to work under a qualified person's supervision for up to 24 months. This review does not resolve how every supervised training arrangement should be identified on the statutory certificate; do not invent a trainee's personal number or substitute the company's number.
+
+Registry integration was investigated separately: the public registry's browser application uses remote search endpoints, but a documented third-party API contract and reuse terms for these two registers were not verified. No automatic registry calls are added to PhaseKit. A future integration should distinguish company and person searches, let the user select the matching record, and retain the selected number and retrieval date without rewriting past reports.
+
 ## Implementation decisions and maintenance
 
 - **Intent:** technical commissioning and installation-certificate preparation are separate report purposes. A technical record can still contain actual tightness, evacuation and test-run measurements; it does not demand the certificate-only declaration, licence numbers or legal interval. A legacy commissioning record without a purpose key follows the former installation-certificate route.

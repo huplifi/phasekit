@@ -102,7 +102,13 @@ export function ReportSave({ content }: { content: ReportContent }) {
             </option>
             {data.equipment.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.name}
+                {[
+                  item.name,
+                  item.location,
+                  data.sites?.find((site) => site.id === item.siteId)?.name,
+                ]
+                  .filter(Boolean)
+                  .join(" · ")}
               </option>
             ))}
           </select>

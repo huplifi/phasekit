@@ -1,5 +1,28 @@
 [
   {
+    "version": "0.5.0-beta.2",
+    "date": "2026-10-06",
+    "channel": "beta",
+    "title": {
+      "fi": "Laitteiden tunnistus ja raportin perustiedot",
+      "en": "Equipment identification and report details"
+    },
+    "changes": {
+      "fi": [
+        "Laitevalinnoissa näkyvät laitteen nimi, sijainti ja kohde, jotta saman kohteen samannimiset laitteet erottuvat.",
+        "Raportin käyttöpaikan voi täyttää tallennetusta kohteesta tai palauttaa liitetyn laitteen tiedoista.",
+        "Yrityksen lupanumerolle on oma kenttä. Asentajan ja vastuuhenkilön henkilökohtaisten lupanumeroiden ohjeita on selvennetty.",
+        "Aiemmat raportit ja niihin kirjoitetut tiedot säilyvät. Lupanumeroita ei siirretä automaattisesti henkilöltä yritykselle."
+      ],
+      "en": [
+        "Equipment selectors show the name, location and site to distinguish identically named devices at the same site.",
+        "Report installation locations can be filled from a saved site or restored from the linked equipment.",
+        "A separate field records the company licence number. Guidance clarifies the installer’s and responsible person’s personal licence numbers.",
+        "Existing reports and recorded values are retained. Licence numbers are not automatically moved from a person to a company."
+      ]
+    }
+  },
+  {
     "version": "0.5.0-beta.1",
     "date": "2026-10-03",
     "channel": "beta",

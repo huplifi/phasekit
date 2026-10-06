@@ -700,12 +700,21 @@ checklistDefinitions.commissioning.fields.push(
     label: text("Asennusliike", "Installation company"),
   },
   {
+    id: "installerCompanyQualificationNumber",
+    group: "installation",
+    label: text("Yrityksen lupanumero", "Company licence number"),
+    help: text(
+      "Toiminnanharjoittajan lupanumero Tukesin kylmälaiteliikkeiden rekisteristä. Henkilöiden lupanumerot kirjataan erikseen.",
+      "The business licence number in the Tukes refrigeration company register. Record personal licence numbers separately.",
+    ),
+  },
+  {
     id: "installerQualificationNumber",
     group: "installation",
     label: text("Asentajan lupanumero", "Installer certificate/licence number"),
     help: text(
-      "Asentajan nimi kirjataan Tekijä-kenttään.",
-      "Enter the installer name in Technician.",
+      "Asentajan henkilökohtaisen pätevyystodistuksen numero. Nimi kirjataan Tekijä-kenttään. Asennustodistuksessa tieto vaaditaan (VNa 1063/2025, 9 §).",
+      "The installer's personal certificate number. Enter the name in Technician. Required for an installation certificate (Government Decree 1063/2025, section 9).",
     ),
   },
   {
@@ -719,6 +728,10 @@ checklistDefinitions.commissioning.fields.push(
     label: text(
       "Vastuuhenkilön lupanumero",
       "Responsible person certificate/licence number",
+    ),
+    help: text(
+      "Vastuuhenkilön henkilökohtaisen pätevyystodistuksen numero, ei yrityksen lupanumero. Tarkista henkilö Tukesin kylmäalan pätevyysrekisteristä.",
+      "The responsible person's personal certificate number, not the company licence number. Check the person in the Tukes refrigeration competence register.",
     ),
   },
   {
@@ -1125,6 +1138,7 @@ export function checklistEditorFields(draft: ChecklistDraft): ChecklistField[] {
   const certificateOnly = new Set([
     "installationLocation",
     "installerCompany",
+    "installerCompanyQualificationNumber",
     "installerQualificationNumber",
     "responsiblePerson",
     "responsibleQualificationNumber",
