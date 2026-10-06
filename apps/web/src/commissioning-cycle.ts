@@ -12,8 +12,8 @@ import type { ReportRow, ToolRecord } from "./storage";
 
 const messages: Record<string, [string, string]> = {
   missing_measurements: [
-    "Valitse kylmäaine ja syötä LP, HP sekä imu- ja nestelämpötila.",
-    "Select a refrigerant and enter LP, HP, suction and liquid temperatures.",
+    "Kaaviota varten tarvitaan kylmäaine, LP, HP sekä imu- ja nestelämpötila. Jos arvoja ei voida mitata, voit tehdä raportin ilman kaaviota.",
+    "The chart requires a refrigerant, LP, HP, suction and liquid temperatures. If these cannot be measured, you can complete the report without the chart.",
   ],
   invalid_pressure_unit: [
     "Tarkista paineyksikkö ja paineviite.",

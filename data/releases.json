@@ -1,5 +1,24 @@
 [
   {
+    "version": "0.5.0-beta.4",
+    "date": "2026-10-06",
+    "channel": "beta",
+    "title": {
+      "fi": "Ulko- ja sisälämpötila käyttöönottoraporttiin",
+      "en": "Outdoor and indoor commissioning temperatures"
+    },
+    "changes": {
+      "fi": [
+        "Käyttöönottoraportissa on omat mittauskentät ulko- ja sisälämpötilalle. Arvot säilyvät raportissa ja näkyvät tulosteessa.",
+        "Nesteputken lämpötilan ja log(p)–h-kaavion voi jättää pois, jos tarvittavia arvoja ei voida mitata. Ohjeita on selvennetty; puuttuvia arvoja ei korvata oletuksilla."
+      ],
+      "en": [
+        "Commissioning reports have dedicated outdoor and indoor temperature fields. Readings are saved with the report and included in print.",
+        "The liquid-line reading and log(p)–h chart can be omitted when the required measurements are unavailable. Guidance is clearer; missing readings are not replaced with assumed values."
+      ]
+    }
+  },
+  {
     "version": "0.5.0-beta.3",
     "date": "2026-10-06",
     "channel": "beta",

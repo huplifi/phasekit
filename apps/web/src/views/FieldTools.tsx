@@ -2348,8 +2348,8 @@ export function WorkChecklists() {
                 </button>
                 <p className="supporting-copy">
                   {l(
-                    "Valinnainen kaavio käyttää kirjattuja käyntiarvoja. Mittausten muuttaminen poistaa aiemman kaavion.",
-                    "The optional chart uses the recorded operating readings. Editing those readings removes the previous chart.",
+                    "Kaavio on valinnainen. Jos tarvittavia paineita tai putkilämpötiloja ei voida mitata, jätä kaavio pois. Ulko- ja sisälämpötila eivät korvaa putkilämpötiloja. Käyntiarvojen muuttaminen poistaa aiemman kaavion.",
+                    "The chart is optional. Omit it if the required pressures or pipe temperatures cannot be measured. Outdoor and indoor temperatures do not replace pipe temperatures. Editing the operating readings removes the previous chart.",
                   )}
                 </p>
               </div>

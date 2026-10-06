@@ -654,6 +654,8 @@ checklistDefinitions.commissioning.fields.unshift(
     ...decimalField("chargeKg", "Täyttömäärä · kg", "Charge · kg"),
     group: "refrigerant",
   },
+  decimalField("outdoorC", "Ulkolämpötila · °C", "Outdoor temperature · °C"),
+  decimalField("indoorC", "Sisälämpötila · °C", "Indoor temperature · °C"),
   {
     id: "pressureUnit",
     label: text("Paineyksikkö", "Pressure unit"),
@@ -689,7 +691,15 @@ checklistDefinitions.commissioning.fields.unshift(
     "Kuumakaasun lämpötila · °C",
     "Discharge temperature · °C",
   ),
-  decimalField("liquidC", "Nesteen lämpötila · °C", "Liquid temperature · °C"),
+  decimalField(
+    "liquidC",
+    "Nesteen lämpötila · °C",
+    "Liquid temperature · °C",
+    text(
+      "Jätä tyhjäksi, jos nesteputken lämpötilaa ei voida mitata. Raportin voi tehdä ilman tätä arvoa ja log(p)–h-kaaviota.",
+      "Leave blank if the liquid-line temperature cannot be measured. The report can be completed without this reading or a log(p)–h chart.",
+    ),
+  ),
 );
 checklistDefinitions.commissioning.fields.push(
   {

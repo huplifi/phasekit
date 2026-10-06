@@ -21,6 +21,18 @@ function draft(
 }
 
 describe("field-report print summary", () => {
+  it("prints signed outdoor and indoor temperatures without requiring liquid readings", () => {
+    const record = draft("commissioning", { outdoorC: "-7,5", indoorC: "21" });
+    const fi = fieldReportSummary(record, "fi");
+    expect(fi.map((item) => item.id)).toEqual(["outdoorC", "indoorC"]);
+    expect(fi[0].value.replace("−", "-")).toBe("-7,5 °C");
+    expect(fi[1].value).toBe("21 °C");
+    expect(fieldReportObservationFields(record, "fi")).toEqual([]);
+    expect(fieldReportSummary(record, "en")[0].label.en).toBe(
+      "Outdoor temperature",
+    );
+  });
+
   it("shows compatible absolute standing-test readings and their signed difference", () => {
     const result = fieldReportSummary(
       draft("evacuation", {

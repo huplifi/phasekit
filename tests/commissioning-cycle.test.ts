@@ -94,6 +94,7 @@ describe("commissioning frozen cycle", () => {
 
   it.each([
     [{ lp: "" }, "missing_measurements"],
+    [{ liquidC: "", outdoorC: "-7.5", indoorC: "21" }, "missing_measurements"],
     [{ refrigerantId: "unknown" }, "pt_unsupported_refrigerant_or_side"],
     [{ hp: "2" }, "high_pressure_must_exceed_low"],
     [{ lp: "0" }, "nonpositive_absolute_pressure"],
