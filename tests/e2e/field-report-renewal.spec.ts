@@ -53,7 +53,7 @@ test("beta9 reports preserve all original fields through import, print and expor
   );
 });
 
-test("company licence can be added without reinterpreting saved personal licences", async ({
+test("retired company licence field preserves recorded values without asking for a third number", async ({
   page,
 }) => {
   const backup = structuredClone(legacy);
@@ -65,73 +65,48 @@ test("company licence can be added without reinterpreting saved personal licence
       installerQualificationNumber: "PERSON-INST-1",
       responsiblePerson: "Test Responsible Person",
       responsibleQualificationNumber: "EXISTING-NUMBER-1",
+      ...(report.status === "draft"
+        ? { installerCompanyQualificationNumber: "COMPANY-1" }
+        : {}),
     });
   }
   await importBackup(page, backup);
-  // Merely opening an existing report must not move or rewrite its numbers.
   for (const report of backup.checklistDrafts.filter(
     (item) => item.kind === "commissioning",
   )) {
     await page.goto(`/#/checklists/${report.id}`);
     await openReportSection(page, "Asentaja ja vastuuhenkilö");
-    await expect(
-      page.getByLabel("Yrityksen lupanumero (valinnainen)", { exact: true }),
-    ).toHaveValue("");
+    const historical = page.getByLabel(
+      "Aiemmin kirjattu yrityksen lupanumero",
+      { exact: true },
+    );
+    if (report.status === "draft")
+      await expect(historical).toHaveValue("COMPANY-1");
+    else await expect(historical).toHaveCount(0);
     await expect(
       page.getByLabel("Asentajan lupanumero", { exact: true }),
     ).toHaveValue("PERSON-INST-1");
     await expect(
       page.getByLabel("Vastuuhenkilön lupanumero", { exact: true }),
     ).toHaveValue("EXISTING-NUMBER-1");
+    const pending = page.waitForEvent("popup");
+    await page
+      .getByRole("button", { name: "Tulosta / PDF", exact: true })
+      .click();
+    const printed = await pending;
+    await expect(printed.locator("body")).toContainText("PERSON-INST-1");
+    await expect(printed.locator("body")).toContainText("EXISTING-NUMBER-1");
+    if (report.status === "draft")
+      await expect(printed.locator("body")).toContainText("COMPANY-1");
+    else
+      await expect(printed.locator("body")).not.toContainText(
+        "Aiemmin kirjattu yrityksen lupanumero",
+      );
+    await printed.close();
   }
   expect((await exportBackup(page)).checklistDrafts).toEqual(
     backup.checklistDrafts,
   );
-
-  const original = backup.checklistDrafts.find(
-    (item) => item.kind === "commissioning" && item.status === "draft",
-  )!;
-  await page.goto(`/#/checklists/${original.id}`);
-  await openReportSection(page, "Asentaja ja vastuuhenkilö");
-  await page
-    .getByLabel("Yrityksen lupanumero (valinnainen)", { exact: true })
-    .fill("COMPANY-1");
-  await expect(page.locator(".field-report-save-state").last()).toContainText(
-    "Tallennettu automaattisesti",
-  );
-  await page.reload();
-  await openReportSection(page, "Asentaja ja vastuuhenkilö");
-  await expect(
-    page.getByLabel("Yrityksen lupanumero (valinnainen)", { exact: true }),
-  ).toHaveValue("COMPANY-1");
-  const pending = page.waitForEvent("popup");
-  await page
-    .getByRole("button", { name: "Tulosta / PDF", exact: true })
-    .click();
-  const printed = await pending;
-  for (const [label, value] of [
-    ["Yrityksen lupanumero (valinnainen)", "COMPANY-1"],
-    ["Asentajan lupanumero", "PERSON-INST-1"],
-    ["Vastuuhenkilön lupanumero", "EXISTING-NUMBER-1"],
-  ]) {
-    await expect(
-      printed.locator(".detail-list > div").filter({
-        has: printed.getByText(label, { exact: true }),
-      }),
-    ).toContainText(value);
-  }
-  await printed.close();
-  const saved = (await exportBackup(page)).checklistDrafts;
-  expect(
-    saved.find((item: { id: string }) => item.id === original.id).fields,
-  ).toEqual({
-    ...original.fields,
-    installerCompanyQualificationNumber: "COMPANY-1",
-    operatorDeclaration: "",
-  });
-  expect(
-    saved.filter((item: { id: string }) => item.id !== original.id),
-  ).toEqual(backup.checklistDrafts.filter((item) => item.id !== original.id));
 });
 
 test("long legacy observations survive note edits and multi-page printing", async ({

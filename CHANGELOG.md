@@ -10,7 +10,7 @@ Clear installation certificate naming
 
 - The report template is named Installation certificate and commissioning. Report headings, lists and text exports reflect the document purpose.
 - Technical commissioning is distinguished from installation certificates in print as well. Existing reports and data are retained.
-- The company licence number is clearly marked as optional additional information, not a third required licence number.
+- A separate third licence number is no longer requested. Any previously recorded company licence value is retained, and guidance for the responsible person’s number is clarified.
 
 ## 0.5.0-beta.2 — 2026-10-06 · Beta
 

@@ -704,14 +704,15 @@ checklistDefinitions.commissioning.fields.push(
   },
   {
     id: "installerCompanyQualificationNumber",
+    legacy: true,
     group: "installation",
     label: text(
-      "Yrityksen lupanumero (valinnainen)",
-      "Company licence number (optional)",
+      "Aiemmin kirjattu yrityksen lupanumero",
+      "Previously recorded company licence number",
     ),
     help: text(
-      "Vapaaehtoinen lisätieto Tukesin yritysrekisteristä. Asennustodistuksen vähimmäissisältö (VNa 1063/2025, 9 §) ei edellytä yrityksen lupanumeroa.",
-      "Optional additional information from the Tukes company register. The minimum installation certificate content (Government Decree 1063/2025, section 9) does not require the company licence number.",
+      "Aiemmassa betaversiossa tallennettu lisätieto. Säilytetään osana raporttia; sitä ei siirretä automaattisesti toiseen kenttään.",
+      "Additional information saved in an earlier beta version. Retained in the report without automatically moving it to another field.",
     ),
   },
   {
@@ -736,8 +737,8 @@ checklistDefinitions.commissioning.fields.push(
       "Responsible person certificate/licence number",
     ),
     help: text(
-      "Vastuuhenkilön henkilökohtaisen pätevyystodistuksen numero, ei yrityksen lupanumero. Tarkista henkilö Tukesin kylmäalan pätevyysrekisteristä.",
-      "The responsible person's personal certificate number, not the company licence number. Check the person in the Tukes refrigeration competence register.",
+      "Toiminnanharjoittajan vastuuhenkilön lupanumero. Vastuuhenkilön tiedot näkyvät myös Tukesin toiminnanharjoittajarekisterissä.",
+      "The licence number of the business's responsible person. Their details also appear in the Tukes register of economic operators.",
     ),
   },
   {
