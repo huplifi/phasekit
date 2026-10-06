@@ -23,7 +23,7 @@ export async function completeExternalCertificate(page: Page) {
     "Laitteen käyttöpaikka": "Testiosoite 1, Testikaupunki",
     "Asentajan lupanumero": "INST-1",
     "Vastuuhenkilön nimi": "Responsible person",
-    "Vastuuhenkilön lupanumero": "RESP-1",
+    "Toiminnanharjoittajan vastuuhenkilön lupanumero": "RESP-1",
   }))
     await page.getByLabel(label, { exact: true }).fill(value);
   await page

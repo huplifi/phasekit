@@ -87,7 +87,9 @@ test("retired company licence field preserves recorded values without asking for
       page.getByLabel("Asentajan lupanumero", { exact: true }),
     ).toHaveValue("PERSON-INST-1");
     await expect(
-      page.getByLabel("Vastuuhenkilön lupanumero", { exact: true }),
+      page.getByLabel("Toiminnanharjoittajan vastuuhenkilön lupanumero", {
+        exact: true,
+      }),
     ).toHaveValue("EXISTING-NUMBER-1");
     const pending = page.waitForEvent("popup");
     await page

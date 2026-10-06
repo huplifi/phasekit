@@ -733,8 +733,8 @@ checklistDefinitions.commissioning.fields.push(
     id: "responsibleQualificationNumber",
     group: "installation",
     label: text(
-      "Vastuuhenkilön lupanumero",
-      "Responsible person certificate/licence number",
+      "Toiminnanharjoittajan vastuuhenkilön lupanumero",
+      "Business responsible person licence number",
     ),
     help: text(
       "Toiminnanharjoittajan vastuuhenkilön lupanumero. Vastuuhenkilön tiedot näkyvät myös Tukesin toiminnanharjoittajarekisterissä.",
