@@ -155,6 +155,11 @@ test("commissioning retains air temperatures and finalises without a liquid read
     })
     .click();
   await page.getByLabel("Täyttömäärä · kg", { exact: true }).fill("1");
+  for (const name of ["Ulkolämpötila · °C", "Sisälämpötila · °C"])
+    await expect(page.getByLabel(name, { exact: true })).toHaveAttribute(
+      "inputmode",
+      "text",
+    );
   await page.getByLabel("Ulkolämpötila · °C", { exact: true }).fill("-7,5");
   await page.getByLabel("Sisälämpötila · °C", { exact: true }).fill("21");
   await page

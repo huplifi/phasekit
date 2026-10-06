@@ -1885,7 +1885,13 @@ export function WorkChecklists() {
             ) : (
               <input
                 type={field.type === "date" ? "date" : "text"}
-                inputMode={field.type === "decimal" ? "decimal" : undefined}
+                inputMode={
+                  ["outdoorC", "indoorC"].includes(field.id)
+                    ? "text"
+                    : field.type === "decimal"
+                      ? "decimal"
+                      : undefined
+                }
                 value={draft.fields[field.id] ?? ""}
                 maxLength={2000}
                 onChange={(e) => change(e.target.value)}
