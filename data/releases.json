@@ -1,5 +1,26 @@
 [
   {
+    "version": "0.5.0-beta.3",
+    "date": "2026-10-06",
+    "channel": "beta",
+    "title": {
+      "fi": "Asennustodistus löytyy omalla nimellään",
+      "en": "Clear installation certificate naming"
+    },
+    "changes": {
+      "fi": [
+        "Raporttipohjan nimi on Asennustodistus ja käyttöönotto. Raportin otsikko, listat ja tekstivienti näyttävät asiakirjan tarkoituksen.",
+        "Tekninen käyttöönotto erottuu asennustodistuksesta myös tulosteessa. Nykyiset raportit ja tiedot säilyvät.",
+        "Erillistä kolmatta lupanumeroa ei enää kysytä. Aiemmin yrityksen lupanumeroksi tallennettu lisätieto säilyy raportissa, ja vastuuhenkilön numeron ohjetta on tarkennettu."
+      ],
+      "en": [
+        "The report template is named Installation certificate and commissioning. Report headings, lists and text exports reflect the document purpose.",
+        "Technical commissioning is distinguished from installation certificates in print as well. Existing reports and data are retained.",
+        "A separate third licence number is no longer requested. Any previously recorded company licence value is retained, and guidance for the responsible person’s number is clarified."
+      ]
+    }
+  },
+  {
     "version": "0.5.0-beta.2",
     "date": "2026-10-06",
     "channel": "beta",

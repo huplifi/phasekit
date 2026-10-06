@@ -12,7 +12,7 @@ import {
 import { formatDate } from "../../../../packages/i18n/src";
 import { reportSummary } from "../report-summary";
 import { savedReportPath } from "../saved-report-route";
-import { checklistDefinitions } from "../../../../packages/core/src/field-tools";
+import { checklistReportName } from "../../../../packages/core/src/field-tools";
 import { isCalendarDate } from "../../../../packages/core/src/schedule";
 import { isValidEquipmentCharge } from "../storage";
 import type { EquipmentRecord, SiteRecord } from "../storage";
@@ -376,8 +376,7 @@ export function Equipment() {
             <ul className="equipment-record-list">
               {fieldReports.map((record) => {
                 const siteName = record.title.trim();
-                const reportType =
-                  checklistDefinitions[record.kind].name[data.locale];
+                const reportType = checklistReportName(record, data.locale);
                 const equipmentName = record.fields.equipment?.trim();
                 const primaryLabel = siteName || reportType;
                 const secondaryLabel = siteName

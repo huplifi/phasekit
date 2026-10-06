@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.3 — 2026-10-06 · Beta
+
+Clear installation certificate naming
+
+- The report template is named Installation certificate and commissioning. Report headings, lists and text exports reflect the document purpose.
+- Technical commissioning is distinguished from installation certificates in print as well. Existing reports and data are retained.
+- A separate third licence number is no longer requested. Any previously recorded company licence value is retained, and guidance for the responsible person’s number is clarified.
+
 ## 0.5.0-beta.2 — 2026-10-06 · Beta
 
 Equipment identification and report details

@@ -675,7 +675,10 @@ function fieldReportTitle(kind: ChecklistKind, locale: Locale): string {
       fi: "Tyhjiöinti- ja pitokoeraportti",
       en: "Evacuation and standing-test record",
     },
-    commissioning: { fi: "Käyttöönottoraportti", en: "Commissioning record" },
+    commissioning: {
+      fi: "Tekninen käyttöönottoraportti",
+      en: "Technical commissioning record",
+    },
     service: { fi: "Huoltoraportti", en: "Service record" },
     refrigerant: { fi: "Kylmäainekirjaus", en: "Refrigerant handling record" },
   };

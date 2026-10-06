@@ -326,7 +326,10 @@ export const checklistDefinitions: Record<
     ],
   },
   commissioning: {
-    name: text("Käyttöönotto", "Commissioning"),
+    name: text(
+      "Asennustodistus ja käyttöönotto",
+      "Installation certificate and commissioning",
+    ),
     steps: [
       {
         id: "instructions",
@@ -701,11 +704,15 @@ checklistDefinitions.commissioning.fields.push(
   },
   {
     id: "installerCompanyQualificationNumber",
+    legacy: true,
     group: "installation",
-    label: text("Yrityksen lupanumero", "Company licence number"),
+    label: text(
+      "Aiemmin kirjattu yrityksen lupanumero",
+      "Previously recorded company licence number",
+    ),
     help: text(
-      "Toiminnanharjoittajan lupanumero Tukesin kylmälaiteliikkeiden rekisteristä. Henkilöiden lupanumerot kirjataan erikseen.",
-      "The business licence number in the Tukes refrigeration company register. Record personal licence numbers separately.",
+      "Aiemmassa betaversiossa tallennettu lisätieto. Säilytetään osana raporttia; sitä ei siirretä automaattisesti toiseen kenttään.",
+      "Additional information saved in an earlier beta version. Retained in the report without automatically moving it to another field.",
     ),
   },
   {
@@ -726,12 +733,12 @@ checklistDefinitions.commissioning.fields.push(
     id: "responsibleQualificationNumber",
     group: "installation",
     label: text(
-      "Vastuuhenkilön lupanumero",
-      "Responsible person certificate/licence number",
+      "Toiminnanharjoittajan vastuuhenkilön lupanumero",
+      "Business responsible person licence number",
     ),
     help: text(
-      "Vastuuhenkilön henkilökohtaisen pätevyystodistuksen numero, ei yrityksen lupanumero. Tarkista henkilö Tukesin kylmäalan pätevyysrekisteristä.",
-      "The responsible person's personal certificate number, not the company licence number. Check the person in the Tukes refrigeration competence register.",
+      "Toiminnanharjoittajan vastuuhenkilön lupanumero. Vastuuhenkilön tiedot näkyvät myös Tukesin toiminnanharjoittajarekisterissä.",
+      "The licence number of the business's responsible person. Their details also appear in the Tukes register of economic operators.",
     ),
   },
   {
@@ -1122,6 +1129,18 @@ export const commonChecklistFields: ChecklistField[] = [
     ),
   },
 ];
+/** Names the document by its purpose without changing the stored report. */
+export function checklistReportName(
+  draft: Pick<ChecklistDraft, "kind" | "fields">,
+  locale: "fi" | "en",
+): string {
+  if (
+    draft.kind === "commissioning" &&
+    draft.fields.commissioningPurpose === "technical"
+  )
+    return text("Tekninen käyttöönotto", "Technical commissioning")[locale];
+  return checklistDefinitions[draft.kind].name[locale];
+}
 /** Includes untouched legacy data only when present; never parses free text into measurements. */
 export function checklistReportFields(draft: ChecklistDraft): ChecklistField[] {
   return [
@@ -1445,7 +1464,7 @@ export function checklistText(
 ): string {
   const definition = checklistDefinitions[draft.kind];
   return [
-    `PhaseKit — ${definition.name[locale]}`,
+    `PhaseKit — ${checklistReportName(draft, locale)}`,
     draft.title,
     `${locale === "fi" ? "Muokattu" : "Updated"}: ${draft.updatedAt}`,
     "",

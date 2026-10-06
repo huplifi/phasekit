@@ -19,6 +19,7 @@ import {
   calculatePipeExpansion,
   pipeExpansionMaterials,
   checklistDefinitions,
+  checklistReportName,
   commonChecklistFields,
   checklistText,
   type ElectricalMode,
@@ -2135,7 +2136,7 @@ export function WorkChecklists() {
       backTo="/reports"
       title={
         draft && definition
-          ? definition.name[locale]
+          ? checklistReportName(draft, locale)
           : l("Uusi raportti", "New report")
       }
     >

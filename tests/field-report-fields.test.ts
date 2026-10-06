@@ -301,10 +301,10 @@ describe("structured field reports", () => {
       checklistEditorFields(record).map((field) => field.id),
     ).not.toContain("installerCompanyQualificationNumber");
     expect(checklistText(record, "fi")).toContain(
-      "Yrityksen lupanumero: COMPANY-1",
+      "Aiemmin kirjattu yrityksen lupanumero: COMPANY-1",
     );
     expect(checklistText(record, "en")).toContain(
-      "Company licence number: COMPANY-1",
+      "Previously recorded company licence number: COMPANY-1",
     );
     expect(
       checklistEditorFields(record).some(
