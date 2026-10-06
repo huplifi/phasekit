@@ -75,7 +75,7 @@ test("company licence can be added without reinterpreting saved personal licence
     await page.goto(`/#/checklists/${report.id}`);
     await openReportSection(page, "Asentaja ja vastuuhenkilö");
     await expect(
-      page.getByLabel("Yrityksen lupanumero", { exact: true }),
+      page.getByLabel("Yrityksen lupanumero (valinnainen)", { exact: true }),
     ).toHaveValue("");
     await expect(
       page.getByLabel("Asentajan lupanumero", { exact: true }),
@@ -94,7 +94,7 @@ test("company licence can be added without reinterpreting saved personal licence
   await page.goto(`/#/checklists/${original.id}`);
   await openReportSection(page, "Asentaja ja vastuuhenkilö");
   await page
-    .getByLabel("Yrityksen lupanumero", { exact: true })
+    .getByLabel("Yrityksen lupanumero (valinnainen)", { exact: true })
     .fill("COMPANY-1");
   await expect(page.locator(".field-report-save-state").last()).toContainText(
     "Tallennettu automaattisesti",
@@ -102,7 +102,7 @@ test("company licence can be added without reinterpreting saved personal licence
   await page.reload();
   await openReportSection(page, "Asentaja ja vastuuhenkilö");
   await expect(
-    page.getByLabel("Yrityksen lupanumero", { exact: true }),
+    page.getByLabel("Yrityksen lupanumero (valinnainen)", { exact: true }),
   ).toHaveValue("COMPANY-1");
   const pending = page.waitForEvent("popup");
   await page
@@ -110,7 +110,7 @@ test("company licence can be added without reinterpreting saved personal licence
     .click();
   const printed = await pending;
   for (const [label, value] of [
-    ["Yrityksen lupanumero", "COMPANY-1"],
+    ["Yrityksen lupanumero (valinnainen)", "COMPANY-1"],
     ["Asentajan lupanumero", "PERSON-INST-1"],
     ["Vastuuhenkilön lupanumero", "EXISTING-NUMBER-1"],
   ]) {

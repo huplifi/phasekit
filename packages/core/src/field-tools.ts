@@ -705,10 +705,13 @@ checklistDefinitions.commissioning.fields.push(
   {
     id: "installerCompanyQualificationNumber",
     group: "installation",
-    label: text("Yrityksen lupanumero", "Company licence number"),
+    label: text(
+      "Yrityksen lupanumero (valinnainen)",
+      "Company licence number (optional)",
+    ),
     help: text(
-      "Toiminnanharjoittajan lupanumero Tukesin kylmälaiteliikkeiden rekisteristä. Henkilöiden lupanumerot kirjataan erikseen.",
-      "The business licence number in the Tukes refrigeration company register. Record personal licence numbers separately.",
+      "Vapaaehtoinen lisätieto Tukesin yritysrekisteristä. Asennustodistuksen vähimmäissisältö (VNa 1063/2025, 9 §) ei edellytä yrityksen lupanumeroa.",
+      "Optional additional information from the Tukes company register. The minimum installation certificate content (Government Decree 1063/2025, section 9) does not require the company licence number.",
     ),
   },
   {
