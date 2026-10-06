@@ -12,6 +12,7 @@ import { useDraftGuard } from "../useDraftGuard";
 import { useApp } from "../context";
 import {
   checklistDefinitions,
+  checklistReportName,
   type ChecklistKind,
 } from "../../../../packages/core/src/field-tools";
 import { formatDate } from "../../../../packages/i18n/src";
@@ -45,7 +46,7 @@ const l = (locale: "fi" | "en", fi: string, en: string) =>
 const fieldKindLabels: Record<ChecklistKind, { fi: string; en: string }> = {
   tightness: { fi: "Paine- ja tiiviyskoe", en: "Pressure and tightness" },
   evacuation: { fi: "Tyhjiöinti", en: "Evacuation" },
-  commissioning: { fi: "Käyttöönotto", en: "Commissioning" },
+  commissioning: checklistDefinitions.commissioning.name,
   service: { fi: "Huolto", en: "Service" },
   refrigerant: { fi: "Kylmäainekirjaus", en: "Refrigerant handling" },
 };
@@ -96,7 +97,7 @@ export function Saved({
           data.equipment.find((item) => item.id === record.equipmentId)?.name,
           data.equipment.find((item) => item.id === record.equipmentId)
             ?.location,
-          checklistDefinitions[record.kind].name[data.locale],
+          checklistReportName(record, data.locale),
           equipmentSiteName(data, record.equipmentId),
         ),
     )
@@ -300,7 +301,10 @@ export function Saved({
           if (entry.type === "field") {
             const record = entry.record;
             const siteName = record.title.trim();
-            const reportType = fieldKindLabels[record.kind][data.locale];
+            const reportType =
+              record.kind === "commissioning"
+                ? checklistReportName(record, data.locale)
+                : fieldKindLabels[record.kind][data.locale];
             const equipmentName =
               record.fields.equipment?.trim() ||
               data.equipment.find((item) => item.id === record.equipmentId)

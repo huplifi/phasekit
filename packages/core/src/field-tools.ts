@@ -326,7 +326,10 @@ export const checklistDefinitions: Record<
     ],
   },
   commissioning: {
-    name: text("Käyttöönotto", "Commissioning"),
+    name: text(
+      "Asennustodistus ja käyttöönotto",
+      "Installation certificate and commissioning",
+    ),
     steps: [
       {
         id: "instructions",
@@ -1122,6 +1125,18 @@ export const commonChecklistFields: ChecklistField[] = [
     ),
   },
 ];
+/** Names the document by its purpose without changing the stored report. */
+export function checklistReportName(
+  draft: Pick<ChecklistDraft, "kind" | "fields">,
+  locale: "fi" | "en",
+): string {
+  if (
+    draft.kind === "commissioning" &&
+    draft.fields.commissioningPurpose === "technical"
+  )
+    return text("Tekninen käyttöönotto", "Technical commissioning")[locale];
+  return checklistDefinitions[draft.kind].name[locale];
+}
 /** Includes untouched legacy data only when present; never parses free text into measurements. */
 export function checklistReportFields(draft: ChecklistDraft): ChecklistField[] {
   return [
@@ -1445,7 +1460,7 @@ export function checklistText(
 ): string {
   const definition = checklistDefinitions[draft.kind];
   return [
-    `PhaseKit — ${definition.name[locale]}`,
+    `PhaseKit — ${checklistReportName(draft, locale)}`,
     draft.title,
     `${locale === "fi" ? "Muokattu" : "Updated"}: ${draft.updatedAt}`,
     "",
