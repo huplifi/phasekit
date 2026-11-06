@@ -1,0 +1,249 @@
+.assessment-intro {
+  margin-top: -8px;
+}
+
+.assessment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 4px 0 20px;
+}
+
+.assessment-choices,
+.assessment-disclosure {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.assessment-choices {
+  margin-bottom: 16px;
+}
+
+.assessment-choices .choice-tabs,
+.assessment-disclosure .choice-tabs {
+  min-width: 0;
+  max-width: 100%;
+  margin-bottom: 8px;
+}
+
+.circuit-figure {
+  margin: 8px 0 20px;
+  padding: 8px 8px 12px;
+  border: 1px solid var(--divider);
+  border-radius: 16px;
+  background: var(--background);
+}
+
+.circuit-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--text);
+}
+
+.circuit-unit {
+  fill: color-mix(in srgb, var(--background) 72%, transparent);
+  stroke-width: 2;
+}
+
+.circuit-unit.is-cold {
+  stroke: var(--palette-primary-blue);
+  stroke-width: 3;
+  fill: color-mix(in srgb, var(--palette-primary-blue) 24%, var(--background));
+}
+
+.circuit-unit.is-hot {
+  stroke: var(--palette-mid-blue);
+  stroke-width: 3;
+  fill: color-mix(in srgb, var(--palette-mid-blue) 34%, var(--background));
+}
+
+.circuit-unit.is-open {
+  stroke: var(--text-secondary);
+  stroke-dasharray: 6 5;
+  fill: transparent;
+}
+
+.circuit-title,
+.circuit-fn,
+.circuit-port-label {
+  fill: currentColor;
+  stroke: none;
+  font-family: var(--font-body), sans-serif;
+}
+
+.circuit-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.circuit-fn,
+.circuit-port-label {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.circuit-port-label {
+  font-weight: 700;
+}
+
+.circuit-pipe {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.circuit-pipe.is-wide {
+  stroke-width: 8;
+}
+
+.circuit-pipe.is-cold,
+.circuit-stub.is-cold {
+  stroke: var(--palette-primary-blue);
+}
+
+.circuit-pipe.is-hot,
+.circuit-stub.is-hot {
+  stroke: var(--palette-mid-blue);
+}
+
+.circuit-stub {
+  fill: none;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.circuit-machine {
+  fill: var(--background);
+  stroke: var(--text);
+  stroke-width: 2;
+}
+
+.circuit-valve,
+.circuit-flow {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.circuit-valve {
+  fill: var(--text);
+  stroke: none;
+}
+
+.circuit-port {
+  fill: var(--accent-background);
+  stroke: var(--accent-foreground);
+  stroke-width: 2;
+}
+
+.circuit-key {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.circuit-key strong {
+  color: var(--text);
+  font-weight: 700;
+  text-align: right;
+}
+
+.circuit-key > span:last-child {
+  grid-column: 1 / -1;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.assessment-pressure {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  gap: 12px;
+  align-items: end;
+}
+
+.assessment-pressure select {
+  margin-top: 0;
+}
+
+.assessment-result {
+  margin-top: 8px;
+}
+
+.assessment-result .result-number {
+  margin-bottom: 8px;
+}
+
+.assessment-rows {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.assessment-rows div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--divider);
+}
+
+.assessment-rows dt {
+  font-weight: 700;
+}
+
+.assessment-rows dd {
+  margin: 0;
+  text-align: right;
+}
+
+.assessment-summary p:last-child {
+  margin-bottom: 0;
+}
+
+.assessment-next {
+  margin: 8px 0 20px;
+  padding-left: 1.2rem;
+}
+
+.assessment-next li + li {
+  margin-top: 8px;
+}
+
+.assessment-disclosure {
+  margin: 12px 0;
+}
+
+.assessment-disclosure summary {
+  min-height: 44px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assessment-hypothesis {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.assessment-hypothesis h3 {
+  margin: 0 0 4px;
+}
+
+.assessment-hypothesis p:last-child {
+  margin-bottom: 0;
+}
+
+.assessment-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.assessment-links p {
+  margin: 0;
+}
