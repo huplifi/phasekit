@@ -33,6 +33,7 @@ import { Compare } from "./views/Compare";
 import { Check } from "./views/Check";
 import { Calculator } from "./views/Calculator";
 import { PTCalculator } from "./views/PTCalculator";
+import { OperatingAssessment } from "./views/OperatingAssessment";
 import { Tools } from "./views/Tools";
 import { ReleaseHistory } from "./views/ReleaseHistory";
 import { Settings } from "./views/Settings";
@@ -359,6 +360,7 @@ export function App() {
     "tools",
     "check",
     "pt",
+    "assessment",
     "ph",
     "shsc",
     "co2e",
@@ -507,6 +509,8 @@ export function App() {
             <Check key={r?.id ?? "check"} r={r} />
           ) : section === "pt" ? (
             <PTCalculator key={r?.id ?? "pt"} initial={r} />
+          ) : section === "assessment" ? (
+            <OperatingAssessment key={r?.id ?? "assessment"} initial={r} />
           ) : section === "ph" || section === "shsc" || section === "co2e" ? (
             <Calculator
               key={`${section === "co2e" ? "co2e" : "cycle"}-${r?.id ?? ""}`}

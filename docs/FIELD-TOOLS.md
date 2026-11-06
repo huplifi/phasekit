@@ -2,6 +2,10 @@
 
 These tools are part of the preview feature branch. They must not be deployed to the production domain as part of preview validation.
 
+## Operating assessment
+
+Route: `#/assessment`, also listed with the other calculators. The visual operating assessment reads partial service measurements against the offline saturation table. Behaviour, fluid limits and the beta-only release boundary are specified in [OPERATING-ASSESSMENT.md](OPERATING-ASSESSMENT.md). It does not calculate COP or apply a universal pressure limit.
+
 ## Liquid thermal power
 
 Route: `#/thermal-power`. The calculator evaluates sensible heat transfer:

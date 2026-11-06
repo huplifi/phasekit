@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Check,
   Gauge,
+  Activity,
   ChartNoAxesCombined,
   GitCompareArrows,
   Plus,
@@ -230,6 +231,7 @@ export function ChemicalFormula({ formula }: { formula: string }) {
 const toolItems = [
   { key: "check", label: "leakCheck", icon: Wrench },
   { key: "pt", label: "pt", icon: Gauge },
+  { key: "assessment", label: "assessment", icon: Activity },
   { key: "ph", label: "shsc", icon: ChartNoAxesCombined },
   { key: "co2e", label: "kgCO2", icon: Scale },
   { key: "compare", label: "compare", icon: GitCompareArrows },
