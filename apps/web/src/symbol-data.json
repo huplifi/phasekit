@@ -25,6 +25,11 @@
       "sha256": "053f6c1b9c564495232fe4b839aa52e7762112912f1f7e290fda0694d931a9cc",
       "retrieved": "2026-09-28",
       "note": "PDF s. 6, PID ja English Legend. Käytetään vain ACC-imuvaraajan esityksen vertailuun; kaavion laitearvoja ei siirretä symboleihin."
+    },
+    "oppitunti-koskettimet": {
+      "title": "Oppituntidia: Koskettimet (9.11.2026)",
+      "pages": 1,
+      "note": "Käyttäjän toimittama oppituntikuva. Esitystavan lähde; ei vahvistettua IEC-tunnusta tai standardistatusta."
     }
   },
   "symbols": [
@@ -754,6 +759,66 @@
       ],
       "notes": "",
       "visual_review": "2026-09-28"
+    },
+    {
+      "id": "vaihtokosketin-keskiasento",
+      "file": "vaihtokosketin-keskiasento.svg",
+      "name_fi": "Väliasentoinen vaihtokosketin",
+      "name_en": "Center-off change-over contact",
+      "aliases_fi": ["keskiasentoinen vaihtokosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Yhteinen kosketin on keskiasennossa irti molemmista vastakoskettimista.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "oppitunti-koskettimet",
+          "pages": [1],
+          "labels": ["Väliasentoinen vaihtokosketin"]
+        }
+      ],
+      "notes": "Piirretty oppituntikuvan perusteella kirjaston ruudukkoon. Oppituntikuva ei vahvista IEC-tunnusta tai standardistatusta.",
+      "visual_review": "2026-11-09"
+    },
+    {
+      "id": "kosketin-no-aikaisemmin-sulkeutuva",
+      "file": "kosketin-no-aikaisemmin-sulkeutuva.svg",
+      "name_fi": "Aikaisemmin sulkeutuva sulkukosketin",
+      "name_en": "Early-make NO contact",
+      "aliases_fi": ["ennakkoon sulkeutuva kosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Sulkeutuu ennen saman kosketinyksikön muita koskettimia.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "oppitunti-koskettimet",
+          "pages": [1],
+          "labels": ["Aikaisemmin sulkeutuva sulkukosketin"]
+        }
+      ],
+      "notes": "Piirretty oppituntikuvan perusteella kirjaston ruudukkoon. Ajoitus on suhteessa saman yksikön muihin koskettimiin; viiveen pituutta tai IEC-statusta ei ole vahvistettu.",
+      "visual_review": "2026-11-09"
+    },
+    {
+      "id": "kosketin-nc-myohassa-avautuva",
+      "file": "kosketin-nc-myohassa-avautuva.svg",
+      "name_fi": "Myöhemmin avautuva avauskosketin",
+      "name_en": "Late-break NC contact",
+      "aliases_fi": ["myöhempään avautuva NC-kosketin"],
+      "category": "ohjaus",
+      "representation": "piirikaavio",
+      "purpose": "Avautuu saman kosketinyksikön muita koskettimia myöhemmin.",
+      "status": "sovellettu",
+      "sources": [
+        {
+          "source": "oppitunti-koskettimet",
+          "pages": [1],
+          "labels": ["Myöhemmin avautuva avauskosketin"]
+        }
+      ],
+      "notes": "Piirretty oppituntikuvan perusteella kirjaston ruudukkoon. Ajoitus on suhteessa saman yksikön muihin koskettimiin; viiveen pituutta tai IEC-statusta ei ole vahvistettu.",
+      "visual_review": "2026-11-09"
     },
     {
       "id": "kontaktori",
@@ -1579,6 +1644,6 @@
       "visual_review": "2026-09-28"
     }
   ],
-  "source_revision": "8dcd1803052ad4e7db189d4ecea7200c2190ff85",
+  "source_revision": "47c26e25a8d3304fadbc146fade2d0233f5b5466",
   "library_url": "https://huplifi.github.io/kylmasentaja-keuda-public/"
 }

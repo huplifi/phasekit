@@ -33,7 +33,7 @@ test("visual reference has separate domains, alias search and accessible details
   await page.getByRole("button", { name: "Sähkö", exact: true }).click();
   await expect(page.locator(".schematic-symbol-card")).toHaveCount(0);
   await search.fill("");
-  await expect(page.locator(".schematic-symbol-card")).toHaveCount(59);
+  await expect(page.locator(".schematic-symbol-card")).toHaveCount(62);
   await page
     .getByRole("combobox", { name: "Ryhmä", exact: true })
     .selectOption("maadoitus");
@@ -76,7 +76,7 @@ test("symbol pictures and detail remain available offline, including dark mobile
       ),
     ];
   });
-  expect(cachedSymbols).toHaveLength(77);
+  expect(cachedSymbols).toHaveLength(80);
   // Playwright WebKit fails network requests when emulated offline even with
   // a controlling worker; inspect its complete precache and UI online instead.
   // Chromium verifies actual offline reload and asset responses.
@@ -117,7 +117,20 @@ test("symbol pictures and detail remain available offline, including dark mobile
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page.getByRole("button", { name: "Sulje symbolin tiedot" }).click();
   await page.getByRole("button", { name: "Sähkö", exact: true }).click();
-  await expect(page.locator(".schematic-symbol-card")).toHaveCount(59);
+  await expect(page.locator(".schematic-symbol-card")).toHaveCount(62);
+  await page
+    .getByRole("combobox", { name: "Ryhmä", exact: true })
+    .selectOption("ohjaus");
+  await page
+    .getByRole("searchbox", { name: "Hae symboleja" })
+    .fill("myohemmin avautuva");
+  await page.getByRole("button", { name: /myöhemmin avautuva/i }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toContainText("saman kosketinyksikön");
+  await dialog.getByText("Lähteet ja rajaukset", { exact: true }).click();
+  await expect(
+    dialog.getByText("Oppituntidia: Koskettimet", { exact: false }),
+  ).toBeVisible();
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

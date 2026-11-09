@@ -12,7 +12,7 @@ import {
 describe("schematic reference library", () => {
   it("keeps the two disciplines separate, including identical geometry", () => {
     expect(searchSymbols("", "cold")).toHaveLength(18);
-    expect(searchSymbols("", "electrical")).toHaveLength(59);
+    expect(searchSymbols("", "electrical")).toHaveLength(62);
     expect(
       searchSymbols("kompressori", "cold").every(
         (s) => s.category === "kylmakierto",
@@ -46,7 +46,7 @@ describe("schematic reference library", () => {
     ).toBe(true);
   });
   it("retains caveats, source references and known shared shapes", () => {
-    expect(new Set(symbols.map((s) => s.id)).size).toBe(77);
+    expect(new Set(symbols.map((s) => s.id)).size).toBe(80);
     for (const symbol of symbols) {
       expect(categoryLabels[symbol.category]).toBeTruthy();
       expect(representationLabels[symbol.representation]).toBeTruthy();
