@@ -29,7 +29,7 @@ Once the CNAME resolves, use [the beta domain panel](https://app.netlify.com/pro
 1. Create a feature branch from the current `beta`; submit a PR targeting `beta`.
 2. Update the root `package.json` version and add matching Finnish and English notes at the top of `data/releases.json`. Record the version date, channel and user-visible changes; run `pnpm release:build` and commit the generated `CHANGELOG.md`. The bundled Settings → Release history view uses those same entries. The build rejects missing translations, duplicate versions, invalid dates and channel/version mismatches. Update README and run `pnpm data:coverage` when data coverage changes.
    CI also runs `pnpm release:check` against the PR base SHA or the previous branch head. Shipped code/data/build changes require a strictly newer version; existing published release notes must be retained unchanged. Documentation and test-only follow-ups do not require a version bump. Locally use `pnpm release:check origin/beta`. The check requires Git history (`fetch-depth: 0` in CI) and rejects an existing release tag pointing to a different candidate commit. Feature corrections within the same unpublished PR keep its candidate version.
-3. Match verification to the change. For a small UI correction, run the affected checks and at most the browser paths needed to verify the behaviour; do not routinely run the full suite locally and again in CI. Use one full CI run for the final release candidate, and repeat only when a new change or failure warrants it. `pnpm verify` remains an optional full local diagnostic command, not a mandatory step for every edit. Inspect the existing Deploy Preview and check local-data/update behaviour when affected. Add regression tests for consequential behaviour or a demonstrated bug, not for reversible cosmetic edits.
+3. Match verification to the change. For a small UI correction, run the affected checks and at most the browser paths needed to verify the behaviour; do not routinely run the full suite locally and again in CI. Use one appropriately scoped CI run for the final release candidate, and repeat only when a new change or failure warrants it. `pnpm verify` remains an optional full local diagnostic command, not a mandatory step for every edit. Inspect the existing Deploy Preview and check local-data/update behaviour when affected. Add regression tests for consequential behaviour or a demonstrated bug, not for reversible cosmetic edits.
 4. Merge reviewed work into `beta`. That updates the public beta automatically. The stable site does not change.
 5. For release, open a PR from `beta` into `main`, review the aggregate changes and source/model versions, and obtain the owner's explicit stable-release decision.
 6. Set the root `package.json` version to the intended stable version (remove the prerelease suffix), add its matching stable history entry, verify the channel in Settings and rerun checks. The root version is the single source for the displayed application version; the build revision comes from Netlify `COMMIT_REF`. Merge only after checks pass. The existing stable Netlify project deploys `main` automatically.
@@ -58,3 +58,24 @@ IndexedDB belongs to the origin. Preview, beta and stable URLs have separate rec
 Beta displays its channel and short build revision. Verify update prompts with an unsaved calculation and stored records before promotion. A green automated run does not replace regulatory review, physical-device checks or user pilots.
 
 References: [Netlify external DNS](https://docs.netlify.com/manage/domains/configure-domains/configure-external-dns/), [Netlify Deploy Previews](https://docs.netlify.com/deploy/deploy-types/deploy-previews/).
+
+## Browser verification scope
+
+Automatic PR and beta/main push checks run a small existing baseline
+(`phasekit`, `mobile-layout`, `release-history`) plus browser spec files added or
+modified by the change. They use desktop Chromium and mobile WebKit. This covers
+shared navigation, accessibility, saved data, language/theme, offline shell,
+version metadata and narrow forms without running every historical regression
+four times. Core unit tests, data validation, lint, typecheck and build still run.
+
+This is **not** automatic app-source dependency analysis. The PR author must add
+or update the relevant regression specs, or run additional existing specs for the
+affected behaviour. Review the printed scope. Changes to shared storage, routing,
+service workers, dependencies or broadly shared controls warrant the full suite:
+run `pnpm test:e2e` on the candidate before promotion. This explicit full run
+retains all four browser projects. No tests are deleted. Keep its result with the
+PR verification evidence; `pnpm verify` also includes the full browser suite.
+
+An empty commit used solely to request a preview does not change the tested tree;
+a duplicate verification run may be cancelled after comparing tree IDs with the
+successful candidate. The same applies to a merge whose tree is identical.
