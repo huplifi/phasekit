@@ -247,3 +247,47 @@
 .assessment-links p {
   margin: 0;
 }
+
+/* The diagram is a reading aid: keep mobile labels legible at 390 px. */
+.circuit-fn {
+  font-size: 24px;
+}
+.circuit-title {
+  font-size: 23px;
+}
+.circuit-key {
+  font-size: 0.9375rem;
+}
+.assessment-system,
+.assessment-reference {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.assessment-result {
+  margin: 20px 0 16px;
+}
+@media (max-width: 480px) {
+  .circuit-title {
+    display: none;
+  }
+  .circuit-fn {
+    font-size: 26px;
+  }
+  .assessment-choices .choice-tabs {
+    flex-wrap: wrap;
+  }
+}
+
+.assessment-calculation {
+  margin-top: 16px;
+  border-top: 1px solid var(--divider);
+  padding-top: 12px;
+}
+.assessment-calculation summary {
+  cursor: pointer;
+  min-height: 44px;
+  font-weight: 700;
+}
+.assessment-calculation .assessment-rows {
+  margin-top: 0;
+}

@@ -28,7 +28,7 @@ Low suction pressure can support a refrigerant-shortage suspicion. The same read
 
 High-side pressure is not compared with a universal limit. A normal or abnormal verdict is given only against figures the user types from the equipment instruction, and those figures stay labelled as entered values. No COP or capacity-for-a-building number is calculated from pressure and temperature. Temperature lift, when both sides are subcritical, is identified as lift rather than efficiency. Stabilisation time is not invented; the equipment instruction is the reference.
 
-The example button fills labelled demo figures. They are not a measured installation.
+The example button fills labelled demo figures. Their provenance remains visible through edits, unit conversions and mode changes; Clear values starts a fresh measured draft. Blank R744/R717 selections start with industrial context and an unknown port role.
 
 ## Sources
 
@@ -37,3 +37,25 @@ Saturation values come from the offline CoolProp 7.2.0 HEOS table described in [
 ## Release boundary
 
 The tool is developed on a branch targeting `beta`. Merging that branch into `beta` deploys https://beta.phasekit.app through the existing beta Netlify project. It does not deploy https://phasekit.app. See [the beta workflow](BETA-RELEASE-WORKFLOW.md).
+
+
+## Beta 0.5.0-beta.6 refinement
+
+The primary result precedes the diagram. System/mode and the atmospheric reference
+use disclosures; entered pressure always shows its gauge/absolute unit. Repeated
+saturation arithmetic is under “Pressure and calculation”, while out-of-domain
+and critical-pressure explanations remain visible. Diagram labels remain legible
+on mobile, unknown ports are detached, and liquid measurement points are upstream
+of (and separate from) the expansion valve in both operating directions.
+
+R744 critical pressure is displayed to three decimals, including equality at
+73.773 bar(a). Suction and unknown roles never acquire a high-side label solely
+from pressure. The lower saturation-table boundary is distinguished from the gap
+below critical pressure. R717 unknown evaporator type remains an open hypothesis,
+even with an entered superheat target; flooded wording does not classify measured
+superheat as small. No universal shortage, superheat or subcooling fault threshold
+has been introduced.
+
+Verification: 19 core cases, plus the operating-assessment browser spec on desktop
+and mobile Chromium and WebKit. Regression coverage includes critical boundaries,
+port roles, unknown/flooded ammonia, sample provenance and diagram/result layout.

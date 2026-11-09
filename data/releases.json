@@ -1,5 +1,26 @@
 [
   {
+    "version": "0.5.0-beta.6",
+    "date": "2026-11-09",
+    "channel": "beta",
+    "title": {
+      "fi": "Käyttöarvio kylmäpiirin mittauksille",
+      "en": "Operating assessment for refrigeration measurements"
+    },
+    "changes": {
+      "fi": [
+        "Uusi Käyttöarvio auttaa lukemaan kylmäpiirin toimintaa paineesta ja saatavilla olevista lisämittauksista. Päätulos näkyy ennen kaaviota; tekniset perustelut avautuvat tarvittaessa.",
+        "R744:n kriittinen paine ja mittausportin rooli erotetaan toisistaan. R717:n avoin tai tulvitettu höyrystin ei vahvista tulistuksesta kylmäainevajausta.",
+        "Kaavion mittauspisteet erottuvat paisuntaventtiilistä ja tekstit ovat luettavampia puhelimessa. Esimerkkilukujen alkuperämerkintä säilyy muokkauksissa."
+      ],
+      "en": [
+        "New Operating assessment helps interpret a refrigeration circuit from pressure and available additional measurements. The main result precedes the diagram; technical reasoning opens on demand.",
+        "R744 critical pressure and measurement-port role are treated separately. Unknown or flooded R717 evaporators do not support a charge-shortage conclusion from superheat.",
+        "Diagram measurement points are separate from the expansion valve and labels are more legible on phones. Example provenance remains visible after edits."
+      ]
+    }
+  },
+  {
     "version": "0.5.0-beta.5",
     "date": "2026-11-09",
     "channel": "beta",

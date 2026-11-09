@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Fact, Refrigerant } from "../../../../packages/core/src/contracts";
+import type {
+  Fact,
+  Refrigerant,
+} from "../../../../packages/core/src/contracts";
 import type { HighSideKind } from "./CircuitDiagram";
 import {
   assessOperation,
@@ -94,19 +97,24 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
   const suggested = suggestedPortRole(draft.system, mode);
 
   useEffect(() => {
-    setDraftDirty(draft.pressure.trim().length > 0 || draft.secondPressure.trim().length > 0);
+    setDraftDirty(
+      draft.pressure.trim().length > 0 ||
+        draft.secondPressure.trim().length > 0,
+    );
     return () => setDraftDirty(false);
   }, [draft.pressure, draft.secondPressure, setDraftDirty]);
 
-  function patch(next: Partial<Draft>, keepDemo = false) {
-    setDraft((current) => ({ ...current, ...next, demo: keepDemo ? current.demo : false }));
+  function patch(next: Partial<Draft>) {
+    setDraft((current) => ({ ...current, ...next }));
   }
 
   function chooseSystem(system: AssessmentSystem) {
     setDraft((current) => {
       const mode = system === "dx_cooling" ? "cooling" : current.mode;
-      const role = current.roleTouched ? current.role : suggestedPortRole(system, mode);
-      return { ...current, system, mode, role, demo: false };
+      const role = current.roleTouched
+        ? current.role
+        : suggestedPortRole(system, mode);
+      return { ...current, system, mode, role };
     });
   }
 
@@ -114,8 +122,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
     setDraft((current) => ({
       ...current,
       mode,
-      role: current.roleTouched ? current.role : suggestedPortRole(current.system, mode),
-      demo: false,
+      role: current.roleTouched
+        ? current.role
+        : suggestedPortRole(current.system, mode),
     }));
   }
 
@@ -124,11 +133,36 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
     try {
       patch({
         pressureUnit: next,
-        pressure: convertReading(draft.pressure, draft.pressureUnit, next, reference),
-        secondPressure: convertReading(draft.secondPressure, draft.pressureUnit, next, reference),
-        uncertainty: scaleUncertainty(draft.uncertainty, draft.pressureUnit, next, reference),
-        oemSuction: convertReading(draft.oemSuction, draft.pressureUnit, next, reference),
-        oemHigh: convertReading(draft.oemHigh, draft.pressureUnit, next, reference),
+        pressure: convertReading(
+          draft.pressure,
+          draft.pressureUnit,
+          next,
+          reference,
+        ),
+        secondPressure: convertReading(
+          draft.secondPressure,
+          draft.pressureUnit,
+          next,
+          reference,
+        ),
+        uncertainty: scaleUncertainty(
+          draft.uncertainty,
+          draft.pressureUnit,
+          next,
+          reference,
+        ),
+        oemSuction: convertReading(
+          draft.oemSuction,
+          draft.pressureUnit,
+          next,
+          reference,
+        ),
+        oemHigh: convertReading(
+          draft.oemHigh,
+          draft.pressureUnit,
+          next,
+          reference,
+        ),
       });
       setUnitError(false);
     } catch {
@@ -137,18 +171,26 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
   }
 
   const result = useMemo(() => {
-    if (!draft.pressure.trim() && !draft.secondPressure.trim()) return undefined;
-    const criticalPressure = verifiedFact(refrigerant?.facts.critical_pressure_bar_abs);
-    const criticalTemperature = verifiedFact(refrigerant?.facts.critical_temp_c);
+    if (!draft.pressure.trim() && !draft.secondPressure.trim())
+      return undefined;
+    const criticalPressure = verifiedFact(
+      refrigerant?.facts.critical_pressure_bar_abs,
+    );
+    const criticalTemperature = verifiedFact(
+      refrigerant?.facts.critical_temp_c,
+    );
     return assessOperation({
       ...(id ? { refrigerantId: id } : {}),
       ...(criticalPressure
         ? {
             criticalPressureBarAbsolute: criticalPressure,
-            criticalSourceIds: refrigerant?.facts.critical_pressure_bar_abs?.sourceIds ?? [],
+            criticalSourceIds:
+              refrigerant?.facts.critical_pressure_bar_abs?.sourceIds ?? [],
           }
         : {}),
-      ...(criticalTemperature ? { criticalTemperatureC: criticalTemperature } : {}),
+      ...(criticalTemperature
+        ? { criticalTemperatureC: criticalTemperature }
+        : {}),
       system: draft.system,
       mode: draft.system === "dx_cooling" ? "cooling" : draft.mode,
       evaporatorStyle: showEvaporator ? draft.evaporator : "unknown",
@@ -161,7 +203,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
               value: draft.pressure,
               unit: draft.pressureUnit,
               role: draft.role,
-              ...(draft.uncertainty.trim() ? { uncertainty: draft.uncertainty } : {}),
+              ...(draft.uncertainty.trim()
+                ? { uncertainty: draft.uncertainty }
+                : {}),
               ...(draft.pipeC.trim() ? { pipeTemperatureC: draft.pipeC } : {}),
             },
           }
@@ -172,7 +216,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
               value: draft.secondPressure,
               unit: draft.pressureUnit,
               role: draft.secondRole,
-              ...(draft.secondPipeC.trim() ? { pipeTemperatureC: draft.secondPipeC } : {}),
+              ...(draft.secondPipeC.trim()
+                ? { pipeTemperatureC: draft.secondPipeC }
+                : {}),
             },
           }
         : {}),
@@ -182,7 +228,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
       stability: draft.stability,
       capacity: draft.capacity,
       ...(draft.model.trim() ? { modelName: draft.model } : {}),
-      ...(draft.oemSuction.trim() ? { oemSuctionPressure: draft.oemSuction } : {}),
+      ...(draft.oemSuction.trim()
+        ? { oemSuctionPressure: draft.oemSuction }
+        : {}),
       ...(draft.oemHigh.trim() ? { oemHighPressure: draft.oemHigh } : {}),
       ...(draft.oemSh.trim() ? { oemSuperheatK: draft.oemSh } : {}),
       ...(draft.oemSc.trim() ? { oemSubcoolingK: draft.oemSc } : {}),
@@ -193,6 +241,14 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
     result?.circuit.highSide ?? (id === "r744" ? "unresolved" : "condenser");
   const labels = circuitCopy(draft, mode, highSide, l);
   const text = (copy: { fi: string; en: string }) => copy[locale];
+  const compactReading =
+    result?.readings[0]?.regime === "saturated" && Boolean(result.focus);
+  const systemName = {
+    air_air: l("Ilma–ilma", "Air-to-air"),
+    dx_cooling: l("Vain jäähdytys", "Cooling only"),
+    hydronic: l("Vesi", "Water"),
+    industrial: l("Teollisuus", "Industrial"),
+  }[draft.system];
   const invalid = new Set(result?.fieldErrors.map((error) => error.field));
 
   return (
@@ -206,7 +262,11 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
         )}
       </p>
       <div className="assessment-actions">
-        <button type="button" className="secondary-button" onClick={() => applyDemo(id, setId, setDraft)}>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={() => applyDemo(id, setId, setDraft)}
+        >
           {l("Näytä esimerkki", "Show an example")}
         </button>
         <button
@@ -223,8 +283,8 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
       {draft.demo && (
         <p className="notice">
           {l(
-            "Esimerkki. Nämä luvut eivät ole mitattu kohde.",
-            "Example. These figures are not a measured installation.",
+            "Esimerkkipohja. Mukana voi olla esimerkkilukuja myös muokkausten jälkeen. Aloita omat mittaukset painamalla Tyhjennä luvut.",
+            "Example draft. Sample figures may remain after editing. Use Clear values to start your own measurements.",
           )}
         </p>
       )}
@@ -232,49 +292,56 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
         value={id}
         onChange={(next) => {
           setId(next);
-          patch({});
+          if (!draft.pressure.trim() && !draft.secondPressure.trim())
+            setDraft(initialDraft(next));
         }}
       />
-      <div className="assessment-choices">
-        <ExclusiveChoices
-          label={l("Järjestelmä", "System")}
-          value={draft.system}
-          onChange={chooseSystem}
-          options={[
-            { value: "air_air", label: l("Ilma–ilma", "Air-to-air") },
-            { value: "dx_cooling", label: l("Vain jäähdytys", "Cooling only") },
-            { value: "hydronic", label: l("Vesi", "Water") },
-            { value: "industrial", label: l("Teollisuus", "Industrial") },
-          ]}
-        />
-        <p className="caption secondary">{systemHint(draft.system, l)}</p>
-      </div>
-      <div className="assessment-choices">
-        <ExclusiveChoices
-          label={l("Käyttö", "Mode")}
-          value={draft.system === "dx_cooling" ? "cooling" : draft.mode}
-          onChange={chooseMode}
-          options={[
-            { value: "cooling", label: l("Jäähdytys", "Cooling") },
-            {
-              value: "heating",
-              label: l("Lämmitys", "Heating"),
-              disabled: draft.system === "dx_cooling",
-            },
-          ]}
-        />
-      </div>
-      <CircuitDiagram
-        layout={draft.system === "industrial" ? "industrial" : "split"}
-        mode={mode}
-        portRole={draft.role}
-        highSide={highSide}
-        labels={labels}
-        ariaLabel={labels.aria}
-      />
+      <details className="assessment-disclosure assessment-system">
+        <summary>
+          {l("Järjestelmä ja käyttö", "System and mode")} · {systemName} ·{" "}
+          {l(
+            mode === "heating" ? "Lämmitys" : "Jäähdytys",
+            mode === "heating" ? "Heating" : "Cooling",
+          )}
+        </summary>
+        <div className="assessment-choices">
+          <ExclusiveChoices
+            label={l("Järjestelmä", "System")}
+            value={draft.system}
+            onChange={chooseSystem}
+            options={[
+              { value: "air_air", label: l("Ilma–ilma", "Air-to-air") },
+              {
+                value: "dx_cooling",
+                label: l("Vain jäähdytys", "Cooling only"),
+              },
+              { value: "hydronic", label: l("Vesi", "Water") },
+              { value: "industrial", label: l("Teollisuus", "Industrial") },
+            ]}
+          />
+          <p className="caption secondary">{systemHint(draft.system, l)}</p>
+        </div>
+        <div className="assessment-choices">
+          <ExclusiveChoices
+            label={l("Käyttö", "Mode")}
+            value={draft.system === "dx_cooling" ? "cooling" : draft.mode}
+            onChange={chooseMode}
+            options={[
+              { value: "cooling", label: l("Jäähdytys", "Cooling") },
+              {
+                value: "heating",
+                label: l("Lämmitys", "Heating"),
+                disabled: draft.system === "dx_cooling",
+              },
+            ]}
+          />
+        </div>
+      </details>
       <div className="assessment-pressure">
         <div className="field-group">
-          <label htmlFor="assessment-pressure">{l("Paine", "Pressure")}</label>
+          <label htmlFor="assessment-pressure">
+            {l("Paine", "Pressure")} · {draft.pressureUnit}
+          </label>
           <input
             id="assessment-pressure"
             className="mono"
@@ -310,7 +377,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
             checked={draft.pressureUnit.endsWith("(a)")}
             onChange={(event) => {
               const base = draft.pressureUnit.split("(")[0];
-              changeUnit(`${base}(${event.target.checked ? "a" : "g"})` as PressureUnit);
+              changeUnit(
+                `${base}(${event.target.checked ? "a" : "g"})` as PressureUnit,
+              );
             }}
           />
           <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
@@ -322,28 +391,34 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
           "Off: gauge pressure. On: absolute pressure, zero at vacuum. Switching converts the entered figure.",
         )}
       </p>
-      {draft.pressureUnit.endsWith("(g)") && (
-        <div className="field-group">
-          <label htmlFor="assessment-atmosphere">
-            {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
-          </label>
-          <input
-            id="assessment-atmosphere"
-            className="mono"
-            inputMode="decimal"
-            autoComplete="off"
-            value={draft.atmosphere}
-            aria-invalid={invalid.has("atmosphere") || undefined}
-            onChange={(event) => patch({ atmosphere: event.target.value })}
-          />
-          <p className="caption secondary">
-            {l(
-              "Oletus 1,01325 bar(a) on standardi-ilmakehä. Se lisätään mittaripaineeseen kerran.",
-              "The default 1.01325 bar(a) is standard atmosphere. It is added to gauge pressure once.",
-            )}
-          </p>
-        </div>
-      )}
+      <details className="assessment-disclosure assessment-reference">
+        <summary>
+          {l("Ilmanpaineviite", "Atmospheric reference")} · {draft.atmosphere}{" "}
+          bar(a)
+        </summary>
+        {draft.pressureUnit.endsWith("(g)") && (
+          <div className="field-group">
+            <label htmlFor="assessment-atmosphere">
+              {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
+            </label>
+            <input
+              id="assessment-atmosphere"
+              className="mono"
+              inputMode="decimal"
+              autoComplete="off"
+              value={draft.atmosphere}
+              aria-invalid={invalid.has("atmosphere") || undefined}
+              onChange={(event) => patch({ atmosphere: event.target.value })}
+            />
+            <p className="caption secondary">
+              {l(
+                "Oletus 1,01325 bar(a) on standardi-ilmakehä. Se lisätään mittaripaineeseen kerran.",
+                "The default 1.01325 bar(a) is standard atmosphere. It is added to gauge pressure once.",
+              )}
+            </p>
+          </div>
+        )}
+      </details>
       {unitError && (
         <p className="notice warning">
           {l(
@@ -381,7 +456,10 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
       </div>
       <div className="field-group">
         <label htmlFor="assessment-pipe">
-          {l("Putken lämpötila, °C, jos mitattu", "Pipe temperature, °C, if measured")}
+          {l(
+            "Putken lämpötila, °C, jos mitattu",
+            "Pipe temperature, °C, if measured",
+          )}
         </label>
         <input
           id="assessment-pipe"
@@ -422,7 +500,11 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
           ))}
         </div>
       ) : null}
-      <section className="result-card info assessment-result" aria-live="polite">
+      <section
+        className="result-card info assessment-result"
+        aria-live="polite"
+        aria-label={l("Käyttöarvion tulos", "Operating assessment result")}
+      >
         {result?.focus ? (
           <>
             <p className="result-label">{text(result.focus.label)}</p>
@@ -431,16 +513,6 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
               <span className="pt-result-unit">{text(result.focus.unit)}</span>
             </p>
             {result.focus.note && <p>{text(result.focus.note)}</p>}
-            {result.rows.length > 0 && (
-              <dl className="assessment-rows">
-                {result.rows.map((row) => (
-                  <div key={row.label.fi}>
-                    <dt>{text(row.label)}</dt>
-                    <dd className="mono">{text(row.value)}</dd>
-                  </div>
-                ))}
-              </dl>
-            )}
           </>
         ) : !result || result.summary.length === 0 ? (
           <p>
@@ -452,12 +524,42 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
         ) : null}
         {result && result.summary.length > 0 && (
           <div className="assessment-summary">
-            {result.summary.map((line) => (
-              <p key={line.fi}>{text(line)}</p>
-            ))}
+            {(compactReading ? result.summary.slice(1) : result.summary).map(
+              (line) => (
+                <p key={line.fi}>{text(line)}</p>
+              ),
+            )}
           </div>
         )}
+        {result && (result.rows.length > 0 || compactReading) && (
+          <details className="assessment-calculation">
+            <summary>
+              {l("Paine ja laskentaperuste", "Pressure and calculation")}
+            </summary>
+            {result.rows.length > 0 && (
+              <dl className="assessment-rows">
+                {result.rows.map((row) => (
+                  <div key={row.label.fi}>
+                    <dt>{text(row.label)}</dt>
+                    <dd className="mono">{text(row.value)}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {compactReading && result.summary[0] && (
+              <p>{text(result.summary[0])}</p>
+            )}
+          </details>
+        )}
       </section>
+      <CircuitDiagram
+        layout={draft.system === "industrial" ? "industrial" : "split"}
+        mode={mode}
+        portRole={draft.role}
+        highSide={highSide}
+        labels={labels}
+        ariaLabel={labels.aria}
+      />
       {result && result.checks.length > 0 && (
         <section>
           <h2>{l("Seuraavaksi", "Next")}</h2>
@@ -502,7 +604,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
               autoComplete="off"
               value={draft.secondPressure}
               aria-invalid={invalid.has("secondaryPressure") || undefined}
-              onChange={(event) => patch({ secondPressure: event.target.value })}
+              onChange={(event) =>
+                patch({ secondPressure: event.target.value })
+              }
             />
           </div>
           <div className="field-group">
@@ -533,7 +637,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
         />
         <div className="assessment-pressure">
           <div className="field-group">
-            <label htmlFor="assessment-indoor">{l("Sisäilma, °C", "Indoor air, °C")}</label>
+            <label htmlFor="assessment-indoor">
+              {l("Sisäilma, °C", "Indoor air, °C")}
+            </label>
             <input
               id="assessment-indoor"
               className="mono"
@@ -545,7 +651,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
             />
           </div>
           <div className="field-group">
-            <label htmlFor="assessment-outdoor">{l("Ulkoilma, °C", "Outdoor air, °C")}</label>
+            <label htmlFor="assessment-outdoor">
+              {l("Ulkoilma, °C", "Outdoor air, °C")}
+            </label>
             <input
               id="assessment-outdoor"
               className="mono"
@@ -560,7 +668,10 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
         {draft.system === "industrial" && (
           <div className="field-group">
             <label htmlFor="assessment-process">
-              {l("Jäähdytettävän kohteen lämpötila, °C", "Cooled-source temperature, °C")}
+              {l(
+                "Jäähdytettävän kohteen lämpötila, °C",
+                "Cooled-source temperature, °C",
+              )}
             </label>
             <input
               id="assessment-process"
@@ -574,7 +685,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
           </div>
         )}
         <div className="field-group">
-          <label htmlFor="assessment-model">{l("Malli, jos tiedossa", "Model, if known")}</label>
+          <label htmlFor="assessment-model">
+            {l("Malli, jos tiedossa", "Model, if known")}
+          </label>
           <input
             id="assessment-model"
             autoComplete="off"
@@ -588,9 +701,15 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
           onChange={(stability) => patch({ stability })}
           options={[
             { value: "unknown", label: l("Ei tiedossa", "Unknown") },
-            { value: "just_started", label: l("Juuri käynnistynyt", "Just started") },
+            {
+              value: "just_started",
+              label: l("Juuri käynnistynyt", "Just started"),
+            },
             { value: "running", label: l("Käy", "Running") },
-            { value: "oem_stable", label: l("Ohjeen mukaan vakaa", "Stable per instruction") },
+            {
+              value: "oem_stable",
+              label: l("Ohjeen mukaan vakaa", "Stable per instruction"),
+            },
             { value: "defrost", label: l("Sulatus", "Defrost") },
           ]}
         />
@@ -651,7 +770,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
       </details>
       {result && result.hypotheses.length > 0 && (
         <details className="assessment-disclosure">
-          <summary>{l("Mitä tämä voi tarkoittaa", "What this can mean")}</summary>
+          <summary>
+            {l("Mitä tämä voi tarkoittaa", "What this can mean")}
+          </summary>
           {result.hypotheses.map((item) => (
             <article className="assessment-hypothesis" key={item.id}>
               <h3>{text(item.title)}</h3>
@@ -689,7 +810,9 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
               </p>
             ))}
           </div>
-          <SourceNote ids={[...result.ptSourceIds, ...result.criticalSourceIds]} />
+          <SourceNote
+            ids={[...result.ptSourceIds, ...result.criticalSourceIds]}
+          />
         </details>
       )}
     </>
@@ -726,7 +849,13 @@ function NumberField({
 }
 
 function verifiedFact(fact: Fact | undefined): string | undefined {
-  if (!fact || fact.state !== "verified" || fact.value === null || fact.value === "") return undefined;
+  if (
+    !fact ||
+    fact.state !== "verified" ||
+    fact.value === null ||
+    fact.value === ""
+  )
+    return undefined;
   return String(fact.value);
 }
 
@@ -887,7 +1016,10 @@ function circuitCopy(
   };
 }
 
-function systemHint(system: AssessmentSystem, l: (fi: string, en: string) => string): string {
+function systemHint(
+  system: AssessmentSystem,
+  l: (fi: string, en: string) => string,
+): string {
   if (system === "dx_cooling") {
     return l(
       "Lauhdutin ja höyrystin. Lämmityskäyttöä ei ole.",
@@ -912,14 +1044,20 @@ function systemHint(system: AssessmentSystem, l: (fi: string, en: string) => str
   );
 }
 
-function roleName(role: PortRole, l: (fi: string, en: string) => string): string {
+function roleName(
+  role: PortRole,
+  l: (fi: string, en: string) => string,
+): string {
   if (role === "suction") return l("Imu", "Suction");
   if (role === "hot_gas") return l("Kuumakaasu", "Hot gas");
   if (role === "liquid") return l("Neste", "Liquid");
   return l("Rooli avoin", "Role open");
 }
 
-function fieldLabel(field: AssessmentField, l: (fi: string, en: string) => string): string {
+function fieldLabel(
+  field: AssessmentField,
+  l: (fi: string, en: string) => string,
+): string {
   const labels: Record<AssessmentField, [string, string]> = {
     atmosphere: ["Ilmanpaine", "Atmosphere"],
     primaryPressure: ["Paine", "Pressure"],
@@ -927,7 +1065,10 @@ function fieldLabel(field: AssessmentField, l: (fi: string, en: string) => strin
     primaryTemperature: ["Putken lämpötila", "Pipe temperature"],
     secondaryPressure: ["Toinen paine", "Second pressure"],
     secondaryUncertainty: ["Toisen paineen epävarmuus", "Second uncertainty"],
-    secondaryTemperature: ["Toisen putken lämpötila", "Second pipe temperature"],
+    secondaryTemperature: [
+      "Toisen putken lämpötila",
+      "Second pipe temperature",
+    ],
     indoorAir: ["Sisäilma", "Indoor air"],
     outdoorAir: ["Ulkoilma", "Outdoor air"],
     processTemperature: ["Kohteen lämpötila", "Source temperature"],
@@ -939,7 +1080,10 @@ function fieldLabel(field: AssessmentField, l: (fi: string, en: string) => strin
   return l(...labels[field]);
 }
 
-function errorLabel(code: AssessmentFieldErrorCode, l: (fi: string, en: string) => string): string {
+function errorLabel(
+  code: AssessmentFieldErrorCode,
+  l: (fi: string, en: string) => string,
+): string {
   const labels: Record<AssessmentFieldErrorCode, [string, string]> = {
     invalid_number: [
       "Tarkista luku. Käytä desimaalipilkkua tai -pistettä.",
