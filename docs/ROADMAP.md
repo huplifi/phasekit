@@ -34,6 +34,10 @@ The latest [feedback batch](FEEDBACK-2026-09-26.md) is implemented on the develo
 
 See [beta implementation](BETA-IMPLEMENTATION.md) for final verification status and [beta/release workflow](BETA-RELEASE-WORKFLOW.md) for separate hosting. Physical-device and qualified-review requirements remain open. [Pilot instructions](PILOT-TESTING.md) and [regulatory review forms](REGULATORY-REVIEW.md) are prepared; creating these documents does not complete those reviews.
 
+## Operating assessment
+
+November 2026, beta channel only. `#/assessment` adds a visual operating assessment for partial measurements, including R134a, R32, R449A, R744 and R717, using the existing saturation table. It does not add a diagnostic expert system, a universal pressure limit, or a COP calculated from pressure and temperature. The behaviour and sources are in [OPERATING-ASSESSMENT.md](OPERATING-ASSESSMENT.md). Merging the feature to `beta` publishes it on the beta site; stable remains a separate decision.
+
 ## Field-report beta
 
 [Beta.4 scope and acceptance](BETA-FIELD-REPORTS.md) covers Reports navigation, discoverable autosaved drafts, immutable final revisions, structured evacuation/commissioning measurements, frozen supported cycle diagrams and result-first printable documents. Existing records remain compatible. The smaller feedback fixes are part of this milestone.

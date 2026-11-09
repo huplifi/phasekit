@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.6 — 2026-11-09 · Beta
+
+Operating assessment for refrigeration measurements
+
+- New Operating assessment helps interpret a refrigeration circuit from available readings. Measurements stay together; a light assessment appears alongside them on desktop and as a dedicated result on phones.
+- R744 critical pressure and measurement-port role are treated separately. Unknown or flooded R717 evaporators do not support a charge-shortage conclusion from superheat.
+- Mobile-friendly selectors and separate optional groups replace long tab rows. A simplified flow diagram shows the measurement location. Example provenance remains visible after edits.
+
 ## 0.5.0-beta.5 — 2026-11-09 · Beta
 
 New schematic symbols and release identification
