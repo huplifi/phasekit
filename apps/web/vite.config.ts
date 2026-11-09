@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 import { fileURLToPath } from "node:url";
 import packageInfo from "../../package.json" with { type: "json" };
+import symbolLibrary from "./src/symbol-data.json" with { type: "json" };
+const buildRevision = process.env.COMMIT_REF || "development";
 const isBetaBuild =
   packageInfo.version.includes("-beta.") ||
   process.env.VITE_RELEASE_CHANNEL === "beta";
@@ -12,11 +14,31 @@ export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
   define: {
     "import.meta.env.VITE_BUILD_REVISION": JSON.stringify(
-      process.env.COMMIT_REF?.slice(0, 7) || "development",
+      buildRevision.slice(0, buildRevision === "development" ? undefined : 7),
     ),
   },
   plugins: [
     react(),
+    {
+      name: "phasekit-build-info",
+      generateBundle() {
+        this.emitFile({
+          type: "asset",
+          fileName: "build-info.json",
+          source:
+            JSON.stringify(
+              {
+                version: packageInfo.version,
+                revision: buildRevision,
+                channel: isBetaBuild ? "beta" : "stable",
+                symbolSourceRevision: symbolLibrary.source_revision,
+              },
+              null,
+              2,
+            ) + "\n",
+        });
+      },
+    },
     {
       name: "phasekit-install-identity",
       transformIndexHtml(html) {

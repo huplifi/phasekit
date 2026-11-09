@@ -1,9 +1,29 @@
 import { test, expect } from "@playwright/test";
 import packageInfo from "../../package.json" with { type: "json" };
 import releases from "../../data/releases.json" with { type: "json" };
+import symbols from "../../apps/web/src/symbol-data.json" with { type: "json" };
 
 test("release history is discoverable and bilingual", async ({ page }) => {
   await page.goto("/#/settings");
+  const buildInfo = await page.request.get("/build-info.json");
+  expect(buildInfo.ok()).toBe(true);
+  const build = await buildInfo.json();
+  expect(build.version).toBe(packageInfo.version);
+  expect(build.symbolSourceRevision).toBe(symbols.source_revision);
+  await expect(page.locator(".about-details")).toContainText(
+    build.revision === "development"
+      ? "development"
+      : build.revision.slice(0, 7),
+  );
+  await expect(
+    page.getByRole("link", {
+      name: symbols.source_revision.slice(0, 7),
+      exact: true,
+    }),
+  ).toHaveAttribute(
+    "href",
+    `https://github.com/huplifi/kylmasentaja-keuda/tree/${symbols.source_revision}/symbolit`,
+  );
   const beta =
     packageInfo.version.includes("-beta.") ||
     process.env.VITE_RELEASE_CHANNEL === "beta";

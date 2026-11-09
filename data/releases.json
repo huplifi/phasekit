@@ -1,5 +1,28 @@
 [
   {
+    "version": "0.5.0-beta.5",
+    "date": "2026-11-09",
+    "channel": "beta",
+    "title": {
+      "fi": "Uudet piirrosmerkit ja julkaisun tunnistetiedot",
+      "en": "New schematic symbols and release identification"
+    },
+    "changes": {
+      "fi": [
+        "Kaaviosymbolien Ohjaus-ryhmässä ovat nyt väliasentoinen vaihtokosketin, aikaisemmin sulkeutuva NO-kosketin ja myöhemmin avautuva NC-kosketin.",
+        "Lisätty IEC 60417 -laitemerkinnät: suojajännitemuuntaja (5222), suojaerotusmuuntaja (5221) ja suojausluokan II laite (5172). Merkeillä ei ole sähköisiä kytkentäportteja.",
+        "Symbolit löytyvät myös IEC-tunnuksilla. Symboliaineiston lähdeversio näkyy erikseen sovellusversiosta ja build-tunnisteesta.",
+        "Julkaisuputki tarkistaa version korotuksen ja kaksikielisen muutoshistorian sovellukseen tehtävien muutosten yhteydessä."
+      ],
+      "en": [
+        "The Controls category now includes a centre-off changeover contact, an early-make normally open contact and a late-break normally closed contact.",
+        "Added IEC 60417 equipment markings: safety isolating transformer (5222), isolating transformer (5221) and Class II equipment (5172). These markings have no electrical connection ports.",
+        "Symbols can also be found by their IEC identifiers. The symbol source revision is displayed separately from the app version and build revision.",
+        "The release pipeline checks for a version increment and bilingual release notes when shipped application files change."
+      ]
+    }
+  },
+  {
     "version": "0.5.0-beta.4",
     "date": "2026-10-06",
     "channel": "beta",

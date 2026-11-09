@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Väliasentoinen vaihtokosketin">
+  <title>Väliasentoinen vaihtokosketin</title>
+  <desc>Yhteinen kosketin on keskiasennossa auki eikä kosketa kumpaakaan vastakosketinta.</desc>
+  <path d="M24 8V24M40 8V24M32 40V56M32 40V28"/>
+</svg>

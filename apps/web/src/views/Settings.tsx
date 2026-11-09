@@ -1,5 +1,6 @@
 import releases from "../../../../data/releases.json";
 import { appVersion, buildRevision, isBeta } from "../release";
+import { symbolSourceRevision, symbolSourceUrl } from "../symbols";
 import { InfoHelp } from "../components/InfoHelp";
 import { useState } from "react";
 import { Download, Upload, Trash2, ExternalLink } from "lucide-react";
@@ -190,6 +191,24 @@ export function Settings() {
           <div>
             <dt>{l("Build-tunniste", "Build revision")}</dt>
             <dd className="mono">{buildRevision}</dd>
+          </div>
+          <div>
+            <dt>
+              {l(
+                "Symboliaineiston lähdeversio",
+                "Symbol library source revision",
+              )}
+            </dt>
+            <dd>
+              <a
+                className="mono"
+                href={symbolSourceUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {symbolSourceRevision.slice(0, 7)}
+              </a>
+            </dd>
           </div>
           <div>
             <dt>{l("Verkkosivusto", "Website")}</dt>
