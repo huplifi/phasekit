@@ -8,9 +8,9 @@ Dates describe versions, not the build time of each deployment. Beta releases do
 
 Operating assessment for refrigeration measurements
 
-- New Operating assessment helps interpret a refrigeration circuit from pressure and available additional measurements. The main result precedes the diagram; technical reasoning opens on demand.
+- New Operating assessment helps interpret a refrigeration circuit from available readings. Measurements stay together; a light assessment appears alongside them on desktop and as a dedicated result on phones.
 - R744 critical pressure and measurement-port role are treated separately. Unknown or flooded R717 evaporators do not support a charge-shortage conclusion from superheat.
-- Diagram measurement points are separate from the expansion valve and labels are more legible on phones. Example provenance remains visible after edits.
+- Mobile-friendly selectors and separate optional groups replace long tab rows. A simplified flow diagram shows the measurement location. Example provenance remains visible after edits.
 
 ## 0.5.0-beta.5 — 2026-11-09 · Beta
 

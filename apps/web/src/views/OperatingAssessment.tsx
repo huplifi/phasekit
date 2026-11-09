@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type {
   Fact,
   Refrigerant,
@@ -23,7 +23,6 @@ import {
 import { useApp } from "../context";
 import { byId } from "../data";
 import { Back, SourceNote } from "../components/Common";
-import { ExclusiveChoices } from "../components/ExclusiveChoices";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import { CircuitDiagram } from "./CircuitDiagram";
 import "./operating-assessment.css";
@@ -94,7 +93,6 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
   const refrigerant = id ? byId.get(id) : undefined;
   const showEvaporator = id === "r717" || draft.system === "industrial";
   const mode = draft.system === "dx_cooling" ? "cooling" : draft.mode;
-  const suggested = suggestedPortRole(draft.system, mode);
 
   useEffect(() => {
     setDraftDirty(
@@ -243,22 +241,31 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
   const text = (copy: { fi: string; en: string }) => copy[locale];
   const compactReading =
     result?.readings[0]?.regime === "saturated" && Boolean(result.focus);
-  const systemName = {
-    air_air: l("Ilma–ilma", "Air-to-air"),
-    dx_cooling: l("Vain jäähdytys", "Cooling only"),
-    hydronic: l("Vesi", "Water"),
-    industrial: l("Teollisuus", "Industrial"),
-  }[draft.system];
   const invalid = new Set(result?.fieldErrors.map((error) => error.field));
 
+  const roles = [
+    { value: "unknown" as const, label: l("En tiedä", "Not sure") },
+    {
+      value: "suction" as const,
+      label: l("Imu", "Suction"),
+    },
+    {
+      value: "hot_gas" as const,
+      label: l("Kuumakaasu", "Hot gas"),
+    },
+    {
+      value: "liquid" as const,
+      label: l("Neste", "Liquid"),
+    },
+  ];
   return (
-    <>
+    <div className="assessment-tool">
       <Back to="/tools" />
       <h1>{t("assessment")}</h1>
       <p className="secondary assessment-intro">
         {l(
-          "Kirjaa paine. Tulistus, alijäähdytys ja tulkinta täydentyvät, jos lisäät mittauksia.",
-          "Enter a pressure. Superheat, subcooling and the reading fill in as you add measurements.",
+          "Syötä tiedot, jotka tiedät. Saat kevyen arvion kylmäpiirin toiminnasta. Voit jättää muut kentät tyhjiksi.",
+          "Enter what you know for a light assessment of the refrigeration circuit. Leave other fields blank.",
         )}
       </p>
       <div className="assessment-actions">
@@ -288,534 +295,540 @@ export function OperatingAssessment({ initial }: { initial?: Refrigerant }) {
           )}
         </p>
       )}
-      <RefrigerantPicker
-        value={id}
-        onChange={(next) => {
-          setId(next);
-          if (!draft.pressure.trim() && !draft.secondPressure.trim())
-            setDraft(initialDraft(next));
-        }}
-      />
-      <details className="assessment-disclosure assessment-system">
-        <summary>
-          {l("Järjestelmä ja käyttö", "System and mode")} · {systemName} ·{" "}
-          {l(
-            mode === "heating" ? "Lämmitys" : "Jäähdytys",
-            mode === "heating" ? "Heating" : "Cooling",
-          )}
-        </summary>
-        <div className="assessment-choices">
-          <ExclusiveChoices
-            label={l("Järjestelmä", "System")}
-            value={draft.system}
-            onChange={chooseSystem}
-            options={[
-              { value: "air_air", label: l("Ilma–ilma", "Air-to-air") },
-              {
-                value: "dx_cooling",
-                label: l("Vain jäähdytys", "Cooling only"),
-              },
-              { value: "hydronic", label: l("Vesi", "Water") },
-              { value: "industrial", label: l("Teollisuus", "Industrial") },
-            ]}
-          />
-          <p className="caption secondary">{systemHint(draft.system, l)}</p>
-        </div>
-        <div className="assessment-choices">
-          <ExclusiveChoices
-            label={l("Käyttö", "Mode")}
-            value={draft.system === "dx_cooling" ? "cooling" : draft.mode}
-            onChange={chooseMode}
-            options={[
-              { value: "cooling", label: l("Jäähdytys", "Cooling") },
-              {
-                value: "heating",
-                label: l("Lämmitys", "Heating"),
-                disabled: draft.system === "dx_cooling",
-              },
-            ]}
-          />
-        </div>
-      </details>
-      <div className="assessment-pressure">
-        <div className="field-group">
-          <label htmlFor="assessment-pressure">
-            {l("Paine", "Pressure")} · {draft.pressureUnit}
-          </label>
-          <input
-            id="assessment-pressure"
-            className="mono"
-            inputMode="text"
-            autoComplete="off"
-            value={draft.pressure}
-            aria-invalid={invalid.has("primaryPressure") || undefined}
-            onChange={(event) => patch({ pressure: event.target.value })}
-          />
-        </div>
-        <div className="field-group">
-          <label htmlFor="assessment-unit">{l("Yksikkö", "Unit")}</label>
-          <select
-            id="assessment-unit"
-            value={draft.pressureUnit.split("(")[0]}
-            onChange={(event) =>
-              changeUnit(
-                `${event.target.value}(${draft.pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
-              )
-            }
-          >
-            {pressureBases.map((unit) => (
-              <option key={unit}>{unit}</option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="help-heading pressure-reference-toggle">
-        <label className="switch-label">
-          <input
-            type="checkbox"
-            role="switch"
-            checked={draft.pressureUnit.endsWith("(a)")}
-            onChange={(event) => {
-              const base = draft.pressureUnit.split("(")[0];
-              changeUnit(
-                `${base}(${event.target.checked ? "a" : "g"})` as PressureUnit,
-              );
+      <div className="assessment-workspace">
+        <div className="assessment-inputs">
+          <h2>{l("Tiedot ja mittaukset", "Details and measurements")}</h2>
+          <RefrigerantPicker
+            value={id}
+            onChange={(next) => {
+              setId(next);
+              if (!draft.pressure.trim() && !draft.secondPressure.trim())
+                setDraft(initialDraft(next));
             }}
           />
-          <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
-        </label>
-      </div>
-      <p className="caption secondary">
-        {l(
-          "Pois päältä: mittaripaine. Päälle: absoluuttinen paine, nolla tyhjiössä. Vaihto muuntaa kirjatun luvun.",
-          "Off: gauge pressure. On: absolute pressure, zero at vacuum. Switching converts the entered figure.",
-        )}
-      </p>
-      <details className="assessment-disclosure assessment-reference">
-        <summary>
-          {l("Ilmanpaineviite", "Atmospheric reference")} · {draft.atmosphere}{" "}
-          bar(a)
-        </summary>
-        {draft.pressureUnit.endsWith("(g)") && (
-          <div className="field-group">
-            <label htmlFor="assessment-atmosphere">
-              {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
-            </label>
-            <input
-              id="assessment-atmosphere"
-              className="mono"
-              inputMode="decimal"
-              autoComplete="off"
-              value={draft.atmosphere}
-              aria-invalid={invalid.has("atmosphere") || undefined}
-              onChange={(event) => patch({ atmosphere: event.target.value })}
+          <div className="assessment-pair">
+            <AssessmentSelect
+              label={l("Järjestelmä", "System")}
+              value={draft.system}
+              onChange={chooseSystem}
+              options={[
+                { value: "air_air", label: l("Ilma–ilma", "Air-to-air") },
+                {
+                  value: "dx_cooling",
+                  label: l("Vain jäähdytys", "Cooling only"),
+                },
+                { value: "hydronic", label: l("Vesi", "Water") },
+                { value: "industrial", label: l("Teollisuus", "Industrial") },
+              ]}
+            />
+            <AssessmentSelect
+              label={l("Käyttö", "Mode")}
+              value={mode}
+              onChange={chooseMode}
+              options={[
+                { value: "cooling", label: l("Jäähdytys", "Cooling") },
+                {
+                  value: "heating",
+                  label: l("Lämmitys", "Heating"),
+                  disabled: draft.system === "dx_cooling",
+                },
+              ]}
+            />
+          </div>
+          <fieldset className="assessment-measurement">
+            <legend>{l("Mittaus 1", "Measurement 1")}</legend>
+            <AssessmentSelect
+              label={l("Mittauskohta", "Measurement location")}
+              value={draft.role}
+              options={roles}
+              onChange={(role) => patch({ role, roleTouched: true })}
             />
             <p className="caption secondary">
               {l(
-                "Oletus 1,01325 bar(a) on standardi-ilmakehä. Se lisätään mittaripaineeseen kerran.",
-                "The default 1.01325 bar(a) is standard atmosphere. It is added to gauge pressure once.",
+                "Tarkista kohta laitteesta. Jos et tiedä, valitse En tiedä.",
+                "Check the location on the equipment. If unsure, choose Not sure.",
               )}
             </p>
-          </div>
-        )}
-      </details>
-      {unitError && (
-        <p className="notice warning">
-          {l(
-            "Lukua ei voitu muuntaa uuteen yksikköön. Tarkista luku ja ilmanpaine.",
-            "The figure could not be converted to the new unit. Check the number and the atmosphere.",
-          )}
-        </p>
-      )}
-      <div className="assessment-choices">
-        <ExclusiveChoices
-          label={l("Portin rooli", "Port role")}
-          value={draft.role}
-          onChange={(role) => patch({ role, roleTouched: true })}
-          options={[
-            { value: "suction", label: l("Imu", "Suction") },
-            { value: "hot_gas", label: l("Kuumakaasu", "Hot gas") },
-            { value: "liquid", label: l("Neste", "Liquid") },
-            { value: "unknown", label: l("Ei varma", "Not sure") },
-          ]}
-        />
-        <p className="caption secondary">
-          {l(
-            "Vahvista rooli. Avoin rooli näyttää kyllästyslämpötilan, mutta ei tulistusta eikä korkeapäätelmää.",
-            "Confirm the role. An open role shows the saturation temperature, but not superheat or a high-side conclusion.",
-          )}
-        </p>
-        {suggested !== "unknown" && draft.role !== suggested && (
-          <p className="caption">
-            {l(
-              `Kaasulinjan tavallinen rooli tässä käytössä on ${roleName(suggested, l)}. Valinta jää siksi, jonka vahvistit.`,
-              `The usual gas-line role in this mode is ${roleName(suggested, l)}. The confirmed choice is kept.`,
-            )}
-          </p>
-        )}
-      </div>
-      <div className="field-group">
-        <label htmlFor="assessment-pipe">
-          {l(
-            "Putken lämpötila, °C, jos mitattu",
-            "Pipe temperature, °C, if measured",
-          )}
-        </label>
-        <input
-          id="assessment-pipe"
-          className="mono"
-          inputMode="text"
-          autoComplete="off"
-          value={draft.pipeC}
-          aria-invalid={invalid.has("primaryTemperature") || undefined}
-          onChange={(event) => patch({ pipeC: event.target.value })}
-        />
-      </div>
-      {showEvaporator && (
-        <div className="assessment-choices">
-          <ExclusiveChoices
-            label={l("Höyrystin", "Evaporator")}
-            value={draft.evaporator}
-            onChange={(evaporator) => patch({ evaporator })}
-            options={[
-              { value: "unknown", label: l("Ei tiedossa", "Unknown") },
-              { value: "dx", label: l("Suorahöyrystys", "Direct expansion") },
-              { value: "flooded", label: l("Tulvitettu", "Flooded") },
-            ]}
-          />
-          <p className="caption secondary">
-            {l(
-              "Tulvitettu ja suorahöyrysteinen tulistus eivät tarkoita samaa. Tyhjä valinta ei tee tulistuksesta vajauspäätöstä.",
-              "Flooded and direct-expansion superheat do not mean the same thing. An unknown choice does not turn superheat into a shortage decision.",
-            )}
-          </p>
-        </div>
-      )}
-      {result?.fieldErrors.length ? (
-        <div className="notice error" role="alert">
-          {result.fieldErrors.map((error) => (
-            <p key={`${error.field}-${error.code}`}>
-              {fieldLabel(error.field, l)}: {errorLabel(error.code, l)}
+            <div className="assessment-pair">
+              <NumberField
+                id="assessment-pressure"
+                label={`${l("Paine", "Pressure")}, ${draft.pressureUnit}`}
+                value={draft.pressure}
+                invalid={invalid.has("primaryPressure")}
+                onChange={(pressure) => patch({ pressure })}
+              />
+              <NumberField
+                id="assessment-pipe"
+                label={l("Putken lämpötila, °C", "Pipe temperature, °C")}
+                value={draft.pipeC}
+                invalid={invalid.has("primaryTemperature")}
+                onChange={(pipeC) => patch({ pipeC })}
+              />
+            </div>
+            <p className="caption secondary">
+              {l(
+                "Paine riittää alkuun. Putken lämpötila samasta kohdasta tarkentaa arviota.",
+                "Start with pressure. A pipe temperature at the same location adds detail.",
+              )}
             </p>
-          ))}
-        </div>
-      ) : null}
-      <section
-        className="result-card info assessment-result"
-        aria-live="polite"
-        aria-label={l("Käyttöarvion tulos", "Operating assessment result")}
-      >
-        {result?.focus ? (
-          <>
-            <p className="result-label">{text(result.focus.label)}</p>
-            <p className="result-number">
-              <span className="mono">{text(result.focus.value)}</span>{" "}
-              <span className="pt-result-unit">{text(result.focus.unit)}</span>
-            </p>
-            {result.focus.note && <p>{text(result.focus.note)}</p>}
-          </>
-        ) : !result || result.summary.length === 0 ? (
-          <p>
-            {l(
-              "Lisää paine, niin näet kyllästyslämpötilan.",
-              "Add a pressure to see the saturation temperature.",
+            <details className="assessment-disclosure assessment-pressure-settings">
+              <summary>
+                {l("Paineen yksikkö ja mittari", "Pressure unit and gauge")}{" "}
+                <span className="secondary">{draft.pressureUnit}</span>
+              </summary>
+              <div className="assessment-pair">
+                <AssessmentSelect
+                  label={l("Yksikkö", "Unit")}
+                  value={draft.pressureUnit.split("(")[0]}
+                  options={pressureBases.map((unit) => ({
+                    value: unit,
+                    label: unit,
+                  }))}
+                  onChange={(unit) =>
+                    changeUnit(
+                      `${unit}(${draft.pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
+                    )
+                  }
+                />
+                <AssessmentSelect
+                  label={l("Paineviite", "Pressure reference")}
+                  value={draft.pressureUnit.endsWith("(a)") ? "a" : "g"}
+                  options={[
+                    { value: "g", label: l("Mittaripaine (g)", "Gauge (g)") },
+                    {
+                      value: "a",
+                      label: l("Absoluuttinen (a)", "Absolute (a)"),
+                    },
+                  ]}
+                  onChange={(reference) =>
+                    changeUnit(
+                      `${draft.pressureUnit.split("(")[0]}(${reference})` as PressureUnit,
+                    )
+                  }
+                />
+              </div>
+              <p className="caption secondary">
+                {l(
+                  "Vaihto muuntaa kirjatut paineet. Sama yksikkö koskee molempia mittauksia ja ohjearvoja.",
+                  "Changing this converts entered pressures. The unit applies to both measurements and instruction values.",
+                )}
+              </p>
+              {draft.pressureUnit.endsWith("(g)") && (
+                <NumberField
+                  id="assessment-atmosphere"
+                  label={l(
+                    "Ilmanpaine, bar(a)",
+                    "Atmospheric pressure, bar(a)",
+                  )}
+                  value={draft.atmosphere}
+                  invalid={invalid.has("atmosphere")}
+                  onChange={(atmosphere) => patch({ atmosphere })}
+                />
+              )}
+              <NumberField
+                id="assessment-uncertainty"
+                label={`${l("Mittauksen 1 epävarmuus ±", "Measurement 1 uncertainty ±")}, ${draft.pressureUnit.split("(")[0]}`}
+                value={draft.uncertainty}
+                invalid={invalid.has("primaryUncertainty")}
+                onChange={(uncertainty) => patch({ uncertainty })}
+              />
+              <p className="caption secondary">
+                {l(
+                  "Ilmanpaineen oletus on 1,01325 bar(a). Se lisätään mittaripaineeseen kerran. Epävarmuuden voi jättää tyhjäksi.",
+                  "Atmospheric pressure defaults to 1.01325 bar(a), added to gauge pressure once. Uncertainty can be left blank.",
+                )}
+              </p>
+            </details>
+            {unitError && (
+              <p className="notice warning" role="alert">
+                {l(
+                  "Yksikön vaihto ei onnistunut. Tarkista paineet ja ilmanpaine.",
+                  "Unit conversion failed. Check the pressures and atmospheric reference.",
+                )}
+              </p>
             )}
-          </p>
-        ) : null}
-        {result && result.summary.length > 0 && (
-          <div className="assessment-summary">
-            {(compactReading ? result.summary.slice(1) : result.summary).map(
-              (line) => (
-                <p key={line.fi}>{text(line)}</p>
-              ),
-            )}
-          </div>
-        )}
-        {result && (result.rows.length > 0 || compactReading) && (
-          <details className="assessment-calculation">
+          </fieldset>
+          <details
+            className="assessment-disclosure assessment-second-measurement"
+            open={
+              draft.demo && Boolean(draft.secondPressure) ? true : undefined
+            }
+          >
             <summary>
-              {l("Paine ja laskentaperuste", "Pressure and calculation")}
+              {l("Toinen mittauskohta", "Second measurement location")}
+              <span className="secondary">
+                {draft.secondPressure
+                  ? `${draft.secondPressure} ${draft.pressureUnit}`
+                  : l("Valinnainen", "Optional")}
+              </span>
             </summary>
-            {result.rows.length > 0 && (
-              <dl className="assessment-rows">
-                {result.rows.map((row) => (
-                  <div key={row.label.fi}>
-                    <dt>{text(row.label)}</dt>
-                    <dd className="mono">{text(row.value)}</dd>
-                  </div>
-                ))}
-              </dl>
+            <AssessmentSelect
+              label={l("Toinen mittauskohta", "Second measurement location")}
+              value={draft.secondRole}
+              options={roles}
+              onChange={(secondRole) => patch({ secondRole })}
+            />
+            <div className="assessment-pair">
+              <NumberField
+                id="assessment-second"
+                label={`${l("Toinen paine", "Second pressure")}, ${draft.pressureUnit}`}
+                value={draft.secondPressure}
+                invalid={invalid.has("secondaryPressure")}
+                onChange={(secondPressure) => patch({ secondPressure })}
+              />
+              <NumberField
+                id="assessment-second-pipe"
+                label={l(
+                  "Toisen putken lämpötila, °C",
+                  "Second pipe temperature, °C",
+                )}
+                value={draft.secondPipeC}
+                invalid={invalid.has("secondaryTemperature")}
+                onChange={(secondPipeC) => patch({ secondPipeC })}
+              />
+            </div>
+            <p className="caption secondary">
+              {l(
+                "Paine ja lämpötila kuuluvat samaan mittauskohtaan.",
+                "Pressure and temperature belong to the same measurement location.",
+              )}
+            </p>
+          </details>
+          <details className="assessment-disclosure">
+            <summary>
+              {l("Olosuhteet ja käynti", "Conditions and running state")}
+            </summary>
+            <div className="assessment-pair">
+              <NumberField
+                id="assessment-indoor"
+                label={l("Sisäilma, °C", "Indoor air, °C")}
+                value={draft.indoorC}
+                invalid={invalid.has("indoorAir")}
+                onChange={(indoorC) => patch({ indoorC })}
+              />
+              <NumberField
+                id="assessment-outdoor"
+                label={l("Ulkoilma, °C", "Outdoor air, °C")}
+                value={draft.outdoorC}
+                invalid={invalid.has("outdoorAir")}
+                onChange={(outdoorC) => patch({ outdoorC })}
+              />
+            </div>
+            {draft.system === "industrial" && (
+              <NumberField
+                id="assessment-process"
+                label={l(
+                  "Jäähdytettävän kohteen lämpötila, °C",
+                  "Cooled-source temperature, °C",
+                )}
+                value={draft.processC}
+                invalid={invalid.has("processTemperature")}
+                onChange={(processC) => patch({ processC })}
+              />
             )}
-            {compactReading && result.summary[0] && (
-              <p>{text(result.summary[0])}</p>
+            <AssessmentSelect
+              label={l("Käynnin vaihe", "Running state")}
+              value={draft.stability}
+              onChange={(stability) => patch({ stability })}
+              options={[
+                { value: "unknown", label: l("Ei tiedossa", "Unknown") },
+                {
+                  value: "just_started",
+                  label: l("Juuri käynnistynyt", "Just started"),
+                },
+                { value: "running", label: l("Käy", "Running") },
+                {
+                  value: "oem_stable",
+                  label: l("Ohjeen mukaan vakaa", "Stable per instruction"),
+                },
+                { value: "defrost", label: l("Sulatus", "Defrost") },
+              ]}
+            />
+            <AssessmentSelect
+              label={l("Teho", "Capacity")}
+              value={draft.capacity}
+              onChange={(capacity) => patch({ capacity })}
+              options={[
+                { value: "unknown", label: l("Ei tiedossa", "Unknown") },
+                { value: "reduced", label: l("Osateho", "Part load") },
+                { value: "full", label: l("Täysi teho", "Full load") },
+              ]}
+            />
+            {showEvaporator && (
+              <AssessmentSelect
+                label={l("Höyrystin", "Evaporator")}
+                value={draft.evaporator}
+                onChange={(evaporator) => patch({ evaporator })}
+                options={[
+                  { value: "unknown", label: l("Ei tiedossa", "Unknown") },
+                  {
+                    value: "dx",
+                    label: l("Suorahöyrystys", "Direct expansion"),
+                  },
+                  { value: "flooded", label: l("Tulvitettu", "Flooded") },
+                ]}
+              />
             )}
           </details>
-        )}
-      </section>
-      <CircuitDiagram
-        layout={draft.system === "industrial" ? "industrial" : "split"}
-        mode={mode}
-        portRole={draft.role}
-        highSide={highSide}
-        labels={labels}
-        ariaLabel={labels.aria}
-      />
-      {result && result.checks.length > 0 && (
-        <section>
-          <h2>{l("Seuraavaksi", "Next")}</h2>
-          <ol className="assessment-next">
-            {result.checks.map((check) => (
-              <li key={check.fi}>{text(check)}</li>
-            ))}
-          </ol>
-        </section>
-      )}
-      <details className="assessment-disclosure">
-        <summary>{l("Lisää mittauksia", "More measurements")}</summary>
-        <div className="field-group">
-          <label htmlFor="assessment-uncertainty">
-            {l("Mittarin epävarmuus ±", "Gauge uncertainty ±")}
-          </label>
-          <input
-            id="assessment-uncertainty"
-            className="mono"
-            inputMode="decimal"
-            autoComplete="off"
-            value={draft.uncertainty}
-            aria-invalid={invalid.has("primaryUncertainty") || undefined}
-            onChange={(event) => patch({ uncertainty: event.target.value })}
-          />
-          <p className="caption secondary">
-            {l(
-              "Sama yksikkö kuin paineella. Epävarmuus ei sisällä toista ilmakehää.",
-              "Same unit as the pressure. Uncertainty does not include a second atmosphere.",
-            )}
-          </p>
-        </div>
-        <div className="assessment-pressure">
-          <div className="field-group">
-            <label htmlFor="assessment-second">
-              {l("Toinen paine, jos mitattu", "Second pressure, if measured")}
-            </label>
-            <input
-              id="assessment-second"
-              className="mono"
-              inputMode="text"
-              autoComplete="off"
-              value={draft.secondPressure}
-              aria-invalid={invalid.has("secondaryPressure") || undefined}
-              onChange={(event) =>
-                patch({ secondPressure: event.target.value })
-              }
-            />
-          </div>
-          <div className="field-group">
-            <label htmlFor="assessment-second-pipe">
-              {l("Sen putki, °C", "Its pipe, °C")}
-            </label>
-            <input
-              id="assessment-second-pipe"
-              className="mono"
-              inputMode="text"
-              autoComplete="off"
-              value={draft.secondPipeC}
-              aria-invalid={invalid.has("secondaryTemperature") || undefined}
-              onChange={(event) => patch({ secondPipeC: event.target.value })}
-            />
-          </div>
-        </div>
-        <ExclusiveChoices
-          label={l("Toisen paineen rooli", "Second pressure role")}
-          value={draft.secondRole}
-          onChange={(secondRole) => patch({ secondRole })}
-          options={[
-            { value: "unknown", label: l("Ei varma", "Not sure") },
-            { value: "suction", label: l("Imu", "Suction") },
-            { value: "hot_gas", label: l("Kuumakaasu", "Hot gas") },
-            { value: "liquid", label: l("Neste", "Liquid") },
-          ]}
-        />
-        <div className="assessment-pressure">
-          <div className="field-group">
-            <label htmlFor="assessment-indoor">
-              {l("Sisäilma, °C", "Indoor air, °C")}
-            </label>
-            <input
-              id="assessment-indoor"
-              className="mono"
-              inputMode="text"
-              autoComplete="off"
-              value={draft.indoorC}
-              aria-invalid={invalid.has("indoorAir") || undefined}
-              onChange={(event) => patch({ indoorC: event.target.value })}
-            />
-          </div>
-          <div className="field-group">
-            <label htmlFor="assessment-outdoor">
-              {l("Ulkoilma, °C", "Outdoor air, °C")}
-            </label>
-            <input
-              id="assessment-outdoor"
-              className="mono"
-              inputMode="text"
-              autoComplete="off"
-              value={draft.outdoorC}
-              aria-invalid={invalid.has("outdoorAir") || undefined}
-              onChange={(event) => patch({ outdoorC: event.target.value })}
-            />
-          </div>
-        </div>
-        {draft.system === "industrial" && (
-          <div className="field-group">
-            <label htmlFor="assessment-process">
+          <details className="assessment-disclosure">
+            <summary>
+              {l("Laitteen ohjearvot", "Equipment instruction values")}
+            </summary>
+            <p className="caption secondary">
               {l(
-                "Jäähdytettävän kohteen lämpötila, °C",
-                "Cooled-source temperature, °C",
+                "Täytä vain laitteen ohjeesta tunnetut arvot. Ilman ohjearvoja arviota ei verrata yleiseen hyvän tai huonon rajaan.",
+                "Enter only values known from the equipment instructions. Without targets, the assessment does not use a universal good/bad threshold.",
               )}
-            </label>
-            <input
-              id="assessment-process"
-              className="mono"
-              inputMode="text"
-              autoComplete="off"
-              value={draft.processC}
-              aria-invalid={invalid.has("processTemperature") || undefined}
-              onChange={(event) => patch({ processC: event.target.value })}
+            </p>
+            <div className="field-group">
+              <label htmlFor="assessment-model">
+                {l("Laitteen malli", "Equipment model")}
+              </label>
+              <input
+                id="assessment-model"
+                value={draft.model}
+                onChange={(event) => patch({ model: event.target.value })}
+              />
+            </div>
+            <div className="assessment-pair">
+              <NumberField
+                id="assessment-oem-suction"
+                label={`${l("Ohjeen imupaine", "Instruction suction pressure")}, ${draft.pressureUnit}`}
+                value={draft.oemSuction}
+                invalid={invalid.has("oemSuction")}
+                onChange={(oemSuction) => patch({ oemSuction })}
+              />
+              <NumberField
+                id="assessment-oem-high"
+                label={`${l("Ohjeen korkeapaine", "Instruction high pressure")}, ${draft.pressureUnit}`}
+                value={draft.oemHigh}
+                invalid={invalid.has("oemHigh")}
+                onChange={(oemHigh) => patch({ oemHigh })}
+              />
+              <NumberField
+                id="assessment-oem-sh"
+                label={l("Ohjeen tulistus, K", "Instruction superheat, K")}
+                value={draft.oemSh}
+                invalid={invalid.has("oemSuperheat")}
+                onChange={(oemSh) => patch({ oemSh })}
+              />
+              <NumberField
+                id="assessment-oem-sc"
+                label={l("Ohjeen alijäähdytys, K", "Instruction subcooling, K")}
+                value={draft.oemSc}
+                invalid={invalid.has("oemSubcooling")}
+                onChange={(oemSc) => patch({ oemSc })}
+              />
+            </div>
+          </details>
+          {result?.fieldErrors.length ? (
+            <div className="notice error" role="alert">
+              {result.fieldErrors.map((error) => (
+                <p key={`${error.field}-${error.code}`}>
+                  {fieldLabel(error.field, l)}: {errorLabel(error.code, l)}
+                </p>
+              ))}
+            </div>
+          ) : null}
+          <button
+            type="button"
+            className="primary assessment-show-result"
+            onClick={() => {
+              const result = document.getElementById("assessment-result");
+              result?.focus({ preventScroll: true });
+              result?.scrollIntoView({ block: "start" });
+            }}
+          >
+            {l("Näytä arvio", "Show assessment")}
+          </button>
+        </div>
+        <div className="assessment-output">
+          <h2>
+            {l("Arvio näillä tiedoilla", "Assessment with these readings")}
+          </h2>
+          <section
+            id="assessment-result"
+            tabIndex={-1}
+            className="result-card info assessment-result"
+            aria-live="polite"
+            aria-label={l("Käyttöarvion tulos", "Operating assessment result")}
+          >
+            {result?.focus ? (
+              <>
+                <p className="result-label">{text(result.focus.label)}</p>
+                <p className="result-number">
+                  <span className="mono">{text(result.focus.value)}</span>{" "}
+                  <span className="pt-result-unit">
+                    {text(result.focus.unit)}
+                  </span>
+                </p>
+                {result.focus.note && <p>{text(result.focus.note)}</p>}
+              </>
+            ) : !result || result.summary.length === 0 ? (
+              <p>
+                {l(
+                  "Lisää paine, niin näet kyllästyslämpötilan.",
+                  "Add a pressure to see the saturation temperature.",
+                )}
+              </p>
+            ) : null}
+            {result && result.summary.length > 0 && (
+              <div className="assessment-summary">
+                {(compactReading
+                  ? result.summary.slice(1)
+                  : result.summary
+                ).map((line) => (
+                  <p key={line.fi}>{text(line)}</p>
+                ))}
+              </div>
+            )}
+            {result && (result.rows.length > 0 || compactReading) && (
+              <details className="assessment-calculation">
+                <summary>
+                  {l("Paine ja laskentaperuste", "Pressure and calculation")}
+                </summary>
+                {result.rows.length > 0 && (
+                  <dl className="assessment-rows">
+                    {result.rows.map((row) => (
+                      <div key={row.label.fi}>
+                        <dt>{text(row.label)}</dt>
+                        <dd className="mono">{text(row.value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {compactReading && result.summary[0] && (
+                  <p>{text(result.summary[0])}</p>
+                )}
+              </details>
+            )}
+          </section>
+
+          {result && result.checks.length > 0 && (
+            <section className="assessment-next-step">
+              <h3>
+                {l(
+                  "Mikä tarkentaisi arviota?",
+                  "What would refine the assessment?",
+                )}
+              </h3>
+              <p>{text(result.checks[0])}</p>
+              {result.checks.length > 1 && (
+                <details className="assessment-disclosure">
+                  <summary>
+                    {l("Muut tarkentavat tiedot", "Other useful details")}
+                  </summary>
+                  <ul>
+                    {result.checks.slice(1).map((check) => (
+                      <li key={check.fi}>{text(check)}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </section>
+          )}
+          <details className="assessment-disclosure assessment-circuit">
+            <summary>
+              {l(
+                "Mittauskohta kylmäpiirissä",
+                "Measurement location in the circuit",
+              )}
+            </summary>
+            <p className="caption secondary">
+              {l(
+                "Yksinkertaistettu kierto. Korostus näyttää mittauksen 1 kohdan, ei laitteen kuntoa.",
+                "Simplified circuit. The highlight marks measurement 1, not equipment condition.",
+              )}
+            </p>
+            <CircuitDiagram
+              layout={draft.system === "industrial" ? "industrial" : "split"}
+              mode={mode}
+              portRole={draft.role}
+              highSide={highSide}
+              labels={labels}
+              ariaLabel={labels.aria}
             />
-          </div>
-        )}
-        <div className="field-group">
-          <label htmlFor="assessment-model">
-            {l("Malli, jos tiedossa", "Model, if known")}
-          </label>
-          <input
-            id="assessment-model"
-            autoComplete="off"
-            value={draft.model}
-            onChange={(event) => patch({ model: event.target.value })}
-          />
-        </div>
-        <ExclusiveChoices
-          label={l("Käynnin vaihe", "Running state")}
-          value={draft.stability}
-          onChange={(stability) => patch({ stability })}
-          options={[
-            { value: "unknown", label: l("Ei tiedossa", "Unknown") },
-            {
-              value: "just_started",
-              label: l("Juuri käynnistynyt", "Just started"),
-            },
-            { value: "running", label: l("Käy", "Running") },
-            {
-              value: "oem_stable",
-              label: l("Ohjeen mukaan vakaa", "Stable per instruction"),
-            },
-            { value: "defrost", label: l("Sulatus", "Defrost") },
-          ]}
-        />
-        <p className="caption secondary">
-          {l(
-            "Vakautus luetaan laitteen ohjeesta. Yleistä minuuttimäärää ei käytetä.",
-            "Stabilisation is read from the equipment instruction. No universal number of minutes is used.",
+          </details>
+          {result && result.hypotheses.length > 0 && (
+            <details className="assessment-disclosure">
+              <summary>
+                {l("Mitä tämä voi tarkoittaa", "What this can mean")}
+              </summary>
+              {result.hypotheses.map((item) => (
+                <article className="assessment-hypothesis" key={item.id}>
+                  <h3>{text(item.title)}</h3>
+                  <p className="caption">
+                    {text(item.strengthLabel)} · {text(item.evidence)}
+                  </p>
+                  <p>{text(item.text)}</p>
+                  <p className="caption">{text(item.differentiate)}</p>
+                </article>
+              ))}
+            </details>
           )}
-        </p>
-        <ExclusiveChoices
-          label={l("Teho", "Capacity")}
-          value={draft.capacity}
-          onChange={(capacity) => patch({ capacity })}
-          options={[
-            { value: "unknown", label: l("Ei tiedossa", "Unknown") },
-            { value: "reduced", label: l("Osateho", "Part load") },
-            { value: "full", label: l("Täysi teho", "Full capacity") },
-          ]}
-        />
-        <p className="caption">
-          {l(
-            "Ohjearvot ovat samassa yksikössä ja paineviitteessä kuin mittaus. Ne ovat kirjaamiasi lukuja.",
-            "Targets use the same unit and pressure reference as the measurement. They are figures you enter.",
+          {result && (
+            <details className="assessment-disclosure">
+              <summary>{l("Tekniset perusteet", "Technical basis")}</summary>
+              {result.technical.map((line) => (
+                <p key={line.fi}>{text(line)}</p>
+              ))}
+              <h3>{l("Teho ja COP", "Capacity and COP")}</h3>
+              {result.efficiency.map((line) => (
+                <p key={line.fi}>{text(line)}</p>
+              ))}
+              <div className="assessment-links">
+                {result.references.map((item) => (
+                  <p className="caption" key={item.url}>
+                    <a href={item.url} target="_blank" rel="noreferrer">
+                      {text(item.title)}
+                    </a>
+                    <br />
+                    {text(item.note)}
+                  </p>
+                ))}
+              </div>
+              <SourceNote
+                ids={[...result.ptSourceIds, ...result.criticalSourceIds]}
+              />
+            </details>
           )}
-        </p>
-        <div className="assessment-pressure">
-          <NumberField
-            id="assessment-oem-suction"
-            label={l("Ohjeen imupaine", "Instruction suction pressure")}
-            value={draft.oemSuction}
-            invalid={invalid.has("oemSuction")}
-            onChange={(oemSuction) => patch({ oemSuction })}
-          />
-          <NumberField
-            id="assessment-oem-high"
-            label={l("Ohjeen korkeapaine", "Instruction high pressure")}
-            value={draft.oemHigh}
-            invalid={invalid.has("oemHigh")}
-            onChange={(oemHigh) => patch({ oemHigh })}
-          />
         </div>
-        <div className="assessment-pressure">
-          <NumberField
-            id="assessment-oem-sh"
-            label={l("Ohjeen tulistus, K", "Instruction superheat, K")}
-            value={draft.oemSh}
-            invalid={invalid.has("oemSuperheat")}
-            onChange={(oemSh) => patch({ oemSh })}
-          />
-          <NumberField
-            id="assessment-oem-sc"
-            label={l("Ohjeen alijäähdytys, K", "Instruction subcooling, K")}
-            value={draft.oemSc}
-            invalid={invalid.has("oemSubcooling")}
-            onChange={(oemSc) => patch({ oemSc })}
-          />
-        </div>
-      </details>
-      {result && result.hypotheses.length > 0 && (
-        <details className="assessment-disclosure">
-          <summary>
-            {l("Mitä tämä voi tarkoittaa", "What this can mean")}
-          </summary>
-          {result.hypotheses.map((item) => (
-            <article className="assessment-hypothesis" key={item.id}>
-              <h3>{text(item.title)}</h3>
-              <p className="caption">
-                {text(item.strengthLabel)} · {text(item.evidence)}
-              </p>
-              <p>{text(item.text)}</p>
-              <p className="caption">{text(item.differentiate)}</p>
-            </article>
-          ))}
-        </details>
-      )}
-      {result && (
-        <details className="assessment-disclosure">
-          <summary>{l("Teho ja COP", "Capacity and COP")}</summary>
-          {result.efficiency.map((line) => (
-            <p key={line.fi}>{text(line)}</p>
-          ))}
-        </details>
-      )}
-      {result && (
-        <details className="assessment-disclosure">
-          <summary>{l("Tekniset perusteet", "Technical basis")}</summary>
-          {result.technical.map((line) => (
-            <p key={line.fi}>{text(line)}</p>
-          ))}
-          <div className="assessment-links">
-            {result.references.map((item) => (
-              <p className="caption" key={item.url}>
-                <a href={item.url} target="_blank" rel="noreferrer">
-                  {text(item.title)}
-                </a>
-                <br />
-                {text(item.note)}
-              </p>
-            ))}
-          </div>
-          <SourceNote
-            ids={[...result.ptSourceIds, ...result.criticalSourceIds]}
-          />
-        </details>
-      )}
-    </>
+      </div>
+    </div>
+  );
+}
+
+function AssessmentSelect<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: readonly { value: T; label: string; disabled?: boolean }[];
+  onChange: (value: T) => void;
+}) {
+  const id = useId();
+  return (
+    <div className="field-group">
+      <label htmlFor={id}>{label}</label>
+      <select
+        id={id}
+        value={value}
+        onChange={(event) => onChange(event.target.value as T)}
+      >
+        {options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+          >
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
 
@@ -979,9 +992,13 @@ function circuitCopy(
             : l("Tyyppi avoin", "Type open"),
       liquid: l("Neste", "Liquid"),
       gas: l("Imu", "Suction"),
-      compressor: l("K", "C"),
+      compressor: l("Kompressori", "Compressor"),
       expansion: l("Paisunta", "Expansion"),
-      port: l(`Portti: ${port}`, `Port: ${port}`),
+      port: l(`Mittaus 1: ${port}`, `Measurement 1: ${port}`),
+      returnFlow: l(
+        "Kierto jatkuu kompressoriin",
+        "The circuit returns to the compressor",
+      ),
       aria: l(
         `Teollinen kierto. Korkeapainepuoli ja höyrystin. Portti: ${port}.`,
         `Industrial circuit. High side and evaporator. Port: ${port}.`,
@@ -1006,42 +1023,18 @@ function circuitCopy(
     rightFunction: outdoorHot ? low : high,
     liquid: l("Neste", "Liquid"),
     gas: heating ? l("Kuumakaasu", "Hot gas") : l("Imu", "Suction"),
-    compressor: l("K", "C"),
+    compressor: l("Kompressori", "Compressor"),
     expansion: l("Paisunta", "Expansion"),
-    port: l(`Portti: ${port}`, `Port: ${port}`),
+    port: l(`Mittaus 1: ${port}`, `Measurement 1: ${port}`),
+    returnFlow: l(
+      "Kierto jatkuu kompressoriin",
+      "The circuit returns to the compressor",
+    ),
     aria: l(
       `${heating ? "Lämmitys" : "Jäähdytys"}. Kaasulinja on ${heating ? "kuumakaasua" : "imua"}. Portti: ${port}.`,
       `${heating ? "Heating" : "Cooling"}. The gas line is ${heating ? "hot gas" : "suction"}. Port: ${port}.`,
     ),
   };
-}
-
-function systemHint(
-  system: AssessmentSystem,
-  l: (fi: string, en: string) => string,
-): string {
-  if (system === "dx_cooling") {
-    return l(
-      "Lauhdutin ja höyrystin. Lämmityskäyttöä ei ole.",
-      "Condenser and evaporator. There is no heating mode.",
-    );
-  }
-  if (system === "hydronic") {
-    return l(
-      "Ulkoilma ja vesi- tai liuospiiri. Kaasulinjan rooli vaihtuu käytön mukaan.",
-      "Outdoor air and a water or brine circuit. The gas-line role changes with the mode.",
-    );
-  }
-  if (system === "industrial") {
-    return l(
-      "Kompressori, korkeapainepuoli ja höyrystin. Portin roolia ei arvata.",
-      "Compressor, high side and evaporator. The port role is not guessed.",
-    );
-  }
-  return l(
-    "Ulko- ja sisäyksikkö. Kaasulinjan portti on jäähdytyksessä usein imu ja lämmityksessä usein kuumakaasu.",
-    "Outdoor and indoor units. The gas-line port is often suction in cooling and hot gas in heating.",
-  );
 }
 
 function roleName(

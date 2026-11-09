@@ -41,12 +41,21 @@ The tool is developed on a branch targeting `beta`. Merging that branch into `be
 
 ## Beta 0.5.0-beta.6 refinement
 
-The primary result precedes the diagram. System/mode and the atmospheric reference
-use disclosures; entered pressure always shows its gauge/absolute unit. Repeated
-saturation arithmetic is under “Pressure and calculation”, while out-of-domain
-and critical-pressure explanations remain visible. Diagram labels remain legible
-on mobile, unknown ports are detached, and liquid measurement points are upstream
-of (and separate from) the expansion valve in both operating directions.
+Measurements are grouped together: refrigerant and operating mode, then pressure,
+measurement location and the temperature of that same pipe. Native labelled
+selectors replace horizontally scrolling choice tabs. Optional second measurements,
+conditions/running state and equipment targets have separate disclosures. Pressure
+unit, reference and gauge uncertainty sit with the first measurement; pressure-unit
+changes convert both readings and instruction pressures together.
+
+Desktop shows inputs and a live result side by side. Mobile uses one column with a
+“Show assessment” button that focuses and scrolls to the result. The primary result
+and one useful next measurement are visible; calculation details, alternative
+explanations and technical sources open on demand. The optional circuit guide uses
+four readable stages in flow order: compressor, high-side exchanger, expansion,
+evaporator, then return to compressor. The measurement marker follows the relevant
+stage (liquid before expansion, suction before compressor); unknown locations stay
+unplaced. The highlight identifies a measurement, not equipment condition.
 
 R744 critical pressure is displayed to three decimals, including equality at
 73.773 bar(a). Suction and unknown roles never acquire a high-side label solely
@@ -58,4 +67,6 @@ has been introduced.
 
 Verification: 19 core cases, plus the operating-assessment browser spec on desktop
 and mobile Chromium and WebKit. Regression coverage includes critical boundaries,
-port roles, unknown/flooded ammonia, sample provenance and diagram/result layout.
+port roles, unknown/flooded ammonia, sample provenance and measurement location. A 320 px regression opens all input
+groups, checks control bounds, converts both pressures together and verifies that
+the result shortcut focuses a visible result.

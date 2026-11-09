@@ -9,7 +9,8 @@ test("Käyttöarvio is available from tools and reads a partial gauge pressure",
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Käyttöarvio",
   );
-  await expect(page.getByRole("img", { name: /Jäähdytys/ })).toBeVisible();
+  await page.locator(".assessment-circuit > summary").click();
+  await expect(page.getByRole("figure", { name: /Jäähdytys/ })).toBeVisible();
   await page.goto("/#/assessment/r134a");
   await page.locator("#assessment-pressure").fill("3");
   await expect(page.locator(".assessment-result")).toContainText(
@@ -34,18 +35,19 @@ test("heating hot gas is not suction superheat, and an open role withholds it", 
   page,
 }) => {
   await page.goto("/#/assessment/r32");
-  await page.locator(".assessment-system > summary").click();
-  await page.getByRole("button", { name: "Lämmitys", exact: true }).click();
-  await expect(
-    page.getByRole("button", { name: "Kuumakaasu", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true");
+  await page.getByLabel("Käyttö", { exact: true }).selectOption("heating");
+  await expect(page.getByLabel("Mittauskohta", { exact: true })).toHaveValue(
+    "hot_gas",
+  );
   await page.locator("#assessment-pressure").fill("18");
   await page.locator("#assessment-pipe").fill("70");
   await expect(page.locator(".assessment-result")).toContainText(
     "Tämä ei ole imutulistus",
   );
   await expect(page.locator(".result-label")).not.toHaveText("Tulistus");
-  await page.getByRole("button", { name: "Ei varma", exact: true }).click();
+  await page
+    .getByLabel("Mittauskohta", { exact: true })
+    .selectOption("unknown");
   await expect(page.locator(".result-label")).toHaveText(
     "Kastepiste tässä paineessa",
   );
@@ -58,14 +60,18 @@ test("R449A shows glide, R744 critical behaviour, and ammonia wording", async ({
   page,
 }) => {
   await page.goto("/#/assessment/r449a");
-  await page.getByRole("switch", { name: "Absoluuttinen paine" }).check();
+  await page.locator(".assessment-pressure-settings > summary").click();
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("a");
   await page.locator("#assessment-pressure").fill("6");
   await expect(page.locator(".assessment-result")).toContainText("liukuma");
 
   await page.goto("/#/assessment/r744");
 
-  await page.getByRole("switch", { name: "Absoluuttinen paine" }).check();
-  await page.getByRole("button", { name: "Kuumakaasu", exact: true }).click();
+  await page.locator(".assessment-pressure-settings > summary").click();
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("a");
+  await page
+    .getByLabel("Mittauskohta", { exact: true })
+    .selectOption("hot_gas");
   await page.locator("#assessment-pressure").fill("90");
   await expect(page.locator(".assessment-result")).toContainText(
     "kaasujäähdytin",
@@ -83,7 +89,9 @@ test("R449A shows glide, R744 critical behaviour, and ammonia wording", async ({
 
   await page.goto("/#/assessment/r717");
 
-  await page.getByRole("button", { name: "Imu", exact: true }).click();
+  await page
+    .getByLabel("Mittauskohta", { exact: true })
+    .selectOption("suction");
   await page.locator("#assessment-pressure").fill("2");
   await page.getByText("Tekniset perusteet", { exact: true }).click();
   await expect(page.locator("main")).toContainText("myrkyllinen");
@@ -99,36 +107,80 @@ test("invalid pressure is reported and does not remove the circuit", async ({
   await page.goto("/#/assessment/r32");
   await page.locator("#assessment-pressure").fill("abc");
   await expect(page.getByRole("alert")).toContainText("Tarkista luku");
-  await expect(page.getByRole("img", { name: /Jäähdytys/ })).toBeVisible();
+  await page.locator(".assessment-circuit > summary").click();
+  await expect(page.getByRole("figure", { name: /Jäähdytys/ })).toBeVisible();
 });
 
-test("example provenance survives edits and result precedes a legible circuit", async ({
+test("example provenance survives edits and the liquid point precedes expansion", async ({
   page,
 }) => {
   await page.goto("/#/assessment/r134a");
   await page
     .getByRole("button", { name: "Näytä esimerkki", exact: true })
     .click();
-  await page.getByRole("button", { name: "Neste", exact: true }).click();
+  await page.getByLabel("Mittauskohta", { exact: true }).selectOption("liquid");
   await page.locator("#assessment-pressure").fill("4");
   await expect(page.getByText(/Esimerkkipohja\./)).toBeVisible();
-  const result = await page.locator(".assessment-result").boundingBox();
-  const circuit = await page.locator(".circuit-svg").boundingBox();
-  expect(result!.y).toBeLessThan(circuit!.y);
-  expect(await page.locator(".circuit-port").getAttribute("cx")).toBe("270");
-  expect(
-    await page
-      .locator(".circuit-fn")
-      .first()
-      .evaluate(
-        (el) =>
-          (parseFloat(getComputedStyle(el).fontSize) *
-            el.getBoundingClientRect().width) /
-          (el as SVGGraphicsElement).getBBox().width,
-      ),
-  ).toBeGreaterThan(11);
+  await page.locator(".assessment-circuit > summary").click();
+  await expect(page.locator(".circuit-measurement")).toHaveText(
+    "Mittaus 1: Neste",
+  );
+  await expect(page.locator(".circuit-flow-list li").nth(1)).toContainText(
+    "Mittaus 1: Neste",
+  );
+  await expect(page.locator(".circuit-flow-list li").nth(2)).toContainText(
+    "Paisunta",
+  );
   await page
     .getByRole("button", { name: "Tyhjennä luvut", exact: true })
     .click();
   await expect(page.getByText(/Esimerkkipohja\./)).toHaveCount(0);
+});
+
+test("narrow measurement form exposes complete controls and keeps both readings together", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.goto("/#/assessment/r134a");
+  await page.locator("#assessment-pressure").fill("3");
+  await page.locator("#assessment-pipe").fill("15");
+  await page.locator(".assessment-second-measurement > summary").click();
+  await page
+    .getByLabel("Toinen mittauskohta", { exact: true })
+    .selectOption("liquid");
+  await page.locator("#assessment-second").fill("10");
+  await page.locator("#assessment-second-pipe").fill("30");
+  await page.getByText("Olosuhteet ja käynti", { exact: true }).click();
+  await page
+    .getByLabel("Käynnin vaihe", { exact: true })
+    .selectOption("oem_stable");
+  await page.getByText("Laitteen ohjearvot", { exact: true }).click();
+  await page.locator(".assessment-pressure-settings > summary").click();
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("a");
+  await expect(page.locator("#assessment-pressure")).toHaveValue("4.01325");
+  await expect(page.locator("#assessment-second")).toHaveValue("11.01325");
+  await expect(page.locator("#assessment-pipe")).toHaveValue("15");
+  const clipped = await page
+    .locator(
+      ".assessment-inputs input, .assessment-inputs select, .assessment-inputs summary",
+    )
+    .evaluateAll((elements) =>
+      elements
+        .filter((el) => {
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && (r.left < 0 || r.right > innerWidth);
+        })
+        .map((el) => el.outerHTML),
+    );
+  expect(clipped).toEqual([]);
+  await page.getByRole("button", { name: "Näytä arvio", exact: true }).click();
+  await expect(page.locator(".assessment-result")).toBeFocused();
+  expect(
+    await page
+      .locator(".assessment-result")
+      .evaluate((el) => el.getBoundingClientRect().top),
+  ).toBeLessThan(80);
+  await expect(page.locator(".result-label")).toHaveText("Tulistus");
+  await expect(page.locator(".assessment-result")).toContainText("6,0");
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });

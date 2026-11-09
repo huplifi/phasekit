@@ -1,283 +1,127 @@
 .assessment-intro {
   margin-top: -8px;
+  max-width: 58ch;
 }
-
 .assessment-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
   margin: 4px 0 20px;
 }
-
-.assessment-choices,
-.assessment-disclosure {
-  max-width: 100%;
+.assessment-workspace {
+  display: grid;
+  gap: 28px;
+}
+.assessment-inputs,
+.assessment-output {
   min-width: 0;
 }
-
-.assessment-choices {
-  margin-bottom: 16px;
+.assessment-tool h2 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
 }
-
-.assessment-choices .choice-tabs,
-.assessment-disclosure .choice-tabs {
+.assessment-tool h3 {
+  font-size: 1rem;
+}
+.assessment-tool .field-group {
   min-width: 0;
-  max-width: 100%;
-  margin-bottom: 8px;
+  margin: 0 0 16px;
 }
-
-.circuit-figure {
-  margin: 8px 0 20px;
-  padding: 8px 8px 12px;
-  border: 1px solid var(--divider);
-  border-radius: 16px;
-  background: var(--background);
-}
-
-.circuit-svg {
-  display: block;
+.assessment-tool input,
+.assessment-tool select {
   width: 100%;
-  height: auto;
-  color: var(--text);
-}
-
-.circuit-unit {
-  fill: color-mix(in srgb, var(--background) 72%, transparent);
-  stroke-width: 2;
-}
-
-.circuit-unit.is-cold {
-  stroke: var(--palette-primary-blue);
-  stroke-width: 3;
-  fill: color-mix(in srgb, var(--palette-primary-blue) 24%, var(--background));
-}
-
-.circuit-unit.is-hot {
-  stroke: var(--palette-mid-blue);
-  stroke-width: 3;
-  fill: color-mix(in srgb, var(--palette-mid-blue) 34%, var(--background));
-}
-
-.circuit-unit.is-open {
-  stroke: var(--text-secondary);
-  stroke-dasharray: 6 5;
-  fill: transparent;
-}
-
-.circuit-title,
-.circuit-fn,
-.circuit-port-label {
-  fill: currentColor;
-  stroke: none;
-  font-family: var(--font-body), sans-serif;
-}
-
-.circuit-title {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.circuit-fn,
-.circuit-port-label {
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.circuit-port-label {
-  font-weight: 700;
-}
-
-.circuit-pipe {
-  fill: none;
-  stroke-linecap: round;
-  stroke-width: 4;
-}
-
-.circuit-pipe.is-wide {
-  stroke-width: 8;
-}
-
-.circuit-pipe.is-cold,
-.circuit-stub.is-cold {
-  stroke: var(--palette-primary-blue);
-}
-
-.circuit-pipe.is-hot,
-.circuit-stub.is-hot {
-  stroke: var(--palette-mid-blue);
-}
-
-.circuit-stub {
-  fill: none;
-  stroke-width: 4;
-  stroke-linecap: round;
-}
-
-.circuit-machine {
-  fill: var(--background);
-  stroke: var(--text);
-  stroke-width: 2;
-}
-
-.circuit-valve,
-.circuit-flow {
-  fill: none;
-  stroke: var(--text);
-  stroke-width: 2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
-}
-
-.circuit-valve {
-  fill: var(--text);
-  stroke: none;
-}
-
-.circuit-port {
-  fill: var(--accent-background);
-  stroke: var(--accent-foreground);
-  stroke-width: 2;
-}
-
-.circuit-key {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px 12px;
-  margin: 8px 0 0;
-  color: var(--text-secondary);
-  font-size: 0.8125rem;
-}
-
-.circuit-key strong {
-  color: var(--text);
-  font-weight: 700;
-  text-align: right;
-}
-
-.circuit-key > span:last-child {
-  grid-column: 1 / -1;
-  color: var(--text);
-  font-weight: 700;
-}
-
-.assessment-pressure {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 96px;
-  gap: 12px;
-  align-items: end;
-}
-
-.assessment-pressure select {
-  margin-top: 0;
-}
-
-.assessment-result {
+  min-width: 0;
   margin-top: 8px;
 }
-
+.assessment-tool select {
+  text-overflow: ellipsis;
+}
+.assessment-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0 16px;
+  align-items: end;
+}
+.assessment-measurement {
+  min-width: 0;
+  margin: 8px 0 12px;
+  padding: 16px;
+  border: 1px solid var(--divider);
+  border-radius: 16px;
+}
+.assessment-measurement legend {
+  padding: 0 8px;
+  font-weight: 700;
+}
+.assessment-measurement > .caption {
+  margin-top: -4px;
+}
+.assessment-disclosure {
+  min-width: 0;
+  margin: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.assessment-disclosure > summary {
+  min-height: 44px;
+  padding: 10px 0;
+  font-weight: 700;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.assessment-disclosure > summary .secondary {
+  display: block;
+  font-weight: 400;
+  font-size: 0.8125rem;
+  margin: 4px 0 0 18px;
+}
+.assessment-disclosure[open] > summary {
+  margin-bottom: 16px;
+}
+.assessment-pressure-settings {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.assessment-pressure-settings > summary {
+  font-size: 0.875rem;
+}
+.assessment-pressure-settings > summary .secondary {
+  display: inline;
+  margin-left: 8px;
+}
+.assessment-show-result {
+  margin-top: 20px;
+  width: 100%;
+}
+.assessment-result {
+  margin: 0 0 20px;
+  scroll-margin-top: 24px;
+}
 .assessment-result .result-number {
   margin-bottom: 8px;
 }
-
+.assessment-summary p:last-child {
+  margin-bottom: 0;
+}
 .assessment-rows {
   display: grid;
   gap: 8px;
   margin: 12px 0 0;
 }
-
 .assessment-rows div {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding-top: 8px;
   border-top: 1px solid var(--divider);
+  padding-top: 8px;
 }
-
 .assessment-rows dt {
   font-weight: 700;
 }
-
 .assessment-rows dd {
   margin: 0;
   text-align: right;
 }
-
-.assessment-summary p:last-child {
-  margin-bottom: 0;
-}
-
-.assessment-next {
-  margin: 8px 0 20px;
-  padding-left: 1.2rem;
-}
-
-.assessment-next li + li {
-  margin-top: 8px;
-}
-
-.assessment-disclosure {
-  margin: 12px 0;
-}
-
-.assessment-disclosure summary {
-  min-height: 44px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.assessment-hypothesis {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--divider);
-}
-
-.assessment-hypothesis h3 {
-  margin: 0 0 4px;
-}
-
-.assessment-hypothesis p:last-child {
-  margin-bottom: 0;
-}
-
-.assessment-links {
-  display: grid;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.assessment-links p {
-  margin: 0;
-}
-
-/* The diagram is a reading aid: keep mobile labels legible at 390 px. */
-.circuit-fn {
-  font-size: 24px;
-}
-.circuit-title {
-  font-size: 23px;
-}
-.circuit-key {
-  font-size: 0.9375rem;
-}
-.assessment-system,
-.assessment-reference {
-  padding: 10px 0;
-  border-bottom: 1px solid var(--divider);
-}
-.assessment-result {
-  margin: 20px 0 16px;
-}
-@media (max-width: 480px) {
-  .circuit-title {
-    display: none;
-  }
-  .circuit-fn {
-    font-size: 26px;
-  }
-  .assessment-choices .choice-tabs {
-    flex-wrap: wrap;
-  }
-}
-
 .assessment-calculation {
   margin-top: 16px;
   border-top: 1px solid var(--divider);
@@ -288,6 +132,110 @@
   min-height: 44px;
   font-weight: 700;
 }
-.assessment-calculation .assessment-rows {
-  margin-top: 0;
+.assessment-next-step {
+  margin: 20px 0;
+}
+.assessment-next-step li + li {
+  margin-top: 12px;
+}
+.assessment-hypothesis {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.assessment-hypothesis h3 {
+  margin: 0 0 4px;
+}
+.assessment-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+.assessment-links p {
+  margin: 0;
+}
+.circuit-figure {
+  margin: 16px 0 0;
+}
+.circuit-flow-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.circuit-flow-list li {
+  position: relative;
+}
+.circuit-stage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+}
+.circuit-stage strong {
+  display: block;
+}
+.circuit-stage .secondary {
+  display: block;
+  font-size: 0.875rem;
+}
+.circuit-step {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--divider);
+  flex-shrink: 0;
+  font-size: 0.875rem;
+}
+.circuit-flow-list .is-open .circuit-stage {
+  border-style: dashed;
+}
+.circuit-arrow {
+  display: block;
+  text-align: center;
+  line-height: 28px;
+  color: var(--text-secondary);
+}
+.circuit-measurement {
+  margin: 8px 0 0 28px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent-foreground);
+  background: var(--accent-background);
+  color: var(--accent-foreground);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+@media (max-width: 480px) {
+  .assessment-measurement .assessment-pair,
+  .assessment-second-measurement .assessment-pair,
+  .assessment-pressure-settings .assessment-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (min-width: 1000px) {
+  .app-shell:has(.assessment-tool) {
+    max-width: 1140px;
+  }
+  .assessment-workspace {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: start;
+  }
+  .assessment-output {
+    position: sticky;
+    top: 24px;
+  }
+  .assessment-show-result {
+    display: none;
+  }
+}
+
+.assessment-tool .field-group > label {
+  margin-bottom: 0;
+}
+.assessment-inputs > .assessment-pair {
+  margin-top: 16px;
 }
