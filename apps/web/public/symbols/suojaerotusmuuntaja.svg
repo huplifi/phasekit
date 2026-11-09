@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Suojaerotusmuuntaja">
+  <title>Suojaerotusmuuntaja</title>
+  <desc>Kaksi päällekkäistä ympyrää ja suora poikkiviiva. Muuntajan ensiö- ja toisiopiirit on erotettu sähköisesti.</desc>
+  <circle cx="32" cy="23" r="13"/>
+  <circle cx="32" cy="41" r="13"/>
+  <path d="M14 32H50"/>
+</svg>

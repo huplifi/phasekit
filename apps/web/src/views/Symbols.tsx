@@ -13,6 +13,8 @@ import { ExclusiveChoices } from "../components/ExclusiveChoices";
 import {
   symbols,
   symbolSources,
+  symbolSourceRevision,
+  symbolSourceUrl,
   categoryLabels,
   representationLabels,
   statusLabels,
@@ -168,6 +170,17 @@ export function Symbols() {
       </div>
       <p className="caption secondary schematic-symbol-count" role="status">
         {l(`${matches.length} symbolia`, `${matches.length} symbols`)}
+      </p>
+      <p className="caption secondary">
+        {l("Symboliaineiston lähdeversio", "Symbol library source revision")}:{" "}
+        <a
+          className="mono"
+          href={symbolSourceUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {symbolSourceRevision.slice(0, 7)}
+        </a>
       </p>
       {matches.length ? (
         <div className="schematic-symbol-grid">

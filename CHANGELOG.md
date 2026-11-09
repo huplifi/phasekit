@@ -4,6 +4,15 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.5 — 2026-11-09 · Beta
+
+New schematic symbols and release identification
+
+- The Controls category now includes a centre-off changeover contact, an early-make normally open contact and a late-break normally closed contact.
+- Added IEC 60417 equipment markings: safety isolating transformer (5222), isolating transformer (5221) and Class II equipment (5172). These markings have no electrical connection ports.
+- Symbols can also be found by their IEC identifiers. The symbol source revision is displayed separately from the app version and build revision.
+- The release pipeline checks for a version increment and bilingual release notes when shipped application files change.
+
 ## 0.5.0-beta.4 — 2026-10-06 · Beta
 
 Outdoor and indoor commissioning temperatures
