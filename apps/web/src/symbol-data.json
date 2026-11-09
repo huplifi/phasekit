@@ -30,6 +30,19 @@
       "title": "Oppituntidia: Koskettimet (9.11.2026)",
       "pages": 1,
       "note": "Käyttäjän toimittama oppituntikuva. Esitystavan lähde; ei vahvistettua IEC-tunnusta tai standardistatusta."
+    },
+    "oppimateriaali-laitemerkinnat": {
+      "title": "Oppimateriaali, laitemerkintätehtävä 3",
+      "pages": 1,
+      "note": "Käyttäjän toimittama tehtäväkuva. Vertailukohdat ovat kilvellinen muuntajamerkki, kilvetön muuntajamerkki ja kaksoisneliö."
+    },
+    "iec-60417-esikatselu": {
+      "title": "IEC/ISO Graphical Symbols for Use on Equipment, esikatselu",
+      "url": "https://www.normservis.cz/download/view/iec/info_iec60417%7Bed1.0%7Db.pdf",
+      "pages": 21,
+      "sha256": "de586a6e5818123640475ca7969d9c19d92189e34cf98862f9a5fb3c1afdc80a",
+      "retrieved": "2026-11-09",
+      "note": "IEC/ISO-esikatselun jakelukopio Normservisin sivustolla. PDF s. 7 sisältää 5172:n, s. 8 sisältää 5221:n ja 5222:n. Kirjaston SVG:t on piirretty opiskelukäyttöön."
     }
   },
   "symbols": [
@@ -1642,8 +1655,86 @@
       ],
       "notes": "Erottimen yleismerkki öljynerotuksen käyttötarkoituksessa. Alaliitäntä on öljyn paluu; säätö- tai uimurimekanismia ei ole kuvattu.",
       "visual_review": "2026-09-28"
+    },
+    {
+      "id": "suojajannitemuuntaja",
+      "file": "suojajannitemuuntaja.svg",
+      "name_fi": "Suojajännitemuuntaja",
+      "name_en": "Safety isolating transformer, general",
+      "aliases_fi": [],
+      "category": "tehonmuunto",
+      "representation": "laitemerkinta",
+      "purpose": "Laitemerkintä muuntajalle, jossa on suojaerotus ja pienoisjännitteinen toisio.",
+      "ports": [],
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-60417-esikatselu",
+          "pages": [8],
+          "labels": ["IEC 60417-5222 — Safety isolating transformer, general"]
+        },
+        {
+          "source": "oppimateriaali-laitemerkinnat",
+          "pages": [1],
+          "labels": ["Tehtävä 3, ylin merkki"]
+        }
+      ],
+      "notes": "Käytetään laitteessa tai laitekilvessä. Tarkka toisiojännite luetaan laitekilvestä.",
+      "visual_review": "2026-11-09"
+    },
+    {
+      "id": "suojaerotusmuuntaja",
+      "file": "suojaerotusmuuntaja.svg",
+      "name_fi": "Suojaerotusmuuntaja",
+      "name_en": "Isolating transformer, general",
+      "aliases_fi": ["erotusmuuntaja"],
+      "category": "tehonmuunto",
+      "representation": "laitemerkinta",
+      "purpose": "Laitemerkintä ensiön ja toision sähköisesti erottavalle muuntajalle.",
+      "ports": [],
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-60417-esikatselu",
+          "pages": [8],
+          "labels": ["IEC 60417-5221 — Isolating transformer, general"]
+        },
+        {
+          "source": "oppimateriaali-laitemerkinnat",
+          "pages": [1],
+          "labels": ["Tehtävä 3, keskimmäinen merkki"]
+        }
+      ],
+      "notes": "Käytetään laitteessa tai laitekilvessä. Tarkka toisiojännite luetaan laitekilvestä.",
+      "visual_review": "2026-11-09"
+    },
+    {
+      "id": "suojausluokka-ii",
+      "file": "suojausluokka-ii.svg",
+      "name_fi": "Suojausluokan II laite",
+      "name_en": "Class II equipment",
+      "aliases_fi": ["kaksoiseristys", "vahvistettu eristys", "kaksoisneliö"],
+      "category": "suojaus-erotus",
+      "representation": "laitemerkinta",
+      "purpose": "Sähköiskusuojaus perustuu kaksois- tai vahvistettuun eristykseen.",
+      "ports": [],
+      "status": "lahdevertailtu",
+      "sources": [
+        {
+          "source": "iec-60417-esikatselu",
+          "pages": [7],
+          "labels": ["IEC 60417-5172 — Class II equipment"]
+        },
+        {
+          "source": "oppimateriaali-laitemerkinnat",
+          "pages": [1],
+          "labels": ["Tehtävä 3, alin merkki"]
+        }
+      ],
+      "notes": "Laitemerkintä. Suojausluokan II tunnus on neliö neliön sisällä.",
+      "visual_review": "2026-11-09"
     }
   ],
-  "source_revision": "47c26e25a8d3304fadbc146fade2d0233f5b5466",
+  "source_revision": "427eb4c6be359445c53d0635245c905d380aecf4",
   "library_url": "https://huplifi.github.io/kylmasentaja-keuda-public/"
 }

@@ -22,7 +22,8 @@
     "native:sync": "pnpm build && cap sync",
     "native:ios": "cap open ios",
     "native:android": "cap open android",
-    "release:build": "node --import tsx scripts/releases.ts"
+    "release:build": "node --import tsx scripts/releases.ts",
+    "release:check": "node --import tsx scripts/release-check.ts"
   },
   "dependencies": {
     "@capacitor/android": "8.5.2",

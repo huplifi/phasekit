@@ -12,7 +12,7 @@ import {
 describe("schematic reference library", () => {
   it("keeps the two disciplines separate, including identical geometry", () => {
     expect(searchSymbols("", "cold")).toHaveLength(18);
-    expect(searchSymbols("", "electrical")).toHaveLength(62);
+    expect(searchSymbols("", "electrical")).toHaveLength(65);
     expect(
       searchSymbols("kompressori", "cold").every(
         (s) => s.category === "kylmakierto",
@@ -46,7 +46,7 @@ describe("schematic reference library", () => {
     ).toBe(true);
   });
   it("retains caveats, source references and known shared shapes", () => {
-    expect(new Set(symbols.map((s) => s.id)).size).toBe(80);
+    expect(new Set(symbols.map((s) => s.id)).size).toBe(83);
     for (const symbol of symbols) {
       expect(categoryLabels[symbol.category]).toBeTruthy();
       expect(representationLabels[symbol.representation]).toBeTruthy();
@@ -60,6 +60,41 @@ describe("schematic reference library", () => {
         );
     }
     expect(JSON.stringify(symbolSources)).not.toContain("Liitteet");
+    expect(JSON.stringify(symbolSources)).not.toMatch(
+      /IMG_\d+|\.jpe?g|"file":/i,
+    );
+    expect(
+      symbols.some((symbol) => symbol.file.startsWith("opetuskaavio-")),
+    ).toBe(false);
+  });
+  it("finds IEC equipment markings without treating them as electrical components", () => {
+    for (const [id, number, category] of [
+      ["suojajannitemuuntaja", "5222", "tehonmuunto"],
+      ["suojaerotusmuuntaja", "5221", "tehonmuunto"],
+      ["suojausluokka-ii", "5172", "suojaus-erotus"],
+    ]) {
+      const symbol = symbols.find((item) => item.id === id)!;
+      expect(symbol.representation).toBe("laitemerkinta");
+      expect(symbol.ports).toEqual([]);
+      expect(symbol.category).toBe(category);
+      for (const query of [
+        number,
+        `IEC 60417-${number}`,
+        symbol.name_fi,
+        symbol.name_en,
+      ])
+        expect(
+          searchSymbols(query, "electrical", category).map((item) => item.id),
+        ).toContain(id);
+      expect(searchSymbols(number, "cold")).toEqual([]);
+    }
+    expect(
+      searchSymbols("vahvistettu eristys", "electrical").map((s) => s.id),
+    ).toContain("suojausluokka-ii");
+    expect(representationLabels.laitemerkinta).toEqual({
+      fi: "Laitemerkintä",
+      en: "Equipment marking",
+    });
   });
   it("ships only self-contained vector assets with every catalogue entry", () => {
     const directory = "apps/web/public/symbols";

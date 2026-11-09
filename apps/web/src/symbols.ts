@@ -3,6 +3,8 @@ import library from "./symbol-data.json";
 export type SchematicSymbol = (typeof library.symbols)[number];
 export type SymbolDomain = "cold" | "electrical";
 export const symbols = library.symbols;
+export const symbolSourceRevision = library.source_revision;
+export const symbolSourceUrl = `https://github.com/huplifi/kylmasentaja-keuda/tree/${symbolSourceRevision}/symbolit`;
 export const symbolSources: Record<
   string,
   { title: string; url?: string; note: string }
@@ -21,6 +23,7 @@ export const categoryLabels: Labels = {
   passiiviset: { fi: "Passiiviset komponentit", en: "Passive components" },
 };
 export const representationLabels: Labels = {
+  laitemerkinta: { fi: "Laitemerkintä", en: "Equipment marking" },
   piirikaavio: { fi: "Piirikaavio", en: "Circuit diagram" },
   kylmakaavio: { fi: "Kylmäkaavio", en: "Refrigeration diagram" },
   asennuspiirustus: { fi: "Asennuspiirustus", en: "Installation drawing" },
@@ -59,6 +62,7 @@ export function searchSymbols(
           symbol.name_en,
           ...symbol.aliases_fi,
           symbol.purpose,
+          ...symbol.sources.flatMap((source) => source.labels ?? []),
         ].join(" "),
       );
       return terms.every((term) => text.includes(term));

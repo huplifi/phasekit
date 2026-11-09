@@ -1,5 +1,65 @@
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import symbolLibrary from "../../apps/web/src/symbol-data.json" with { type: "json" };
+
+test("all six additions are searchable in Finnish and English with source scope", async ({
+  page,
+}) => {
+  const ids = [
+    "vaihtokosketin-keskiasento",
+    "kosketin-no-aikaisemmin-sulkeutuva",
+    "kosketin-nc-myohassa-avautuva",
+    "suojajannitemuuntaja",
+    "suojaerotusmuuntaja",
+    "suojausluokka-ii",
+  ];
+  for (const locale of ["fi", "en"]) {
+    await page.goto("/#/settings");
+    await page
+      .getByRole("combobox", { name: /^(Kieli|Language)$/ })
+      .selectOption(locale);
+    await page.goto("/#/symbols");
+    await page
+      .getByRole("button", {
+        name: locale === "fi" ? "Sähkö" : "Electrical",
+        exact: true,
+      })
+      .click();
+    for (const id of ids) {
+      const symbol = symbolLibrary.symbols.find((item) => item.id === id)!;
+      const name = locale === "fi" ? symbol.name_fi : symbol.name_en;
+      await page
+        .getByRole("combobox", {
+          name: locale === "fi" ? "Ryhmä" : "Category",
+          exact: true,
+        })
+        .selectOption(symbol.category);
+      await page.getByRole("searchbox").fill(name);
+      await page.getByRole("button", { name, exact: true }).click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toContainText(symbol.purpose);
+      await expect(dialog).toContainText(symbol.notes);
+      if (symbol.representation === "laitemerkinta") {
+        await expect(dialog).toContainText(
+          locale === "fi" ? "Laitemerkintä" : "Equipment marking",
+        );
+        await dialog
+          .getByText(
+            locale === "fi" ? "Lähteet ja rajaukset" : "Sources and scope",
+            { exact: true },
+          )
+          .click();
+        await expect(dialog).toContainText(symbol.sources[0].labels![0]);
+      }
+      await page
+        .getByRole("button", {
+          name:
+            locale === "fi" ? "Sulje symbolin tiedot" : "Close symbol details",
+        })
+        .click();
+    }
+  }
+});
 
 test("visual reference has separate domains, alias search and accessible details", async ({
   page,
@@ -33,7 +93,7 @@ test("visual reference has separate domains, alias search and accessible details
   await page.getByRole("button", { name: "Sähkö", exact: true }).click();
   await expect(page.locator(".schematic-symbol-card")).toHaveCount(0);
   await search.fill("");
-  await expect(page.locator(".schematic-symbol-card")).toHaveCount(62);
+  await expect(page.locator(".schematic-symbol-card")).toHaveCount(65);
   await page
     .getByRole("combobox", { name: "Ryhmä", exact: true })
     .selectOption("maadoitus");
@@ -76,7 +136,7 @@ test("symbol pictures and detail remain available offline, including dark mobile
       ),
     ];
   });
-  expect(cachedSymbols).toHaveLength(80);
+  expect(cachedSymbols).toHaveLength(83);
   // Playwright WebKit fails network requests when emulated offline even with
   // a controlling worker; inspect its complete precache and UI online instead.
   // Chromium verifies actual offline reload and asset responses.
@@ -117,7 +177,7 @@ test("symbol pictures and detail remain available offline, including dark mobile
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   await page.getByRole("button", { name: "Sulje symbolin tiedot" }).click();
   await page.getByRole("button", { name: "Sähkö", exact: true }).click();
-  await expect(page.locator(".schematic-symbol-card")).toHaveCount(62);
+  await expect(page.locator(".schematic-symbol-card")).toHaveCount(65);
   await page
     .getByRole("combobox", { name: "Ryhmä", exact: true })
     .selectOption("ohjaus");
