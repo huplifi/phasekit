@@ -20,6 +20,7 @@ export const config: Config = {
     "/api/shared-assets",
     "/api/shared-assets/:id",
     "/api/shared-assets/:id/read",
+    "/api/shared-assets/:id/receipt",
   ],
   rateLimit: { windowLimit: 30, windowSize: 60, aggregateBy: ["ip", "domain"] },
 };

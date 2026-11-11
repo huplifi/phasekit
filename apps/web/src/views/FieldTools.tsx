@@ -1504,7 +1504,9 @@ export function WorkChecklists() {
       return id;
     }
   };
-  const [kind, setKind] = useState<ChecklistKind>("tightness");
+  const [kind, setKind] = useState<ChecklistKind | "electrical-inspection">(
+    "tightness",
+  );
   const [selected, setSelected] = useState(routeId);
   const [deletePending, setDeletePending] = useState(false);
   const [printError, setPrintError] = useState(false);
@@ -1618,6 +1620,10 @@ export function WorkChecklists() {
     go(`/checklists/${encodeURIComponent(id)}`);
   };
   const create = () => {
+    if (kind === "electrical-inspection") {
+      go("/electrical-reports/new");
+      return;
+    }
     if (data.checklistDrafts.length >= 1000) return;
     const record: FieldReport = {
       id: crypto.randomUUID(),
@@ -2153,24 +2159,45 @@ export function WorkChecklists() {
               {l("Raporttipohja", "Report template")}
               <select
                 value={kind}
-                onChange={(e) => setKind(e.target.value as ChecklistKind)}
+                onChange={(e) =>
+                  setKind(
+                    e.target.value as ChecklistKind | "electrical-inspection",
+                  )
+                }
               >
                 {Object.entries(checklistDefinitions).map(([key, item]) => (
                   <option key={key} value={key}>
                     {item.name[locale]}
                   </option>
                 ))}
+                <option value="electrical-inspection">
+                  {l(
+                    "Sähkölaitteiston käyttöönottotarkastuspöytäkirja",
+                    "Electrical commissioning inspection",
+                  )}
+                </option>
               </select>
             </label>
             <button
               className="secondary-button"
-              disabled={data.checklistDrafts.length >= 1000}
+              disabled={
+                kind !== "electrical-inspection" &&
+                data.checklistDrafts.length >= 1000
+              }
               onClick={create}
             >
               <Plus size={18} />
               {l("Luo raportti", "Create report")}
             </button>
           </div>
+          {kind === "electrical-inspection" && (
+            <p className="supporting-copy">
+              {l(
+                "Valitse seuraavassa vaiheessa mukaan aiemmin kirjatut sähkömittaukset. Mittauksia ei tarvitse kirjoittaa uudelleen.",
+                "Choose previously recorded electrical measurements in the next step. There is no need to enter the readings again.",
+              )}
+            </p>
+          )}
           {selected && (
             <p role="status">
               {l(
@@ -2181,14 +2208,15 @@ export function WorkChecklists() {
           )}
         </>
       )}
-      {data.checklistDrafts.length >= 1000 && (
-        <p role="status">
-          {l(
-            "Enintään 1 000 raporttia. Vie ja poista vanhoja raportteja ennen uuden luontia.",
-            "Limit of 1,000 reports. Export and remove old records before creating another.",
-          )}
-        </p>
-      )}
+      {kind !== "electrical-inspection" &&
+        data.checklistDrafts.length >= 1000 && (
+          <p role="status">
+            {l(
+              "Enintään 1 000 raporttia. Vie ja poista vanhoja raportteja ennen uuden luontia.",
+              "Limit of 1,000 reports. Export and remove old records before creating another.",
+            )}
+          </p>
+        )}
       {draft && definition && (
         <section className="checklist-record field-report-editor">
           <div className="field-checklist-save-state">
@@ -2609,46 +2637,48 @@ export function WorkChecklists() {
           )}
         </section>
       )}
-      <Sources
-        title={l(
-          "Raporttipohjan tausta ja lähteet",
-          "Report template background and sources",
-        )}
-      >
-        <p>
-          {l(
-            "Raportit ovat yleisiä kirjauspohjia. Valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Valmis raportti tai rastit eivät tarkoita teknistä hyväksyntää. Kirjaa poikkeamat muistiinpanoihin.",
-            "Reports are generic recording templates. Manufacturer instructions determine the sequence, media, limits and acceptance. A final report or checked steps do not imply technical acceptance. Record exceptions in Notes.",
+      {(draft || kind !== "electrical-inspection") && (
+        <Sources
+          title={l(
+            "Raporttipohjan tausta ja lähteet",
+            "Report template background and sources",
           )}
-        </p>
-        <p className="supporting-copy">
-          {l(
-            "Kirjaukset säilyvät tässä selaimessa ja sisältyvät asetusten varmuuskopioon.",
-            "Records stay in this browser and are included in Settings backups.",
-          )}
-        </p>
-        {!draft && kind === "commissioning" && (
-          <p>
-            <a
-              href="https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {l(
-                "VNa 1063/2025, 9 § — asennustodistuksen tiedot",
-                "Government Decree 1063/2025, section 9 — installation-certificate content",
-              )}
-            </a>
-          </p>
-        )}
-        <a
-          href="https://webapps.copeland.com/online-product-information/Publication/LaunchPDF?Index=AEM&PDF=AE-105"
-          target="_blank"
-          rel="noreferrer"
         >
-          Copeland — Refrigeration Manual, Part 5: Installation and Service
-        </a>
-      </Sources>
+          <p>
+            {l(
+              "Raportit ovat yleisiä kirjauspohjia. Valmistajan ohje määrää työjärjestyksen, koeväliaineet, rajat ja hyväksymisen. Valmis raportti tai rastit eivät tarkoita teknistä hyväksyntää. Kirjaa poikkeamat muistiinpanoihin.",
+              "Reports are generic recording templates. Manufacturer instructions determine the sequence, media, limits and acceptance. A final report or checked steps do not imply technical acceptance. Record exceptions in Notes.",
+            )}
+          </p>
+          <p className="supporting-copy">
+            {l(
+              "Kirjaukset säilyvät tässä selaimessa ja sisältyvät asetusten varmuuskopioon.",
+              "Records stay in this browser and are included in Settings backups.",
+            )}
+          </p>
+          {!draft && kind === "commissioning" && (
+            <p>
+              <a
+                href="https://www.finlex.fi/api/media/statute/893594/mainPdf/main.pdf"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {l(
+                  "VNa 1063/2025, 9 § — asennustodistuksen tiedot",
+                  "Government Decree 1063/2025, section 9 — installation-certificate content",
+                )}
+              </a>
+            </p>
+          )}
+          <a
+            href="https://webapps.copeland.com/online-product-information/Publication/LaunchPDF?Index=AEM&PDF=AE-105"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Copeland — Refrigeration Manual, Part 5: Installation and Service
+          </a>
+        </Sources>
+      )}
     </Layout>
   );
 }

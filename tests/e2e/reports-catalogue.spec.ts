@@ -1,5 +1,55 @@
 import { test, expect } from "@playwright/test";
 
+test("electrical inspection starts through the common new-report template flow", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto("/#/reports");
+  await expect(
+    page.getByRole("button", { name: "Uusi sähköpöytäkirja", exact: true }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Uusi raportti", exact: true })
+    .click();
+  const templates = page.getByRole("combobox", {
+    name: "Raporttipohja",
+    exact: true,
+  });
+  await expect(templates).toHaveValue("tightness");
+  await templates.selectOption("electrical-inspection");
+  await expect(templates.locator("option:checked")).toHaveText(
+    "Sähkölaitteiston käyttöönottotarkastuspöytäkirja",
+  );
+  await expect(
+    page.getByText(
+      "Valitse seuraavassa vaiheessa mukaan aiemmin kirjatut sähkömittaukset.",
+      { exact: false },
+    ),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Raporttipohjan tausta ja lähteet", { exact: true }),
+  ).toHaveCount(0);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: testInfo.outputPath("common-report-template-320.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({
+    path: testInfo.outputPath("common-report-template-390.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Luo raportti", exact: true }).click();
+  await expect(page).toHaveURL(/#\/electrical-reports\/new$/);
+  await expect(
+    page.getByText("Valitse kirjatut mittaukset.", { exact: false }),
+  ).toBeVisible();
+});
+
 test("Reports discovers a draft after leaving the editor and filters it by site", async ({
   page,
 }) => {

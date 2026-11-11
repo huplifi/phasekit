@@ -77,20 +77,18 @@ function matches(secret: string, expected: string) {
   );
   return timingSafeEqual(a, b);
 }
-async function boundedJson(request: Request): Promise<unknown> {
-  if (!request.headers.get("content-type")?.startsWith("application/json"))
-    throw new Error("invalid");
-  if (Number(request.headers.get("content-length")) > LIMIT)
+async function boundedBody(request: Request, limit = LIMIT): Promise<string> {
+  if (Number(request.headers.get("content-length")) > limit)
     throw new Error("large");
   const reader = request.body?.getReader();
-  if (!reader) throw new Error("invalid");
+  if (!reader) return "";
   let bytes = 0;
   const chunks: Uint8Array[] = [];
   for (;;) {
     const result = await reader.read();
     if (result.done) break;
     bytes += result.value.byteLength;
-    if (bytes > LIMIT) {
+    if (bytes > limit) {
       await reader.cancel();
       throw new Error("large");
     }
@@ -102,7 +100,12 @@ async function boundedJson(request: Request): Promise<unknown> {
     body.set(chunk, offset);
     offset += chunk.byteLength;
   }
-  return JSON.parse(new TextDecoder().decode(body));
+  return new TextDecoder().decode(body);
+}
+async function boundedJson(request: Request): Promise<unknown> {
+  if (!request.headers.get("content-type")?.startsWith("application/json"))
+    throw new Error("invalid");
+  return JSON.parse(await boundedBody(request));
 }
 /** One object per asset, immutable credentials, conditional whole-snapshot replacement. */
 export function sharedAssetsHandler(store: SnapshotStore) {
@@ -115,10 +118,10 @@ export function sharedAssetsHandler(store: SnapshotStore) {
     )
       return denied();
     const route = url.pathname.match(
-      /^\/api\/shared-assets(?:\/([a-f0-9]{32})(\/read)?)?$/,
+      /^\/api\/shared-assets(?:\/([a-f0-9]{32})(\/(?:read|receipt))?)?$/,
     );
     if (!route || url.search) return denied();
-    const [, id, read] = route;
+    const [, id, operation] = route;
     // URL alone and GET never disclose even whether the object exists.
     if (
       request.method === "GET" ||
@@ -151,7 +154,7 @@ export function sharedAssetsHandler(store: SnapshotStore) {
         return denied();
       }
       if (!id) return denied();
-      if (read && request.method === "POST") {
+      if (operation === "/read" && request.method === "POST") {
         const parsed = z
           .object({ readCode })
           .safeParse(await boundedJson(request));
@@ -165,7 +168,13 @@ export function sharedAssetsHandler(store: SnapshotStore) {
         if (!entry || entry.data.revoked || !valid) return denied();
         return reply(200, { snapshot: entry.data.snapshot });
       }
-      if (read || !["PUT", "DELETE"].includes(request.method)) return denied();
+      const receiptRequest =
+        operation === "/receipt" && request.method === "POST";
+      if (
+        (operation && !receiptRequest) ||
+        (!receiptRequest && !["PUT", "DELETE"].includes(request.method))
+      )
+        return denied();
       const secret =
         request.headers.get("authorization")?.replace(/^Bearer /, "") ?? "";
       if (!writeSecret.safeParse(secret).success) return denied();
@@ -176,6 +185,12 @@ export function sharedAssetsHandler(store: SnapshotStore) {
         return request.method === "DELETE"
           ? reply(200, { revoked: true })
           : denied();
+      if (receiptRequest) {
+        // Credential-only recovery never reads or resends an asset snapshot.
+        // Empty body is normal; discard at most 1 KiB if a caller supplies one.
+        await boundedBody(request, 1024);
+        return reply(200, receipt(entry.etag, entry.data.snapshot));
+      }
       const body = await boundedJson(request);
       if (request.method === "DELETE") {
         const parsed = z

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { CopyPlus, FileText, Plus, QrCode } from "lucide-react";
+import { CopyPlus, FileText, QrCode } from "lucide-react";
 import { Back } from "../components/Common";
 import { ElectricalMeterHelp } from "../components/ElectricalMeterHelp";
+import { ElectricalMeasurementGuide } from "../components/ElectricalMeasurementGuide";
 import { useApp } from "../context";
 import type {
   ElectricalMeasurement,
@@ -35,6 +36,270 @@ const newSession = (): ElectricalSession => ({
   meter: { brand: "", model: "", serialNumber: "" },
 });
 
+const shortLabels: Record<MeasurementType, { fi: string; en: string }> = {
+  continuity: { fi: "Jatkuvuus", en: "Continuity" },
+  insulation: { fi: "Eristysresistanssi", en: "Insulation resistance" },
+  "loop-impedance": { fi: "Silmukkaimpedanssi", en: "Loop impedance" },
+  "short-circuit-current": {
+    fi: "Oikosulkuvirta",
+    en: "Short-circuit current",
+  },
+  "rcd-time": { fi: "RCD:n toiminta-aika", en: "RCD tripping time" },
+  "rcd-current": { fi: "RCD:n toimintavirta", en: "RCD tripping current" },
+  voltage: { fi: "Jännite", en: "Voltage" },
+  "phase-sequence": { fi: "Vaihejärjestys", en: "Phase sequence" },
+  other: { fi: "Muu testi", en: "Other test" },
+};
+const pointKey = (measurement: ElectricalMeasurement) =>
+  measurement.pointId ?? measurement.id;
+function measurementStatus(
+  measurement: ElectricalMeasurement | undefined,
+  locale: "fi" | "en",
+) {
+  if (!measurement || !hasMeasurementResult(measurement.result))
+    return locale === "fi" ? "Ei kirjattu" : "Not recorded";
+  const labels = {
+    unassessed: { fi: "Kirjattu · arvioimatta", en: "Recorded · unassessed" },
+    pass: { fi: "Arvioitu · hyväksytty", en: "Assessed · pass" },
+    fail: { fi: "Arvioitu · puute", en: "Assessed · defect" },
+    "not-applicable": {
+      fi: "Arvioitu · ei sovellu",
+      en: "Assessed · not applicable",
+    },
+  };
+  return labels[measurement.assessment][locale];
+}
+type PatchRow = (
+  type: MeasurementType,
+  patch: Partial<ElectricalMeasurement>,
+  recordId?: string,
+) => string;
+
+function MeasurementRow({
+  type,
+  measurement,
+  session,
+  locale,
+  onPatch,
+  onBusy,
+}: {
+  type: MeasurementType;
+  measurement?: ElectricalMeasurement;
+  session: ElectricalSession;
+  locale: "fi" | "en";
+  onPatch: PatchRow;
+  onBusy: (busy: boolean) => void;
+}) {
+  const l = (fi: string, en: string) => (locale === "fi" ? fi : en);
+  const [textResult, setTextResult] = useState(false);
+  const [photoError, setPhotoError] = useState("");
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const definition = measurementTypes[type];
+  const result = measurement?.result ?? "";
+  const unit = measurement?.unit ?? definition.unit;
+  const numericType = type !== "phase-sequence" && type !== "other";
+  const resultParts = result.match(/^([<>]=?|[≤≥])\s*(.*)$/);
+  const qualifier = resultParts?.[1] ?? "";
+  const resultValue = resultParts?.[2] ?? result;
+  const patch = (changes: Partial<ElectricalMeasurement>) =>
+    onPatch(type, changes, measurement?.id);
+  const resultPatch = (value: string) =>
+    patch({ result: value, assessment: "unassessed", assessmentNote: "" });
+  return (
+    <div className="electrical-sheet-row" data-type={type}>
+      <div className="electrical-sheet-row-main">
+        <label
+          className="electrical-sheet-label"
+          htmlFor={`electrical-result-${type}-${measurement?.id ?? "new"}`}
+        >
+          {shortLabels[type][locale]
+            .replace("Silmukkaimpedanssi", "Silmukka\u00adimpedanssi")
+            .replace("Eristysresistanssi", "Eristys\u00adresistanssi")}
+          <span className="electrical-row-status">
+            {measurementStatus(measurement, locale)}
+          </span>
+        </label>
+        <div className="electrical-sheet-inputs">
+          <input
+            id={`electrical-result-${type}-${measurement?.id ?? "new"}`}
+            aria-label={`${definition.label[locale]} · ${l("Tulos", "Result")}`}
+            className="mono"
+            type="text"
+            inputMode={numericType && !textResult ? "decimal" : "text"}
+            value={result}
+            maxLength={1000}
+            onChange={(event) => resultPatch(event.target.value)}
+          />
+          <span className="electrical-sheet-unit mono">{unit || "—"}</span>
+        </div>
+      </div>
+      <details className="electrical-row-details">
+        <summary>
+          {l("Ohje ja lisätiedot", "Guidance and details")}
+          {measurement?.note || measurement?.photo
+            ? ` · ${l("liite", "attachment")}`
+            : ""}
+        </summary>
+        <p className="caption">{definition.label[locale]}</p>
+        <ElectricalMeasurementGuide type={type} locale={locale} />
+        <ElectricalMeterHelp
+          meter={measurement?.meter ?? session.meter}
+          type={type}
+          locale={locale}
+        />
+        {numericType && (
+          <label>
+            {l("Vertailumerkki", "Qualifier")}
+            <select
+              aria-label={`${shortLabels[type][locale]} · ${l("Vertailumerkki", "Qualifier")}`}
+              value={qualifier}
+              onChange={(event) =>
+                resultPatch(
+                  `${event.target.value}${event.target.value && resultValue ? " " : ""}${resultValue}`,
+                )
+              }
+            >
+              <option value="">=</option>
+              {[">", "<", "≥", "≤", ">=", "<="].map((symbol) => (
+                <option key={symbol} value={symbol}>
+                  {symbol}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+        <label>
+          {l("Yksikkö", "Unit")}
+          <input
+            value={unit}
+            maxLength={80}
+            onChange={(event) =>
+              patch({
+                unit: event.target.value,
+                assessment: "unassessed",
+                assessmentNote: "",
+              })
+            }
+          />
+        </label>
+        {numericType && (
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={textResult}
+              onChange={(event) => setTextResult(event.target.checked)}
+            />
+            {l(
+              "Tekstinäppäimistö / mittarin ilmoitus",
+              "Text keyboard / meter indication",
+            )}
+          </label>
+        )}
+        <label>
+          {l("Huomio (vapaaehtoinen)", "Note (optional)")}
+          <textarea
+            rows={2}
+            value={measurement?.note ?? ""}
+            maxLength={4000}
+            onChange={(event) => patch({ note: event.target.value })}
+          />
+        </label>
+        <label>
+          {l("Lisää kuva (vapaaehtoinen)", "Add photo (optional)")}
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            capture="environment"
+            disabled={photoBusy}
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+              event.target.value = "";
+              if (!file) return;
+              setPhotoError("");
+              setPhotoBusy(true);
+              onBusy(true);
+              const targetId = patch({});
+              try {
+                const photo = await prepareMeasurementPhoto(file);
+                onPatch(type, { photo }, targetId);
+              } catch {
+                setPhotoError(
+                  l(
+                    "Kuvaa ei voitu lisätä. Valitse JPG-, PNG- tai WebP-kuva (enintään 12 Mt); aiempi kuva säilyy.",
+                    "Could not add photo. Choose JPG, PNG or WebP (up to 12 MB); the previous photo is retained.",
+                  ),
+                );
+              } finally {
+                setPhotoBusy(false);
+                onBusy(false);
+              }
+            }}
+          />
+        </label>
+        {photoBusy && (
+          <p role="status">{l("Käsitellään kuvaa…", "Preparing photo…")}</p>
+        )}
+        {photoError && (
+          <p role="alert" className="danger-text">
+            {photoError}
+          </p>
+        )}
+        {measurement?.photo && (
+          <div>
+            <img
+              className="electrical-photo"
+              src={measurement.photo}
+              alt={l("Mittauksen liitekuva", "Measurement attachment")}
+            />
+            <button
+              className="text-button"
+              onClick={() => patch({ photo: undefined })}
+            >
+              {l("Poista kuva", "Remove photo")}
+            </button>
+          </div>
+        )}
+        {measurement && (
+          <p className="caption">
+            {new Date(measurement.measuredAt).toLocaleString(
+              locale === "fi" ? "fi-FI" : "en-GB",
+            )}{" "}
+            · {measurement.technician} ·{" "}
+            {[
+              measurement.meter.brand,
+              measurement.meter.model,
+              measurement.meter.serialNumber,
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          </p>
+        )}
+        {measurement &&
+          (measurement.technician !== session.technician ||
+            JSON.stringify(measurement.meter) !==
+              JSON.stringify(session.meter)) && (
+            <button
+              className="secondary-button"
+              onClick={() =>
+                patch({
+                  technician: session.technician,
+                  meter: { ...session.meter },
+                  assessment: "unassessed",
+                  assessmentNote: "",
+                })
+              }
+            >
+              {l(
+                "Päivitä tämän mittauksen tekijä/mittari",
+                "Update this measurement's technician/meter",
+              )}
+            </button>
+          )}
+      </details>
+    </div>
+  );
+}
+
 export function ElectricalMeasurements({ path }: { path: string }) {
   const { data, setData, persistenceStatus, go } = useApp();
   const locale = data.locale;
@@ -43,9 +308,8 @@ export function ElectricalMeasurements({ path }: { path: string }) {
   const [settingsOpen, setSettingsOpen] = useState(
     !data.electricalSession?.technician,
   );
-  const [textResult, setTextResult] = useState(false);
-  const [photoError, setPhotoError] = useState("");
-  const [photoBusy, setPhotoBusy] = useState(false);
+  const [busyPhotos, setBusyPhotos] = useState(0);
+  const photoBusy = busyPhotos > 0;
   useEffect(() => {
     if (!photoBusy) return;
     const guard = (event: BeforeUnloadEvent) => {
@@ -60,16 +324,12 @@ export function ElectricalMeasurements({ path }: { path: string }) {
   const active = measurements.find(
     (measurement) => measurement.id === session.activeMeasurementId,
   );
-  const draft = active ?? {
-    point: "",
-    type: "continuity" as MeasurementType,
-    result: "",
-    unit: "Ω",
-    note: "",
-    assessment: "unassessed",
-    assessmentNote: "",
-    photo: undefined,
-  };
+  const activeKey = active ? pointKey(active) : `point-${session.id}`;
+  const activeRows = active
+    ? measurements.filter(
+        (item) => pointKey(item) === activeKey && item.sessionId === session.id,
+      )
+    : [];
   const route = path.split("?")[0].split("/");
   const routeId = route[3];
   const unknownRoute =
@@ -140,56 +400,83 @@ export function ElectricalMeasurements({ path }: { path: string }) {
       return { ...previous, electricalSession: next };
     });
   };
-  const updateMeasurement = (patch: Partial<ElectricalMeasurement>) => {
+  const updateMeasurement: PatchRow = (type, patch, recordId) => {
+    setSettingsOpen(false);
+    const existing = recordId
+      ? measurements.find((item) => item.id === recordId)
+      : activeRows.find((item) => item.type === type);
+    const targetId = existing?.id ?? recordId ?? crypto.randomUUID();
+    const groupId = existing ? pointKey(existing) : (activeKey ?? targetId);
+    const template = {
+      ...createMeasurement(session, type),
+      id: targetId,
+      pointId: groupId,
+      point: active?.point ?? "",
+    };
     setData((previous) => {
-      const currentSession = previous.electricalSession ?? fallback;
-      const currentList = previous.electricalMeasurements ?? [];
-      const existing = currentList.find(
-        (item) => item.id === currentSession.activeMeasurementId,
-      );
-      const measurement = {
-        ...(existing ?? createMeasurement(currentSession)),
-        ...patch,
-      };
-      return {
-        ...previous,
-        electricalMeasurements: existing
-          ? currentList.map((item) =>
-              item.id === existing.id ? measurement : item,
-            )
-          : [...currentList, measurement],
-        electricalSession: {
-          ...currentSession,
-          activeMeasurementId: measurement.id,
-        },
-      };
-    });
-  };
-  const addPoint = (copy: boolean) => {
-    setData((previous) => {
-      const currentSession = previous.electricalSession ?? fallback;
       const list = previous.electricalMeasurements ?? [];
-      const existing = list.find(
-        (item) => item.id === currentSession.activeMeasurementId,
-      );
-      const measurement =
-        copy && existing
-          ? copyMeasurementPoint(existing, currentSession)
-          : createMeasurement(currentSession);
+      const current = list.find((item) => item.id === targetId);
+      const measurement = { ...(current ?? template), ...patch };
+      const currentSession = previous.electricalSession ?? session;
       return {
         ...previous,
-        electricalMeasurements: [...list, measurement],
-        electricalSession: {
-          ...currentSession,
-          activeMeasurementId: measurement.id,
-        },
+        electricalMeasurements: current
+          ? list.map((item) => (item.id === targetId ? measurement : item))
+          : [...list, measurement],
+        electricalSession:
+          !currentSession.activeMeasurementId &&
+          currentSession.id === session.id
+            ? { ...currentSession, activeMeasurementId: targetId }
+            : currentSession,
       };
     });
-    setTextResult(false);
-    setPhotoError("");
+    return targetId;
+  };
+  const updatePointName = (point: string) => {
+    if (!active) {
+      updateMeasurement("continuity", { point });
+      return;
+    }
+    setData((previous) => ({
+      ...previous,
+      electricalMeasurements: (previous.electricalMeasurements ?? []).map(
+        (item) =>
+          pointKey(item) === activeKey && item.sessionId === session.id
+            ? { ...item, point }
+            : item,
+      ),
+    }));
+  };
+  const addPoint = () => {
+    const groupId = crypto.randomUUID();
+    const copied = (
+      activeRows.length
+        ? activeRows.map((source) => copyMeasurementPoint(source, session))
+        : [createMeasurement(session)]
+    ).map((measurement) => ({ ...measurement, pointId: groupId }));
+    setData((previous) => ({
+      ...previous,
+      electricalMeasurements: [
+        ...(previous.electricalMeasurements ?? []),
+        ...copied,
+      ],
+      electricalSession: {
+        ...(previous.electricalSession ?? session),
+        activeMeasurementId: copied[0].id,
+      },
+    }));
   };
   const readings = measurements.filter(
     (measurement) => measurement.sessionId === session.id,
+  );
+  const pointGroups = Array.from(
+    readings
+      .reduce((groups, measurement) => {
+        const key = pointKey(measurement);
+        groups.set(key, [...(groups.get(key) ?? []), measurement]);
+        return groups;
+      }, new Map<string, ElectricalMeasurement[]>())
+      .entries(),
   );
   const completed = readings.filter((measurement) =>
     hasMeasurementResult(measurement.result),
@@ -198,10 +485,6 @@ export function ElectricalMeasurements({ path }: { path: string }) {
     session.siteName.trim() || session.equipmentName.trim(),
   );
   const ready = hasContext && Boolean(session.technician.trim());
-  const numericType = draft.type !== "phase-sequence" && draft.type !== "other";
-  const resultParts = draft.result.match(/^([<>]=?|[≤≥])\s*(.*)$/);
-  const qualifier = resultParts?.[1] ?? "";
-  const resultValue = resultParts?.[2] ?? draft.result;
   const availableEquipment = data.equipment.filter(
     (equipment) => !session.siteId || equipment.siteId === session.siteId,
   );
@@ -447,257 +730,61 @@ export function ElectricalMeasurements({ path }: { path: string }) {
       )}
       <section
         className="electrical-editor"
-        aria-label={l("Mittauksen kirjaus", "Measurement entry")}
+        aria-label={l("Mittauspisteen kirjaukset", "Measurement point sheet")}
       >
-        <h2>{l("Mittaus", "Measurement")}</h2>
+        <div className="electrical-context-heading">
+          <h2>{l("Mittauspiste", "Measurement point")}</h2>
+          <span className="caption">
+            {
+              activeRows.filter((item) => hasMeasurementResult(item.result))
+                .length
+            }{" "}
+            {l("kirjattua", "recorded")}
+          </span>
+        </div>
         <fieldset disabled={!ready}>
           <label>
             {l("Mittauspiste tai ryhmä", "Measurement point or circuit")}
             <input
-              value={draft.point}
+              value={active?.point ?? ""}
               maxLength={200}
-              onChange={(event) =>
-                updateMeasurement({ point: event.target.value })
-              }
+              onChange={(event) => updatePointName(event.target.value)}
             />
           </label>
-          <label>
-            {l("Mittaustyyppi", "Measurement type")}
-            <select
-              value={draft.type}
-              onChange={(event) => {
-                const definition = definitions.find(
-                  (item) => item.type === event.target.value,
-                )!;
-                updateMeasurement({
-                  type: definition.type,
-                  unit: definition.unit,
-                  result: "",
-                  assessment: "unassessed",
-                  assessmentNote: "",
-                });
-                setTextResult(false);
-              }}
-            >
-              {definitions.map((definition) => (
-                <option key={definition.type} value={definition.type}>
-                  {definition[locale]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <ElectricalMeterHelp
-            meter={active?.meter ?? session.meter}
-            type={draft.type}
-            locale={locale}
-          />
-          <div className="electrical-result-row">
-            {numericType && !textResult && (
-              <label>
-                {l("Merkki", "Qualifier")}
-                <select
-                  aria-label={l("Vertailumerkki", "Qualifier")}
-                  value={qualifier}
-                  onChange={(event) =>
-                    updateMeasurement({
-                      result: `${event.target.value}${event.target.value && resultValue ? " " : ""}${resultValue}`,
-                      assessment: "unassessed",
-                      assessmentNote: "",
-                    })
-                  }
-                >
-                  <option value="">=</option>
-                  {[">", "<", "≥", "≤", ">=", "<="].map((symbol) => (
-                    <option key={symbol} value={symbol}>
-                      {symbol}
-                    </option>
-                  ))}
-                </select>
-              </label>
+          <p className="caption secondary">
+            {l(
+              "Luettelo on muistituki; tarvittavat mittaukset määräytyvät työstä. Tyhjä rivi ei tarkoita puuttuvaa pakollista mittausta eikä nollaa.",
+              "Use this list as a reminder; the work determines which measurements are needed. A blank row means neither a missing required measurement nor zero.",
             )}
-            <label className="electrical-result-value">
-              {l("Tulos", "Result")}
-              <input
-                className="mono"
-                type="text"
-                inputMode={numericType && !textResult ? "decimal" : "text"}
-                value={numericType && !textResult ? resultValue : draft.result}
-                maxLength={200}
-                onChange={(event) =>
-                  updateMeasurement({
-                    result:
-                      numericType && !textResult
-                        ? `${qualifier}${qualifier && event.target.value ? " " : ""}${event.target.value}`
-                        : event.target.value,
-                    assessment: "unassessed",
-                    assessmentNote: "",
-                  })
-                }
-              />
-            </label>
-            <label>
-              {l("Yksikkö", "Unit")}
-              <input
-                value={draft.unit}
-                maxLength={30}
-                onChange={(event) =>
-                  updateMeasurement({
-                    unit: event.target.value,
-                    assessment: "unassessed",
-                    assessmentNote: "",
-                  })
-                }
-              />
-            </label>
+          </p>
+          <div className="electrical-point-sheet">
+            {definitions.flatMap((definition) => {
+              const rows = activeRows.filter(
+                (item) => item.type === definition.type,
+              );
+              return (rows.length ? rows : [undefined]).map(
+                (measurement, index) => (
+                  <MeasurementRow
+                    key={`${activeKey}-${definition.type}-${index}`}
+                    type={definition.type}
+                    measurement={measurement}
+                    session={session}
+                    locale={locale}
+                    onPatch={updateMeasurement}
+                    onBusy={(busy) =>
+                      setBusyPhotos((count) =>
+                        Math.max(0, count + (busy ? 1 : -1)),
+                      )
+                    }
+                  />
+                ),
+              );
+            })}
           </div>
-          {numericType && (
-            <label className="checkbox">
-              <input
-                type="checkbox"
-                checked={textResult}
-                onChange={(event) => setTextResult(event.target.checked)}
-              />
-              {l(
-                "Tekstinäppäimistö / mittarin ilmoitus",
-                "Text keyboard / meter indication",
-              )}
-            </label>
-          )}
-          <label>
-            {l("Huomio (vapaaehtoinen)", "Note (optional)")}
-            <textarea
-              rows={2}
-              value={draft.note}
-              maxLength={4000}
-              onChange={(event) =>
-                updateMeasurement({ note: event.target.value })
-              }
-            />
-          </label>
-          <details>
-            <summary>
-              {l("Kuva ja mittaustiedot", "Photo and measurement details")}
-            </summary>
-            <label>
-              {l("Lisää kuva (vapaaehtoinen)", "Add photo (optional)")}
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                capture="environment"
-                disabled={photoBusy}
-                onChange={async (event) => {
-                  const file = event.target.files?.[0];
-                  event.target.value = "";
-                  if (!file) return;
-                  setPhotoError("");
-                  setPhotoBusy(true);
-                  const target = active ?? createMeasurement(session);
-                  if (!active)
-                    setData((previous) => ({
-                      ...previous,
-                      electricalMeasurements: [
-                        ...(previous.electricalMeasurements ?? []),
-                        target,
-                      ],
-                      electricalSession: {
-                        ...(previous.electricalSession ?? session),
-                        activeMeasurementId: target.id,
-                      },
-                    }));
-                  try {
-                    const photo = await prepareMeasurementPhoto(file);
-                    // Keep the upload attached to its original record even if another point is opened meanwhile.
-                    setData((previous) => {
-                      const list = previous.electricalMeasurements ?? [];
-                      const existing = list.find(
-                        (item) => item.id === target.id,
-                      );
-                      return {
-                        ...previous,
-                        electricalMeasurements: existing
-                          ? list.map((item) =>
-                              item.id === target.id ? { ...item, photo } : item,
-                            )
-                          : [...list, { ...target, photo }],
-                      };
-                    });
-                  } catch {
-                    setPhotoError(
-                      l(
-                        "Kuvaa ei voitu lisätä. Valitse JPG-, PNG- tai WebP-kuva (enintään 12 Mt); aiempi kuva säilyy.",
-                        "Could not add photo. Choose JPG, PNG or WebP (up to 12 MB); the previous photo is retained.",
-                      ),
-                    );
-                  } finally {
-                    setPhotoBusy(false);
-                  }
-                }}
-              />
-            </label>
-            {photoBusy && (
-              <p role="status">{l("Käsitellään kuvaa…", "Preparing photo…")}</p>
-            )}
-            {photoError && (
-              <p role="alert" className="danger-text">
-                {photoError}
-              </p>
-            )}
-            {draft.photo && (
-              <div>
-                <img
-                  className="electrical-photo"
-                  src={draft.photo}
-                  alt={l("Mittauksen liitekuva", "Measurement attachment")}
-                />
-                <button
-                  className="text-button"
-                  onClick={() => updateMeasurement({ photo: undefined })}
-                >
-                  {l("Poista kuva", "Remove photo")}
-                </button>
-              </div>
-            )}
-            {active && (
-              <p className="caption">
-                {new Date(active.measuredAt).toLocaleString(
-                  locale === "fi" ? "fi-FI" : "en-GB",
-                )}{" "}
-                · {active.technician} ·{" "}
-                {[
-                  active.meter.brand,
-                  active.meter.model,
-                  active.meter.serialNumber,
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-              </p>
-            )}
-            {active &&
-              (active.technician !== session.technician ||
-                JSON.stringify(active.meter) !==
-                  JSON.stringify(session.meter)) && (
-                <button
-                  className="secondary-button"
-                  onClick={() =>
-                    updateMeasurement({
-                      technician: session.technician,
-                      meter: { ...session.meter },
-                      assessment: "unassessed",
-                      assessmentNote: "",
-                    })
-                  }
-                >
-                  {l(
-                    "Päivitä tämän mittauksen tekijä/mittari",
-                    "Update this measurement's technician/meter",
-                  )}
-                </button>
-              )}
-          </details>
           <div className="field-actions">
             <button
               className="primary"
-              onClick={() => addPoint(true)}
+              onClick={addPoint}
               disabled={!active || photoBusy}
             >
               <CopyPlus size={18} />
@@ -706,88 +793,93 @@ export function ElectricalMeasurements({ path }: { path: string }) {
                 "Next point from previous",
               )}
             </button>
-            <button
-              className="secondary-button"
-              onClick={() => addPoint(false)}
-              disabled={photoBusy}
-            >
-              <Plus size={18} />
-              {l("Uusi mittaus", "New measurement")}
-            </button>
           </div>
         </fieldset>
         <p className="caption secondary">
           {l(
-            "Kirjattu tulos odottaa arviointia. Tyhjä tulos säilyy luonnoksena eikä tarkoita nollaa.",
-            "A recorded result awaits assessment. An empty result remains a draft and does not mean zero.",
+            "Kirjattu tulos odottaa arviointia. Raporttiin valitaan vain tarvittavat kirjaukset.",
+            "A recorded result awaits assessment. Select only the relevant records for the report.",
           )}
         </p>
       </section>
       <section
         className="electrical-readings"
-        aria-label={l("Mittauskerran kirjaukset", "Session records")}
+        aria-label={l("Mittauskerran pisteet", "Session points")}
       >
-        <h2>
-          {l("Mittauskerran kirjaukset", "Session records")} ·{" "}
-          {completed.length}
-        </h2>
-        {readings.length === 0 ? (
+        <div className="electrical-context-heading">
+          <h2>
+            {l("Mittauskerran pisteet", "Session points")} ·{" "}
+            {pointGroups.length}
+          </h2>
+          <button
+            className="secondary-button"
+            disabled={!completed.length}
+            onClick={() =>
+              go(
+                `/electrical-reports/new?session=${encodeURIComponent(session.id)}`,
+              )
+            }
+          >
+            <FileText size={18} />
+            {l("Luo raportti", "Create report")}
+          </button>
+        </div>
+        {!pointGroups.length ? (
           <p className="secondary">
-            {l("Ei vielä mittauksia.", "No measurements yet.")}
+            {l("Ei vielä kirjauksia.", "No records yet.")}
           </p>
         ) : (
           <ul>
-            {readings.map((measurement) => (
-              <li key={measurement.id}>
-                <button
-                  className={`electrical-reading ${measurement.id === active?.id ? "active" : ""}`}
-                  aria-pressed={measurement.id === active?.id}
-                  onClick={() => {
-                    updateSession({ activeMeasurementId: measurement.id });
-                    setPhotoError("");
-                  }}
-                >
-                  <span>
+            {pointGroups.map(([key, rows]) => {
+              const filled = rows.filter((measurement) =>
+                hasMeasurementResult(measurement.result),
+              );
+              const blank =
+                definitions.length -
+                new Set(filled.map((measurement) => measurement.type)).size;
+              return (
+                <li key={key}>
+                  <button
+                    className={`electrical-point-summary ${key === activeKey ? "active" : ""}`}
+                    aria-pressed={key === activeKey}
+                    onClick={() =>
+                      updateSession({ activeMeasurementId: rows[0].id })
+                    }
+                  >
                     <strong>
-                      {measurement.point || l("Nimetön piste", "Unnamed point")}
+                      {rows[0].point || l("Nimetön piste", "Unnamed point")}
                     </strong>
-                    <small>
-                      {
-                        definitions.find(
-                          (item) => item.type === measurement.type,
-                        )?.[locale]
-                      }
-                    </small>
-                  </span>
-                  <span>
-                    <strong className="mono">
-                      {hasMeasurementResult(measurement.result)
-                        ? measurementResultText(measurement)
-                        : l("Luonnos", "Draft")}
-                    </strong>
-                    <small>
-                      {measurement.assessment === "unassessed"
-                        ? l("Arvioimatta", "Unassessed")
-                        : l("Arvioitu", "Assessed")}
-                    </small>
-                  </span>
-                </button>
-              </li>
-            ))}
+                    <span className="caption">
+                      {filled.length} {l("kirjattua", "recorded")} · {blank}{" "}
+                      {l("tyhjää", "blank")}
+                    </span>
+                    <span className="electrical-point-values">
+                      {filled.length ? (
+                        filled.map((measurement) => (
+                          <span key={measurement.id}>
+                            <span>
+                              {shortLabels[measurement.type][locale]}
+                              <small className="electrical-row-status">
+                                {measurementStatus(measurement, locale)}
+                              </small>
+                            </span>
+                            <strong className="mono">
+                              {measurementResultText(measurement)}
+                            </strong>
+                          </span>
+                        ))
+                      ) : (
+                        <span>
+                          {l("Ei kirjattuja tuloksia", "No recorded results")}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
-        <button
-          className="secondary-button"
-          disabled={!completed.length}
-          onClick={() =>
-            go(
-              `/electrical-reports/new?session=${encodeURIComponent(session.id)}`,
-            )
-          }
-        >
-          <FileText size={18} />
-          {l("Luo raportti", "Create report")}
-        </button>
       </section>
     </div>
   );

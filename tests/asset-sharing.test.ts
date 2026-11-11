@@ -1,4 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+vi.mock("../apps/web/src/release", () => ({ appVersion: "test" }));
+import { recoverAssetReceipt } from "../apps/web/src/asset-sharing";
 import { emptyData, parseBackup } from "../apps/web/src/storage";
 import {
   createElectricalReport,
@@ -354,6 +356,220 @@ describe("shared asset document boundary", () => {
     ).toBe(403);
     expect(
       (await handler(request("", "POST", { ...link, snapshot }))).status,
+    ).toBe(403);
+  });
+  it("recovers the latest receipt after a lost PUT without overwriting a different snapshot, then revokes", async () => {
+    const store = new MemoryStore();
+    const handler = sharedAssetsHandler(store);
+    const data = fixture();
+    const link = data.sharedLinks![0];
+    const initial = buildAssetSnapshot(data, "site", "site-1", now);
+    const originalReceipt = await (
+      await handler(request("", "POST", { ...link, snapshot: initial }))
+    ).json();
+    const remote = structuredClone(initial);
+    remote.data.sites[0].address = "Successfully stored newer snapshot";
+    const successfulPut = await handler(
+      request(
+        `/${link.id}`,
+        "PUT",
+        { snapshot: remote, expectedEtag: originalReceipt.etag },
+        link.writeSecret,
+      ),
+    );
+    expect(successfulPut.status).toBe(200); // Its response is deliberately not used to update the local receipt.
+    expect(
+      (
+        await handler(
+          request(
+            `/${link.id}`,
+            "PUT",
+            { snapshot: initial, expectedEtag: originalReceipt.etag },
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(409);
+    const recovered = await handler(
+      request(`/${link.id}/receipt`, "POST", undefined, link.writeSecret),
+    );
+    expect(recovered.status).toBe(200);
+    const receipt = await recovered.json();
+    expect(receipt.etag).not.toBe(originalReceipt.etag);
+    expect(receipt.publishedFingerprint).toBe(
+      await snapshotFingerprint(remote),
+    );
+    expect(store.entries.get(link.id)!.data.snapshot).toEqual(remote);
+    expect(
+      (
+        await handler(
+          request(
+            `/${link.id}`,
+            "DELETE",
+            { expectedEtag: receipt.etag },
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(200);
+    expect(
+      (
+        await handler(
+          request(`/${link.id}/read`, "POST", { readCode: link.readCode }),
+        )
+      ).status,
+    ).toBe(403);
+  });
+  it("recovers a credential-only owner receipt even when local records exceed the upload limit", async () => {
+    const store = new MemoryStore();
+    const handler = sharedAssetsHandler(store);
+    const data = fixture();
+    const link = data.sharedLinks![0];
+    const initial = buildAssetSnapshot(data, "site", "site-1", now);
+    const original = await (
+      await handler(request("", "POST", { ...link, snapshot: initial }))
+    ).json();
+    const remote = structuredClone(initial);
+    remote.data.sites[0].address = "Latest stored version";
+    const update = await handler(
+      request(
+        `/${link.id}`,
+        "PUT",
+        { expectedEtag: original.etag, snapshot: remote },
+        link.writeSecret,
+      ),
+    );
+    expect(update.status).toBe(200);
+    const latest = await update.json();
+    data.electricalMeasurements = Array.from({ length: 3 }, (_, index) => ({
+      ...data.electricalMeasurements![0],
+      id: `large-photo-${index}`,
+      photo: `data:image/png;base64,${"A".repeat(1_600_000)}`,
+    }));
+    const oversized = buildAssetSnapshot(data, "site", "site-1", now);
+    expect(JSON.stringify(oversized).length).toBeGreaterThan(4_000_000);
+    const received: Request[] = [];
+    vi.stubGlobal("window", { location: { origin: link.origin } });
+    vi.stubGlobal("fetch", async (input: string, init?: RequestInit) => {
+      const incoming = new Request(new URL(input, link.origin), init);
+      received.push(incoming);
+      return handler(incoming);
+    });
+    try {
+      const receipt = await recoverAssetReceipt({ ...link, ...original });
+      expect(receipt).toEqual(latest);
+      expect(received).toHaveLength(1);
+      expect(new URL(received[0].url).pathname).toBe(
+        `/api/shared-assets/${link.id}/receipt`,
+      );
+      expect(received[0].method).toBe("POST");
+      expect(received[0].body).toBeNull();
+      expect(received[0].headers.get("authorization")).toBe(
+        `Bearer ${link.writeSecret}`,
+      );
+      expect(store.entries.get(link.id)!.data.snapshot).toEqual(remote);
+      expect(
+        (
+          await handler(
+            request(
+              `/${link.id}`,
+              "DELETE",
+              { expectedEtag: receipt.etag },
+              link.writeSecret,
+            ),
+          )
+        ).status,
+      ).toBe(200);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+  it("receipt recovery requires the owner key and denies missing, revoked and non-POST routes", async () => {
+    const store = new MemoryStore();
+    const handler = sharedAssetsHandler(store);
+    const data = fixture();
+    const link = data.sharedLinks![0];
+    const snapshot = buildAssetSnapshot(data, "site", "site-1", now);
+    const created = await (
+      await handler(request("", "POST", { ...link, snapshot }))
+    ).json();
+    for (const secret of [undefined, link.readCode, "0".repeat(64)])
+      expect(
+        (
+          await handler(
+            request(`/${link.id}/receipt`, "POST", undefined, secret),
+          )
+        ).status,
+      ).toBe(403);
+    expect(
+      (
+        await handler(
+          request(
+            `/${"f".repeat(32)}/receipt`,
+            "POST",
+            undefined,
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(403);
+    for (const method of ["GET", "HEAD", "PUT", "DELETE"])
+      expect(
+        (
+          await handler(
+            request(`/${link.id}/receipt`, method, undefined, link.writeSecret),
+          )
+        ).status,
+      ).toBe(403);
+    expect(
+      (
+        await handler(
+          request(
+            `/${link.id}/receipt`,
+            "POST",
+            { padding: "x".repeat(1025) },
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(413);
+    const crossOrigin = request(
+      `/${link.id}/receipt`,
+      "POST",
+      undefined,
+      link.writeSecret,
+    );
+    crossOrigin.headers.set("Origin", "https://other.example");
+    expect((await handler(crossOrigin)).status).toBe(403);
+    const recovered = await handler(
+      request(`/${link.id}/receipt`, "POST", undefined, link.writeSecret),
+    );
+    expect(recovered.status).toBe(200);
+    const body = await recovered.text();
+    expect(body.length).toBeLessThan(512);
+    expect(JSON.parse(body)).toEqual(created);
+    expect(body).not.toContain("snapshot");
+    expect(body).not.toContain(link.writeSecret);
+    expect(body).not.toContain(link.readCode);
+    expect(recovered.headers.get("cache-control")).toBe("no-store");
+    expect(
+      (
+        await handler(
+          request(
+            `/${link.id}`,
+            "DELETE",
+            { expectedEtag: created.etag },
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(200);
+    expect(
+      (
+        await handler(
+          request(`/${link.id}/receipt`, "POST", undefined, link.writeSecret),
+        )
+      ).status,
     ).toBe(403);
   });
   it("bounds payloads, validates snapshots, and blocks cross-origin requests", async () => {

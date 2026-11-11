@@ -8,6 +8,7 @@ import {
   snapshotFingerprint,
   newColdReport,
   publishAsset,
+  recoverAssetReceipt,
   revokeSharedAsset,
 } from "../asset-sharing";
 import { AssetQr } from "../components/AssetQr";
@@ -41,6 +42,10 @@ export function AssetDetail({ path }: { path: string }) {
   const [error, setError] = useState("");
   const [preview, setPreview] = useState(false);
   const [fingerprint, setFingerprint] = useState("");
+  const [needsRecovery, setNeedsRecovery] = useState(false);
+  const [recoveryNotice, setRecoveryNotice] = useState<
+    "matched" | "different" | null
+  >(null);
   const snapshot = useMemo(
     () => (root ? buildAssetSnapshot(data, type, id) : null),
     [data, type, id, root],
@@ -78,7 +83,7 @@ export function AssetDetail({ path }: { path: string }) {
     link?.publishedFingerprint && fingerprint !== link.publishedFingerprint,
   );
   async function publish() {
-    if (!snapshot || foreignOrigin) return;
+    if (!snapshot || foreignOrigin || needsRecovery) return;
     setBusy(true);
     setError("");
     try {
@@ -90,19 +95,56 @@ export function AssetDetail({ path }: { path: string }) {
       const receipt = await publishAsset(credentials, snapshot);
       await persistSharedLink({ ...credentials, ...receipt });
       setPreview(false);
+      setNeedsRecovery(false);
+      setRecoveryNotice(null);
     } catch (failure) {
+      if (
+        link?.etag &&
+        !(failure instanceof Error && failure.message === "too-large")
+      )
+        setNeedsRecovery(true);
+      setRecoveryNotice(null);
       setError(
         failure instanceof Error && failure.message === "conflict"
           ? fi
-            ? "Palvelinkopio on muuttunut toisessa laitteessa. Palauta uusin varmuuskopio ennen päivittämistä."
-            : "The server copy changed on another device. Restore its latest backup before updating."
+            ? "Palvelinkopion hallintatiedot ovat vanhentuneet. Päivitys on voinut onnistua vastauksen katkettua, tai kopio on muuttunut toisessa laitteessa. Palauta jaon hallintatiedot ennen jatkamista."
+            : "The server receipt is out of date. An update may have succeeded before its response was lost, or another device changed the copy. Recover sharing details before continuing."
           : failure instanceof Error && failure.message === "too-large"
             ? fi
               ? "Jaettava sisältö ylittää 4 Mt. Vähennä kuvia ennen jakamista. Paikalliset tiedot säilyvät."
               : "The shared document exceeds 4 MB. Reduce images before sharing. Local data is retained."
-            : fi
-              ? "Palvelinjako ei onnistunut. Paikalliset tiedot ja jakotunniste säilyvät; yritä uudelleen verkkoyhteydellä."
-              : "Sharing failed. Local records and sharing credentials are retained; retry when connected.",
+            : link?.etag
+              ? fi
+                ? "Päivityksen tilaa ei voitu varmistaa. Paikalliset tiedot säilyvät. Palauta jaon hallintatiedot ennen jatkamista."
+                : "The update outcome could not be confirmed. Local data is retained. Recover sharing details before continuing."
+              : fi
+                ? "Palvelinjako ei onnistunut. Paikalliset tiedot ja jakotunniste säilyvät; yritä uudelleen verkkoyhteydellä."
+                : "Sharing failed. Local records and sharing credentials are retained; retry when connected.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function recover() {
+    if (!link || !snapshot || foreignOrigin) return;
+    setBusy(true);
+    setError("");
+    try {
+      const receipt = await recoverAssetReceipt(link);
+      await persistSharedLink({ ...link, ...receipt });
+      const localFingerprint = await snapshotFingerprint(snapshot);
+      setRecoveryNotice(
+        receipt.publishedFingerprint === localFingerprint
+          ? "matched"
+          : "different",
+      );
+      setNeedsRecovery(false);
+      setPreview(false);
+    } catch {
+      setError(
+        fi
+          ? "Jaon hallintatietojen palautus ei onnistunut. Paikalliset tiedot säilyvät. Yritä uudelleen verkkoyhteydellä."
+          : "Sharing details could not be recovered. Local data is retained. Retry when connected.",
       );
     } finally {
       setBusy(false);
@@ -127,12 +169,20 @@ export function AssetDetail({ path }: { path: string }) {
         ...current,
         sharedLinks: current.sharedLinks?.filter((item) => item.id !== link.id),
       }));
-    } catch {
-      setError(
-        fi
-          ? "Jaon sulkeminen epäonnistui. Linkki voi olla yhä käytössä."
-          : "Revocation failed. The link may still be active.",
-      );
+    } catch (failure) {
+      if (failure instanceof Error && failure.message === "conflict") {
+        setNeedsRecovery(true);
+        setError(
+          fi
+            ? "Jaon hallintatiedot ovat vanhentuneet. Palauta jaon hallintatiedot ja sulje sitten jako."
+            : "Sharing details are out of date. Recover sharing details, then revoke the share.",
+        );
+      } else
+        setError(
+          fi
+            ? "Jaon sulkeminen epäonnistui. Linkki voi olla yhä käytössä."
+            : "Revocation failed. The link may still be active.",
+        );
     } finally {
       setBusy(false);
     }
@@ -246,6 +296,38 @@ export function AssetDetail({ path }: { path: string }) {
               ? "Esikatsele jaettava sisältö"
               : "Preview shared content"}
         </button>
+        {link?.publishedAt && (
+          <div className="button-group">
+            <button
+              className="secondary-button"
+              disabled={busy || foreignOrigin || persistenceStatus !== "saved"}
+              onClick={() => void recover()}
+            >
+              {fi ? "Palauta jaon hallintatiedot" : "Recover sharing details"}
+            </button>
+          </div>
+        )}
+        {recoveryNotice === "matched" && (
+          <p className="notice" role="status">
+            {fi
+              ? "Jaon hallintatiedot palautettu. Palvelinkopio vastaa paikallisia tietoja."
+              : "Sharing details recovered. The server copy matches local records."}
+          </p>
+        )}
+        {recoveryNotice === "different" && link && (
+          <p className="notice warning" role="status">
+            {fi
+              ? "Palvelinkopio eroaa paikallisista tiedoista. Se voi sisältää uudempia tietoja. Tarkista jaettu kopio lukukoodilla ennen kuin korvaat sen paikallisilla tiedoilla."
+              : "The server copy differs from local records and may contain newer information. Review the shared copy with its read code before replacing it with local records."}{" "}
+            <a
+              href={sharedAssetUrl(link.id, link.origin)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {fi ? "Avaa palvelinkopio" : "Open server copy"}
+            </a>
+          </p>
+        )}
         {preview && (
           <div className="asset-record">
             <h3>
@@ -268,20 +350,29 @@ export function AssetDetail({ path }: { path: string }) {
             </p>
             <button
               className="primary"
-              disabled={busy || persistenceStatus !== "saved" || foreignOrigin}
+              disabled={
+                busy ||
+                persistenceStatus !== "saved" ||
+                foreignOrigin ||
+                needsRecovery
+              }
               onClick={() => void publish()}
             >
               {busy
                 ? fi
                   ? "Jaetaan…"
                   : "Sharing…"
-                : link?.etag
+                : recoveryNotice === "different"
                   ? fi
-                    ? "Päivitä palvelinkopio"
-                    : "Update server copy"
-                  : fi
-                    ? "Jaa palvelimelle ja luo QR"
-                    : "Share to server and create QR"}
+                    ? "Korvaa palvelinkopio paikallisilla tiedoilla"
+                    : "Replace server copy with local records"
+                  : link?.etag
+                    ? fi
+                      ? "Päivitä palvelinkopio"
+                      : "Update server copy"
+                    : fi
+                      ? "Jaa palvelimelle ja luo QR"
+                      : "Share to server and create QR"}
             </button>
           </div>
         )}
