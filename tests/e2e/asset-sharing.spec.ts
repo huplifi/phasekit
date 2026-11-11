@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import jsQR from "jsqr";
 import { PNG } from "pngjs";
 import { createSharedAssetLink } from "../../apps/web/src/asset-sharing-types";
+import { buildAssetSnapshot } from "../../apps/web/src/asset-snapshot";
 import { emptyData } from "../../apps/web/src/storage";
 import { sharedAssetsHandler } from "../../netlify/lib/shared-assets";
 import type {
@@ -305,4 +306,207 @@ test("a restored foreign-origin share retains the original QR and cannot write t
     `https://original.phasekit.example/#/shared/${link.id}`,
   );
   expect(requests).toBe(0);
+});
+
+test("a lost successful PUT can recover its owner receipt and revoke without re-publishing", async ({
+  page,
+}) => {
+  const store = new MemoryStore();
+  const handler = sharedAssetsHandler(store);
+  await page.goto("/");
+  const origin = new URL(page.url()).origin;
+  const link = createSharedAssetLink("site", "site-qr", origin);
+  const original = buildAssetSnapshot(fixture(), "site", "site-qr", now);
+  const created = await handler(
+    new Request(`${origin}/api/shared-assets`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...link, snapshot: original }),
+    }),
+  );
+  const oldReceipt = await created.json();
+  const data = { ...fixture(), sharedLinks: [{ ...link, ...oldReceipt }] };
+  data.sites[0].address = "Local update whose successful response is lost";
+  let putCount = 0;
+  await page.route("**/api/shared-assets**", async (route) => {
+    const input = route.request();
+    const response = await handler(
+      new Request(input.url(), {
+        method: input.method(),
+        headers: input.headers(),
+        body: input.postData() ?? undefined,
+      }),
+    );
+    if (input.method() === "PUT") {
+      putCount++;
+      if (putCount === 1) {
+        await route.abort();
+        return;
+      }
+    }
+    await route.fulfill({
+      status: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
+      body: await response.text(),
+    });
+  });
+  await page.evaluate(async (value) => {
+    const opening = indexedDB.open("phasekit", 1);
+    await new Promise<void>((resolve) => {
+      opening.onsuccess = () => {
+        const db = opening.result;
+        const tx = db.transaction("user", "readwrite");
+        tx.objectStore("user").put(value, "state");
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+      };
+    });
+  }, data);
+  await page.reload();
+  await page.goto("/#/assets/site/site-qr");
+  await page
+    .getByRole("button", { name: "Esikatsele jaettava sisältö" })
+    .click();
+  await page
+    .getByRole("button", { name: "Päivitä palvelinkopio", exact: true })
+    .click();
+  await expect(page.getByRole("alert")).toContainText(
+    "Palauta jaon hallintatiedot",
+  );
+  await expect(
+    page.getByRole("button", { name: "Päivitä palvelinkopio", exact: true }),
+  ).toBeDisabled();
+  expect(store.entries.get(link.id)!.data.snapshot.data.sites[0].address).toBe(
+    data.sites[0].address,
+  );
+  await page
+    .getByRole("button", { name: "Palauta jaon hallintatiedot", exact: true })
+    .click();
+  await expect(
+    page.getByText(
+      "Jaon hallintatiedot palautettu. Palvelinkopio vastaa paikallisia tietoja.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  expect(putCount).toBe(1);
+  page.once("dialog", (dialog) => dialog.accept());
+  await page
+    .getByRole("button", { name: "Sulje jaettu linkki", exact: true })
+    .click();
+  await expect(page.getByAltText("QR-tarra: Testikohde")).toHaveCount(0);
+  expect(store.entries.get(link.id)!.data.revoked).toBe(true);
+  expect(putCount).toBe(1);
+});
+
+test("recovering a stale receipt preserves the newer server snapshot until explicitly reviewed replacement", async ({
+  page,
+}) => {
+  const store = new MemoryStore();
+  const handler = sharedAssetsHandler(store);
+  await page.goto("/");
+  const origin = new URL(page.url()).origin;
+  const link = createSharedAssetLink("site", "site-qr", origin);
+  const original = buildAssetSnapshot(fixture(), "site", "site-qr", now);
+  const created = await handler(
+    new Request(`${origin}/api/shared-assets`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...link, snapshot: original }),
+    }),
+  );
+  const oldReceipt = await created.json();
+  const newer = structuredClone(original);
+  newer.data.sites[0].address =
+    "Newer server snapshot from another owner device";
+  const remoteUpdate = await handler(
+    new Request(`${origin}/api/shared-assets/${link.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${link.writeSecret}`,
+      },
+      body: JSON.stringify({ expectedEtag: oldReceipt.etag, snapshot: newer }),
+    }),
+  );
+  expect(remoteUpdate.status).toBe(200);
+  const data = { ...fixture(), sharedLinks: [{ ...link, ...oldReceipt }] };
+  data.sites[0].address = "Different local records";
+  let putCount = 0;
+  await page.route("**/api/shared-assets**", async (route) => {
+    const input = route.request();
+    if (input.method() === "PUT") putCount++;
+    const response = await handler(
+      new Request(input.url(), {
+        method: input.method(),
+        headers: input.headers(),
+        body: input.postData() ?? undefined,
+      }),
+    );
+    await route.fulfill({
+      status: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
+      body: await response.text(),
+    });
+  });
+  await page.evaluate(async (value) => {
+    const opening = indexedDB.open("phasekit", 1);
+    await new Promise<void>((resolve) => {
+      opening.onsuccess = () => {
+        const db = opening.result;
+        const tx = db.transaction("user", "readwrite");
+        tx.objectStore("user").put(value, "state");
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+      };
+    });
+  }, data);
+  await page.reload();
+  await page.goto("/#/assets/site/site-qr");
+  await page
+    .getByRole("button", { name: "Esikatsele jaettava sisältö" })
+    .click();
+  await page
+    .getByRole("button", { name: "Päivitä palvelinkopio", exact: true })
+    .click();
+  await expect(page.getByRole("alert")).toContainText(
+    "Palauta jaon hallintatiedot",
+  );
+  await page
+    .getByRole("button", { name: "Palauta jaon hallintatiedot", exact: true })
+    .click();
+  await expect(
+    page.getByText("Palvelinkopio eroaa paikallisista tiedoista.", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  expect(store.entries.get(link.id)!.data.snapshot.data.sites[0].address).toBe(
+    newer.data.sites[0].address,
+  );
+  expect(putCount).toBe(1);
+  await expect(
+    page.getByRole("button", {
+      name: "Korvaa palvelinkopio paikallisilla tiedoilla",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Esikatsele jaettava sisältö" })
+    .click();
+  await page
+    .getByRole("button", {
+      name: "Korvaa palvelinkopio paikallisilla tiedoilla",
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.getByText("Vastaa paikallisia tietoja", { exact: false }),
+  ).toBeVisible();
+  expect(store.entries.get(link.id)!.data.snapshot.data.sites[0].address).toBe(
+    data.sites[0].address,
+  );
+  expect(putCount).toBe(2);
 });

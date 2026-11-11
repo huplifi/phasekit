@@ -356,6 +356,68 @@ describe("shared asset document boundary", () => {
       (await handler(request("", "POST", { ...link, snapshot }))).status,
     ).toBe(403);
   });
+  it("recovers the latest receipt after a lost PUT without overwriting a different snapshot, then revokes", async () => {
+    const store = new MemoryStore();
+    const handler = sharedAssetsHandler(store);
+    const data = fixture();
+    const link = data.sharedLinks![0];
+    const initial = buildAssetSnapshot(data, "site", "site-1", now);
+    const originalReceipt = await (
+      await handler(request("", "POST", { ...link, snapshot: initial }))
+    ).json();
+    const remote = structuredClone(initial);
+    remote.data.sites[0].address = "Successfully stored newer snapshot";
+    const successfulPut = await handler(
+      request(
+        `/${link.id}`,
+        "PUT",
+        { snapshot: remote, expectedEtag: originalReceipt.etag },
+        link.writeSecret,
+      ),
+    );
+    expect(successfulPut.status).toBe(200); // Its response is deliberately not used to update the local receipt.
+    expect(
+      (
+        await handler(
+          request(
+            `/${link.id}`,
+            "PUT",
+            { snapshot: initial, expectedEtag: originalReceipt.etag },
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(409);
+    const recovered = await handler(
+      request("", "POST", { ...link, snapshot: initial }),
+    );
+    expect(recovered.status).toBe(200);
+    const receipt = await recovered.json();
+    expect(receipt.etag).not.toBe(originalReceipt.etag);
+    expect(receipt.publishedFingerprint).toBe(
+      await snapshotFingerprint(remote),
+    );
+    expect(store.entries.get(link.id)!.data.snapshot).toEqual(remote);
+    expect(
+      (
+        await handler(
+          request(
+            `/${link.id}`,
+            "DELETE",
+            { expectedEtag: receipt.etag },
+            link.writeSecret,
+          ),
+        )
+      ).status,
+    ).toBe(200);
+    expect(
+      (
+        await handler(
+          request(`/${link.id}/read`, "POST", { readCode: link.readCode }),
+        )
+      ).status,
+    ).toBe(403);
+  });
   it("bounds payloads, validates snapshots, and blocks cross-origin requests", async () => {
     const store = new MemoryStore();
     const handler = sharedAssetsHandler(store);

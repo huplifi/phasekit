@@ -242,18 +242,6 @@ export function Saved({
           <button
             className="secondary-button"
             type="button"
-            onClick={() => go("/electrical-reports/new")}
-          >
-            <Plus size={18} />
-            {l(
-              data.locale,
-              "Uusi sähköpöytäkirja",
-              "New electrical inspection",
-            )}
-          </button>
-          <button
-            className="secondary-button"
-            type="button"
             onClick={() => go("/equipment")}
           >
             {l(data.locale, "Laitteet ja kohteet", "Equipment and sites")}

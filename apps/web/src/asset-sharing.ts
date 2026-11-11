@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { FieldReport, EquipmentRecord, SiteRecord } from "./storage";
 import type { SharedAssetLink } from "./asset-sharing-types";
 import { equipmentReportPatch } from "./equipment-report-defaults";
@@ -46,36 +47,59 @@ async function responseData(response: Response) {
     );
   return await response.json();
 }
+const receiptSchema = z.object({
+  etag: z.string().min(1).max(200),
+  publishedAt: z.iso.datetime(),
+  publishedFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
+});
+export type SharedAssetReceipt = z.infer<typeof receiptSchema>;
+async function requestCreationReceipt(
+  link: SharedAssetLink,
+  snapshot: AssetSnapshot,
+): Promise<SharedAssetReceipt> {
+  if (link.origin !== window.location.origin) throw new Error("foreign-origin");
+  const response = await fetch(endpoint, {
+    method: "POST",
+    cache: "no-store",
+    referrerPolicy: "no-referrer",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: link.id,
+      readCode: link.readCode,
+      writeSecret: link.writeSecret,
+      snapshot,
+    }),
+  });
+  return receiptSchema.parse(await responseData(response));
+}
 export async function publishAsset(
   link: SharedAssetLink,
   snapshot: AssetSnapshot,
-): Promise<{
-  etag: string;
-  publishedAt: string;
-  publishedFingerprint: string;
-}> {
+): Promise<SharedAssetReceipt> {
   if (link.origin !== window.location.origin) throw new Error("foreign-origin");
-  const update = Boolean(link.etag);
-  const response = await fetch(update ? `${endpoint}/${link.id}` : endpoint, {
-    method: update ? "PUT" : "POST",
+  if (!link.etag) return requestCreationReceipt(link, snapshot);
+  const response = await fetch(`${endpoint}/${link.id}`, {
+    method: "PUT",
     cache: "no-store",
     referrerPolicy: "no-referrer",
     headers: {
       "Content-Type": "application/json",
-      ...(update ? { Authorization: `Bearer ${link.writeSecret}` } : {}),
+      Authorization: `Bearer ${link.writeSecret}`,
     },
-    body: JSON.stringify(
-      update
-        ? { snapshot, expectedEtag: link.etag }
-        : {
-            id: link.id,
-            readCode: link.readCode,
-            writeSecret: link.writeSecret,
-            snapshot,
-          },
-    ),
+    body: JSON.stringify({ snapshot, expectedEtag: link.etag }),
   });
-  return responseData(response);
+  return receiptSchema.parse(await responseData(response));
+}
+/** Explicit owner action: the idempotent POST returns the current stored
+ * receipt without replacing an existing snapshot, even when local data differs.
+ * Never follow this with an automatic PUT; the owner must review and publish.
+ */
+export async function recoverAssetReceipt(
+  link: SharedAssetLink,
+  snapshot: AssetSnapshot,
+): Promise<SharedAssetReceipt> {
+  if (!link.etag && !link.publishedAt) throw new Error("not-published");
+  return requestCreationReceipt(link, snapshot);
 }
 export async function readSharedAsset(
   id: string,

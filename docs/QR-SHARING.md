@@ -29,6 +29,10 @@ favourites and sharing credentials are excluded by an explicit schema allowlist.
 - Creating a share durably saves the ID and both credentials locally before
   sending anything. If the first response is lost, retrying uses the same
   credentials/ID and returns the existing receipt without overwriting it.
+- After a lost update response or a stale-revision conflict, **Recover sharing
+  details** authenticates with the existing credentials and retrieves the current
+  server receipt without replacing its snapshot. Matching content is confirmed;
+  different content is flagged for review before an explicit replacement.
 - Keep a backup to retain editing access on another device. Lost editing keys
   cannot be recovered through the read code. Deleting a local asset does not
   revoke its previously shared server copy; revoke it explicitly first.
@@ -69,8 +73,10 @@ The function bounds bodies to 4,000,000 bytes while streaming, validates all
 record types, rejects duplicate IDs and rejects unrelated embedded electrical
 readings. Netlify's edge configuration rate-limits the endpoint to 30 requests
 per 60 seconds per IP/domain combination. There are no in-memory security
-counters. Edge rate enforcement needs verification on an authorized deployment;
-local handler tests do not claim to prove the hosted edge policy. Creation may
+counters. The beta deployment returned HTTP 429 after crossing the threshold and allowing
+Netlify’s documented enforcement delay (up to 10 seconds). This is a distributed
+rate control, not a strict immediate per-request counter. Local handler tests
+alone do not prove the hosted edge policy. Creation may
 return a different status for a new ID versus an occupied ID; hiding that
 existence signal is outside this accountless first version. A known ID still
 grants no record access without its separate read code.
@@ -111,6 +117,16 @@ ETag; it does not synthesize a revision or weaken conditional updates. Unpatched
 Netlify Dev therefore cannot complete a read/update integration check with this
 emulator version. Treat that as a local emulator limitation, not production
 verification.
+
+Live beta verification on 11 November 2026 (0.5.0-beta.7) passed synthetic
+create/read/update/conflict/revoke and lost-create retry checks against real
+Netlify Blobs. A downloaded QR PNG was independently decoded and opened in an
+isolated mobile WebKit browser with no account or local site record; wrong-code
+reads failed, the correct code opened the snapshot, and owner revocation blocked
+subsequent reads. Test shares were revoked. The matching CI candidate passed
+503 unit tests and 45 focused browser tests (one existing WebKit offline test
+skipped); local integration additionally covered current commissioning and
+operating-assessment paths.
 
 Official platform references: [Functions API](https://docs.netlify.com/build/functions/api/),
 [Netlify Blobs](https://docs.netlify.com/build/data-and-storage/netlify-blobs/),

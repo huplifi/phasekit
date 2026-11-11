@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.8 — 2026-11-11 · Beta
+
+Unified report creation and sharing recovery
+
+- Electrical commissioning inspections now start from the shared New report action alongside the other report templates. Create report in Electrical measurements remains a shortcut.
+- The owner can recover the server’s current sharing receipt when a connection loss interrupts an update response. Recovery does not change the server snapshot.
+- Differences between the server snapshot and local records are shown before another publication. The share can also be revoked after receipt recovery.
+
 ## 0.5.0-beta.7 — 2026-11-11 · Beta
 
 Electrical measurements, inspection reports and shared QR labels
