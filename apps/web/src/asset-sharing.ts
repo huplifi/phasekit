@@ -90,16 +90,21 @@ export async function publishAsset(
   });
   return receiptSchema.parse(await responseData(response));
 }
-/** Explicit owner action: the idempotent POST returns the current stored
- * receipt without replacing an existing snapshot, even when local data differs.
- * Never follow this with an automatic PUT; the owner must review and publish.
+/** Explicit owner action: fetch the current receipt without sending local
+ * records or changing the stored snapshot. Never automatically follow with PUT.
  */
 export async function recoverAssetReceipt(
   link: SharedAssetLink,
-  snapshot: AssetSnapshot,
 ): Promise<SharedAssetReceipt> {
+  if (link.origin !== window.location.origin) throw new Error("foreign-origin");
   if (!link.etag && !link.publishedAt) throw new Error("not-published");
-  return requestCreationReceipt(link, snapshot);
+  const response = await fetch(`${endpoint}/${link.id}/receipt`, {
+    method: "POST",
+    cache: "no-store",
+    referrerPolicy: "no-referrer",
+    headers: { Authorization: `Bearer ${link.writeSecret}` },
+  });
+  return receiptSchema.parse(await responseData(response));
 }
 export async function readSharedAsset(
   id: string,

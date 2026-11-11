@@ -36,11 +36,14 @@ async function startFromMeasurement(page: Page) {
   await page
     .getByLabel("Mittauspiste tai ryhmä", { exact: true })
     .fill("Ryhmä 7");
-  await page.getByLabel("Tulos", { exact: true }).fill("0,42");
+  const continuity = page.locator(
+    '.electrical-sheet-row[data-type="continuity"]',
+  );
+  await continuity.locator(".electrical-sheet-inputs input").fill("0,42");
   await expect
     .poll(async () => (await stored(page)).electricalMeasurements?.[0]?.result)
     .toBe("0,42");
-  await page.getByText("Kuva ja mittaustiedot", { exact: true }).click();
+  await continuity.getByText("Ohje ja lisätiedot", { exact: true }).click();
   const photo = await page.evaluate(() => {
     const canvas = document.createElement("canvas");
     canvas.width = 20;
@@ -50,7 +53,7 @@ async function startFromMeasurement(page: Page) {
     ctx.fillRect(0, 0, 20, 20);
     return canvas.toDataURL("image/png").split(",")[1];
   });
-  await page
+  await continuity
     .getByLabel("Lisää kuva (vapaaehtoinen)", { exact: true })
     .setInputFiles({
       name: "reading.png",

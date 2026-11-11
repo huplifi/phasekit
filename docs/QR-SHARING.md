@@ -30,8 +30,8 @@ favourites and sharing credentials are excluded by an explicit schema allowlist.
   sending anything. If the first response is lost, retrying uses the same
   credentials/ID and returns the existing receipt without overwriting it.
 - After a lost update response or a stale-revision conflict, **Recover sharing
-  details** authenticates with the existing credentials and retrieves the current
-  server receipt without replacing its snapshot. Matching content is confirmed;
+  details** authenticates with the owner key and retrieves the current
+  server receipt without uploading local data or replacing its snapshot. Matching content is confirmed;
   different content is flagged for review before an explicit replacement.
 - Keep a backup to retain editing access on another device. Lost editing keys
   cannot be recovered through the read code. Deleting a local asset does not
@@ -59,6 +59,7 @@ from production; their snapshots do not survive deletion of that preview.
 | --- | --- | --- |
 | `POST /api/shared-assets` | ID, read code, editing secret in JSON body | Create only if new; authenticated creation retry returns stored receipt |
 | `POST /api/shared-assets/:id/read` | Read code in JSON body | Return validated snapshot |
+| `POST /api/shared-assets/:id/receipt` | Editing secret as `Authorization: Bearer …`; no snapshot body | Recover current owner receipt without modifying data |
 | `PUT /api/shared-assets/:id` | Editing secret as `Authorization: Bearer …`; expected ETag in JSON | Replace whole snapshot only if ETag matches |
 | `DELETE /api/shared-assets/:id` | Editing secret and expected ETag | Revoke via conditional tombstone write |
 | Bare `GET` / `HEAD` / reads without a valid code | None | Generic access-denied response, no existence disclosure through these read requests |

@@ -276,9 +276,9 @@ async function smoke() {
       "Owner update replaces opaque ETag",
     );
     await persist(record, path);
-    // The original local payload must recover the CURRENT receipt without
-    // overwriting the newer server snapshot after a lost PUT response.
-    const recovered = await request("", "POST", { ...link, snapshot });
+    // Owner-only receipt recovery must not upload the local snapshot or
+    // overwrite the newer server snapshot after a lost PUT response.
+    const recovered = await request(`/${link.id}/receipt`, "POST", undefined, link.writeSecret);
     status(recovered, 200, "Recover receipt after interrupted update");
     assert.equal((await receipt(recovered)).etag, record.etag);
     status(

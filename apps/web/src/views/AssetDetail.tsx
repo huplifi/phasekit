@@ -130,7 +130,7 @@ export function AssetDetail({ path }: { path: string }) {
     setBusy(true);
     setError("");
     try {
-      const receipt = await recoverAssetReceipt(link, snapshot);
+      const receipt = await recoverAssetReceipt(link);
       await persistSharedLink({ ...link, ...receipt });
       const localFingerprint = await snapshotFingerprint(snapshot);
       setRecoveryNotice(

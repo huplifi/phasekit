@@ -1,6 +1,6 @@
 # Electrical measurements and inspection reports
 
-This addition keeps everyday electrical readings in **Tools → Electrical measurements** and formal inspection documents in the existing **Reports** catalogue. A reading can be recorded without creating a report. The interface and exports support Finnish and English.
+This addition keeps everyday electrical readings in **Tools → Electrical measurements** and formal inspection documents in the existing **Reports** catalogue. A reading can be recorded without creating a report. Formal electrical reports start through Reports → New report → Report template, with the measurement tool retaining its direct shortcut. The interface and exports support Finnish and English.
 
 ## Data and field mapping
 
@@ -24,6 +24,30 @@ The existing schema-v1 backup remains readable. Electrical fields are additive: 
 | Document history                               | `status`, `revision`, `previousRevisionId`, `createdAt`, `updatedAt`, `finalizedAt`           |
 
 A measurement also preserves its ID, session ID, site/equipment identity, point, measurement type, raw result, unit, measurement timestamp, technician, optional note and optional bounded raster photo. Source readings keep their original author, date and site when included in a report.
+
+## Point sheet and study reminders
+
+The tool presents all nine reading types directly for the current point. Notes,
+photos, instrument settings and learning guidance expand per row. Empty rows do
+not create stored readings until edited and do not imply mandatory missing
+checks. Recorded, assessed and blank states remain distinct. Optional `pointId`
+groups new readings; older readings without it remain separate points, even if
+their names match. Copying a point clears every copied result, assessment, note
+and photo while retaining useful context. Active point cards use a uniform border
+and a subtle background rather than a thick side accent.
+
+Study reminders explain purpose, preparation and the information needed to judge
+a result. The chosen Finnish study reference is **SFS 6000-6:2022**; SESKO lists
+part 6:2022 and Tukes' S10-2026 list still references the 2022 SFS 6000 series.
+The full standard was not available in this task, so **numeric acceptance limits
+have not been verified or encoded**. Manufacturer procedure reminders are kept
+separate from normative acceptance criteria. Old or foreign-scope insulation
+threshold tables were not adopted as Finnish limits. A qualified review of the
+actual standard's methods, conditions and limits remains required before adding
+such values.
+
+References: [SESKO's 2022 standard parts](https://sesko.fi/standardointi/sahkoasennukset/sfs-6000-uudistus-2022/),
+[Tukes' current technical requirements and S10 list](https://tukes.fi/sahko/sahkotyot-ja-urakointi/sahkoasennusten-tekniset-vaatimukset).
 
 ## Results, snapshots and revisions
 

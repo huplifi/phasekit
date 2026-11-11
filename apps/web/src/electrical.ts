@@ -59,6 +59,8 @@ export interface ElectricalSession {
 }
 export interface ElectricalMeasurement {
   id: string;
+  /** Optional explicit grouping; legacy readings remain independent points. */
+  pointId?: string;
   sessionId: string;
   siteId?: string;
   siteName: string;
@@ -131,6 +133,7 @@ export const electricalSessionSchema = z.object({
 });
 export const electricalMeasurementSchema = z.object({
   id,
+  pointId: id.optional(),
   sessionId: id,
   siteId: id.optional(),
   siteName: name,
