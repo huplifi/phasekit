@@ -1,0 +1,82 @@
+.asset-detail {
+  max-width: 860px;
+  margin-inline: auto;
+}
+.asset-detail h1,
+.asset-detail h2,
+.asset-detail p,
+.asset-record summary {
+  overflow-wrap: anywhere;
+}
+.asset-detail .button-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-block: 16px;
+}
+.asset-detail button,
+.asset-detail .secondary-button {
+  white-space: normal;
+}
+.asset-detail form {
+  display: grid;
+  gap: 16px;
+  max-width: 30rem;
+  margin-block: 24px;
+}
+.asset-detail form label {
+  display: grid;
+  gap: 8px;
+}
+.asset-detail input {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.asset-record {
+  border: 1px solid var(--control-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-block: 12px;
+}
+.asset-record summary {
+  cursor: pointer;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.asset-record dl {
+  display: grid;
+  gap: 12px;
+}
+.asset-record dt {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+.asset-record dd {
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.asset-record img {
+  max-width: 100%;
+  height: auto;
+}
+.asset-qr {
+  margin-block: 20px;
+}
+.asset-qr > img {
+  display: block;
+  border: 1px solid var(--control-border);
+  border-radius: 4px;
+}
+.asset-history h2 {
+  font-size: 1.15rem;
+}
+@media (max-width: 480px) {
+  .asset-record {
+    padding: 16px;
+  }
+  .asset-detail .button-group > * {
+    flex: 1 1 160px;
+  }
+}

@@ -83,6 +83,7 @@ export function equipmentReportPatch(
   }
   return {
     equipmentId: equipment.id,
+    siteId: site?.id,
     title: report.title.trim()
       ? report.title
       : site?.name || equipment.location || equipment.name,

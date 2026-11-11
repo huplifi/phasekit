@@ -38,6 +38,12 @@ import { Tools } from "./views/Tools";
 import { ReleaseHistory } from "./views/ReleaseHistory";
 import { Settings } from "./views/Settings";
 import { Saved } from "./views/Saved";
+import { AssetDetail } from "./views/AssetDetail";
+import { SharedAsset } from "./views/SharedAsset";
+import { AssetScanner } from "./views/AssetScanner";
+import { ElectricalMeasurements } from "./views/ElectricalMeasurements";
+import { ElectricalReports } from "./views/ElectricalReports";
+import type { SharedAssetLink } from "./asset-sharing-types";
 import { Equipment } from "./views/Equipment";
 import { UnitConverter } from "./views/UnitConverter";
 import {
@@ -113,6 +119,24 @@ export function App() {
     },
     [enqueue],
   );
+  const persistSharedLink = useCallback(
+    async (link: SharedAssetLink) => {
+      if (!writable.current) throw new Error("Storage not ready");
+      const next = {
+        ...dataRef.current,
+        sharedLinks: [
+          ...(dataRef.current.sharedLinks ?? []).filter(
+            (item) => item.id !== link.id,
+          ),
+          link,
+        ],
+      };
+      dataRef.current = next;
+      setRenderedData(next);
+      await enqueue(next);
+    },
+    [enqueue],
+  );
   const persistSnapshot = useCallback(
     async (snapshot: Snapshot) => {
       if (!writable.current) throw new Error("Storage not ready");
@@ -175,6 +199,15 @@ export function App() {
     },
     [enqueue],
   );
+  useEffect(() => {
+    if (persistenceStatus === "saved") return;
+    const preventLoss = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", preventLoss);
+    return () => window.removeEventListener("beforeunload", preventLoss);
+  }, [persistenceStatus]);
   const {
     needRefresh: [needRefresh],
     updateServiceWorker,
@@ -348,7 +381,7 @@ export function App() {
       setData((d) => ({ ...d, favourites: [...d.favourites, id] }));
     }
   }
-  const [section, id, detailTab] = path.split("/").slice(1);
+  const [section, id, detailTab] = path.split("?")[0].split("/").slice(1);
   const r = id ? byId.get(id) : undefined;
   const nav = [
     { key: "refrigerants", path: "/", icon: Snowflake },
@@ -370,10 +403,20 @@ export function App() {
     "heat-quantity",
     "symbols",
     "electrical",
+    "electrical-measurements",
+    "scan",
     "pipe",
   ].includes(section)
     ? "tools"
-    : ["saved", "reports", "equipment", "checklists"].includes(section)
+    : [
+          "saved",
+          "reports",
+          "equipment",
+          "checklists",
+          "assets",
+          "shared",
+          "electrical-reports",
+        ].includes(section)
       ? "saved"
       : section === "settings" ||
           section === "releases" ||
@@ -387,6 +430,7 @@ export function App() {
         setData,
         persistenceStatus,
         persistSnapshot,
+        persistSharedLink,
         persistToolRecord,
         setDraftDirty,
         t,
@@ -456,7 +500,23 @@ export function App() {
         )}
         {storageError && (
           <p role="alert" className="notice error">
-            {t("storageError")}
+            {t("storageError")}{" "}
+            {writable.current ? (
+              <button
+                className="text-button"
+                onClick={() => void enqueue(dataRef.current).catch(() => {})}
+              >
+                {data.locale === "fi"
+                  ? "Yritä tallennusta uudelleen"
+                  : "Retry local save"}
+              </button>
+            ) : (
+              <span>
+                {data.locale === "fi"
+                  ? "Palauta varmuuskopio asetuksissa. Alkuperäisiä tietoja ei ole korvattu."
+                  : "Restore a backup in Settings. Original records have not been replaced."}
+              </span>
+            )}
           </p>
         )}
         {needRefresh && (
@@ -541,6 +601,16 @@ export function App() {
             <HeatQuantityCalculator />
           ) : section === "thermal-power" ? (
             <ThermalPowerCalculator />
+          ) : section === "assets" ? (
+            <AssetDetail key={path} path={path} />
+          ) : section === "shared" ? (
+            <SharedAsset key={id} id={id ?? ""} />
+          ) : section === "scan" ? (
+            <AssetScanner />
+          ) : section === "electrical-measurements" ? (
+            <ElectricalMeasurements key={path.split("?")[0]} path={path} />
+          ) : section === "electrical-reports" ? (
+            <ElectricalReports key={path} path={path} />
           ) : section === "electrical" ? (
             <ElectricalCalculator />
           ) : section === "pipe" ? (

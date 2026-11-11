@@ -131,6 +131,21 @@ describe("additive field-report persistence", () => {
     },
   );
 
+  it("persists an explicit site-only report link without adding one to legacy reports", async () => {
+    const siteOnly = { ...legacy, id: "site-only", siteId: "site-1" };
+    const state = backup([legacy, siteOnly]);
+    await saveData(state);
+    const restored = await loadData();
+    expect(restored.checklistDrafts[0]).not.toHaveProperty("siteId");
+    expect(restored.checklistDrafts[1].siteId).toBe("site-1");
+    expect(mergeBackup(emptyData(), state).checklistDrafts[1].siteId).toBe(
+      "site-1",
+    );
+    expect(() =>
+      parseBackup(JSON.stringify(backup([{ ...siteOnly, siteId: "" }]))),
+    ).toThrow();
+  });
+
   it("merges only missing report IDs, preserving local history and importing complete new revisions", () => {
     const final = finalized();
     const current = backup([legacy, final]);

@@ -6,6 +6,7 @@ import {
   Zap,
   Ruler,
   BookOpen,
+  ScanLine,
 } from "lucide-react";
 import { useApp } from "../context";
 import { ToolMenu } from "../components/Common";
@@ -29,6 +30,18 @@ export function Tools() {
         </h2>
         <div className="tool-list">
           {[
+            {
+              path: "electrical-measurements",
+              fi: "Sähkömittaukset",
+              en: "Electrical measurements",
+              icon: Zap,
+            },
+            {
+              path: "scan",
+              fi: "Skannaa kohteen QR",
+              en: "Scan asset QR",
+              icon: ScanLine,
+            },
             {
               path: "convert",
               fi: "Yleinen yksikkömuunnin",

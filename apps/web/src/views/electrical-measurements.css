@@ -1,0 +1,185 @@
+.electrical-context,
+.electrical-editor,
+.electrical-readings {
+  border: 1px solid var(--control-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-block: 20px;
+}
+.electrical-measurements h2 {
+  margin: 0 0 20px;
+  font-size: 1.15rem;
+}
+.electrical-context-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.electrical-context-heading h2 {
+  margin: 0;
+}
+.electrical-measurements fieldset {
+  padding: 0;
+  border: 0;
+  min-width: 0;
+  margin: 0;
+}
+.electrical-measurements fieldset:disabled {
+  opacity: 0.65;
+}
+.electrical-measurements button {
+  white-space: normal;
+}
+.electrical-result-row {
+  display: grid;
+  grid-template-columns: 75px minmax(0, 1fr) 85px;
+  gap: 10px;
+  align-items: end;
+}
+.electrical-result-row:has(> :nth-child(2):last-child) {
+  grid-template-columns: minmax(0, 1fr) 85px;
+}
+.electrical-result-row label {
+  min-width: 0;
+}
+.electrical-meter-help {
+  padding: 12px;
+  background: var(--surface, var(--background));
+  border: 1px solid var(--control-border);
+  border-radius: 8px;
+  margin: 16px 0 20px;
+}
+.electrical-meter-help p:first-child {
+  margin: 0;
+}
+.electrical-meter-help a {
+  overflow-wrap: anywhere;
+  font-size: 0.875rem;
+}
+.electrical-function-figure {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 16px 0;
+}
+.electrical-function-marker {
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--text);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.electrical-photo {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  margin-block: 12px;
+  object-fit: contain;
+}
+.electrical-readings ul {
+  list-style: none;
+  padding: 0;
+  margin-block: 16px;
+}
+.electrical-reading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 16px;
+  padding: 14px 8px;
+  border: 0;
+  border-bottom: 1px solid var(--control-border);
+  background: transparent;
+  text-align: left;
+  color: var(--text);
+}
+.electrical-reading > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.electrical-reading > span:last-child {
+  flex: 0 0 auto;
+  min-width: 6rem;
+  max-width: 45%;
+  text-align: right;
+}
+.electrical-reading small {
+  display: block;
+  margin-top: 4px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.electrical-reading.active {
+  box-shadow: inset 3px 0 0 var(--link);
+  padding-left: 12px;
+}
+.electrical-measurements input[type="file"] {
+  display: block;
+  max-width: 100%;
+  margin-top: 8px;
+  font-size: 0.8rem;
+}
+.electrical-save-state {
+  min-height: 2.5em;
+}
+@media (max-width: 420px) {
+  .electrical-context,
+  .electrical-editor,
+  .electrical-readings {
+    padding: 14px;
+  }
+  .electrical-result-row {
+    grid-template-columns: 62px minmax(0, 1fr) 65px;
+    gap: 8px;
+  }
+  .electrical-result-row input,
+  .electrical-result-row select {
+    padding-inline: 8px;
+  }
+  .electrical-measurements .field-tool-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .electrical-measurements .field-actions > button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.electrical-selector-diagram {
+  width: 300px;
+  max-width: 100%;
+  height: auto;
+  margin-inline: auto;
+  color: var(--text);
+}
+.electrical-dial-ring {
+  fill: var(--background);
+  stroke: var(--control-border);
+  stroke-width: 2;
+}
+.electrical-dial-hub {
+  fill: var(--text);
+}
+.electrical-dial-label {
+  fill: var(--text-secondary);
+  font-size: 15px;
+}
+.electrical-dial-selected {
+  fill: var(--text);
+  font-size: 18px;
+  font-weight: 700;
+}
+.electrical-dial-pointer {
+  stroke: var(--text);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.electrical-dial-detail {
+  font-size: 11px;
+}

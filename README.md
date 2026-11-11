@@ -12,7 +12,7 @@ The stable release **0.4.1** includes field reports, sites and equipment, direct
 - Search with regulation/model/oil filters, favourites and comparison.
 - General unit conversion, sensible thermal power, electrical/Ohm calculations, pipe volume/velocity, material thermal expansion, bounded single-phase straight-pipe pressure loss and local field reports.
 - Frozen calculation reports, equipment/site-linked history with device associations, JSON backup/restore and consistent result-first print-to-PDF reports. Reports collects drafts, finalised field reports, leak-check assessments and calculations in one searchable chronological catalogue. Commissioning, evacuation, tightness, service and refrigerant records retain observations and marked/unmarked steps. Work date and technician are separate; signature and printed name are written on the printed document; finalising freezes the record and editing creates a new revision. Supported commissioning measurements can attach a frozen cycle chart. Commissioning records include evacuation readings and installation-document preparation fields based on VNa 1063/2025 §9; external test protocols and the responsible person’s paper signature remain necessary. See [the requirements matrix](docs/COMMISSIONING-REQUIREMENTS.md).
-- Light/dark themes, bundled fonts and offline data. No accounts, analytics or cloud storage.
+- Light/dark themes, bundled fonts and offline data. Local storage by default; optional code-protected server snapshots shared only by explicit action. No accounts or analytics. See [QR sharing](docs/QR-SHARING.md).
 
 [Stable app](https://phasekit.app) · [Public beta](https://beta.phasekit.app) · [Changelog](CHANGELOG.md) · [In-app release history](https://phasekit.app/#/releases) · [Beta workflow](docs/BETA-RELEASE-WORKFLOW.md) · [Beta verification](docs/BETA-PRINT-AND-COMPARISON.md) · [Roadmap](docs/ROADMAP.md) · [Preview verification](docs/PREVIEW-VERIFICATION.md) · [Testing guide](docs/PREVIEW-TESTING.md) · [Data coverage](docs/COVERAGE.md) · [Calculation limits](docs/THERMODYNAMICS.md) · [p–h model](docs/PH-THERMODYNAMICS.md) · [Verification](docs/VERIFICATION.md)
 
@@ -62,7 +62,7 @@ For the production configuration, import [huplifi/phasekit](https://github.com/h
 
 No runtime secrets or backend services are required. Add `phasekit.app` as a custom domain in Netlify and follow the DNS records supplied for that project. See [deployment instructions](docs/DEPLOYMENT.md).
 
-Browser storage belongs to an origin. Export a backup from the old site before moving to the new domain, then import it in Settings. Favourites, calculations and field reports do not migrate automatically. Reports are local to this browser, not cloud-synchronised. Export a Settings backup for safekeeping; PDF/text exports are readable documents, while the JSON backup preserves editable records.
+Browser storage belongs to an origin. Export a backup from the old site before moving to the new domain, then import it in Settings. Favourites, calculations and field reports do not migrate automatically. Working records are local to this browser. Shared server snapshots update only when explicitly requested; they are not automatically synchronised. Export a Settings backup for safekeeping; PDF/text exports are readable documents, while the JSON backup preserves editable records and private sharing keys. Keep backups private: those keys allow server snapshot updates and revocation. Clearing local storage does not revoke server shares.
 
 ## Repository layout
 

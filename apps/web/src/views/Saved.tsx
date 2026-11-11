@@ -120,7 +120,29 @@ export function Saved({
         l(data.locale, "Vuototarkastusarvio", "Leak-check assessment"),
       ),
   );
+  const electricalReports = (data.electricalReports ?? []).filter(
+    (record) =>
+      (filter === "all" ||
+        filter === "electrical-inspection" ||
+        (filter === "draft" && record.status === "draft") ||
+        (filter === "final" && record.status === "final")) &&
+      matches(
+        record.siteName,
+        record.equipmentName,
+        record.inspector,
+        l(
+          data.locale,
+          "Käyttöönottotarkastuspöytäkirja",
+          "Electrical inspection report",
+        ),
+      ),
+  );
   const entries = [
+    ...electricalReports.map((record) => ({
+      type: "electrical-inspection" as const,
+      record,
+      date: record.updatedAt,
+    })),
     ...fieldReports.map((record) => ({
       type: "field" as const,
       record,
@@ -220,6 +242,18 @@ export function Saved({
           <button
             className="secondary-button"
             type="button"
+            onClick={() => go("/electrical-reports/new")}
+          >
+            <Plus size={18} />
+            {l(
+              data.locale,
+              "Uusi sähköpöytäkirja",
+              "New electrical inspection",
+            )}
+          </button>
+          <button
+            className="secondary-button"
+            type="button"
             onClick={() => go("/equipment")}
           >
             {l(data.locale, "Laitteet ja kohteet", "Equipment and sites")}
@@ -258,6 +292,11 @@ export function Saved({
               ["final", "Viimeistellyt", "Finalised"],
               ["field", "Työmaaraportit", "Field reports"],
               ["calculation", "Laskelmat", "Calculations"],
+              [
+                "electrical-inspection",
+                "Sähköpöytäkirjat",
+                "Electrical inspection reports",
+              ],
               ["check", "Vuototarkastusarviot", "Leak-check assessments"],
               ...Object.entries(checklistDefinitions).map(
                 ([key, definition]) => [
@@ -298,6 +337,60 @@ export function Saved({
           </p>
         )}
         {entries.map((entry) => {
+          if (entry.type === "electrical-inspection") {
+            const record = entry.record;
+            return (
+              <button
+                key={`electrical-${record.id}`}
+                type="button"
+                className="report-list-link field-report-link"
+                onClick={() =>
+                  go(`/electrical-reports/${encodeURIComponent(record.id)}`)
+                }
+              >
+                <span className="report-row-content">
+                  <strong className="report-summary">
+                    {record.siteName ||
+                      l(data.locale, "Kohde nimeämättä", "Site not named")}
+                  </strong>
+                  <span className="report-field-secondary">
+                    {[
+                      l(
+                        data.locale,
+                        "Käyttöönottotarkastuspöytäkirja",
+                        "Electrical inspection report",
+                      ),
+                      record.equipmentName,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                  <span className="report-row-tertiary">
+                    <time dateTime={record.updatedAt}>
+                      {formatDate(record.updatedAt, data.locale)}
+                    </time>
+                    <span
+                      className={
+                        record.status === "final"
+                          ? "report-field-final-status"
+                          : "report-field-draft-status status-badge status-badge--warning"
+                      }
+                    >
+                      {record.status === "final"
+                        ? l(data.locale, "Viimeistelty", "Finalised")
+                        : l(data.locale, "Luonnos", "Draft")}{" "}
+                      · v{record.revision}
+                    </span>
+                  </span>
+                </span>
+                <ChevronRight
+                  className="report-list-chevron"
+                  size={20}
+                  aria-hidden="true"
+                />
+              </button>
+            );
+          }
           if (entry.type === "field") {
             const record = entry.record;
             const siteName = record.title.trim();
