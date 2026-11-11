@@ -52,7 +52,7 @@ const emptySiteDraft: SiteDraft = { name: "", address: "" };
 
 export function Equipment() {
   const setDraftDirty = useDraftGuard();
-  const { data, setData, go } = useApp();
+  const { data, setData, go, notify } = useApp();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<EquipmentDraft>(emptyDraft);
   const [error, setError] = useState("");
@@ -148,6 +148,20 @@ export function Equipment() {
     cancel();
   };
   const removeSite = (site: SiteRecord) => {
+    if (
+      data.sharedLinks?.some(
+        (link) => link.assetType === "site" && link.assetId === site.id,
+      )
+    ) {
+      notify(
+        t(
+          "Sulje kohteen jako ennen poistamista. Jos ensimmäinen jakopyyntö jäi kesken, yritä sitä uudelleen ja sulje sitten jako.",
+          "Revoke the site share before deleting. If the first sharing request was interrupted, retry it and then revoke the share.",
+        ),
+      );
+      go(`/assets/site/${encodeURIComponent(site.id)}`);
+      return;
+    }
     if (
       !window.confirm(
         t(
@@ -247,6 +261,20 @@ export function Equipment() {
   };
   const remove = (item: EquipmentRecord) => {
     if (
+      data.sharedLinks?.some(
+        (link) => link.assetType === "equipment" && link.assetId === item.id,
+      )
+    ) {
+      notify(
+        t(
+          "Sulje laitteen jako ennen poistamista. Jos ensimmäinen jakopyyntö jäi kesken, yritä sitä uudelleen ja sulje sitten jako.",
+          "Revoke the equipment share before deleting. If the first sharing request was interrupted, retry it and then revoke the share.",
+        ),
+      );
+      go(`/assets/equipment/${encodeURIComponent(item.id)}`);
+      return;
+    }
+    if (
       !window.confirm(
         t(
           `Poistetaanko laite “${item.name}”? Raportit ja laskelmat säilyvät. Laskelmien laitelinkki poistuu. Raporttien alkuperäiset laite- ja kohdetiedot säilyvät muuttumattomina.`,
@@ -284,7 +312,11 @@ export function Equipment() {
       <article className="equipment-card" key={item.id}>
         <div className="equipment-card-heading">
           <div>
-            <h3 className="equipment-device-name">{item.name}</h3>
+            <h3 className="equipment-device-name">
+              <a href={`#/assets/equipment/${encodeURIComponent(item.id)}`}>
+                {item.name}
+              </a>
+            </h3>
             {item.location && (
               <p className="supporting-copy">{item.location}</p>
             )}
@@ -745,7 +777,11 @@ export function Equipment() {
               >
                 <header className="equipment-site-heading">
                   <div>
-                    <h2 id={`site-${site.id}`}>{site.name}</h2>
+                    <h2 id={`site-${site.id}`}>
+                      <a href={`#/assets/site/${encodeURIComponent(site.id)}`}>
+                        {site.name}
+                      </a>
+                    </h2>
                     {site.address && (
                       <p className="supporting-copy">{site.address}</p>
                     )}

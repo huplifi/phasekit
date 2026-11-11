@@ -31,6 +31,7 @@ describe("equipment defaults respect recorded report facts", () => {
     });
     expect(patch.title).toBe("Torpanmäki 2");
     expect(patch.equipmentId).toBe("unit");
+    expect(patch.siteId).toBe("site");
     expect(patch.fields).toMatchObject({
       equipment: "LN25 · Model A · SN1",
       installationLocation: "Katu 1 · Konehuone",
@@ -59,6 +60,23 @@ describe("equipment defaults respect recorded report facts", () => {
     expect(
       equipmentReportPatch({ ...report, status: "final" }, equipment),
     ).toEqual({});
+  });
+  it("updates draft site association when relinking and never changes finalized site identity", () => {
+    const linked = { ...report, siteId: "former-site" };
+    expect(
+      equipmentReportPatch(linked, equipment, {
+        id: "next-site",
+        name: "Next",
+        address: "",
+        updatedAt: "2026-11-11",
+      }).siteId,
+    ).toBe("next-site");
+    const withoutSite = equipmentReportPatch(linked, equipment);
+    expect(withoutSite).toHaveProperty("siteId", undefined);
+    expect(
+      equipmentReportPatch({ ...linked, status: "final" }, equipment),
+    ).toEqual({});
+    expect(linked.siteId).toBe("former-site");
   });
   it("does not treat total charge as a movement or a measurement", () => {
     const patch = equipmentReportPatch(

@@ -4,6 +4,15 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.7 — 2026-11-11 · Beta
+
+Electrical measurements, inspection reports and shared QR labels
+
+- Record electrical measurements for a site or device, attach photos and continue offline. Meter-specific guidance is available for verified Fluke models.
+- Create an electrical commissioning inspection report from saved measurements. Drafts, final versions and revisions retain measurement snapshots; the PDF includes a handwritten signature field.
+- Share site or equipment history on the server without an account. A permanent QR link requires a separate site code printed on its label. Updates and revocation require a separate owner key.
+- Download QR labels as PNG images or print them. Shared data updates only when explicitly published; local saving and server sharing are shown as separate actions.
+
 ## 0.5.0-beta.6 — 2026-11-09 · Beta
 
 Operating assessment for refrigeration measurements

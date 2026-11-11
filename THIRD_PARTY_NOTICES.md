@@ -21,3 +21,5 @@ Dependency versions are pinned by `pnpm-lock.yaml`. Their upstream licences and 
 The six unmodified CoolProp EOS JSON files in `data/coolprop-supplement/` come from commit `afce86ff977552663ca3a78d8ea318cc64dcbdfd`. Their per-file SHA-256, CAS identities and EOS references are recorded in its manifest. The same [CoolProp MIT notice](licenses/CoolProp-MIT.txt) applies.
 
 Direct PDF export uses jsPDF (MIT), bundled locally without a CDN. Its notice is retained in `licenses/jsPDF-MIT.txt` and in the bundled distribution.
+
+QR generation uses node-qrcode (`qrcode`, MIT), bundled locally without a CDN. Its notice is retained in [licenses/qrcode-MIT.txt](licenses/qrcode-MIT.txt). QR decoding in development tests uses jsQR (Apache-2.0). Server snapshots use the Netlify Blobs and Functions SDKs (MIT).

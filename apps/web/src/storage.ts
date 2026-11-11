@@ -1,5 +1,17 @@
 import { openDB } from "idb";
 import { z } from "zod";
+import {
+  electricalMeasurementSchema,
+  electricalSessionSchema,
+  electricalReportSchema,
+} from "./electrical";
+import type {
+  ElectricalMeasurement,
+  ElectricalSession,
+  ElectricalInspectionReport,
+} from "./electrical";
+import { sharedAssetLinkSchema } from "./asset-sharing-types";
+import type { SharedAssetLink } from "./asset-sharing-types";
 import type {
   CheckResult,
   Refrigerant,
@@ -62,6 +74,7 @@ export interface FieldReport extends ChecklistDraft {
   previousRevisionId?: string;
   finalizedAt?: string;
   appVersion?: string;
+  siteId?: string;
   equipmentId?: string;
   cycleReport?: ToolRecord;
 }
@@ -91,6 +104,10 @@ export interface UserData {
   toolRecords: ToolRecord[];
   equipment: EquipmentRecord[];
   sites?: SiteRecord[];
+  electricalMeasurements?: ElectricalMeasurement[];
+  electricalSession?: ElectricalSession;
+  electricalReports?: ElectricalInspectionReport[];
+  sharedLinks?: SharedAssetLink[];
   locale: Locale;
   theme: "light" | "dark" | "system";
 }
@@ -103,6 +120,9 @@ export const emptyData = (): UserData => ({
   toolRecords: [],
   equipment: [],
   sites: [],
+  electricalMeasurements: [],
+  electricalReports: [],
+  sharedLinks: [],
   locale: "fi",
   theme: "system",
 });
@@ -317,6 +337,13 @@ const toolRecord = z.object({
   chartSnapshot: chartSnapshot.optional(),
 });
 export const backupSchema = z.object({
+  electricalMeasurements: z
+    .array(electricalMeasurementSchema)
+    .max(5000)
+    .default([]),
+  electricalSession: electricalSessionSchema.optional(),
+  electricalReports: z.array(electricalReportSchema).max(1000).default([]),
+  sharedLinks: z.array(sharedAssetLinkSchema).max(1000).default([]),
   schemaVersion: z.literal(1),
   favourites: z.array(id).max(10000),
   recent: z.array(id).max(100),
@@ -352,6 +379,7 @@ export const backupSchema = z.object({
         previousRevisionId: boundedId.optional(),
         finalizedAt: z.iso.datetime().optional(),
         appVersion: z.string().max(100).optional(),
+        siteId: boundedId.optional(),
         equipmentId: boundedId.optional(),
         cycleReport: toolRecord.optional(),
         fields: z
@@ -404,6 +432,9 @@ export function parseBackup(text: string): UserData {
     data.checklistDrafts,
     data.equipment,
     data.sites,
+    data.electricalMeasurements,
+    data.electricalReports,
+    data.sharedLinks,
   ])
     if (new Set(records.map((r) => r.id)).size !== records.length)
       throw new Error("Duplicate record");
@@ -475,6 +506,20 @@ export function mergeBackup(current: UserData, incoming: UserData): UserData {
       ),
       equipment: appendMissing(current.equipment, incoming.equipment),
       sites: appendMissing(current.sites ?? [], incoming.sites ?? []),
+      electricalMeasurements: appendMissing(
+        current.electricalMeasurements ?? [],
+        incoming.electricalMeasurements ?? [],
+      ),
+      electricalReports: appendMissing(
+        current.electricalReports ?? [],
+        incoming.electricalReports ?? [],
+      ),
+      sharedLinks: appendMissing(
+        current.sharedLinks ?? [],
+        incoming.sharedLinks ?? [],
+      ),
+      electricalSession:
+        current.electricalSession ?? incoming.electricalSession,
       snapshots: [
         ...current.snapshots,
         ...incoming.snapshots.filter((s) => !ids.has(s.id)),

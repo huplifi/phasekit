@@ -64,6 +64,11 @@ export function Settings() {
       <section className="section">
         <h2>{t("localData")}</h2>
         <p className="secondary">{t("privacy")}</p>
+        <p className="caption secondary">
+          {data.locale === "fi"
+            ? "Varmuuskopio sisältää jaettujen kohteiden lukukoodit ja yksityiset muokkausavaimet. Säilytä se turvallisesti: avaimilla voi päivittää ja sulkea jaon. Paikallisten tietojen poistaminen ei sulje palvelimelle jaettuja kopioita. Sulje jaot kohteiden tai laitteiden näkymissä ennen poistamista, tai säilytä avaimet varmuuskopiossa."
+            : "Backups include shared assets’ read codes and private editing keys. Keep them secure: the keys allow updates and revocation. Deleting local data does not revoke shared server copies. Revoke shares on the site/equipment pages first, or preserve the keys in a backup."}
+        </p>
         <div className="settings-actions">
           <div className="settings-backup-actions">
             <button
@@ -112,6 +117,11 @@ export function Settings() {
         {confirm && (
           <div className="notice warning" role="alert">
             <p>{t("confirmDelete")}</p>
+            <p>
+              {data.locale === "fi"
+                ? "Palvelimelle jaetut kopiot jäävät saataville. Ilman muokkausavaimen varmuuskopiota et voi enää päivittää tai sulkea niitä."
+                : "Shared server copies remain available. Without a backup of the editing keys, you can no longer update or revoke them."}
+            </p>
             <div className="button-group">
               <button
                 className="secondary-button"

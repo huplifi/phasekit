@@ -1,5 +1,28 @@
 [
   {
+    "version": "0.5.0-beta.7",
+    "date": "2026-11-11",
+    "channel": "beta",
+    "title": {
+      "fi": "Sähkömittaukset, tarkastusraportit ja jaettavat QR-tarrat",
+      "en": "Electrical measurements, inspection reports and shared QR labels"
+    },
+    "changes": {
+      "fi": [
+        "Kirjaa sähkömittaukset kohteelle tai laitteelle, liitä kuvia ja jatka myös ilman verkkoyhteyttä. Mittarikohtaiset ohjeet ovat saatavilla varmennetuille Fluke-malleille.",
+        "Kokoa mittauksista sähkölaitteiston käyttöönottotarkastuspöytäkirja. Luonnokset, viimeistellyt versiot ja korjausversiot säilyttävät mittausten tilannekuvat; PDF sisältää tulosteeseen tehtävän allekirjoituksen paikan.",
+        "Jaa kohteen tai laitteen historia palvelimelle ilman käyttäjätiliä. Pysyvä QR-linkki avataan erillisellä kohdekoodilla, joka tulostuu tarraan. Päivitys ja jaon sulkeminen edellyttävät erillistä muokkausavainta.",
+        "QR-tarran voi ladata PNG-kuvana tai tulostaa. Jaetut tiedot päivittyvät vain erikseen julkaistaessa; paikallinen tallennus ja palvelimelle jakaminen näkyvät erillisinä toimintoina."
+      ],
+      "en": [
+        "Record electrical measurements for a site or device, attach photos and continue offline. Meter-specific guidance is available for verified Fluke models.",
+        "Create an electrical commissioning inspection report from saved measurements. Drafts, final versions and revisions retain measurement snapshots; the PDF includes a handwritten signature field.",
+        "Share site or equipment history on the server without an account. A permanent QR link requires a separate site code printed on its label. Updates and revocation require a separate owner key.",
+        "Download QR labels as PNG images or print them. Shared data updates only when explicitly published; local saving and server sharing are shown as separate actions."
+      ]
+    }
+  },
+  {
     "version": "0.5.0-beta.6",
     "date": "2026-11-09",
     "channel": "beta",

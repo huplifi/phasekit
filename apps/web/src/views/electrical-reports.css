@@ -1,0 +1,79 @@
+.electrical-report-editor {
+  max-width: 58rem;
+}
+.electrical-report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-block: 1rem 2rem;
+}
+.electrical-report-grid label {
+  min-width: 0;
+}
+.electrical-report-grid input,
+.electrical-report-grid textarea,
+.electrical-report-grid select {
+  width: 100%;
+  box-sizing: border-box;
+}
+.electrical-report-wide {
+  grid-column: 1 / -1;
+}
+.electrical-reading-selection {
+  margin-block: 1.5rem;
+}
+.electrical-reading-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--divider);
+}
+.electrical-reading-choice > input[type="checkbox"] {
+  flex: 0 0 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.15rem 0 0;
+}
+.electrical-reading-choice > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.electrical-reading-choice > span > span {
+  display: block;
+  margin-top: 0.3rem;
+}
+.electrical-report-reading {
+  padding: 1rem;
+  margin-block: 1rem;
+  border: 1px solid var(--divider);
+  border-radius: 0.5rem;
+}
+.electrical-report-reading h3 {
+  font-size: 1rem;
+}
+.electrical-report-reading textarea,
+.electrical-report-reading select {
+  width: 100%;
+  box-sizing: border-box;
+}
+.electrical-report-photo {
+  display: block;
+  max-width: 100%;
+  max-height: 18rem;
+  margin-block: 1rem;
+}
+.electrical-report-state {
+  margin-bottom: 0.3rem;
+}
+.electrical-report-actions {
+  margin-block: 1.5rem 2rem;
+}
+@media (max-width: 520px) {
+  .electrical-report-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .electrical-report-actions {
+    display: grid;
+  }
+}

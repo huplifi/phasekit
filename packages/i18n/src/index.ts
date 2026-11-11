@@ -120,7 +120,7 @@ export const fi = {
   system: "Järjestelmä",
   localData: "Omat tiedot",
   privacy:
-    "Tiedot säilyvät tällä laitteella. Ei kirjautumista, analytiikkaa tai pilvitallennusta.",
+    "Tiedot tallentuvat oletuksena tälle laitteelle. Voit jakaa kohteen tai laitteen palvelinkopion erikseen lukukoodilla. Ei käyttäjätilejä tai analytiikkaa.",
   export: "Vie varmuuskopio",
   import: "Tuo varmuuskopio",
   importSuccess: "Varmuuskopio yhdistetty omiin tietoihin.",
@@ -324,7 +324,8 @@ export const en: Record<MessageKey, string> = {
   dark: "Dark",
   system: "System",
   localData: "Your data",
-  privacy: "Data stays on this device. No account, analytics or cloud storage.",
+  privacy:
+    "Data is saved on this device by default. You can explicitly share a code-protected server snapshot of a site or equipment. No accounts or analytics.",
   export: "Export backup",
   import: "Import backup",
   importSuccess: "Backup merged with your local data.",
