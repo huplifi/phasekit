@@ -4,6 +4,14 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.9 — 2026-11-17 · Beta
+
+Dew and bubble points at the same pressure
+
+- In the pressure–temperature tool, switch between saturated vapour and saturated liquid at the same pressure. Your original input is retained, and the pressure result identifies gauge or absolute pressure.
+- Enter pressures or evaporation and condensation temperatures for a refrigeration cycle. For blends, choose the boundary for each temperature. Superheat uses the dew point and subcooling uses the bubble point.
+- On phones, measurements and results appear together. Use ± to change a numeric field’s sign, and tap a point on the log(p)–h diagram to inspect pressure, temperature and enthalpy.
+
 ## 0.5.0-beta.8 — 2026-11-12 · Beta
 
 Direct electrical measurement entry and learning guidance
