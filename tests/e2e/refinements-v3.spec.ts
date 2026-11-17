@@ -23,21 +23,21 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   const p = page.getByLabel("Paine", { exact: true });
   const t = page.getByLabel("Lämpötila", { exact: true });
   await p.fill("5");
-  await expect(t).toHaveValue("15.76");
+  await expect(t).toHaveValue("15,76");
   await t.fill("20");
   await expect
-    .poll(async () => Number(await p.inputValue()))
+    .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(5.72, 1);
-  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
   await expect
-    .poll(async () => Number(await p.inputValue()))
+    .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(4.7, 1);
   const atmosphere = page.locator(".pt-atmosphere");
   await atmosphere.locator("summary").click();
   await expect(atmosphere).toContainText("standardi-ilmakehä");
   await page.getByLabel("Paineyksikkö").selectOption("kPa");
   await expect
-    .poll(async () => Number(await p.inputValue()))
+    .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(470, -1);
   await expect(t).toHaveValue("20");
   await page.getByLabel("Lämpötilayksikkö").selectOption("F");

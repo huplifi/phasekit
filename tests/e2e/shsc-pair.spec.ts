@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { devices, expect, test } from "@playwright/test";
 
 test("the supplied R134a paper example plots with gauge pressures", async ({
   page,
@@ -170,7 +170,10 @@ test("SH and SC use their own pressures and temperatures together", async ({
 
 test("R452A cycle accepts measured dew temperatures and uses bubble for subcooling", async ({
   page,
-}) => {
+}, info) => {
+  const iphone = devices["iPhone 16 Pro"];
+  const mobileWebKit = info.project.name === "mobile-webkit";
+  if (mobileWebKit) await page.setViewportSize(iphone.viewport);
   await page.goto("/#/ph/r452a");
   await page
     .getByRole("button", { name: "Kyllästyslämpötilat", exact: true })
@@ -192,6 +195,19 @@ test("R452A cycle accepts measured dew temperatures and uses bubble for subcooli
     "6,6 K",
   ]);
   await expect(page.locator(".cycle-results")).toContainText("36,6");
+  if (mobileWebKit) {
+    // Both Safari with its toolbars and the full-height app must show all five inputs and both results.
+    for (const viewport of [iphone.viewport, { width: 402, height: 874 }]) {
+      await page.setViewportSize(viewport);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      const card = (await page.locator(".cycle-readings").boundingBox())!;
+      const nav = (await page.locator(".main-nav").boundingBox())!;
+      expect(card.y + card.height).toBeLessThanOrEqual(nav.y);
+      expect(
+        (await page.locator("#cycle-evaporation").boundingBox())!.y,
+      ).toBeGreaterThan(0);
+    }
+  }
   await expect(page.locator(".ph-cycle")).toHaveCount(4);
 
   await page.locator("#cycle-high-boundary").selectOption("bubble");

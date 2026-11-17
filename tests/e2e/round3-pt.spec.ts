@@ -67,7 +67,7 @@ test("R410A heating case works and genuine bounds explain the data limit", async
     provenance.getByRole("heading", { name: "Lähteet", exact: true }),
   ).toBeVisible();
   await expect(provenance.locator(".source-disclosure")).toHaveCount(0);
-  expect(Number(await pressure.inputValue())).toBeCloseTo(35.1, 1);
+  expect(Number((await pressure.inputValue()).replace(",", "."))).toBeCloseTo(35.1, 1);
   await page.locator("#pt-side-bubble").click();
   await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
     "aria-pressed",
@@ -116,7 +116,7 @@ test("P–T input and result follow the last edited value and clears invalid res
     "Laskettu",
   );
   await expect(page.locator("#pt-pressure-status")).toContainText("Syötetty");
-  await expect(temperature).toHaveValue("15.76");
+  await expect(temperature).toHaveValue("15,76");
   await expect(pressure).toHaveValue("5");
 
   await temperature.fill("20");
@@ -128,6 +128,7 @@ test("P–T input and result follow the last edited value and clears invalid res
 
   await temperature.fill("-999");
   await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.locator(".pt-reading")).toHaveCount(0);
   await expect(pressure).toHaveValue("");
 });
 
@@ -161,13 +162,19 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
   const bubble = page.locator("#pt-side-bubble");
   const dew = page.locator("#pt-side-dew");
   await temperature.fill("40,0");
-  await expect(pressure).toHaveValue("17.59");
-  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
-  await expect(pressure).toHaveValue("16.57");
-  await expect(page.locator("#pt-pressure-status")).toContainText("bar(g)");
+  await expect(pressure).toHaveValue("17,59");
+  await expect(page.locator(".pt-reading h2")).toHaveText("Absoluuttinen paine");
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
+  await expect(pressure).toHaveValue("16,57");
+  const reading = page.locator(".pt-reading");
+  await expect(reading).toBeVisible();
+  await expect(reading.getByRole("heading")).toHaveText("Mittaripaine");
+  await expect(reading.locator(".pt-reading-value")).toHaveText("16,57 bar(g)");
   await bubble.click();
-  await expect(pressure).toHaveValue("16.57");
-  await expect(temperature).toHaveValue("36.60");
+  await expect(pressure).toHaveValue("16,57");
+  await expect(temperature).toHaveValue("36,60");
+  await expect(reading.getByRole("heading")).toHaveText("Kuplapiste");
+  await expect(reading.locator(".pt-reading-value")).toHaveText("36,60 °C");
   await expect(page.locator("#pt-temperature-status")).toContainText(
     "Laskettu",
   );
@@ -217,7 +224,7 @@ test("the numeric keypad sign control retains the number, caret and focus", asyn
   await expect(
     page.getByRole("button", { name: "Vaihda paineen etumerkki" }),
   ).toHaveCount(0);
-  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
   await pressure.fill("0,1");
   await page.getByRole("button", { name: "Vaihda paineen etumerkki" }).click();
   await expect(pressure).toHaveValue("-0,1");

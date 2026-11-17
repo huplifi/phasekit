@@ -242,24 +242,23 @@
   width: 100%;
   max-width: 780px;
   height: auto;
-  background: var(--surface);
-  border: 1px solid var(--divider);
-  border-radius: 10px;
+  background: var(--background);
 }
 
 .ph-gridline {
-  stroke: var(--divider);
+  stroke: var(--text);
+  stroke-opacity: 0.12;
   stroke-width: 1;
 }
 
 .ph-gridline-minor {
-  stroke-opacity: 0.4;
+  stroke-opacity: 0.06;
   stroke-width: 0.7;
 }
 
 .ph-pressure-guide {
   stroke: var(--text);
-  stroke-opacity: 0.5;
+  stroke-opacity: 0.28;
   stroke-width: 1;
   stroke-dasharray: 6 4;
 }
@@ -291,7 +290,7 @@
   font-size: 12px;
   font-weight: 700;
   paint-order: stroke;
-  stroke: var(--surface);
+  stroke: var(--background);
   stroke-width: 3px;
 }
 
@@ -309,6 +308,7 @@
 
 .ph-bubble {
   stroke: #3c7890;
+  stroke-dasharray: 2 4;
 }
 
 .ph-dew {
@@ -324,6 +324,9 @@
   stroke-dasharray: 3 4;
 }
 
+.ph-chart [data-point] {
+  cursor: pointer;
+}
 .ph-point {
   fill: var(--background);
   stroke: var(--text);
@@ -341,7 +344,7 @@
   font-size: 17px;
   font-weight: 800;
   paint-order: stroke;
-  stroke: var(--surface);
+  stroke: var(--background);
   stroke-width: 4px;
 }
 
@@ -381,7 +384,7 @@
 
 .ph-legend-bubble::before {
   border-color: #3c7890 !important;
-  border-top-style: dashed !important;
+  border-top-style: dotted !important;
 }
 
 .ph-legend-dew::before {
@@ -455,9 +458,9 @@
 }
 .ph-figure .ph-legend {
   max-width: 780px;
-  margin: 12px 0 18px;
+  margin: 4px 0 18px;
   gap: 8px 16px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 .ph-cycle-line {
   stroke-width: 3.2;
@@ -466,16 +469,12 @@
   fill: var(--text);
 }
 .ph-point-halo {
-  fill: var(--surface);
+  fill: var(--background);
   stroke: var(--text);
   stroke-width: 1.2;
 }
 .ph-point-selected .ph-point {
   fill: var(--text);
-}
-.ph-point-selected .ph-point-label {
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 .ph-diagram-section .ph-results {
   margin: 0 0 20px;
@@ -500,29 +499,6 @@
 .ph-point-card[data-selected="true"] {
   border-color: var(--text);
   box-shadow: inset 0 0 0 1px var(--text);
-}
-.ph-point-select {
-  display: grid;
-  grid-template-columns: 1.75rem minmax(0, 1fr);
-  column-gap: 10px;
-  align-items: center;
-  width: 100%;
-  min-height: 58px;
-  text-align: left;
-  padding: 12px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-}
-.ph-point-select:hover {
-  background: var(--surface);
-}
-.ph-point-select:focus-visible {
-  outline: 2px solid var(--text);
-  outline-offset: -4px;
 }
 .ph-point-number {
   grid-row: span 2;
@@ -629,54 +605,30 @@
 .ph-fit-settings input:disabled {
   opacity: 0.45;
 }
-.ph-point-inspection-title {
-  margin: 0 0 10px;
-  font-size: 1rem;
-}
-.ph-point-picker {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
-  gap: 8px;
-  margin-bottom: 10px;
-}
-.ph-point-picker .ph-point-select {
-  min-height: 48px;
-  border: 1px solid var(--divider);
-  border-radius: 7px;
-  padding: 8px 10px;
-}
-.ph-point-picker .ph-point-select[aria-pressed="true"] {
-  border-color: var(--text);
-  box-shadow: inset 0 0 0 1px var(--text);
-}
-.ph-point-picker .ph-point-select[aria-pressed="true"] .ph-point-number {
-  background: var(--text);
-  color: var(--background);
-}
-.ph-point-picker .ph-point-number {
-  grid-row: auto;
-}
-.ph-point-picker .ph-point-name {
-  font-size: 0.8rem;
-  line-height: 1.35;
-}
 .ph-active-point {
-  border: 1px solid var(--divider);
-  border-radius: 8px;
-  padding: 12px;
+  padding: 12px 0 16px;
+  border-block: 1px solid var(--divider);
 }
-.ph-active-point-title {
+.ph-selected-heading {
   display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  gap: 5px 14px;
-  margin: 0 0 12px;
-  font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  margin-bottom: 6px;
 }
-.ph-active-point-title > span {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.ph-select-point {
+  width: auto;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 4px 2px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 .ph-active-point .ph-point-values {
   padding: 0;
@@ -702,19 +654,6 @@
 }
 .ph-point-card-heading .ph-point-number {
   grid-row: span 2;
-}
-@media (max-width: 400px) {
-  .ph-point-picker .ph-point-select {
-    grid-template-columns: 1.5625rem minmax(0, 1fr);
-    column-gap: 7px;
-  }
-  .ph-point-picker .ph-point-number {
-    width: 1.5625rem;
-    height: 1.5625rem;
-  }
-  .ph-point-picker .ph-point-name {
-    font-size: 0.75rem;
-  }
 }
 @media print {
   .ph-all-points > .ph-point-list {

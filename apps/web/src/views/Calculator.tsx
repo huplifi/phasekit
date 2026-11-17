@@ -957,7 +957,7 @@ export function Calculator({
                   <div className="cycle-boundary" key={high ? "high" : "low"}>
                     <label htmlFor={fieldId}>
                       <span>
-                        {high ? "HP" : "LP"} ·{" "}
+                        {inputMode === "pressure" && (high ? "HP · " : "LP · ")}
                         {inputMode === "pressure"
                           ? high
                             ? l("Korkeapaine", "High pressure")
@@ -1050,7 +1050,8 @@ export function Calculator({
             </div>
             <div className="help-heading temperature-heading">
               <h2>
-                {l("Mittauslämpötilat", "Measured temperatures")} · °{tempUnit}
+                {l("Mittauslämpötilat", "Measured temperatures")}{" "}
+                <span className="cycle-input-unit">°{tempUnit}</span>
               </h2>
               <InfoHelp label={l("Mittauspisteet", "Measurement points")}>
                 {l(
@@ -1125,39 +1126,20 @@ export function Calculator({
             </div>
           </>
         )}
-        <div className={tool === "shsc" ? "cycle-submit" : undefined}>
-          <button
-            className="primary"
-            disabled={
-              !r ||
-              (tool === "shsc" &&
-                (!available.supported || !liquidAvailable.supported))
-            }
-          >
-            {l("Laske", "Calculate")}
-          </button>
-          {resolvedPressures && (
-            <output
-              className="caption mono cycle-resolved-pressures"
-              aria-label={l("Absoluuttiset paineet", "Absolute pressures")}
+        {(tool !== "shsc" || !output) && (
+          <div className={tool === "shsc" ? "cycle-submit" : undefined}>
+            <button
+              className="primary"
+              disabled={
+                !r ||
+                (tool === "shsc" &&
+                  (!available.supported || !liquidAvailable.supported))
+              }
             >
-              {resolvedPressures.low && (
-                <span>
-                  LP{" "}
-                  {formatNumber(Number(resolvedPressures.low), data.locale, 2)}{" "}
-                  bar(a)
-                </span>
-              )}
-              {resolvedPressures.high && (
-                <span>
-                  HP{" "}
-                  {formatNumber(Number(resolvedPressures.high), data.locale, 2)}{" "}
-                  bar(a)
-                </span>
-              )}
-            </output>
-          )}
-        </div>
+              {l("Laske", "Calculate")}
+            </button>
+          </div>
+        )}
       </form>
       <div
         ref={resultRef}
@@ -1178,85 +1160,132 @@ export function Calculator({
             )}
           </p>
         )}
-        {output?.map((output) => (
-          <section key={output.mode ?? "co2e"} className="result-card info">
-            <p className="result-label">
-              {tool === "co2e" ? r?.designation + " · " : ""}
-              {output.mode === "superheat"
-                ? l("Tulistus", "Superheat")
-                : output.mode === "subcooling"
-                  ? l("Alijäähdytys", "Subcooling")
-                  : title}
-            </p>
-            <p className="calculator-number mono">
-              {tool === "co2e"
-                ? formatDecimal(output.value, data.locale)
-                : formatNumber(Number(output.value), data.locale, 1)}{" "}
-              {output.unit}
-            </p>
-            {output.negative && (
-              <p>
-                {l(
-                  output.mode === "superheat"
-                    ? "Imu on kastepisteen alapuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen tulistus. Tarkista mittauspiste ja paineviite."
-                    : "Nesteen lämpötila on kuplapisteen yläpuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen alijäähdytys. Tarkista mittauspiste ja paineviite.",
-                  output.mode === "superheat"
-                    ? "Suction is below the dew temperature. This is a negative temperature difference, not positive superheat. Check measurement location and pressure reference."
-                    : "Liquid temperature is above the bubble temperature. This is a negative temperature difference, not positive subcooling. Check measurement location and pressure reference.",
+        {output && (
+          <div className={tool === "shsc" ? "cycle-readings" : undefined}>
+            {output.map((output) => (
+              <section key={output.mode ?? "co2e"} className="result-card info">
+                <p className="result-label">
+                  {tool === "co2e" ? r?.designation + " · " : ""}
+                  {output.mode === "superheat"
+                    ? l("Tulistus", "Superheat")
+                    : output.mode === "subcooling"
+                      ? l("Alijäähdytys", "Subcooling")
+                      : title}
+                </p>
+                <p className="calculator-number mono">
+                  {tool === "co2e"
+                    ? formatDecimal(output.value, data.locale)
+                    : formatNumber(Number(output.value), data.locale, 1)}{" "}
+                  <span className="reading-unit">{output.unit}</span>
+                </p>
+                {output.negative && (
+                  <p>
+                    {l(
+                      output.mode === "superheat"
+                        ? "Imu on kastepisteen alapuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen tulistus. Tarkista mittauspiste ja paineviite."
+                        : "Nesteen lämpötila on kuplapisteen yläpuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen alijäähdytys. Tarkista mittauspiste ja paineviite.",
+                      output.mode === "superheat"
+                        ? "Suction is below the dew temperature. This is a negative temperature difference, not positive superheat. Check measurement location and pressure reference."
+                        : "Liquid temperature is above the bubble temperature. This is a negative temperature difference, not positive subcooling. Check measurement location and pressure reference.",
+                    )}
+                  </p>
                 )}
-              </p>
+                {output.saturation && (
+                  <p className="caption cycle-saturation">
+                    {output.mode === "superheat"
+                      ? l("Kastepiste", "Dew point")
+                      : l("Kuplapiste", "Bubble point")}{" "}
+                    <span>
+                      {formatNumber(
+                        Number(output.saturation.temperatureC),
+                        data.locale,
+                        1,
+                      )}{" "}
+                      °C
+                    </span>
+                  </p>
+                )}
+                {output.basis && <p className="caption mono">{output.basis}</p>}
+                {tool === "co2e" && <SourceNote ids={output.sourceIds} />}
+              </section>
+            ))}{" "}
+            {resolvedPressures && (
+              <output
+                className="caption mono cycle-resolved-pressures"
+                aria-label={l("Absoluuttiset paineet", "Absolute pressures")}
+              >
+                {resolvedPressures.low && (
+                  <span>
+                    LP{" "}
+                    {formatNumber(
+                      Number(resolvedPressures.low),
+                      data.locale,
+                      2,
+                    )}{" "}
+                    bar(a)
+                  </span>
+                )}
+                {resolvedPressures.high && (
+                  <span>
+                    HP{" "}
+                    {formatNumber(
+                      Number(resolvedPressures.high),
+                      data.locale,
+                      2,
+                    )}{" "}
+                    bar(a)
+                  </span>
+                )}
+              </output>
             )}
-            {output.saturation && (
-              <p className="caption mono">
-                {output.mode === "superheat"
-                  ? l("Kastepiste", "Dew point")
-                  : l("Kuplapiste", "Bubble point")}
-                :{" "}
-                {formatNumber(
-                  Number(output.saturation.temperatureC),
-                  data.locale,
-                  1,
-                )}{" "}
-                °C
-              </p>
-            )}
-            {output.basis && <p className="caption mono">{output.basis}</p>}
-            {output.saturation ? (
-              <details className="cycle-result-details">
-                <summary>
-                  {l("Laskenta ja lähteet", "Calculation and sources")}
-                </summary>
-                {output.saturation &&
-                  output.measuredC &&
-                  output.differenceK && (
-                    <p className="caption mono">
+          </div>
+        )}
+        {tool === "shsc" && output && (
+          <details className="cycle-result-details">
+            <summary>
+              {l("Laskenta ja lähteet", "Calculation and sources")}
+            </summary>
+            {output.map(
+              (output) =>
+                output.saturation &&
+                output.measuredC &&
+                output.differenceK && (
+                  <p className="caption" key={output.mode}>
+                    <strong>
+                      {output.mode === "superheat"
+                        ? l("Tulistus", "Superheat")
+                        : l("Alijäähdytys", "Subcooling")}
+                    </strong>
+                    {" · "}
+                    <span className="mono">
                       {output.mode === "superheat"
                         ? `${formatNumber(Number(output.measuredC), data.locale, 2)} − (${formatNumber(Number(output.saturation.temperatureC), data.locale, 2)})`
                         : `${formatNumber(Number(output.saturation.temperatureC), data.locale, 2)} − (${formatNumber(Number(output.measuredC), data.locale, 2)})`}{" "}
                       °C ={" "}
                       {formatNumber(Number(output.differenceK), data.locale, 2)}{" "}
                       K
-                    </p>
-                  )}
-                {output.saturation && pressureUnit.endsWith("(g)") && (
-                  <p className="caption">
-                    {l("Ilmanpaineviite", "Atmospheric reference")}:{" "}
-                    <span className="mono">{atmosphere} bar(a)</span>
-                    {Number(atmosphere.replace(",", ".")) === 1.01325
-                      ? l(
-                          " · standardi-ilmakehä (oletus)",
-                          " · standard atmosphere (assumed)",
-                        )
-                      : ""}
+                    </span>
                   </p>
-                )}
-                <SourceNote ids={output.sourceIds} />
-              </details>
-            ) : (
-              <SourceNote ids={output.sourceIds} />
+                ),
             )}
-          </section>
-        ))}
+            {pressureUnit.endsWith("(g)") && (
+              <p className="caption">
+                {l("Ilmanpaineviite", "Atmospheric reference")}:{" "}
+                <span className="mono">{atmosphere} bar(a)</span>
+                {Number(atmosphere.replace(",", ".")) === 1.01325
+                  ? l(
+                      " · standardi-ilmakehä (oletus)",
+                      " · standard atmosphere (assumed)",
+                    )
+                  : ""}
+              </p>
+            )}
+            <SourceNote
+              ids={[...new Set(output.flatMap((item) => item.sourceIds))]}
+              disclosure={false}
+            />
+          </details>
+        )}
       </div>
       {tool === "co2e" && r && output?.[0].kg !== undefined && (
         <CO2eBreakdown refrigerant={r} kg={output[0].kg} gwpKey={gwpKey} />

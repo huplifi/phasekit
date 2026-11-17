@@ -152,6 +152,7 @@ function PHChart({
   chartId,
   highlightedGuideIndex,
   selectedPoint,
+  onSelectPoint,
 }: {
   diagram: PHDiagram;
   result?: PHCycleResult | null;
@@ -161,6 +162,7 @@ function PHChart({
   chartId: string;
   highlightedGuideIndex: number | null;
   selectedPoint: (typeof pointLabels)[number];
+  onSelectPoint: (label: (typeof pointLabels)[number]) => void;
 }) {
   const titleId = useId();
   const descriptionId = useId();
@@ -378,6 +380,27 @@ function PHChart({
         id={chartId}
         className="ph-chart"
         viewBox={`0 0 ${box.width} ${box.height}`}
+        onClick={(event) => {
+          const transform = event.currentTarget.getScreenCTM();
+          if (!transform) return;
+          // Compare distances in screen pixels so neighbouring states remain selectable when zoomed.
+          let nearest: (typeof pointLabels)[number] | undefined;
+          let distance = 24;
+          for (const point of points) {
+            const center = new DOMPoint(x(point.h), y(point.p)).matrixTransform(
+              transform,
+            );
+            const d = Math.hypot(
+              event.clientX - center.x,
+              event.clientY - center.y,
+            );
+            if (d < distance) {
+              nearest = point.label;
+              distance = d;
+            }
+          }
+          if (nearest) onSelectPoint(nearest);
+        }}
         role="img"
         aria-labelledby={`${titleId} ${descriptionId}`}
       >
@@ -721,6 +744,7 @@ export function PHDiagramPanel({
               chartId={chartId}
               highlightedGuideIndex={highlightedGuideIndex}
               selectedPoint={selectedPoint}
+              onSelectPoint={setSelectedPoint}
             />
             <figcaption className="ph-legend caption">
               <span className="ph-legend-bubble">
@@ -729,62 +753,43 @@ export function PHDiagramPanel({
               <span className="ph-legend-dew">
                 {l("Kastepisteraja", "Dew boundary")}
               </span>
-              {result && (
-                <span className="ph-legend-cycle">
-                  {l(
-                    "Kiertosuunta 1 → 2 → 3 → 4 → 1",
-                    "Cycle direction 1 → 2 → 3 → 4 → 1",
-                  )}
-                </span>
-              )}
             </figcaption>
           </figure>
           {result && (
             <section
               className="ph-results ph-result"
-              aria-labelledby="ph-result-title"
+              aria-label={l("Kierron pisteet", "Cycle state points")}
             >
-              <h3
-                id="ph-result-title"
-                className="ph-point-inspection-title"
-                tabIndex={-1}
-              >
-                {l("Kierron pisteet", "Cycle state points")}
-              </h3>
-              <div
-                className="ph-point-picker"
-                role="group"
-                aria-label={l("Valitse kiertopiste", "Select cycle point")}
-              >
-                {pointLabels.map((label) => (
-                  <button
-                    key={label}
-                    type="button"
-                    className="ph-point-select"
-                    data-point={label}
-                    aria-pressed={selectedPoint === label}
+              <div className="ph-active-point">
+                <div className="ph-selected-heading">
+                  <select
+                    className="ph-select-point"
+                    aria-label={l("Valitse kiertopiste", "Select cycle point")}
+                    value={selectedPoint}
                     aria-controls={chartId}
-                    aria-label={`${label} · ${pointNames[label]}`}
-                    onClick={() => setSelectedPoint(label)}
-                    onFocus={() => setSelectedPoint(label)}
+                    onChange={(event) =>
+                      setSelectedPoint(
+                        event.target.value as (typeof pointLabels)[number],
+                      )
+                    }
                   >
-                    <span className="ph-point-number" aria-hidden="true">
-                      {label}
-                    </span>
-                    <span className="ph-point-name">{pointNames[label]}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="ph-active-point" aria-live="polite">
-                <p className="ph-active-point-title">
-                  <strong>
-                    {selectedPoint} · {pointNames[selectedPoint]}
-                  </strong>
-                  <span>{phase(result.points[selectedPoint].phase)}</span>
-                </p>
-                <dl className="ph-point-values ph-active-point-values">
+                    {pointLabels.map((label) => (
+                      <option key={label} value={label}>
+                        {label} · {pointNames[label]}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="ph-point-phase">
+                    {phase(result.points[selectedPoint].phase)}
+                  </span>
+                </div>
+                <dl
+                  aria-live="polite"
+                  aria-atomic="true"
+                  className="ph-point-values ph-active-point-values"
+                >
                   <div>
-                    <dt>p · bar(a)</dt>
+                    <dt>{l("Paine", "Pressure")} · bar(a)</dt>
                     <dd className="mono">
                       {formatted(
                         result.points[selectedPoint].pressureBarAbsolute,
@@ -798,7 +803,7 @@ export function PHDiagramPanel({
                         : undefined
                     }
                   >
-                    <dt>T · °C</dt>
+                    <dt>{l("Lämpötila", "Temp.")} · °C</dt>
                     <dd className="mono">
                       {result.points[selectedPoint].temperatureC === null ? (
                         result.points[selectedPoint].temperatureBoundsC ? (
@@ -825,24 +830,21 @@ export function PHDiagramPanel({
                     </dd>
                   </div>
                   <div>
-                    <dt>h · kJ/kg</dt>
+                    <dt>{l("Entalpia", "Enthalpy")} · kJ/kg</dt>
                     <dd className="mono">
                       {formatted(result.points[selectedPoint].enthalpyKJkg)}
                     </dd>
                   </div>
                 </dl>
               </div>
-              <p className="caption secondary ph-point-inspection-note">
-                {selectedPoint === "4"
-                  ? l(
-                      "Lämpötila on kupla- ja kastepisteen rajaus. h₄ = h₃ olettaa isentalpisen paisunnan.",
-                      "Temperature is bounded by bubble and dew values. h₄ = h₃ assumes isenthalpic expansion.",
-                    )
-                  : l(
-                      "Valitse piste nähdäksesi arvot ja sijainnin. Paineet ovat absoluuttisia.",
-                      "Select a point to see its values and position. Pressures are absolute.",
-                    )}
-              </p>
+              {selectedPoint === "4" && (
+                <p className="caption secondary ph-point-inspection-note">
+                  {l(
+                    "Paisunta oletetaan isentalpiseksi (h₄ = h₃).",
+                    "Expansion is assumed isenthalpic (h₄ = h₃).",
+                  )}
+                </p>
+              )}
               <details className="ph-all-points">
                 <summary>
                   {l("Kaikki pistearvot", "All state-point values")}

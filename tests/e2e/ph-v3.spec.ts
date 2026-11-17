@@ -188,9 +188,7 @@ test("log(p)-h keeps named point inspection and the expansion range beside a mob
   await page.getByRole("switch", { name: "Sovita kiertoon" }).check();
   await expect(page.locator(".ph-cycle-arrow")).toHaveCount(4);
   await expect(page.locator(".ph-chart-options")).not.toHaveAttribute("open");
-  await page
-    .getByRole("button", { name: "4 · Paisunnan jälkeen", exact: true })
-    .click();
+  await page.locator('.ph-chart [data-point="4"] .ph-point').click();
   await expect(page.locator(".ph-point-selected")).toHaveAttribute(
     "data-point",
     "4",
@@ -201,9 +199,7 @@ test("log(p)-h keeps named point inspection and the expansion range beside a mob
   );
   await expect(page.locator(".ph-active-point-values")).toContainText("259,33");
   await expect(page.locator(".ph-active-point")).toContainText("Kaksifaasinen");
-  await page
-    .getByRole("button", { name: "2 · Kuumakaasu", exact: true })
-    .focus();
+  await page.getByLabel("Valitse kiertopiste").selectOption("2");
   await expect(page.locator(".ph-point-selected")).toHaveAttribute(
     "data-point",
     "2",

@@ -158,7 +158,7 @@ test("PT arrows share the input centre and redundant slider is gone", async ({
   ).toBeLessThan(1);
   await page.getByLabel("Paine", { exact: true }).fill("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).toHaveValue(
-    "15.76",
+    "15,76",
   );
   await noOverflow(page);
   await page.screenshot({

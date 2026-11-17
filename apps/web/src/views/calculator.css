@@ -350,12 +350,12 @@
 .cycle-form .form-grid.cycle-boundaries {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
   padding-top: 0;
-  margin-block: 6px 8px;
+  margin-block: 14px 16px;
 }
 .cycle-form .cycle-boundaries,
 .cycle-form .shsc-temperatures {
   align-items: stretch;
-  column-gap: 8px;
+  column-gap: 12px;
 }
 .cycle-boundary {
   display: flex;
@@ -364,6 +364,11 @@
 }
 .cycle-boundary > label:first-child {
   flex: 1;
+}
+.cycle-boundary > label,
+.cycle-measured-field > label {
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 .cycle-input-unit {
   font-size: 0.8rem;
@@ -389,9 +394,19 @@
   input {
   padding-inline-end: 3rem;
 }
+.cycle-form .cycle-boundary-choice select {
+  border-color: transparent;
+  background-color: transparent;
+  padding-inline: 0 2px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+.cycle-form .temperature-heading h2 {
+  font-size: 0.9375rem;
+}
 .cycle-form .temperature-heading {
   flex-wrap: wrap;
-  margin-block: 4px;
+  margin-block: 14px 6px;
 }
 .cycle-form .shsc-temperatures {
   display: grid;
@@ -414,46 +429,73 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 12px;
-  margin-top: 8px;
+  margin-top: 14px;
 }
 .cycle-form .cycle-submit .primary {
   min-height: 44px;
   margin: 0;
 }
-.cycle-resolved-pressures {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 12px;
-  margin: 0;
-}
-.cycle-resolved-pressures span {
-  white-space: nowrap;
-}
 .cycle-results:not(:empty) {
+  margin-top: 20px;
+}
+.cycle-readings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
-  gap: 8px;
-  margin-top: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+  gap: 12px 18px;
+  padding: 16px 18px;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
 }
-.cycle-results > .notice {
-  grid-column: 1 / -1;
-}
-.cycle-results .result-card {
+.cycle-readings > .result-card {
+  padding: 0;
   min-width: 0;
-  padding: 10px 12px;
+  background: transparent;
+  color: inherit;
 }
 .cycle-results .result-card + .result-card,
 .cycle-results .result-label,
 .cycle-results .caption {
   margin: 0;
 }
-.cycle-results .calculator-number {
-  margin-block: 2px;
-  font-size: clamp(1.25rem, 6vw, 1.75rem);
+.cycle-readings .result-label {
+  font-size: 0.875rem;
+}
+.cycle-readings .calculator-number {
+  margin: 3px 0 6px;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+.cycle-readings .reading-unit {
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+.cycle-readings .cycle-saturation,
+.cycle-resolved-pressures {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+.cycle-saturation span {
+  white-space: nowrap;
+}
+.cycle-resolved-pressures {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 4px 16px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider);
+}
+.cycle-results .cycle-result-details {
+  margin-top: 8px;
 }
 .cycle-results .cycle-result-details > summary {
-  font-size: 0.75rem;
-  padding-block: 7px;
+  min-height: 44px;
+  padding-block: 12px;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 .cycle-form .sr-only {
   position: absolute;
@@ -491,8 +533,15 @@
   .cycle-form .cycle-boundaries select {
     height: 44px;
   }
+  .cycle-results:not(:empty) {
+    margin-top: 14px;
+  }
+  .cycle-readings {
+    padding-block: 12px;
+    gap: 8px 16px;
+  }
   .cycle-form .form-grid.cycle-boundaries {
-    margin-block: 3px;
+    margin-block: 8px;
   }
   .cycle-form .temperature-heading,
   .cycle-form {

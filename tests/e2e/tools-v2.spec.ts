@@ -31,12 +31,12 @@ test("tools open without a refrigerant; P–T and SHSC retain measurements on fl
   await choose(page, "R134a");
   await page.getByLabel("Paine", { exact: true }).fill("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).toHaveValue(
-    "15.76",
+    "15,76",
   );
   await choose(page, "R32");
   await expect(page.getByLabel("Paine", { exact: true })).toHaveValue("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).not.toHaveValue(
-    "15.76",
+    "15,76",
   );
   await page.goto("/#/shsc/r134a");
   await page.locator("#shsc-lp").fill("5");
@@ -75,7 +75,7 @@ test("CO2e and new calculators work after offline reload", async ({
   await page.reload();
   await page.getByLabel("Paine", { exact: true }).fill("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).toHaveValue(
-    "15.76",
+    "15,76",
   );
 });
 

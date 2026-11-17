@@ -1456,6 +1456,19 @@ pre.share-text {
 }
 
 /* Keep version details available without displacing the field readings. */
+.compact-calculator-shell {
+  --calculator-safe-top: env(safe-area-inset-top, 0px);
+  padding-top: var(--calculator-safe-top);
+}
+.compact-calculator-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: var(--calculator-safe-top);
+  background: var(--background);
+  pointer-events: none;
+  z-index: 5;
+}
 .calculator-masthead {
   display: flex;
   align-items: center;
@@ -1469,7 +1482,10 @@ pre.share-text {
 }
 .calculator-masthead .beta-banner {
   margin: 0;
-  padding: 0 8px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 0.75rem;
 }
 .calculator-masthead .beta-banner:has(details[open]) {
   width: 100%;
@@ -1510,6 +1526,8 @@ pre.share-text {
   .compact-calculator-shell main .back {
     float: inline-end;
     margin-inline-start: 8px;
+    font-size: 0.8125rem;
+    font-weight: 500;
   }
   .compact-calculator-shell .calculator-heading,
   .compact-calculator-shell .pt-header h1 {
@@ -1520,5 +1538,18 @@ pre.share-text {
   }
   .compact-calculator-shell .refrigerant-picker {
     clear: both;
+  }
+  .compact-calculator-shell .long-heading {
+    font-size: 1.5rem;
+  }
+}
+@media (max-height: 720px) and (max-width: 620px) {
+  .compact-calculator-shell .main-nav {
+    padding-block: 4px max(4px, env(safe-area-inset-bottom));
+  }
+  .compact-calculator-shell .main-nav a {
+    min-height: 48px;
+    padding-block: 4px 6px;
+    gap: 3px;
   }
 }

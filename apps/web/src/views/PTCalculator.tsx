@@ -143,16 +143,23 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
   const pressureIsEntered = anchor.kind === "pressure";
   const temperatureIsEntered =
     anchor.kind === "temperature" && !isTemperatureConverted;
-  const pressureStatus = pressureIsEntered
-    ? anchor.value.trim()
-      ? l("Syötetty", "Entered")
-      : l("Syötä paine", "Enter pressure")
-    : l("Laskettu", "Calculated");
-  const temperatureStatus = temperatureIsEntered
-    ? anchor.value.trim()
-      ? l("Syötetty", "Entered")
-      : l("Syötä lämpötila", "Enter temperature")
-    : l("Laskettu", "Calculated");
+  const referenceName = (unit: PressureUnit) =>
+    unit.endsWith("(a)")
+      ? l("Absoluuttinen paine", "Absolute pressure")
+      : l("Mittaripaine", "Gauge pressure");
+  const boundaryName = (boundary: "dew" | "bubble") =>
+    r?.kind === "pure"
+      ? l("Kyllästyslämpötila", "Saturation temperature")
+      : boundary === "dew"
+        ? l("Kastepiste", "Dew point")
+        : l("Kuplapiste", "Bubble point");
+  const fieldStatus = (entered: boolean) => {
+    if (entered && anchor.value.trim()) return l("Syötetty", "Entered");
+    return result ? l("Laskettu", "Calculated") : "";
+  };
+  const displayNumber = (value: string) =>
+    data.locale === "fi" ? value.replace(".", ",") : value.replace(",", ".");
+  const temperatureResult = pressureIsEntered || isTemperatureConverted;
   let pressure = result
     ? formatPTReading(result.pressure.value, "pressure")
     : "";
@@ -318,32 +325,32 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
       </header>
       {r?.kind === "blend" && (
         <fieldset className="pt-phase-switch">
-          <legend>
-            <span>{l("Faasiraja", "Phase boundary")}</span>
+          <legend>{l("Faasiraja", "Phase boundary")}</legend>
+          <div className="pt-phase-row">
+            <div className="pt-phase-options">
+              <button
+                id="pt-side-dew"
+                type="button"
+                aria-pressed={effectiveSide === "dew"}
+                onClick={() => changeSide("dew")}
+              >
+                {l("Kylläinen höyry", "Saturated vapour")}
+              </button>
+              <button
+                id="pt-side-bubble"
+                type="button"
+                aria-pressed={effectiveSide === "bubble"}
+                onClick={() => changeSide("bubble")}
+              >
+                {l("Kylläinen neste", "Saturated liquid")}
+              </button>
+            </div>
             <InfoHelp label={l("Faasiraja", "Phase boundary")}>
               {l(
                 "Kastepisteessä höyry on kylläistä. Kuplapisteessä neste on kylläistä. Seoksilla lämpötilat voivat erota samalla paineella. Käytä kastepistettä tulistukseen ja kuplapistettä alijäähdytykseen.",
                 "At the dew point, vapour is saturated. At the bubble point, liquid is saturated. Blends can have different temperatures at the same pressure. Use dew for superheat and bubble for subcooling.",
               )}
             </InfoHelp>
-          </legend>
-          <div className="pt-phase-options">
-            <button
-              id="pt-side-dew"
-              type="button"
-              aria-pressed={effectiveSide === "dew"}
-              onClick={() => changeSide("dew")}
-            >
-              {l("Kylläinen höyry", "Saturated vapour")}
-            </button>
-            <button
-              id="pt-side-bubble"
-              type="button"
-              aria-pressed={effectiveSide === "bubble"}
-              onClick={() => changeSide("bubble")}
-            >
-              {l("Kylläinen neste", "Saturated liquid")}
-            </button>
           </div>
         </fieldset>
       )}
@@ -367,7 +374,9 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
               }
             >
               {units.map((unit) => (
-                <option key={unit}>{unit}</option>
+                <option key={unit} value={unit}>
+                  {unit}({pressureUnit.endsWith("(a)") ? "a" : "g"})
+                </option>
               ))}
             </select>
           </div>
@@ -380,7 +389,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
                 : undefined
             }
             autoComplete="off"
-            value={pressure}
+            value={pressureIsEntered ? pressure : displayNumber(pressure)}
             onValueChange={(value) => edit("pressure", value)}
             aria-describedby="pt-feedback pt-pressure-status"
             aria-invalid={
@@ -388,12 +397,9 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             }
           />
           <span id="pt-pressure-status" className="pt-field-status">
-            <span className="pt-status-mark" aria-hidden="true" />
-            {pressureStatus} ·{" "}
-            {pressureUnit.endsWith("(a)")
-              ? l("Absoluuttinen paine", "Absolute pressure")
-              : l("Mittaripaine", "Gauge pressure")}{" "}
-            · {pressureUnit}
+            {isTemperatureConverted && result
+              ? l("Sama paine", "Same pressure")
+              : fieldStatus(pressureIsEntered)}
           </span>
         </div>
         <ArrowLeftRight className="pt-relation" size={20} aria-hidden="true" />
@@ -423,7 +429,9 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
               "Change temperature sign",
             )}
             autoComplete="off"
-            value={temperature}
+            value={
+              temperatureIsEntered ? temperature : displayNumber(temperature)
+            }
             onValueChange={(value) => edit("temperature", value)}
             aria-describedby="pt-feedback pt-temperature-status"
             aria-invalid={
@@ -431,8 +439,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             }
           />
           <span id="pt-temperature-status" className="pt-field-status">
-            <span className="pt-status-mark" aria-hidden="true" />
-            {temperatureStatus} · °{tempUnit}
+            {fieldStatus(temperatureIsEntered)}
           </span>
         </div>
       </div>
@@ -466,7 +473,8 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             )}
           </p>
         )}
-        {r &&
+        {!result &&
+          r &&
           anchor.kind === "temperature" &&
           enteredSide &&
           isTemperatureConverted && (
@@ -481,38 +489,65 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
             </p>
           )}
       </div>
-      <span className="pt-sr-result" aria-live="polite" aria-atomic="true">
-        {result && r && !unitError && !error
-          ? anchor.kind === "pressure" || isTemperatureConverted
-            ? `${l("Laskettu lämpötila", "Calculated temperature")}: ${temperature} °${tempUnit}`
-            : `${l("Laskettu paine", "Calculated pressure")}: ${pressure} ${pressureUnit}`
-          : ""}
-      </span>
+      <div aria-live="polite" aria-atomic="true">
+        {result && r && !unitError && !error && (
+          <section className="pt-reading" aria-labelledby="pt-result-title">
+            <h2 id="pt-result-title">
+              {temperatureResult
+                ? boundaryName(effectiveSide)
+                : referenceName(pressureUnit)}
+            </h2>
+            <p className="pt-reading-value">
+              <span className="mono">
+                {displayNumber(temperatureResult ? temperature : pressure)}
+              </span>{" "}
+              <span className="pt-reading-unit">
+                {temperatureResult ? `°${tempUnit}` : pressureUnit}
+              </span>
+            </p>
+            <p className="pt-source-note">
+              {anchor.kind === "pressure"
+                ? referenceName(anchor.unit)
+                : isTemperatureConverted
+                  ? enteredSide === "dew"
+                    ? l("Syötetty kastepiste", "Entered dew point")
+                    : l("Syötetty kuplapiste", "Entered bubble point")
+                  : boundaryName(effectiveSide)}{" "}
+              {displayNumber(enteredValue)} {enteredUnit}
+            </p>
+          </section>
+        )}
+      </div>
       <div className="help-heading pressure-reference-toggle">
-        <label className="switch-label">
-          <input
-            type="checkbox"
-            role="switch"
-            checked={pressureUnit.endsWith("(a)")}
-            onChange={(event) =>
-              changePressureUnit(
-                `${pressureUnit.split("(")[0]}(${event.target.checked ? "a" : "g"})` as PressureUnit,
-              )
-            }
-          />
-          <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
+        <label htmlFor="pt-reference">
+          {l("Paineviite", "Pressure reference")}
         </label>
+        <select
+          id="pt-reference"
+          value={pressureUnit.endsWith("(a)") ? "a" : "g"}
+          onChange={(event) =>
+            changePressureUnit(
+              `${pressureUnit.split("(")[0]}(${event.target.value})` as PressureUnit,
+            )
+          }
+        >
+          <option value="g">{l("Mittaripaine", "Gauge pressure")}</option>
+          <option value="a">
+            {l("Absoluuttinen paine", "Absolute pressure")}
+          </option>
+        </select>
         <InfoHelp label={l("Paineviite", "Pressure reference")}>
           {l(
-            "Päällä: absoluuttinen paine, jonka nollakohta on tyhjiö. Pois: mittaripaine suhteessa ilmanpaineeseen. Vaihto muuntaa syötetyn paineen; paikallinen ilmanpaine vaikuttaa muunnokseen.",
-            "On: absolute pressure, referenced to vacuum. Off: gauge pressure, relative to atmosphere. Switching converts the entered pressure; local atmospheric pressure affects the conversion.",
+            "Mittaripaineen nollakohta on paikallinen ilmanpaine. Absoluuttisen paineen nollakohta on tyhjiö.",
+            "Gauge pressure is relative to local atmospheric pressure. Absolute pressure is relative to vacuum.",
           )}
         </InfoHelp>
       </div>
       {pressureUnit.endsWith("(g)") && (
         <details className="pt-atmosphere">
           <summary>
-            {l("Ilmanpaineviite", "Atmospheric reference")}: {atmosphere} bar(a)
+            {l("Ilmanpaine", "Atmospheric pressure")}{" "}
+            {displayNumber(atmosphere)} bar(a)
           </summary>
           <div className="field-group">
             <label htmlFor="pt-atmosphere">
