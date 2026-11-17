@@ -23,26 +23,26 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   const p = page.getByLabel("Paine", { exact: true });
   const t = page.getByLabel("Lämpötila", { exact: true });
   await p.fill("5");
-  await expect(t).toHaveValue("15.8");
+  await expect(t).toHaveValue("15,76");
   await t.fill("20");
   await expect
-    .poll(async () => Number(await p.inputValue()))
+    .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(5.72, 1);
-  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
   await expect
-    .poll(async () => Number(await p.inputValue()))
+    .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(4.7, 1);
-  await expect(page.locator(".pt-live-result")).toContainText(
-    "standardi-ilmakehä",
-  );
+  const atmosphere = page.locator(".pt-atmosphere");
+  await atmosphere.locator("summary").click();
+  await expect(atmosphere).toContainText("standardi-ilmakehä");
   await page.getByLabel("Paineyksikkö").selectOption("kPa");
   await expect
-    .poll(async () => Number(await p.inputValue()))
+    .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(470, -1);
   await expect(t).toHaveValue("20");
   await page.getByLabel("Lämpötilayksikkö").selectOption("F");
   await expect(t).toHaveValue("68");
-  await expect(page.getByLabel("Lämpötilapiste", { exact: true })).toHaveCount(
+  await expect(page.locator("#pt-side-bubble")).toHaveCount(
     0,
   );
   await t.fill("-999");
@@ -53,12 +53,12 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   await expect(t).toHaveValue("68");
   await expect(p).toHaveValue("");
   await expect(
-    page.getByLabel("Lämpötilapiste", { exact: true }),
+    page.locator("#pt-side-bubble"),
   ).toBeVisible();
   await page
-    .getByRole("button", { name: "Lisätietoa: Lämpötilapiste" })
+    .getByRole("button", { name: "Lisätietoa: Faasiraja" })
     .click();
-  await expect(page.getByRole("tooltip")).toContainText("Tulistuksessa");
+  await expect(page.getByRole("tooltip")).toContainText("tulistukseen");
   await page.keyboard.press("Escape");
   await choose(page, "R134a");
   await expect(p).not.toHaveValue("");

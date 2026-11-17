@@ -1,4 +1,5 @@
 import { ExclusiveChoices } from "../components/ExclusiveChoices";
+import { SignedDecimalInput } from "../components/SignedDecimalInput";
 import {
   calculatePHCycle,
   getPHAvailability,
@@ -23,6 +24,7 @@ import {
   getPTAvailability,
   offlinePTProvider,
   type PTResult,
+  type SaturationSide,
 } from "../../../../packages/core/src/pt";
 import {
   convertPressure,
@@ -38,6 +40,13 @@ import type { ReportRow } from "../storage";
 import { co2eBreakdown } from "../../../../packages/core/src/co2e-breakdown";
 import { Back, SourceNote } from "../components/Common";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
+import { formatPTReading, convertPTTemperature } from "./pt-state";
+import {
+  cycleEntryDisplay,
+  cyclePressure,
+  type CycleEntry,
+  type CycleInputMode,
+} from "./cycle-input";
 import "./calculator.css";
 
 type Tool = "shsc" | "co2e";
@@ -143,7 +152,23 @@ export function Calculator({
   const l = (a: string, b: string) => (fi ? a : b);
   const [id, setId] = useState(initial?.id ?? "");
   const [direction, setDirection] = useState(false);
-  const [highPressure, setHighPressure] = useState("");
+  const [inputMode, setInputMode] = useState<CycleInputMode>("pressure");
+  const [lowEntry, setLowEntry] = useState<CycleEntry>({
+    kind: "pressure",
+    value: "",
+    unit: "bar(a)",
+  });
+  const [highEntry, setHighEntry] = useState<CycleEntry>({
+    kind: "pressure",
+    value: "",
+    unit: "bar(a)",
+  });
+  const [lowSide, setLowSide] = useState<SaturationSide>("dew");
+  const [highSide, setHighSide] = useState<SaturationSide>("dew");
+  const [resolvedPressures, setResolvedPressures] = useState<{
+    low?: string;
+    high?: string;
+  } | null>(null);
   const [hotGas, setHotGas] = useState("");
   const [liquid, setLiquid] = useState("");
   const [value, setValue] = useState("");
@@ -176,6 +201,7 @@ export function Calculator({
   useEffect(() => () => setDraftDirty(false), [setDraftDirty]);
   function changed() {
     setOutput(null);
+    setResolvedPressures(null);
     setCycle(null);
     setChartView((previous) => ({ ...previous, fitCycle: false }));
     setDiagramMessage("");
@@ -188,54 +214,97 @@ export function Calculator({
     setGwpKey(defaultGwpKey(byId.get(next)));
     changed();
   }
+  function displayedEntry(entry: CycleEntry, side: SaturationSide) {
+    try {
+      const display = cycleEntryDisplay({
+        id,
+        entry,
+        mode: inputMode,
+        side,
+        pressureUnit,
+        tempUnit,
+        atmosphere,
+      });
+      return display && entry.kind !== inputMode
+        ? formatPTReading(display, inputMode)
+        : display;
+    } catch {
+      // Preserve an unfinished original entry; a derived counterpart is unavailable.
+      return entry.kind === inputMode &&
+        entry.unit === (inputMode === "pressure" ? pressureUnit : tempUnit)
+        ? entry.value
+        : "";
+    }
+  }
+  const lowInput = displayedEntry(lowEntry, lowSide);
+  const highInput = displayedEntry(highEntry, highSide);
+  function editEntry(high: boolean, next: string) {
+    const entry: CycleEntry =
+      inputMode === "pressure"
+        ? { kind: "pressure", value: next, unit: pressureUnit }
+        : {
+            kind: "temperature",
+            value: next,
+            unit: tempUnit,
+            side: high ? highSide : lowSide,
+          };
+    (high ? setHighEntry : setLowEntry)(entry);
+    changed();
+  }
+  function changeBoundary(high: boolean, side: SaturationSide) {
+    // A boundary selector describes the entered temperature, not the SH/SC reference.
+    const current = high ? highInput : lowInput;
+    (high ? setHighSide : setLowSide)(side);
+    if ((high ? highEntry : lowEntry).kind === "temperature")
+      (high ? setHighEntry : setLowEntry)({
+        kind: "temperature",
+        value: current,
+        unit: tempUnit,
+        side,
+      });
+    changed();
+  }
   function changePressureUnit(next: PressureUnit) {
     if (next === pressureUnit) return;
     try {
-      const converted = [value, highPressure].map((entry) =>
-        entry.trim()
-          ? convertPressure({ value: entry, unit: pressureUnit }, next, {
-              value: atmosphere,
-              unit: "bar(a)",
-            })
-          : entry,
-      );
-      setValue(converted[0]);
-      setHighPressure(converted[1]);
-      setUnitError(false);
+      for (const entry of [lowEntry, highEntry]) {
+        if (entry.value.trim() && entry.kind === "pressure")
+          convertPressure({ value: entry.value, unit: entry.unit }, next, {
+            value: atmosphere,
+            unit: "bar(a)",
+          });
+      }
     } catch {
       setUnitError(true);
       return;
     }
     setPressureUnit(next);
-    setOutput(null);
-    setCycle(null);
-    setDiagramMessage("");
-    setError("");
-    setDraftDirty(true);
+    changed();
   }
   function changeAtmosphere(next: string) {
     // Keep the entered gauge measurement; the new reference changes its
     // derived absolute pressure.
     setAtmosphere(next);
-    setOutput(null);
-    setCycle(null);
-    setDiagramMessage("");
-    setError("");
-    setDraftDirty(true);
+    changed();
   }
   function changeTemperatureUnit(next: "C" | "F") {
     if (next === tempUnit) return;
     try {
+      for (const entry of [lowEntry, highEntry]) {
+        if (entry.kind === "temperature" && entry.value.trim())
+          cycleEntryDisplay({
+            id,
+            entry,
+            mode: "temperature",
+            side: entry.side,
+            pressureUnit,
+            tempUnit: next,
+            atmosphere,
+          });
+      }
       const converted = [measured, hotGas, liquid].map((entry) => {
         if (!entry.trim()) return entry;
-        const old = parseDecimal(entry);
-        return (
-          next === "F"
-            ? old.mul(9).div(5).plus(32)
-            : old.minus(32).mul(5).div(9)
-        )
-          .toSignificantDigits(12)
-          .toFixed();
+        return convertPTTemperature(entry, tempUnit, next);
       });
       setMeasured(converted[0]);
       setHotGas(converted[1]);
@@ -246,14 +315,11 @@ export function Calculator({
       return;
     }
     setTempUnit(next);
-    setOutput(null);
-    setCycle(null);
-    setDiagramMessage("");
-    setError("");
-    setDraftDirty(true);
+    changed();
   }
   function calculate() {
     setOutput(null);
+    setResolvedPressures(null);
     setCycle(null);
     setDiagramMessage("");
     setError("");
@@ -280,47 +346,60 @@ export function Calculator({
           },
         ]);
       } else if (tool === "shsc") {
-        const low = parseDecimal(
-          convertPressure({ value, unit: pressureUnit }, "bar(a)", atm),
-        );
-        const high = parseDecimal(
-          convertPressure(
-            { value: highPressure, unit: pressureUnit },
-            "bar(a)",
-            atm,
-          ),
-        );
-        if (high.lte(low)) throw new Error("high_pressure_must_exceed_low");
-        for (const entry of [measured, liquid]) {
+        const low = cyclePressure(id, lowEntry, atmosphere);
+        const high = cyclePressure(id, highEntry, atmosphere);
+        if (low && high && parseDecimal(high).lte(low))
+          throw new Error("high_pressure_must_exceed_low");
+        for (const entry of [measured, liquid].filter((entry) =>
+          entry.trim(),
+        )) {
           const temperature = parseDecimal(entry);
           if (temperature.lt(tempUnit === "C" ? "-273.15" : "-459.67"))
             throw new Error("invalid_temperature");
         }
-        const results = (["superheat", "subcooling"] as const).map((mode) => {
-          const result = calculateSHSC({
-            refrigerantId: id,
-            mode,
-            pressure: {
-              value: mode === "superheat" ? value : highPressure,
-              unit: pressureUnit,
-            },
-            measuredTemperature: {
-              value: mode === "superheat" ? measured : liquid,
-              unit: tempUnit,
-            },
-            atmosphere: atm,
-          });
-          return {
-            mode,
-            value: tempUnit === "C" ? result.differenceK : result.differenceF,
-            unit: tempUnit === "C" ? "K" : "°F Δ",
-            saturation: result.saturation,
-            sourceIds: result.saturation.provider.sourceIds,
-            negative: Number(result.differenceK) < 0,
-            measuredC: result.measuredTemperatureC,
-            differenceK: result.differenceK,
-          };
-        });
+        const results = (["superheat", "subcooling"] as const).flatMap(
+          (mode): Output[] => {
+            const pressure = mode === "superheat" ? low : high;
+            const temperature = mode === "superheat" ? measured : liquid;
+            if (!pressure || !temperature.trim()) return [];
+            const result = calculateSHSC({
+              refrigerantId: id,
+              mode,
+              pressure: {
+                value: pressure,
+                unit: "bar(a)",
+              },
+              measuredTemperature: {
+                value: mode === "superheat" ? measured : liquid,
+                unit: tempUnit,
+              },
+              atmosphere: atm,
+            });
+            return [
+              {
+                mode,
+                value:
+                  tempUnit === "C" ? result.differenceK : result.differenceF,
+                unit: tempUnit === "C" ? "K" : "°F Δ",
+                saturation: result.saturation,
+                sourceIds: result.saturation.provider.sourceIds,
+                negative: Number(result.differenceK) < 0,
+                measuredC: result.measuredTemperatureC,
+                differenceK: result.differenceK,
+              },
+            ];
+          },
+        );
+        if (!results.length) {
+          setError(
+            l(
+              "Syötä vähintään LP ja imulämpötila tai HP ja nestelämpötila.",
+              "Enter at least LP and suction temperature, or HP and liquid temperature.",
+            ),
+          );
+          return;
+        }
+        setResolvedPressures({ low, high });
         setOutput(results);
         if (!getPHAvailability(id).supported) {
           setDiagramMessage(
@@ -329,11 +408,30 @@ export function Calculator({
               "No p–h data is available for this refrigerant.",
             ),
           );
-        } else if (!hotGas.trim()) {
+        } else if (
+          low &&
+          high &&
+          measured.trim() &&
+          liquid.trim() &&
+          !hotGas.trim()
+        ) {
           setDiagramMessage(
             l(
               "Lisää Kuumakaasu-lämpötila, niin myös neljän pisteen kierto voidaan laskea.",
               "Add the hot-gas temperature to calculate the four-point cycle.",
+            ),
+          );
+        } else if (
+          !low ||
+          !high ||
+          !measured.trim() ||
+          !liquid.trim() ||
+          !hotGas.trim()
+        ) {
+          setDiagramMessage(
+            l(
+              "Täydennä molemmat puolet sekä imu-, kuumakaasu- ja nestelämpötilat neljän pisteen kiertoa varten.",
+              "Complete both sides and the suction, hot-gas and liquid temperatures for the four-point cycle.",
             ),
           );
         } else {
@@ -341,8 +439,8 @@ export function Calculator({
             setCycle(
               calculatePHCycle({
                 refrigerantId: id,
-                lowPressure: { value, unit: pressureUnit },
-                highPressure: { value: highPressure, unit: pressureUnit },
+                lowPressure: { value: low, unit: "bar(a)" },
+                highPressure: { value: high, unit: "bar(a)" },
                 T1: { value: measured, unit: tempUnit },
                 T2: { value: hotGas, unit: tempUnit },
                 T3: { value: liquid, unit: tempUnit },
@@ -492,27 +590,65 @@ export function Calculator({
           ),
         );
     } else if (tool === "shsc") {
-      inputRows.push(
-        reportRow(
-          "LP · Imupaine",
-          "LP · Suction pressure",
-          value,
-          pressureUnit,
-        ),
-        reportRow(
-          "HP · Korkeapaine",
-          "HP · High pressure",
-          highPressure,
-          pressureUnit,
-        ),
-        reportRow("Imu", "Suction", measured, `°${tempUnit}`),
-        reportRow("Neste", "Liquid", liquid, `°${tempUnit}`),
-      );
+      for (const [sideLabel, entry] of [
+        ["LP", lowEntry],
+        ["HP", highEntry],
+      ] as const) {
+        if (!entry.value.trim()) continue;
+        inputRows.push(
+          entry.kind === "pressure"
+            ? reportRow(
+                sideLabel === "LP" ? "LP · Imupaine" : "HP · Korkeapaine",
+                sideLabel === "LP"
+                  ? "LP · Suction pressure"
+                  : "HP · High pressure",
+                entry.value,
+                entry.unit,
+              )
+            : reportRow(
+                sideLabel === "LP"
+                  ? "LP · Syötetty höyrystymislämpötila"
+                  : "HP · Syötetty lauhtumislämpötila",
+                sideLabel === "LP"
+                  ? "LP · Entered evaporation temperature"
+                  : "HP · Entered condensation temperature",
+                entry.value,
+                "°" + entry.unit,
+              ),
+        );
+        if (entry.kind === "temperature")
+          inputRows.push(
+            reportRow(
+              sideLabel + " · Syötteen faasiraja",
+              sideLabel + " · Entered phase boundary",
+              entry.side,
+            ),
+          );
+        const pressure =
+          sideLabel === "LP" ? resolvedPressures?.low : resolvedPressures?.high;
+        if (pressure)
+          outputRows.push(
+            reportRow(
+              sideLabel + " · Laskettu absoluuttinen paine",
+              sideLabel + " · Calculated absolute pressure",
+              pressure,
+              "bar(a)",
+            ),
+          );
+      }
+      if (measured.trim())
+        inputRows.push(reportRow("Imu", "Suction", measured, "°" + tempUnit));
+      if (liquid.trim())
+        inputRows.push(reportRow("Neste", "Liquid", liquid, "°" + tempUnit));
       if (hotGas.trim())
         inputRows.push(
           reportRow("Kuumakaasu", "Hot gas", hotGas, `°${tempUnit}`),
         );
-      if (pressureUnit.endsWith("(g)"))
+      if (
+        [lowEntry, highEntry].some(
+          (entry) => entry.kind === "pressure" && entry.unit.endsWith("(g)"),
+        )
+      )
         inputRows.push(
           reportRow(
             "Ilmanpaineviite",
@@ -612,17 +748,95 @@ export function Calculator({
           </InfoHelp>
         )}
       </div>
-      {tool === "shsc" && (
-        <p className="secondary">
-          {l(
-            "Tulistus, alijäähdytys ja log(p)–h samoista mittauksista.",
-            "Superheat, subcooling and log(p)–h from the same measurements.",
-          )}
-        </p>
-      )}
-      <RefrigerantPicker value={id} onChange={selectId} />
+      <div className={tool === "shsc" ? "cycle-toolbar" : undefined}>
+        <RefrigerantPicker value={id} onChange={selectId} />
+        {tool === "shsc" && (
+          <details className="cycle-unit-settings">
+            <summary
+              aria-label={
+                l("Yksiköt ja paineviite", "Units and pressure reference") +
+                " · " +
+                pressureUnit +
+                " · °" +
+                tempUnit
+              }
+            >
+              {pressureUnit} · °{tempUnit}
+            </summary>
+            <div className="form-grid shsc-unit-settings">
+              <label>
+                {l("Paineyksikkö", "Pressure unit")}
+                <select
+                  value={pressureUnit.split("(")[0]}
+                  onChange={(e) =>
+                    changePressureUnit(
+                      `${e.target.value}(${pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
+                    )
+                  }
+                >
+                  {pressureUnits.map((unit) => (
+                    <option key={unit}>{unit}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                {l("Lämpötilayksikkö", "Temperature unit")}
+                <select
+                  value={tempUnit}
+                  onChange={(e) =>
+                    changeTemperatureUnit(e.target.value as "C" | "F")
+                  }
+                >
+                  <option value="C">°C</option>
+                  <option value="F">°F</option>
+                </select>
+              </label>
+            </div>
+            <div className="help-heading pressure-reference-toggle">
+              <label className="switch-label">
+                <input
+                  type="checkbox"
+                  role="switch"
+                  checked={pressureUnit.endsWith("(a)")}
+                  onChange={(event) =>
+                    changePressureUnit(
+                      `${pressureUnit.split("(")[0]}(${event.target.checked ? "a" : "g"})` as PressureUnit,
+                    )
+                  }
+                />
+                <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
+              </label>
+              <InfoHelp label={l("Paineviite", "Pressure reference")}>
+                {l(
+                  "Päällä: absoluuttinen paine. Pois: mittaripaine suhteessa ilmanpaineeseen. Vaihto muuntaa syötetyn paineen.",
+                  "On: absolute pressure. Off: gauge pressure relative to atmosphere. Switching converts the entered pressure.",
+                )}
+              </InfoHelp>
+            </div>
+            {pressureUnit.endsWith("(g)") && (
+              <label>
+                {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
+                <input
+                  inputMode="decimal"
+                  className="mono"
+                  id="cycle-atmosphere"
+                  value={atmosphere}
+                  onChange={(e) => changeAtmosphere(e.target.value)}
+                  required
+                />
+                <span className="caption">
+                  {l(
+                    "Oletus 1,01325 bar(a) on standardi-ilmakehä. Muuta tarvittaessa mitattuun paikalliseen paineeseen.",
+                    "The default 1.01325 bar(a) is standard atmosphere. Adjust to measured local pressure when needed.",
+                  )}
+                </span>
+              </label>
+            )}
+          </details>
+        )}
+      </div>
       <form
-        className={`calculator-form${tool === "co2e" ? " co2e-form" : ""}`}
+        className={`calculator-form${tool === "co2e" ? " co2e-form" : " cycle-form"}`}
         onSubmit={(e) => {
           e.preventDefault();
           calculate();
@@ -708,204 +922,229 @@ export function Calculator({
             />
           </div>
         )}
-        {tool === "shsc" && (
-          <div className="form-grid shsc-unit-settings">
-            <label>
-              {l("Paineyksikkö", "Pressure unit")}
-              <select
-                value={pressureUnit.split("(")[0]}
-                onChange={(e) =>
-                  changePressureUnit(
-                    `${e.target.value}(${pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
-                  )
-                }
-              >
-                {pressureUnits.map((unit) => (
-                  <option key={unit}>{unit}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              {l("Lämpötilayksikkö", "Temperature unit")}
-              <select
-                value={tempUnit}
-                onChange={(e) =>
-                  changeTemperatureUnit(e.target.value as "C" | "F")
-                }
-              >
-                <option value="C">°C</option>
-                <option value="F">°F</option>
-              </select>
-            </label>
-          </div>
-        )}
-        {tool === "shsc" && (
-          <div className="help-heading pressure-reference-toggle">
-            <label className="switch-label">
-              <input
-                type="checkbox"
-                role="switch"
-                checked={pressureUnit.endsWith("(a)")}
-                onChange={(event) =>
-                  changePressureUnit(
-                    `${pressureUnit.split("(")[0]}(${event.target.checked ? "a" : "g"})` as PressureUnit,
-                  )
-                }
-              />
-              <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
-            </label>
-            <InfoHelp label={l("Paineviite", "Pressure reference")}>
-              {l(
-                "Päällä: absoluuttinen paine. Pois: mittaripaine suhteessa ilmanpaineeseen. Vaihto muuntaa syötetyn paineen.",
-                "On: absolute pressure. Off: gauge pressure relative to atmosphere. Switching converts the entered pressure.",
-              )}
-            </InfoHelp>
-          </div>
-        )}
-        {tool === "shsc" && pressureUnit.endsWith("(g)") && (
-          <label>
-            {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
-            <input
-              inputMode="decimal"
-              className="mono"
-              id="cycle-atmosphere"
-              value={atmosphere}
-              onChange={(e) => changeAtmosphere(e.target.value)}
-              required
-            />
-            <span className="caption">
-              {l(
-                "Oletus 1,01325 bar(a) on standardi-ilmakehä. Muuta tarvittaessa mitattuun paikalliseen paineeseen.",
-                "The default 1.01325 bar(a) is standard atmosphere. Adjust to measured local pressure when needed.",
-              )}
-            </span>
-          </label>
-        )}
+
         {tool === "shsc" && (
           <>
-            <div className="form-grid shsc-fields">
-              <label htmlFor="shsc-lp">
-                <span>
-                  LP · {l("Imupaine", "Suction pressure")}
-                  <span className="caption secondary field-unit">
-                    {pressureUnit}
-                  </span>
-                </span>
-                <input
-                  id="shsc-lp"
-                  inputMode={pressureUnit.endsWith("(g)") ? "text" : "decimal"}
-                  autoComplete="off"
-                  className="mono"
-                  value={value}
-                  onChange={(e) => {
-                    setValue(e.target.value);
-                    changed();
-                  }}
-                  required
-                />
-              </label>
-              <label htmlFor="shsc-hp">
-                <span>
-                  HP · {l("Korkeapaine", "High pressure")}
-                  <span className="caption secondary field-unit">
-                    {pressureUnit}
-                  </span>
-                </span>
-                <input
-                  id="shsc-hp"
-                  inputMode={pressureUnit.endsWith("(g)") ? "text" : "decimal"}
-                  autoComplete="off"
-                  className="mono"
-                  value={highPressure}
-                  onChange={(e) => {
-                    setHighPressure(e.target.value);
-                    changed();
-                  }}
-                  required
-                />
-              </label>
+            <ExclusiveChoices
+              className="cycle-input-mode"
+              label={l("Syöttötapa", "Input mode")}
+              value={inputMode}
+              options={[
+                { value: "pressure", label: l("Paineet", "Pressures") },
+                {
+                  value: "temperature",
+                  label: l("Kyllästyslämpötilat", "Saturation temperatures"),
+                },
+              ]}
+              onChange={(mode) => {
+                setInputMode(mode);
+                changed();
+              }}
+            />
+            <div className="form-grid shsc-fields cycle-boundaries">
+              {([false, true] as const).map((high) => {
+                const side = high ? highSide : lowSide;
+                const source = high ? highEntry : lowEntry;
+                const fieldId =
+                  inputMode === "pressure"
+                    ? high
+                      ? "shsc-hp"
+                      : "shsc-lp"
+                    : high
+                      ? "cycle-condensation"
+                      : "cycle-evaporation";
+                return (
+                  <div className="cycle-boundary" key={high ? "high" : "low"}>
+                    <label htmlFor={fieldId}>
+                      <span>
+                        {inputMode === "pressure" && (high ? "HP · " : "LP · ")}
+                        {inputMode === "pressure"
+                          ? high
+                            ? l("Korkeapaine", "High pressure")
+                            : l("Imupaine", "Suction pressure")
+                          : high
+                            ? l("Lauhtuminen", "Condensation")
+                            : l("Höyrystyminen", "Evaporation")}
+                        <span className="cycle-input-unit">
+                          {" "}
+                          {inputMode === "pressure"
+                            ? pressureUnit
+                            : "°" + tempUnit}
+                        </span>
+                      </span>
+                    </label>
+                    <SignedDecimalInput
+                      id={fieldId}
+                      autoComplete="off"
+                      className="mono"
+                      value={high ? highInput : lowInput}
+                      onValueChange={(next) => editEntry(high, next)}
+                      signLabel={
+                        inputMode === "temperature" ||
+                        pressureUnit.endsWith("(g)")
+                          ? l(
+                              high
+                                ? "Vaihda HP-arvon etumerkki"
+                                : "Vaihda LP-arvon etumerkki",
+                              high
+                                ? "Change HP value sign"
+                                : "Change LP value sign",
+                            )
+                          : undefined
+                      }
+                    />
+                    {source.kind !== inputMode && source.value.trim() && (
+                      <p className="caption secondary cycle-source-value">
+                        {l("Syötetty", "Entered")} {source.value}{" "}
+                        {source.kind === "temperature" ? "°" : ""}
+                        {source.unit}
+                        {source.kind === "temperature" &&
+                          r?.kind === "blend" &&
+                          (source.side === "dew"
+                            ? l(" · kastepiste", " · dew point")
+                            : l(" · kuplapiste", " · bubble point"))}
+                      </p>
+                    )}
+                    {inputMode === "temperature" && r?.kind === "blend" && (
+                      <label
+                        className="cycle-boundary-choice"
+                        htmlFor={
+                          high ? "cycle-high-boundary" : "cycle-low-boundary"
+                        }
+                      >
+                        <span className="sr-only">
+                          {high
+                            ? l(
+                                "Lauhtumisen faasiraja",
+                                "Condensation phase boundary",
+                              )
+                            : l(
+                                "Höyrystymisen faasiraja",
+                                "Evaporation phase boundary",
+                              )}
+                        </span>
+                        <select
+                          id={
+                            high ? "cycle-high-boundary" : "cycle-low-boundary"
+                          }
+                          value={side}
+                          onChange={(e) =>
+                            changeBoundary(
+                              high,
+                              e.target.value as SaturationSide,
+                            )
+                          }
+                        >
+                          <option value="dew">
+                            {l("Kylläinen höyry", "Saturated vapour")}
+                          </option>
+                          <option value="bubble">
+                            {l("Kylläinen neste", "Saturated liquid")}
+                          </option>
+                        </select>
+                      </label>
+                    )}
+                  </div>
+                );
+              })}
             </div>
             <div className="help-heading temperature-heading">
-              <h2>{l("Lämpötilat", "Temperatures")}</h2>
+              <h2>
+                {l("Mittauslämpötilat", "Measured temperatures")}{" "}
+                <span className="cycle-input-unit">°{tempUnit}</span>
+              </h2>
               <InfoHelp label={l("Mittauspisteet", "Measurement points")}>
                 {l(
-                  "Imu: kompressoriin tuleva höyry, käytetään tulistuksen laskentaan LP-paineen kastepisteestä. Kuumakaasu: kompressorista lähtevä kaasu; tarvitaan log(p)–h-kierron piirtämiseen, ei vaikuta tulistukseen tai alijäähdytykseen. Neste: nestelinja ennen paisuntaventtiiliä, käytetään alijäähdytyksen laskentaan HP-paineen kuplapisteestä.",
-                  "Suction: vapour entering the compressor, used for superheat relative to LP dew temperature. Hot gas: gas leaving the compressor; required to plot the log(p)–h cycle, not used for superheat or subcooling. Liquid: liquid line before the expansion valve, used for subcooling relative to HP bubble temperature.",
+                  "Kastepisteessä höyry on kylläistä. Kuplapisteessä neste on kylläistä. Valitse seokselle syötettyä lämpötilaa vastaava faasiraja. Tulistus on imukaasun lämpötilan ero imupaineen kastepisteeseen. Alijäähdytys on korkeapaineen kuplapisteen ja ennen paisuntaa mitatun nestelämpötilan erotus. Kompressorilta lähtevän kuumakaasun lämpötila tarvitaan kierron piirtämiseen.",
+                  "At the dew point, vapour is saturated. At the bubble point, liquid is saturated. For a blend, select the phase boundary that matches the entered temperature. Superheat is suction temperature above the low-pressure dew point. Subcooling is the high-pressure bubble point minus liquid temperature before expansion. Discharge gas temperature is needed to plot the cycle.",
                 )}
               </InfoHelp>
             </div>
             <div className="shsc-fields shsc-temperatures">
-              <label htmlFor="shsc-suction">
-                <span>
-                  {l("Imu", "Suction")} · °{tempUnit}
-                </span>
-                <input
+              <div className="cycle-measured-field">
+                <label htmlFor="shsc-suction">
+                  <span>{l("Imu", "Suction")}</span>
+                </label>
+                <SignedDecimalInput
                   id="shsc-suction"
-                  inputMode="text"
+                  signLabel={l(
+                    "Vaihda imulämpötilan etumerkki",
+                    "Change suction temperature sign",
+                  )}
                   autoComplete="off"
                   className="mono"
                   value={measured}
-                  onChange={(e) => {
-                    setMeasured(e.target.value);
+                  onValueChange={(next) => {
+                    setMeasured(next);
                     changed();
                   }}
-                  required
                 />
-              </label>
-              <label htmlFor="shsc-hot-gas">
-                <span>
-                  {l("Kuumakaasu", "Hot gas")} · °{tempUnit}
-                  <span className="caption secondary field-unit">
-                    {l("Kaaviota varten", "For the diagram")}
+              </div>
+              <div className="cycle-measured-field">
+                <label htmlFor="shsc-hot-gas">
+                  <span>
+                    {l("Kuumakaasu", "Hot gas")}
+                    <span className="sr-only">
+                      {l("Kaaviota varten", "For the diagram")}
+                    </span>
                   </span>
-                </span>
-                <input
+                </label>
+                <SignedDecimalInput
                   id="shsc-hot-gas"
-                  inputMode="text"
+                  signLabel={l(
+                    "Vaihda kuumakaasulämpötilan etumerkki",
+                    "Change hot-gas temperature sign",
+                  )}
                   autoComplete="off"
                   className="mono"
                   value={hotGas}
-                  onChange={(e) => {
-                    setHotGas(e.target.value);
+                  onValueChange={(next) => {
+                    setHotGas(next);
                     changed();
                   }}
                 />
-              </label>
-              <label htmlFor="shsc-liquid">
-                <span>
-                  {l("Neste", "Liquid")} · °{tempUnit}
-                </span>
-                <input
+              </div>
+              <div className="cycle-measured-field">
+                <label htmlFor="shsc-liquid">
+                  <span>{l("Neste", "Liquid")}</span>
+                </label>
+                <SignedDecimalInput
                   id="shsc-liquid"
-                  inputMode="text"
+                  signLabel={l(
+                    "Vaihda nestelämpötilan etumerkki",
+                    "Change liquid temperature sign",
+                  )}
                   autoComplete="off"
                   className="mono"
                   value={liquid}
-                  onChange={(e) => {
-                    setLiquid(e.target.value);
+                  onValueChange={(next) => {
+                    setLiquid(next);
                     changed();
                   }}
-                  required
                 />
-              </label>
+              </div>
             </div>
           </>
         )}
-        <button
-          className="primary"
-          disabled={
-            !r ||
-            (tool === "shsc" &&
-              (!available.supported || !liquidAvailable.supported))
-          }
-        >
-          {l("Laske", "Calculate")}
-        </button>
+        {(tool !== "shsc" || !output) && (
+          <div className={tool === "shsc" ? "cycle-submit" : undefined}>
+            <button
+              className="primary"
+              disabled={
+                !r ||
+                (tool === "shsc" &&
+                  (!available.supported || !liquidAvailable.supported))
+              }
+            >
+              {l("Laske", "Calculate")}
+            </button>
+          </div>
+        )}
       </form>
       <div
         ref={resultRef}
         tabIndex={-1}
-        className="calculator-result"
+        className={`calculator-result${tool === "shsc" ? " cycle-results" : ""}`}
         aria-live="polite"
       >
         {error && (
@@ -921,63 +1160,115 @@ export function Calculator({
             )}
           </p>
         )}
-        {output?.map((output) => (
-          <section key={output.mode ?? "co2e"} className="result-card info">
-            <p className="result-label">
-              {r?.designation} ·{" "}
-              {output.mode === "superheat"
-                ? l("Tulistus", "Superheat")
-                : output.mode === "subcooling"
-                  ? l("Alijäähdytys", "Subcooling")
-                  : title}
-            </p>
-            <p className="calculator-number mono">
-              {tool === "co2e"
-                ? formatDecimal(output.value, data.locale)
-                : formatNumber(Number(output.value), data.locale, 1)}{" "}
-              {output.unit}
-            </p>
-            {output.negative && (
-              <p>
-                {l(
-                  output.mode === "superheat"
-                    ? "Imu on kastepisteen alapuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen tulistus. Tarkista mittauspiste ja paineviite."
-                    : "Nesteen lämpötila on kuplapisteen yläpuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen alijäähdytys. Tarkista mittauspiste ja paineviite.",
-                  output.mode === "superheat"
-                    ? "Suction is below the dew temperature. This is a negative temperature difference, not positive superheat. Check measurement location and pressure reference."
-                    : "Liquid temperature is above the bubble temperature. This is a negative temperature difference, not positive subcooling. Check measurement location and pressure reference.",
+        {output && (
+          <div className={tool === "shsc" ? "cycle-readings" : undefined}>
+            {output.map((output) => (
+              <section key={output.mode ?? "co2e"} className="result-card info">
+                <p className="result-label">
+                  {tool === "co2e" ? r?.designation + " · " : ""}
+                  {output.mode === "superheat"
+                    ? l("Tulistus", "Superheat")
+                    : output.mode === "subcooling"
+                      ? l("Alijäähdytys", "Subcooling")
+                      : title}
+                </p>
+                <p className="calculator-number mono">
+                  {tool === "co2e"
+                    ? formatDecimal(output.value, data.locale)
+                    : formatNumber(Number(output.value), data.locale, 1)}{" "}
+                  <span className="reading-unit">{output.unit}</span>
+                </p>
+                {output.negative && (
+                  <p>
+                    {l(
+                      output.mode === "superheat"
+                        ? "Imu on kastepisteen alapuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen tulistus. Tarkista mittauspiste ja paineviite."
+                        : "Nesteen lämpötila on kuplapisteen yläpuolella. Tämä on negatiivinen lämpötilaero, ei positiivinen alijäähdytys. Tarkista mittauspiste ja paineviite.",
+                      output.mode === "superheat"
+                        ? "Suction is below the dew temperature. This is a negative temperature difference, not positive superheat. Check measurement location and pressure reference."
+                        : "Liquid temperature is above the bubble temperature. This is a negative temperature difference, not positive subcooling. Check measurement location and pressure reference.",
+                    )}
+                  </p>
                 )}
-              </p>
+                {output.saturation && (
+                  <p className="caption cycle-saturation">
+                    {output.mode === "superheat"
+                      ? l("Kastepiste", "Dew point")
+                      : l("Kuplapiste", "Bubble point")}{" "}
+                    <span>
+                      {formatNumber(
+                        Number(output.saturation.temperatureC),
+                        data.locale,
+                        1,
+                      )}{" "}
+                      °C
+                    </span>
+                  </p>
+                )}
+                {output.basis && <p className="caption mono">{output.basis}</p>}
+                {tool === "co2e" && <SourceNote ids={output.sourceIds} />}
+              </section>
+            ))}{" "}
+            {resolvedPressures && (
+              <output
+                className="caption mono cycle-resolved-pressures"
+                aria-label={l("Absoluuttiset paineet", "Absolute pressures")}
+              >
+                {resolvedPressures.low && (
+                  <span>
+                    LP{" "}
+                    {formatNumber(
+                      Number(resolvedPressures.low),
+                      data.locale,
+                      2,
+                    )}{" "}
+                    bar(a)
+                  </span>
+                )}
+                {resolvedPressures.high && (
+                  <span>
+                    HP{" "}
+                    {formatNumber(
+                      Number(resolvedPressures.high),
+                      data.locale,
+                      2,
+                    )}{" "}
+                    bar(a)
+                  </span>
+                )}
+              </output>
             )}
-            {output.saturation && (
-              <p className="caption mono">
-                {output.mode === "superheat"
-                  ? l("Kastepiste", "Dew point")
-                  : l("Kuplapiste", "Bubble point")}
-                :{" "}
-                {formatNumber(
-                  Number(output.saturation.temperatureC),
-                  data.locale,
-                  1,
-                )}{" "}
-                °C ·{" "}
-                {formatPressure(
-                  Number(output.saturation.pressureBarAbsolute),
-                  data.locale,
-                )}{" "}
-                bar(a)
-              </p>
+          </div>
+        )}
+        {tool === "shsc" && output && (
+          <details className="cycle-result-details">
+            <summary>
+              {l("Laskenta ja lähteet", "Calculation and sources")}
+            </summary>
+            {output.map(
+              (output) =>
+                output.saturation &&
+                output.measuredC &&
+                output.differenceK && (
+                  <p className="caption" key={output.mode}>
+                    <strong>
+                      {output.mode === "superheat"
+                        ? l("Tulistus", "Superheat")
+                        : l("Alijäähdytys", "Subcooling")}
+                    </strong>
+                    {" · "}
+                    <span className="mono">
+                      {output.mode === "superheat"
+                        ? `${formatNumber(Number(output.measuredC), data.locale, 2)} − (${formatNumber(Number(output.saturation.temperatureC), data.locale, 2)})`
+                        : `${formatNumber(Number(output.saturation.temperatureC), data.locale, 2)} − (${formatNumber(Number(output.measuredC), data.locale, 2)})`}{" "}
+                      °C ={" "}
+                      {formatNumber(Number(output.differenceK), data.locale, 2)}{" "}
+                      K
+                    </span>
+                  </p>
+                ),
             )}
-            {output.saturation && output.measuredC && output.differenceK && (
-              <p className="caption mono">
-                {output.mode === "superheat"
-                  ? `${formatNumber(Number(output.measuredC), data.locale, 2)} − (${formatNumber(Number(output.saturation.temperatureC), data.locale, 2)})`
-                  : `${formatNumber(Number(output.saturation.temperatureC), data.locale, 2)} − (${formatNumber(Number(output.measuredC), data.locale, 2)})`}{" "}
-                °C = {formatNumber(Number(output.differenceK), data.locale, 2)}{" "}
-                K
-              </p>
-            )}
-            {output.saturation && pressureUnit.endsWith("(g)") && (
+            {pressureUnit.endsWith("(g)") && (
               <p className="caption">
                 {l("Ilmanpaineviite", "Atmospheric reference")}:{" "}
                 <span className="mono">{atmosphere} bar(a)</span>
@@ -989,10 +1280,12 @@ export function Calculator({
                   : ""}
               </p>
             )}
-            {output.basis && <p className="caption mono">{output.basis}</p>}
-            <SourceNote ids={output.sourceIds} />
-          </section>
-        ))}
+            <SourceNote
+              ids={[...new Set(output.flatMap((item) => item.sourceIds))]}
+              disclosure={false}
+            />
+          </details>
+        )}
       </div>
       {tool === "co2e" && r && output?.[0].kg !== undefined && (
         <CO2eBreakdown refrigerant={r} kg={output[0].kg} gwpKey={gwpKey} />

@@ -36,6 +36,7 @@ test("print and saved cycle retain selected guides and view without losing repor
   await page
     .getByRole("switch", { name: "Sovita kiertoon", exact: true })
     .check();
+  await page.locator(".ph-chart-options > summary").click();
   await page.getByRole("button", { name: /Entropia s/ }).click();
   await page.getByRole("button", { name: /Ominaistilavuus v/ }).click();
   await page.locator(".report-save > summary").click();

@@ -31,6 +31,7 @@ test("log(p)-h plots a sourced R134a cycle and clears it after changed or invali
   expect(await page.locator(".ph-isoline-temperature").count()).toBeGreaterThan(
     0,
   );
+  await page.locator(".ph-chart-options > summary").click();
   await page.getByRole("button", { name: /Entropia s/ }).click();
   expect(await page.locator(".ph-isoline-entropy").count()).toBeGreaterThan(0);
   await page.getByRole("button", { name: /Ominaistilavuus v/ }).click();
@@ -58,15 +59,13 @@ test("log(p)-h plots a sourced R134a cycle and clears it after changed or invali
     path: test.info().outputPath(`phasekit-v3-${info.project.name}-ph.png`),
     fullPage: true,
   });
-  await page
-    .locator(".ph-diagram-section")
-    .screenshot({
-      path: test
-        .info()
-        .outputPath(`phasekit-v3-${info.project.name}-ph-chart.png`),
-    });
+  await page.locator(".ph-diagram-section").screenshot({
+    path: test
+      .info()
+      .outputPath(`phasekit-v3-${info.project.name}-ph-chart.png`),
+  });
   for (const id of ["shsc-suction", "shsc-hot-gas", "shsc-liquid"]) {
-    await expect(page.locator(`#${id}`)).toHaveAttribute("inputmode", "text");
+    await expect(page.locator(`#${id}`)).toHaveAttribute("inputmode", "decimal");
   }
   await page.locator("#shsc-suction").fill("-1,5");
   await page.getByRole("button", { name: "Laske", exact: true }).click();
@@ -103,15 +102,20 @@ test("log(p)-h survives offline reload, converts units, and rejects unavailable 
   await page.reload();
   await fillCycle(page);
   await expect(page.locator(".ph-results")).toBeVisible();
+  await page.locator(".cycle-unit-settings > summary").click();
   await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
   await expect
     .poll(async () => Number(await page.locator("#shsc-lp").inputValue()))
     .toBeCloseTo(1.48675, 4);
   await page.getByRole("button", { name: "Laske", exact: true }).click();
   await expect(page.locator(".ph-results")).toBeVisible();
-  const gaugeReading = await page.locator("#shsc-lp").inputValue();
+  // The entered 2.5 bar(a) remains the source when the gauge reference changes.
   await page.locator("#cycle-atmosphere").fill("1.0");
-  await expect(page.locator("#shsc-lp")).toHaveValue(gaugeReading);
+  await expect(page.locator("#shsc-lp")).toHaveValue("1.5");
+  // A gauge measurement entered here retains its gauge reading instead.
+  await page.locator("#shsc-lp").fill("1.48");
+  await page.locator("#cycle-atmosphere").fill("1.02");
+  await expect(page.locator("#shsc-lp")).toHaveValue("1.48");
   await page.getByRole("button", { name: "Laske", exact: true }).click();
   await expect(page.locator(".ph-results")).toBeVisible();
   await page
@@ -166,4 +170,63 @@ test("log(p)-h is readable in English dark mode and enlarged text", async ({
       ),
     )
     .toBe(true);
+});
+
+test("log(p)-h keeps named point inspection and the expansion range beside a mobile plot", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 900 });
+  await page.goto("/#/ph/r452a");
+  await page.locator(".cycle-unit-settings > summary").click();
+  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await page.locator("#shsc-lp").fill("4");
+  await page.locator("#shsc-hp").fill("19");
+  await page.locator("#shsc-suction").fill("5");
+  await page.locator("#shsc-hot-gas").fill("70");
+  await page.locator("#shsc-liquid").fill("40");
+  await page.getByRole("button", { name: "Laske", exact: true }).click();
+  await page.getByRole("switch", { name: "Sovita kiertoon" }).check();
+  await expect(page.locator(".ph-cycle-arrow")).toHaveCount(4);
+  await expect(page.locator(".ph-chart-options")).not.toHaveAttribute("open");
+  await page.locator('.ph-chart [data-point="4"] .ph-point').click();
+  await expect(page.locator(".ph-point-selected")).toHaveAttribute(
+    "data-point",
+    "4",
+  );
+  await expect(page.locator(".ph-active-point-values")).toContainText("5,01");
+  await expect(page.locator(".ph-active-point-values")).toContainText(
+    "−7,39…−3,47",
+  );
+  await expect(page.locator(".ph-active-point-values")).toContainText("259,33");
+  await expect(page.locator(".ph-active-point")).toContainText("Kaksifaasinen");
+  await page.getByLabel("Valitse kiertopiste").selectOption("2");
+  await expect(page.locator(".ph-point-selected")).toHaveAttribute(
+    "data-point",
+    "2",
+  );
+  await expect(page.locator(".ph-active-point-values")).toContainText("70");
+  await page.locator(".ph-all-points > summary").click();
+  await expect(page.locator('.ph-point-card[data-point="4"]')).toContainText(
+    "−7,39…−3,47",
+  );
+  for (const largeText of [false, true]) {
+    if (largeText)
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+      });
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth + 1,
+      ),
+    ).toBe(true);
+    expect(
+      await page
+        .locator(".ph-active-point, .ph-point-card")
+        .evaluateAll((elements) =>
+          elements.every(
+            (element) => element.scrollWidth <= element.clientWidth + 1,
+          ),
+        ),
+    ).toBe(true);
+  }
 });

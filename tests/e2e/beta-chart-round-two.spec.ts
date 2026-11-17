@@ -58,6 +58,7 @@ test("cycle fit centres only the four calculated points and guide controls remai
   );
   expect(fitExtent.width).toBeGreaterThan(fullExtent.width);
 
+  await page.locator(".ph-chart-options > summary").click();
   const temperature = page.getByRole("button", { name: /Lämpötila T/ });
   const entropy = page.getByRole("button", { name: /Entropia s/ });
   const volume = page.getByRole("button", { name: /Ominaistilavuus v/ });
@@ -141,6 +142,7 @@ test("fit switch is explained until a cycle exists, and all selected guide label
   );
   await calculateR134aCycle(page);
   await expect(fit).toBeEnabled();
+  await page.locator(".ph-chart-options > summary").click();
   const entropy = page.getByRole("button", { name: /Entropia s/ });
   const volume = page.getByRole("button", { name: /Ominaistilavuus v/ });
   await entropy.click();

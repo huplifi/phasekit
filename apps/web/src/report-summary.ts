@@ -69,9 +69,31 @@ export function reportSummary(report: Report, locale: Locale): string {
   }
   if (report.tool === "pt") {
     const input = findRow(report.inputs, "Syötetty arvo", "Entered value");
-    const output = report.outputs.find(
-      (row) => row.unit && row.unit !== input?.unit,
+    const enteredPhase = findRow(
+      report.inputs,
+      "Syötetty lämpötilapiste",
+      "Entered phase boundary",
     );
+    const viewedPhase = findRow(report.inputs, "Faasiraja", "Phase boundary");
+    if (
+      enteredPhase &&
+      viewedPhase &&
+      enteredPhase.value !== viewedPhase.value
+    ) {
+      const output = findRow(report.outputs, "Lämpötila", "Temperature");
+      const from = [
+        formatReportRow(enteredPhase, locale),
+        formatReportRow(input, locale),
+      ].join(" ");
+      const to = [
+        formatReportRow(viewedPhase, locale),
+        formatReportRow(output, locale),
+      ].join(" ");
+      return `${name} · ${from} → ${to}`;
+    }
+    const output = findRow(report.inputs, "Syötetty suure", "Entered quantity")
+      ? primaryReportOutputs(report)[0]
+      : report.outputs.find((row) => row.unit && row.unit !== input?.unit);
     return [name, transition(input, output, locale)]
       .filter(Boolean)
       .join(" · ");
@@ -196,8 +218,10 @@ export function formatReportRow(
       turbulent: ["Turbulenttinen", "Turbulent"],
     },
   };
-  const translated =
-    enums[row.label.en]?.[row.value]?.[locale === "fi" ? 0 : 1];
+  const enumLabel = row.label.en.endsWith("Entered phase boundary")
+    ? "Phase boundary"
+    : row.label.en;
+  const translated = enums[enumLabel]?.[row.value]?.[locale === "fi" ? 0 : 1];
   const unavailable =
     row.value === "unavailable" ||
     (row.label.en === "Breakdown status" &&
@@ -312,7 +336,19 @@ export function primaryReportOutputs(
       "Syötetty suure",
       "Entered quantity",
     )?.value;
-    const label = entered === "temperature" ? "Pressure" : "Temperature";
+    const enteredSide = findRow(
+      report.inputs,
+      "Syötetty lämpötilapiste",
+      "Entered phase boundary",
+    )?.value;
+    const viewedSide = findRow(
+      report.inputs,
+      "Faasiraja",
+      "Phase boundary",
+    )?.value;
+    const showPressure =
+      entered === "temperature" && (!enteredSide || enteredSide === viewedSide);
+    const label = showPressure ? "Pressure" : "Temperature";
     return report.outputs.filter((row) => row.label.en === label);
   }
   const preferred: Record<string, string[]> = {
