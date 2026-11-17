@@ -22,7 +22,7 @@
 .calculator-result .result-card {
   overflow-wrap: anywhere;
 }
-.shsc-fields label {
+.shsc-fields label:where(:not(.switch-label)) {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -226,7 +226,7 @@
 .calculator-form .shsc-fields {
   gap: 12px;
 }
-.calculator-form .shsc-fields label {
+.calculator-form .shsc-fields label:where(:not(.switch-label)) {
   margin: 0;
 }
 .calculator-form .form-grid.shsc-fields {
@@ -302,17 +302,6 @@
 }
 
 /* Keep the five cycle readings and their two primary results together. */
-.compact-calculator-shell .calculator-heading {
-  margin: 2px 0 8px;
-}
-.cycle-toolbar {
-  clear: both;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0 10px;
-}
-.cycle-toolbar > *,
 .cycle-boundary,
 .cycle-measured-field {
   min-width: 0;
@@ -323,29 +312,24 @@
   color: var(--link);
   font-size: 0.875rem;
 }
-.cycle-unit-settings[open] {
-  grid-column: 1 / -1;
-}
 .cycle-unit-settings .shsc-unit-settings {
   margin-block: 6px 10px;
 }
-.cycle-toolbar .shsc-unit-settings label {
+.cycle-unit-settings .shsc-unit-settings label {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 4px;
 }
-.cycle-toolbar .shsc-unit-settings select {
+.cycle-unit-settings .shsc-unit-settings select {
   width: auto;
   max-width: 100%;
   margin: 0;
 }
 .cycle-form {
+  scroll-margin-top: max(12px, env(safe-area-inset-top, 0px));
   margin-top: 8px;
-}
-.cycle-form .cycle-input-mode {
-  margin-block: 0;
 }
 .cycle-form .form-grid.cycle-boundaries {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
@@ -358,12 +342,26 @@
   column-gap: 12px;
 }
 .cycle-boundary {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-row: span 7;
+  grid-template-rows: subgrid;
+  align-content: start;
+  row-gap: 4px;
 }
-.cycle-boundary > label:first-child {
-  flex: 1;
+.cycle-form .cycle-boundary > label:not(.switch-label) {
+  display: block;
+  align-self: end;
+}
+.cycle-field-status {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+.cycle-boundary > .cycle-field-status:first-of-type {
+  margin-bottom: 4px;
+}
+.phase-switch > span {
+  min-width: 5ch;
 }
 .cycle-boundary > label,
 .cycle-measured-field > label {
@@ -376,8 +374,7 @@
   font-weight: 400;
   white-space: nowrap;
 }
-.cycle-form .shsc-fields input,
-.cycle-form .cycle-boundaries select {
+.cycle-form .shsc-fields input[type="text"] {
   width: 100%;
   min-width: 0;
   min-height: 44px;
@@ -387,19 +384,6 @@
   background: var(--background);
   color: var(--text);
   font-size: 1rem;
-}
-.cycle-form
-  .shsc-fields
-  .signed-decimal-input.has-sign-action:focus-within
-  input {
-  padding-inline-end: 3rem;
-}
-.cycle-form .cycle-boundary-choice select {
-  border-color: transparent;
-  background-color: transparent;
-  padding-inline: 0 2px;
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
 }
 .cycle-form .temperature-heading h2 {
   font-size: 0.9375rem;
@@ -422,7 +406,11 @@
   display: block;
   align-self: start;
   overflow-wrap: anywhere;
-  grid-row: auto;
+  grid-row: 1;
+}
+.cycle-form .cycle-measured-field > input {
+  grid-row: 2;
+  grid-column: 1;
 }
 .cycle-submit {
   display: flex;
@@ -470,22 +458,13 @@
   font-family: var(--font-body);
   font-size: 1rem;
 }
-.cycle-readings .cycle-saturation,
-.cycle-resolved-pressures {
+.cycle-readings .cycle-saturation {
   color: var(--text-secondary);
   font-size: 0.75rem;
   line-height: 1.45;
 }
 .cycle-saturation span {
   white-space: nowrap;
-}
-.cycle-resolved-pressures {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: 4px 16px;
-  flex-wrap: wrap;
-  padding-top: 10px;
-  border-top: 1px solid var(--divider);
 }
 .cycle-results .cycle-result-details {
   margin-top: 8px;
@@ -507,7 +486,7 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.cycle-toolbar .help-heading {
+.cycle-unit-settings .help-heading {
   flex-wrap: wrap;
 }
 .cycle-results .result-label,
@@ -516,22 +495,12 @@
 .cycle-unit-settings .switch-label {
   overflow-wrap: anywhere;
 }
-.cycle-source-value {
-  margin: 3px 0;
-  font-size: 0.75rem;
-  overflow-wrap: anywhere;
-}
 @media (max-height: 720px) and (max-width: 620px) {
-  .cycle-form .cycle-input-mode button,
-  .cycle-form .shsc-fields input,
-  .cycle-form .cycle-boundaries select,
+  .cycle-form .shsc-fields input[type="text"],
   .cycle-form .cycle-submit .primary {
     height: auto;
     min-height: 44px;
     padding-block: 6px;
-  }
-  .cycle-form .cycle-boundaries select {
-    height: 44px;
   }
   .cycle-results:not(:empty) {
     margin-top: 14px;

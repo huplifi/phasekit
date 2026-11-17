@@ -16,6 +16,8 @@ import { ReportSave, type ReportContent } from "../components/ReportSave";
 import type { ReportRow } from "../storage";
 import { Back, SourceNote } from "../components/Common";
 import { InfoHelp } from "../components/InfoHelp";
+import { PhaseSwitch } from "../components/PhaseSwitch";
+import { PressureReferenceSwitch } from "../components/PressureReferenceSwitch";
 import { SignedDecimalInput } from "../components/SignedDecimalInput";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import {
@@ -196,9 +198,6 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
     setUnitError(false);
     setDraftDirty(Boolean(value));
   }
-  function changeSide(next: "dew" | "bubble") {
-    setSide(next);
-  }
   function changePressureUnit(next: PressureUnit) {
     if (anchor.kind === "pressure" && anchor.value.trim()) {
       try {
@@ -324,35 +323,19 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
         )}
       </header>
       {r?.kind === "blend" && (
-        <fieldset className="pt-phase-switch">
-          <legend>{l("Faasiraja", "Phase boundary")}</legend>
-          <div className="pt-phase-row">
-            <div className="pt-phase-options">
-              <button
-                id="pt-side-dew"
-                type="button"
-                aria-pressed={effectiveSide === "dew"}
-                onClick={() => changeSide("dew")}
-              >
-                {l("Kylläinen höyry", "Saturated vapour")}
-              </button>
-              <button
-                id="pt-side-bubble"
-                type="button"
-                aria-pressed={effectiveSide === "bubble"}
-                onClick={() => changeSide("bubble")}
-              >
-                {l("Kylläinen neste", "Saturated liquid")}
-              </button>
-            </div>
-            <InfoHelp label={l("Faasiraja", "Phase boundary")}>
-              {l(
-                "Kastepisteessä höyry on kylläistä. Kuplapisteessä neste on kylläistä. Seoksilla lämpötilat voivat erota samalla paineella. Käytä kastepistettä tulistukseen ja kuplapistettä alijäähdytykseen.",
-                "At the dew point, vapour is saturated. At the bubble point, liquid is saturated. Blends can have different temperatures at the same pressure. Use dew for superheat and bubble for subcooling.",
-              )}
-            </InfoHelp>
-          </div>
-        </fieldset>
+        <div className="help-heading pt-phase-switch">
+          <PhaseSwitch
+            side={effectiveSide}
+            label={l("Höyry / Neste", "Vapour / Liquid")}
+            onChange={setSide}
+          />
+          <InfoHelp label={l("Faasiraja", "Phase boundary")}>
+            {l(
+              "Kastepisteessä höyry on kylläistä. Kuplapisteessä neste on kylläistä. Seoksilla lämpötilat voivat erota samalla paineella. Käytä kastepistettä tulistukseen ja kuplapistettä alijäähdytykseen.",
+              "At the dew point, vapour is saturated. At the bubble point, liquid is saturated. Blends can have different temperatures at the same pressure. Use dew for superheat and bubble for subcooling.",
+            )}
+          </InfoHelp>
+        </div>
       )}
       <div
         className="pt-pair"
@@ -383,12 +366,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           <SignedDecimalInput
             id="pt-pressure"
             className="mono"
-            signLabel={
-              pressureUnit.endsWith("(g)")
-                ? l("Vaihda paineen etumerkki", "Change pressure sign")
-                : undefined
-            }
-            autoComplete="off"
+            signed={pressureUnit.endsWith("(g)")}
             value={pressureIsEntered ? pressure : displayNumber(pressure)}
             onValueChange={(value) => edit("pressure", value)}
             aria-describedby="pt-feedback pt-pressure-status"
@@ -424,11 +402,6 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           <SignedDecimalInput
             id="pt-temperature"
             className="mono"
-            signLabel={l(
-              "Vaihda lämpötilan etumerkki",
-              "Change temperature sign",
-            )}
-            autoComplete="off"
             value={
               temperatureIsEntered ? temperature : displayNumber(temperature)
             }
@@ -518,31 +491,10 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           </section>
         )}
       </div>
-      <div className="help-heading pressure-reference-toggle">
-        <label htmlFor="pt-reference">
-          {l("Paineviite", "Pressure reference")}
-        </label>
-        <select
-          id="pt-reference"
-          value={pressureUnit.endsWith("(a)") ? "a" : "g"}
-          onChange={(event) =>
-            changePressureUnit(
-              `${pressureUnit.split("(")[0]}(${event.target.value})` as PressureUnit,
-            )
-          }
-        >
-          <option value="g">{l("Mittaripaine", "Gauge pressure")}</option>
-          <option value="a">
-            {l("Absoluuttinen paine", "Absolute pressure")}
-          </option>
-        </select>
-        <InfoHelp label={l("Paineviite", "Pressure reference")}>
-          {l(
-            "Mittaripaineen nollakohta on paikallinen ilmanpaine. Absoluuttisen paineen nollakohta on tyhjiö.",
-            "Gauge pressure is relative to local atmospheric pressure. Absolute pressure is relative to vacuum.",
-          )}
-        </InfoHelp>
-      </div>
+      <PressureReferenceSwitch
+        unit={pressureUnit}
+        onChange={changePressureUnit}
+      />
       {pressureUnit.endsWith("(g)") && (
         <details className="pt-atmosphere">
           <summary>

@@ -1,4 +1,6 @@
 import { ExclusiveChoices } from "../components/ExclusiveChoices";
+import { PhaseSwitch } from "../components/PhaseSwitch";
+import { PressureReferenceSwitch } from "../components/PressureReferenceSwitch";
 import { SignedDecimalInput } from "../components/SignedDecimalInput";
 import {
   calculatePHCycle,
@@ -152,7 +154,6 @@ export function Calculator({
   const l = (a: string, b: string) => (fi ? a : b);
   const [id, setId] = useState(initial?.id ?? "");
   const [direction, setDirection] = useState(false);
-  const [inputMode, setInputMode] = useState<CycleInputMode>("pressure");
   const [lowEntry, setLowEntry] = useState<CycleEntry>({
     kind: "pressure",
     value: "",
@@ -214,33 +215,36 @@ export function Calculator({
     setGwpKey(defaultGwpKey(byId.get(next)));
     changed();
   }
-  function displayedEntry(entry: CycleEntry, side: SaturationSide) {
+  function displayedEntry(
+    entry: CycleEntry,
+    side: SaturationSide,
+    mode: CycleInputMode,
+  ) {
+    const original =
+      entry.kind === mode && (entry.kind === "pressure" || entry.side === side);
     try {
       const display = cycleEntryDisplay({
         id,
         entry,
-        mode: inputMode,
+        mode,
         side,
         pressureUnit,
         tempUnit,
         atmosphere,
       });
-      return display && entry.kind !== inputMode
-        ? formatPTReading(display, inputMode)
-        : display;
+      if (original || !display) return display;
+      const formatted = formatPTReading(display, mode);
+      return fi ? formatted.replace(".", ",") : formatted;
     } catch {
-      // Preserve an unfinished original entry; a derived counterpart is unavailable.
-      return entry.kind === inputMode &&
-        entry.unit === (inputMode === "pressure" ? pressureUnit : tempUnit)
+      return original &&
+        entry.unit === (mode === "pressure" ? pressureUnit : tempUnit)
         ? entry.value
         : "";
     }
   }
-  const lowInput = displayedEntry(lowEntry, lowSide);
-  const highInput = displayedEntry(highEntry, highSide);
-  function editEntry(high: boolean, next: string) {
+  function editEntry(high: boolean, mode: CycleInputMode, next: string) {
     const entry: CycleEntry =
-      inputMode === "pressure"
+      mode === "pressure"
         ? { kind: "pressure", value: next, unit: pressureUnit }
         : {
             kind: "temperature",
@@ -249,19 +253,6 @@ export function Calculator({
             side: high ? highSide : lowSide,
           };
     (high ? setHighEntry : setLowEntry)(entry);
-    changed();
-  }
-  function changeBoundary(high: boolean, side: SaturationSide) {
-    // A boundary selector describes the entered temperature, not the SH/SC reference.
-    const current = high ? highInput : lowInput;
-    (high ? setHighSide : setLowSide)(side);
-    if ((high ? highEntry : lowEntry).kind === "temperature")
-      (high ? setHighEntry : setLowEntry)({
-        kind: "temperature",
-        value: current,
-        unit: tempUnit,
-        side,
-      });
     changed();
   }
   function changePressureUnit(next: PressureUnit) {
@@ -317,7 +308,7 @@ export function Calculator({
     setTempUnit(next);
     changed();
   }
-  function calculate() {
+  function calculate(form: HTMLFormElement) {
     setOutput(null);
     setResolvedPressures(null);
     setCycle(null);
@@ -463,7 +454,24 @@ export function Calculator({
           ),
       );
     }
-    requestAnimationFrame(() => resultRef.current?.focus());
+    requestAnimationFrame(() => {
+      const result = resultRef.current;
+      result?.focus();
+      const readings = result?.querySelector(".cycle-readings");
+      if (!readings || !window.matchMedia("(max-width: 620px)").matches) return;
+      const top = form.getBoundingClientRect().top;
+      const bottom = readings.getBoundingClientRect().bottom;
+      const available =
+        document.querySelector(".main-nav")?.getBoundingClientRect().top ??
+        window.innerHeight;
+      const inset = parseFloat(getComputedStyle(form).scrollMarginTop) || 0;
+      if (
+        bottom - top + inset <= available &&
+        (top < inset || bottom > available)
+      ) {
+        form.scrollIntoView({ block: "start" });
+      }
+    });
   }
   const title = tool === "shsc" ? t("shsc") : "kg ↔ CO₂e";
   const reportRow = (
@@ -748,98 +756,79 @@ export function Calculator({
           </InfoHelp>
         )}
       </div>
-      <div className={tool === "shsc" ? "cycle-toolbar" : undefined}>
-        <RefrigerantPicker value={id} onChange={selectId} />
-        {tool === "shsc" && (
-          <details className="cycle-unit-settings">
-            <summary
-              aria-label={
-                l("Yksiköt ja paineviite", "Units and pressure reference") +
-                " · " +
-                pressureUnit +
-                " · °" +
-                tempUnit
-              }
-            >
-              {pressureUnit} · °{tempUnit}
-            </summary>
-            <div className="form-grid shsc-unit-settings">
-              <label>
-                {l("Paineyksikkö", "Pressure unit")}
-                <select
-                  value={pressureUnit.split("(")[0]}
-                  onChange={(e) =>
-                    changePressureUnit(
-                      `${e.target.value}(${pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
-                    )
-                  }
-                >
-                  {pressureUnits.map((unit) => (
-                    <option key={unit}>{unit}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                {l("Lämpötilayksikkö", "Temperature unit")}
-                <select
-                  value={tempUnit}
-                  onChange={(e) =>
-                    changeTemperatureUnit(e.target.value as "C" | "F")
-                  }
-                >
-                  <option value="C">°C</option>
-                  <option value="F">°F</option>
-                </select>
-              </label>
-            </div>
-            <div className="help-heading pressure-reference-toggle">
-              <label className="switch-label">
-                <input
-                  type="checkbox"
-                  role="switch"
-                  checked={pressureUnit.endsWith("(a)")}
-                  onChange={(event) =>
-                    changePressureUnit(
-                      `${pressureUnit.split("(")[0]}(${event.target.checked ? "a" : "g"})` as PressureUnit,
-                    )
-                  }
-                />
-                <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
-              </label>
-              <InfoHelp label={l("Paineviite", "Pressure reference")}>
+      <RefrigerantPicker value={id} onChange={selectId} />
+      {tool === "shsc" && (
+        <details className="cycle-unit-settings">
+          <summary
+            aria-label={
+              l("Yksiköt ja paineviite", "Units and pressure reference") +
+              " · " +
+              pressureUnit +
+              " · °" +
+              tempUnit
+            }
+          >
+            {pressureUnit} · °{tempUnit}
+          </summary>
+          <div className="form-grid shsc-unit-settings">
+            <label>
+              {l("Paineyksikkö", "Pressure unit")}
+              <select
+                value={pressureUnit.split("(")[0]}
+                onChange={(e) =>
+                  changePressureUnit(
+                    `${e.target.value}(${pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
+                  )
+                }
+              >
+                {pressureUnits.map((unit) => (
+                  <option key={unit}>{unit}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {l("Lämpötilayksikkö", "Temperature unit")}
+              <select
+                value={tempUnit}
+                onChange={(e) =>
+                  changeTemperatureUnit(e.target.value as "C" | "F")
+                }
+              >
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+              </select>
+            </label>
+          </div>
+          <PressureReferenceSwitch
+            unit={pressureUnit}
+            onChange={changePressureUnit}
+          />
+          {pressureUnit.endsWith("(g)") && (
+            <label>
+              {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
+              <input
+                inputMode="decimal"
+                className="mono"
+                id="cycle-atmosphere"
+                value={atmosphere}
+                onChange={(e) => changeAtmosphere(e.target.value)}
+                required
+              />
+              <span className="caption">
                 {l(
-                  "Päällä: absoluuttinen paine. Pois: mittaripaine suhteessa ilmanpaineeseen. Vaihto muuntaa syötetyn paineen.",
-                  "On: absolute pressure. Off: gauge pressure relative to atmosphere. Switching converts the entered pressure.",
+                  "Oletus 1,01325 bar(a) on standardi-ilmakehä. Muuta tarvittaessa mitattuun paikalliseen paineeseen.",
+                  "The default 1.01325 bar(a) is standard atmosphere. Adjust to measured local pressure when needed.",
                 )}
-              </InfoHelp>
-            </div>
-            {pressureUnit.endsWith("(g)") && (
-              <label>
-                {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
-                <input
-                  inputMode="decimal"
-                  className="mono"
-                  id="cycle-atmosphere"
-                  value={atmosphere}
-                  onChange={(e) => changeAtmosphere(e.target.value)}
-                  required
-                />
-                <span className="caption">
-                  {l(
-                    "Oletus 1,01325 bar(a) on standardi-ilmakehä. Muuta tarvittaessa mitattuun paikalliseen paineeseen.",
-                    "The default 1.01325 bar(a) is standard atmosphere. Adjust to measured local pressure when needed.",
-                  )}
-                </span>
-              </label>
-            )}
-          </details>
-        )}
-      </div>
+              </span>
+            </label>
+          )}
+        </details>
+      )}
       <form
         className={`calculator-form${tool === "co2e" ? " co2e-form" : " cycle-form"}`}
         onSubmit={(e) => {
           e.preventDefault();
-          calculate();
+          calculate(e.currentTarget);
         }}
       >
         {tool === "co2e" && (
@@ -925,124 +914,97 @@ export function Calculator({
 
         {tool === "shsc" && (
           <>
-            <ExclusiveChoices
-              className="cycle-input-mode"
-              label={l("Syöttötapa", "Input mode")}
-              value={inputMode}
-              options={[
-                { value: "pressure", label: l("Paineet", "Pressures") },
-                {
-                  value: "temperature",
-                  label: l("Kyllästyslämpötilat", "Saturation temperatures"),
-                },
-              ]}
-              onChange={(mode) => {
-                setInputMode(mode);
-                changed();
-              }}
-            />
             <div className="form-grid shsc-fields cycle-boundaries">
               {([false, true] as const).map((high) => {
                 const side = high ? highSide : lowSide;
-                const source = high ? highEntry : lowEntry;
-                const fieldId =
-                  inputMode === "pressure"
-                    ? high
-                      ? "shsc-hp"
-                      : "shsc-lp"
-                    : high
-                      ? "cycle-condensation"
-                      : "cycle-evaporation";
+                const entry = high ? highEntry : lowEntry;
+                const pressureId = high ? "shsc-hp" : "shsc-lp";
+                const temperatureId = high
+                  ? "cycle-condensation"
+                  : "cycle-evaporation";
+                const pressure = displayedEntry(entry, side, "pressure");
+                const temperature = displayedEntry(entry, side, "temperature");
+                const otherBoundary =
+                  entry.kind === "temperature" && entry.side !== side;
                 return (
-                  <div className="cycle-boundary" key={high ? "high" : "low"}>
-                    <label htmlFor={fieldId}>
-                      <span>
-                        {inputMode === "pressure" && (high ? "HP · " : "LP · ")}
-                        {inputMode === "pressure"
-                          ? high
-                            ? l("Korkeapaine", "High pressure")
-                            : l("Imupaine", "Suction pressure")
-                          : high
-                            ? l("Lauhtuminen", "Condensation")
-                            : l("Höyrystyminen", "Evaporation")}
-                        <span className="cycle-input-unit">
-                          {" "}
-                          {inputMode === "pressure"
-                            ? pressureUnit
-                            : "°" + tempUnit}
-                        </span>
-                      </span>
+                  <div className="cycle-boundary" key={pressureId}>
+                    <label htmlFor={pressureId}>
+                      {high
+                        ? l("HP · Korkeapaine", "HP · High pressure")
+                        : l("LP · Imupaine", "LP · Suction pressure")}{" "}
+                      <span className="cycle-input-unit">{pressureUnit}</span>
                     </label>
                     <SignedDecimalInput
-                      id={fieldId}
-                      autoComplete="off"
+                      id={pressureId}
                       className="mono"
-                      value={high ? highInput : lowInput}
-                      onValueChange={(next) => editEntry(high, next)}
-                      signLabel={
-                        inputMode === "temperature" ||
-                        pressureUnit.endsWith("(g)")
-                          ? l(
-                              high
-                                ? "Vaihda HP-arvon etumerkki"
-                                : "Vaihda LP-arvon etumerkki",
-                              high
-                                ? "Change HP value sign"
-                                : "Change LP value sign",
-                            )
-                          : undefined
+                      signed={pressureUnit.endsWith("(g)")}
+                      value={pressure}
+                      aria-describedby={pressureId + "-status"}
+                      onValueChange={(value) =>
+                        editEntry(high, "pressure", value)
                       }
                     />
-                    {source.kind !== inputMode && source.value.trim() && (
-                      <p className="caption secondary cycle-source-value">
-                        {l("Syötetty", "Entered")} {source.value}{" "}
-                        {source.kind === "temperature" ? "°" : ""}
-                        {source.unit}
-                        {source.kind === "temperature" &&
-                          r?.kind === "blend" &&
-                          (source.side === "dew"
-                            ? l(" · kastepiste", " · dew point")
-                            : l(" · kuplapiste", " · bubble point"))}
-                      </p>
-                    )}
-                    {inputMode === "temperature" && r?.kind === "blend" && (
-                      <label
-                        className="cycle-boundary-choice"
-                        htmlFor={
-                          high ? "cycle-high-boundary" : "cycle-low-boundary"
-                        }
-                      >
-                        <span className="sr-only">
-                          {high
+                    <small
+                      className="cycle-field-status"
+                      id={pressureId + "-status"}
+                    >
+                      {pressure &&
+                        (entry.kind === "pressure"
+                          ? l("Syötetty", "Entered")
+                          : l("Laskettu", "Calculated"))}
+                    </small>
+                    <label htmlFor={temperatureId}>
+                      {high
+                        ? l("Lauhtuminen", "Condensation")
+                        : l("Höyrystyminen", "Evaporation")}{" "}
+                      <span className="cycle-input-unit">°{tempUnit}</span>
+                    </label>
+                    <SignedDecimalInput
+                      id={temperatureId}
+                      className="mono"
+                      value={temperature}
+                      aria-describedby={temperatureId + "-status"}
+                      onValueChange={(value) =>
+                        editEntry(high, "temperature", value)
+                      }
+                    />
+                    <small
+                      className="cycle-field-status"
+                      id={temperatureId + "-status"}
+                    >
+                      {otherBoundary && entry.value ? (
+                        <>
+                          {entry.side === "dew"
+                            ? l("Syötetty kastepiste", "Entered dew point")
+                            : l(
+                                "Syötetty kuplapiste",
+                                "Entered bubble point",
+                              )}{" "}
+                          {entry.value} °{entry.unit}
+                        </>
+                      ) : (
+                        temperature &&
+                        (entry.kind === "temperature"
+                          ? l("Syötetty", "Entered")
+                          : l("Laskettu", "Calculated"))
+                      )}
+                    </small>
+                    {r?.kind === "blend" && (
+                      <PhaseSwitch
+                        side={side}
+                        label={
+                          high
                             ? l(
-                                "Lauhtumisen faasiraja",
-                                "Condensation phase boundary",
+                                "Lauhtuminen · Höyry / Neste",
+                                "Condensation · Vapour / Liquid",
                               )
                             : l(
-                                "Höyrystymisen faasiraja",
-                                "Evaporation phase boundary",
-                              )}
-                        </span>
-                        <select
-                          id={
-                            high ? "cycle-high-boundary" : "cycle-low-boundary"
-                          }
-                          value={side}
-                          onChange={(e) =>
-                            changeBoundary(
-                              high,
-                              e.target.value as SaturationSide,
-                            )
-                          }
-                        >
-                          <option value="dew">
-                            {l("Kylläinen höyry", "Saturated vapour")}
-                          </option>
-                          <option value="bubble">
-                            {l("Kylläinen neste", "Saturated liquid")}
-                          </option>
-                        </select>
-                      </label>
+                                "Höyrystyminen · Höyry / Neste",
+                                "Evaporation · Vapour / Liquid",
+                              )
+                        }
+                        onChange={high ? setHighSide : setLowSide}
+                      />
                     )}
                   </div>
                 );
@@ -1055,8 +1017,8 @@ export function Calculator({
               </h2>
               <InfoHelp label={l("Mittauspisteet", "Measurement points")}>
                 {l(
-                  "Kastepisteessä höyry on kylläistä. Kuplapisteessä neste on kylläistä. Valitse seokselle syötettyä lämpötilaa vastaava faasiraja. Tulistus on imukaasun lämpötilan ero imupaineen kastepisteeseen. Alijäähdytys on korkeapaineen kuplapisteen ja ennen paisuntaa mitatun nestelämpötilan erotus. Kompressorilta lähtevän kuumakaasun lämpötila tarvitaan kierron piirtämiseen.",
-                  "At the dew point, vapour is saturated. At the bubble point, liquid is saturated. For a blend, select the phase boundary that matches the entered temperature. Superheat is suction temperature above the low-pressure dew point. Subcooling is the high-pressure bubble point minus liquid temperature before expansion. Discharge gas temperature is needed to plot the cycle.",
+                  "Kastepisteessä höyry on kylläistä. Kuplapisteessä neste on kylläistä. Valitse Höyry tai Neste ennen lämpötilan syöttämistä. Kun vaihdat valintaa syötön jälkeen, näet toisen faasirajan lämpötilan samalla paineella. Tulistus on imukaasun lämpötilan ero imupaineen kastepisteeseen. Alijäähdytys on korkeapaineen kuplapisteen ja ennen paisuntaa mitatun nestelämpötilan erotus. Kompressorilta lähtevän kuumakaasun lämpötila tarvitaan kierron piirtämiseen.",
+                  "At the dew point, vapour is saturated. At the bubble point, liquid is saturated. Choose Vapour or Liquid before entering a temperature. Switching after entry shows the other boundary at the same pressure. Superheat is suction temperature above the low-pressure dew point. Subcooling is the high-pressure bubble point minus liquid temperature before expansion. Discharge gas temperature is needed to plot the cycle.",
                 )}
               </InfoHelp>
             </div>
@@ -1067,11 +1029,6 @@ export function Calculator({
                 </label>
                 <SignedDecimalInput
                   id="shsc-suction"
-                  signLabel={l(
-                    "Vaihda imulämpötilan etumerkki",
-                    "Change suction temperature sign",
-                  )}
-                  autoComplete="off"
                   className="mono"
                   value={measured}
                   onValueChange={(next) => {
@@ -1091,11 +1048,6 @@ export function Calculator({
                 </label>
                 <SignedDecimalInput
                   id="shsc-hot-gas"
-                  signLabel={l(
-                    "Vaihda kuumakaasulämpötilan etumerkki",
-                    "Change hot-gas temperature sign",
-                  )}
-                  autoComplete="off"
                   className="mono"
                   value={hotGas}
                   onValueChange={(next) => {
@@ -1110,11 +1062,6 @@ export function Calculator({
                 </label>
                 <SignedDecimalInput
                   id="shsc-liquid"
-                  signLabel={l(
-                    "Vaihda nestelämpötilan etumerkki",
-                    "Change liquid temperature sign",
-                  )}
-                  autoComplete="off"
                   className="mono"
                   value={liquid}
                   onValueChange={(next) => {
@@ -1209,35 +1156,6 @@ export function Calculator({
                 {tool === "co2e" && <SourceNote ids={output.sourceIds} />}
               </section>
             ))}{" "}
-            {resolvedPressures && (
-              <output
-                className="caption mono cycle-resolved-pressures"
-                aria-label={l("Absoluuttiset paineet", "Absolute pressures")}
-              >
-                {resolvedPressures.low && (
-                  <span>
-                    LP{" "}
-                    {formatNumber(
-                      Number(resolvedPressures.low),
-                      data.locale,
-                      2,
-                    )}{" "}
-                    bar(a)
-                  </span>
-                )}
-                {resolvedPressures.high && (
-                  <span>
-                    HP{" "}
-                    {formatNumber(
-                      Number(resolvedPressures.high),
-                      data.locale,
-                      2,
-                    )}{" "}
-                    bar(a)
-                  </span>
-                )}
-              </output>
-            )}
           </div>
         )}
         {tool === "shsc" && output && (

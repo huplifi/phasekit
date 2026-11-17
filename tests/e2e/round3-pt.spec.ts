@@ -67,12 +67,14 @@ test("R410A heating case works and genuine bounds explain the data limit", async
     provenance.getByRole("heading", { name: "Lähteet", exact: true }),
   ).toBeVisible();
   await expect(provenance.locator(".source-disclosure")).toHaveCount(0);
-  expect(Number((await pressure.inputValue()).replace(",", "."))).toBeCloseTo(35.1, 1);
-  await page.locator("#pt-side-bubble").click();
-  await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
-    "aria-pressed",
-    "true",
+  expect(Number((await pressure.inputValue()).replace(",", "."))).toBeCloseTo(
+    35.1,
+    1,
   );
+  await page.getByRole("switch", { name: "Höyry / Neste" }).uncheck();
+  await expect(
+    page.getByRole("switch", { name: "Höyry / Neste" }),
+  ).not.toBeChecked();
   await temperature.fill("80");
   await expect(pressure).toHaveValue("");
   await expect(page.getByRole("alert")).toContainText("tuettu alue");
@@ -139,16 +141,14 @@ test("P–T blend controls identify the selected phase boundary", async ({
   await choose(page, "R410A");
   await page.getByLabel("Paine", { exact: true }).fill("5");
 
-  await expect(page.locator("#pt-side-dew")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.getByRole("switch", { name: "Höyry / Neste" }),
+  ).toBeChecked();
   const before = await page.locator("#pt-temperature").inputValue();
-  await page.locator("#pt-side-bubble").click();
-  await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await page.getByRole("switch", { name: "Höyry / Neste" }).uncheck();
+  await expect(
+    page.getByRole("switch", { name: "Höyry / Neste" }),
+  ).not.toBeChecked();
   await expect(page.locator("#pt-pressure")).toHaveValue("5");
   await expect(page.locator("#pt-temperature")).not.toHaveValue(before);
 });
@@ -159,18 +159,19 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
   await page.goto("/#/pt/r452a");
   const pressure = page.locator("#pt-pressure");
   const temperature = page.locator("#pt-temperature");
-  const bubble = page.locator("#pt-side-bubble");
-  const dew = page.locator("#pt-side-dew");
+  const phase = page.getByRole("switch", { name: "Höyry / Neste" });
   await temperature.fill("40,0");
   await expect(pressure).toHaveValue("17,59");
-  await expect(page.locator(".pt-reading h2")).toHaveText("Absoluuttinen paine");
-  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
+  await expect(page.locator(".pt-reading h2")).toHaveText(
+    "Absoluuttinen paine",
+  );
+  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
   await expect(pressure).toHaveValue("16,57");
   const reading = page.locator(".pt-reading");
   await expect(reading).toBeVisible();
   await expect(reading.getByRole("heading")).toHaveText("Mittaripaine");
   await expect(reading.locator(".pt-reading-value")).toHaveText("16,57 bar(g)");
-  await bubble.click();
+  await phase.uncheck();
   await expect(pressure).toHaveValue("16,57");
   await expect(temperature).toHaveValue("36,60");
   await expect(reading.getByRole("heading")).toHaveText("Kuplapiste");
@@ -179,13 +180,13 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
     "Laskettu",
   );
   await expect(page.locator(".pt-source-note")).toContainText("40,0 °C");
-  await dew.click();
+  await phase.check();
   await expect(temperature).toHaveValue("40,0");
   await expect(page.locator("#pt-temperature-status")).toContainText(
     "Syötetty",
   );
 
-  await bubble.click();
+  await phase.uncheck();
   await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
@@ -198,36 +199,31 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
   await expect(entry).toContainText("36,603");
 });
 
-test("the numeric keypad sign control retains the number, caret and focus", async ({
+test("temperatures and gauge pressures accept a leading minus from the standard keyboard", async ({
   page,
 }) => {
-  await page.goto("/#/pt/r452a");
-  const field = page.locator("#pt-temperature");
-  const sign = page.getByRole("button", {
-    name: "Vaihda lämpötilan etumerkki",
-  });
-  await expect(field).toHaveAttribute("inputmode", "decimal");
-  await field.focus();
-  await sign.click();
-  await expect(field).toBeFocused();
-  await expect(field).toHaveValue("-");
-  await field.pressSequentially("10,5");
-  await expect(field).toHaveValue("-10,5");
-  await sign.click();
-  await expect(field).toHaveValue("10,5");
-  await expect(field).toBeFocused();
-  await expect
-    .poll(() => field.evaluate((el: HTMLInputElement) => el.selectionStart))
-    .toBe(4);
+  await page.goto("/#/pt/r134a");
+  const temperature = page.locator("#pt-temperature");
   const pressure = page.locator("#pt-pressure");
-  await pressure.focus();
-  await expect(
-    page.getByRole("button", { name: "Vaihda paineen etumerkki" }),
-  ).toHaveCount(0);
-  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
-  await pressure.fill("0,1");
-  await page.getByRole("button", { name: "Vaihda paineen etumerkki" }).click();
+  await expect(temperature).toHaveAttribute("inputmode", "text");
+  await expect(pressure).toHaveAttribute("inputmode", "decimal");
+  await temperature.focus();
+  await temperature.pressSequentially("-");
+  await expect(temperature).toHaveValue("-");
+  await temperature.pressSequentially("10,5");
+  await expect(temperature).toHaveValue("-10,5");
+  await expect(temperature).toBeFocused();
+  await expect(page.locator(".pt-reading h2")).toHaveText(
+    "Absoluuttinen paine",
+  );
+  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await expect(pressure).toHaveAttribute("inputmode", "text");
+  await pressure.fill("");
+  await pressure.pressSequentially("-0,1");
   await expect(pressure).toHaveValue("-0,1");
   await expect(pressure).toBeFocused();
-  await expect(page.locator("#pt-temperature")).not.toHaveValue("");
+  await expect(temperature).toHaveValue(/^-\d/);
+  await temperature.fill("−10,5");
+  await expect(temperature).toHaveValue("-10,5");
+  await expect(page.locator(".pt-reading h2")).toHaveText("Mittaripaine");
 });

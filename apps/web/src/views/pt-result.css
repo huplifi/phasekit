@@ -2,59 +2,12 @@
   max-width: 46rem;
   margin-inline: auto;
 }
-.pt-header h1 {
-  margin: 8px 0 16px;
-}
 .pt-instruction {
   margin: 8px 0;
   font-size: 0.8125rem;
 }
 .pt-phase-switch {
-  min-width: 0;
-  border: 0;
-  padding: 0;
-  margin: 14px 0 18px;
-}
-.pt-phase-switch legend {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-.pt-phase-row,
-.pt-phase-options {
-  display: flex;
-  align-items: center;
-}
-.pt-phase-row {
-  position: relative;
-  gap: 4px;
-}
-.pt-phase-options {
-  flex: 1;
-  gap: 0;
-  border-bottom: 1px solid var(--divider);
-}
-.pt-phase-options button {
-  flex: 1;
-  min-width: 0;
-  min-height: 44px;
-  align-self: stretch;
-  border: 0;
-  border-radius: 0;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  padding: 6px;
-  background: transparent;
-  color: var(--text-secondary);
-  font: inherit;
-  font-size: 0.8125rem;
-}
-.pt-phase-options button[aria-pressed="true"] {
-  color: var(--text);
-  border-bottom-color: currentColor;
-  font-weight: 600;
+  margin-block: 16px;
 }
 .pt-calculator .pt-pair {
   gap: 4px 8px;
@@ -78,7 +31,7 @@
   background-color: transparent;
   font-size: 0.75rem;
 }
-.pt-value-field .signed-decimal-input input {
+.pt-calculator .pt-value-field > input {
   min-height: 48px;
   padding: 9px 11px;
   border: 1px solid var(--control-border);
@@ -87,9 +40,6 @@
   color: var(--text);
   font-size: 1.125rem;
   font-variant-numeric: tabular-nums;
-}
-.pt-value-field .has-sign-action:focus-within input {
-  padding-inline-end: 3rem;
 }
 .pt-field-status {
   color: var(--text-secondary);
@@ -138,30 +88,6 @@
   margin: 0;
   font-size: 0.8125rem;
   color: var(--text-secondary);
-}
-.pt-calculator .pressure-reference-toggle {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  column-gap: 8px;
-}
-.pt-calculator .pressure-reference-toggle label,
-.pt-calculator .pressure-reference-toggle select {
-  font-size: 0.8125rem;
-  font-weight: 400;
-}
-.pt-calculator .pressure-reference-toggle label {
-  color: var(--text-secondary);
-}
-.pt-calculator .pressure-reference-toggle select {
-  width: auto;
-  max-width: 100%;
-  min-height: 44px;
-  padding: 4px;
-  border-color: transparent;
-  background: transparent;
-  color: var(--text);
 }
 .pt-calculator .pt-atmosphere {
   margin: 0;

@@ -423,25 +423,6 @@ export function App() {
           (section === "coverage" && !r)
         ? "settings"
         : "refrigerants";
-  const compactCalculator = ["pt", "ph", "shsc"].includes(section);
-  const betaInfo = isBeta && (
-    <>
-      <div className="beta-banner-actions">
-        <a className="beta-release-link" href="#/releases">
-          {data.locale === "fi" ? "Versiohistoria" : "Release history"}
-        </a>
-        <a href="https://phasekit.app" aria-describedby="beta-storage-note">
-          {data.locale === "fi" ? "Vakaa versio" : "Stable version"}
-          <ExternalLink size={16} aria-hidden="true" />
-        </a>
-      </div>
-      <p id="beta-storage-note">
-        {data.locale === "fi"
-          ? "Betan tallennukset ovat erillään vakaasta versiosta."
-          : "Beta records are separate from the stable version."}
-      </p>
-    </>
-  );
   return (
     <AppContext.Provider
       value={{
@@ -470,54 +451,53 @@ export function App() {
       >
         {t("skip")}
       </a>
-      <div
-        className={
-          compactCalculator ? "app-shell compact-calculator-shell" : "app-shell"
-        }
-      >
-        <div className={compactCalculator ? "calculator-masthead" : undefined}>
-          <header className="brand-header">
-            <a href="#/" aria-label="PhaseKit">
-              <img
-                src={
-                  theme === "dark"
-                    ? "/phasekit-logo-dark.svg"
-                    : "/phasekit-logo-light.svg"
-                }
-                alt=""
-                width="40"
-                height="40"
-              />
-              <span>PhaseKit</span>
-            </a>
-            {!online && (
-              <span className="offline-indicator">
-                <WifiOff size={16} />
-                {t("offline")}
-              </span>
-            )}
-          </header>
-          {isBeta && (
-            <aside className="beta-banner caption" aria-label="Beta">
-              {compactCalculator ? (
-                <details>
-                  <summary>
-                    Beta <span className="mono">{appVersion}</span>
-                  </summary>
-                  {betaInfo}
-                </details>
-              ) : (
-                <>
-                  <div className="beta-banner-heading">
-                    <strong>Beta</strong>
-                    <span className="mono">{appVersion}</span>
-                  </div>
-                  {betaInfo}
-                </>
-              )}
-            </aside>
+      <div className="app-shell">
+        <header className="brand-header">
+          <a href="#/" aria-label="PhaseKit">
+            <img
+              src={
+                theme === "dark"
+                  ? "/phasekit-logo-dark.svg"
+                  : "/phasekit-logo-light.svg"
+              }
+              alt=""
+              width="40"
+              height="40"
+            />
+            <span>PhaseKit</span>
+          </a>
+          {!online && (
+            <span className="offline-indicator">
+              <WifiOff size={16} />
+              {t("offline")}
+            </span>
           )}
-        </div>
+        </header>
+        {isBeta && (
+          <aside className="beta-banner caption" aria-label="Beta">
+            <div className="beta-banner-heading">
+              <strong>Beta</strong>
+              <span className="mono">{appVersion}</span>
+            </div>
+            <div className="beta-banner-actions">
+              <a className="beta-release-link" href="#/releases">
+                {data.locale === "fi" ? "Versiohistoria" : "Release history"}
+              </a>
+              <a
+                href="https://phasekit.app"
+                aria-describedby="beta-storage-note"
+              >
+                {data.locale === "fi" ? "Vakaa versio" : "Stable version"}
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            </div>
+            <p id="beta-storage-note">
+              {data.locale === "fi"
+                ? "Betan tallennukset ovat erillään vakaasta versiosta."
+                : "Beta records are separate from the stable version."}
+            </p>
+          </aside>
+        )}
         {storageError && (
           <p role="alert" className="notice error">
             {t("storageError")}{" "}
