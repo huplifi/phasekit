@@ -302,17 +302,6 @@
 }
 
 /* Keep the five cycle readings and their two primary results together. */
-.compact-calculator-shell .calculator-heading {
-  margin: 2px 0 8px;
-}
-.cycle-toolbar {
-  clear: both;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0 10px;
-}
-.cycle-toolbar > *,
 .cycle-boundary,
 .cycle-measured-field {
   min-width: 0;
@@ -323,20 +312,17 @@
   color: var(--link);
   font-size: 0.875rem;
 }
-.cycle-unit-settings[open] {
-  grid-column: 1 / -1;
-}
 .cycle-unit-settings .shsc-unit-settings {
   margin-block: 6px 10px;
 }
-.cycle-toolbar .shsc-unit-settings label {
+.cycle-unit-settings .shsc-unit-settings label {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 4px;
 }
-.cycle-toolbar .shsc-unit-settings select {
+.cycle-unit-settings .shsc-unit-settings select {
   width: auto;
   max-width: 100%;
   margin: 0;
@@ -387,12 +373,6 @@
   background: var(--background);
   color: var(--text);
   font-size: 1rem;
-}
-.cycle-form
-  .shsc-fields
-  .signed-decimal-input.has-sign-action:focus-within
-  input {
-  padding-inline-end: 3rem;
 }
 .cycle-form .cycle-boundary-choice select {
   border-color: transparent;
@@ -507,7 +487,7 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.cycle-toolbar .help-heading {
+.cycle-unit-settings .help-heading {
   flex-wrap: wrap;
 }
 .cycle-results .result-label,

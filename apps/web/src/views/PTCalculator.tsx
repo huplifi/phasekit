@@ -16,6 +16,7 @@ import { ReportSave, type ReportContent } from "../components/ReportSave";
 import type { ReportRow } from "../storage";
 import { Back, SourceNote } from "../components/Common";
 import { InfoHelp } from "../components/InfoHelp";
+import { PressureReferenceSwitch } from "../components/PressureReferenceSwitch";
 import { SignedDecimalInput } from "../components/SignedDecimalInput";
 import { RefrigerantPicker } from "../components/RefrigerantPicker";
 import {
@@ -383,12 +384,7 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           <SignedDecimalInput
             id="pt-pressure"
             className="mono"
-            signLabel={
-              pressureUnit.endsWith("(g)")
-                ? l("Vaihda paineen etumerkki", "Change pressure sign")
-                : undefined
-            }
-            autoComplete="off"
+            signed={pressureUnit.endsWith("(g)")}
             value={pressureIsEntered ? pressure : displayNumber(pressure)}
             onValueChange={(value) => edit("pressure", value)}
             aria-describedby="pt-feedback pt-pressure-status"
@@ -424,11 +420,6 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           <SignedDecimalInput
             id="pt-temperature"
             className="mono"
-            signLabel={l(
-              "Vaihda lämpötilan etumerkki",
-              "Change temperature sign",
-            )}
-            autoComplete="off"
             value={
               temperatureIsEntered ? temperature : displayNumber(temperature)
             }
@@ -518,31 +509,10 @@ export function PTCalculator({ initial }: { initial?: Refrigerant }) {
           </section>
         )}
       </div>
-      <div className="help-heading pressure-reference-toggle">
-        <label htmlFor="pt-reference">
-          {l("Paineviite", "Pressure reference")}
-        </label>
-        <select
-          id="pt-reference"
-          value={pressureUnit.endsWith("(a)") ? "a" : "g"}
-          onChange={(event) =>
-            changePressureUnit(
-              `${pressureUnit.split("(")[0]}(${event.target.value})` as PressureUnit,
-            )
-          }
-        >
-          <option value="g">{l("Mittaripaine", "Gauge pressure")}</option>
-          <option value="a">
-            {l("Absoluuttinen paine", "Absolute pressure")}
-          </option>
-        </select>
-        <InfoHelp label={l("Paineviite", "Pressure reference")}>
-          {l(
-            "Mittaripaineen nollakohta on paikallinen ilmanpaine. Absoluuttisen paineen nollakohta on tyhjiö.",
-            "Gauge pressure is relative to local atmospheric pressure. Absolute pressure is relative to vacuum.",
-          )}
-        </InfoHelp>
-      </div>
+      <PressureReferenceSwitch
+        unit={pressureUnit}
+        onChange={changePressureUnit}
+      />
       {pressureUnit.endsWith("(g)") && (
         <details className="pt-atmosphere">
           <summary>

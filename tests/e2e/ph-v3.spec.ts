@@ -65,7 +65,7 @@ test("log(p)-h plots a sourced R134a cycle and clears it after changed or invali
       .outputPath(`phasekit-v3-${info.project.name}-ph-chart.png`),
   });
   for (const id of ["shsc-suction", "shsc-hot-gas", "shsc-liquid"]) {
-    await expect(page.locator(`#${id}`)).toHaveAttribute("inputmode", "decimal");
+    await expect(page.locator(`#${id}`)).toHaveAttribute("inputmode", "text");
   }
   await page.locator("#shsc-suction").fill("-1,5");
   await page.getByRole("button", { name: "Laske", exact: true }).click();

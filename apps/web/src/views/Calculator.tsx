@@ -1,4 +1,5 @@
 import { ExclusiveChoices } from "../components/ExclusiveChoices";
+import { PressureReferenceSwitch } from "../components/PressureReferenceSwitch";
 import { SignedDecimalInput } from "../components/SignedDecimalInput";
 import {
   calculatePHCycle,
@@ -748,93 +749,74 @@ export function Calculator({
           </InfoHelp>
         )}
       </div>
-      <div className={tool === "shsc" ? "cycle-toolbar" : undefined}>
-        <RefrigerantPicker value={id} onChange={selectId} />
-        {tool === "shsc" && (
-          <details className="cycle-unit-settings">
-            <summary
-              aria-label={
-                l("Yksiköt ja paineviite", "Units and pressure reference") +
-                " · " +
-                pressureUnit +
-                " · °" +
-                tempUnit
-              }
-            >
-              {pressureUnit} · °{tempUnit}
-            </summary>
-            <div className="form-grid shsc-unit-settings">
-              <label>
-                {l("Paineyksikkö", "Pressure unit")}
-                <select
-                  value={pressureUnit.split("(")[0]}
-                  onChange={(e) =>
-                    changePressureUnit(
-                      `${e.target.value}(${pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
-                    )
-                  }
-                >
-                  {pressureUnits.map((unit) => (
-                    <option key={unit}>{unit}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                {l("Lämpötilayksikkö", "Temperature unit")}
-                <select
-                  value={tempUnit}
-                  onChange={(e) =>
-                    changeTemperatureUnit(e.target.value as "C" | "F")
-                  }
-                >
-                  <option value="C">°C</option>
-                  <option value="F">°F</option>
-                </select>
-              </label>
-            </div>
-            <div className="help-heading pressure-reference-toggle">
-              <label className="switch-label">
-                <input
-                  type="checkbox"
-                  role="switch"
-                  checked={pressureUnit.endsWith("(a)")}
-                  onChange={(event) =>
-                    changePressureUnit(
-                      `${pressureUnit.split("(")[0]}(${event.target.checked ? "a" : "g"})` as PressureUnit,
-                    )
-                  }
-                />
-                <span>{l("Absoluuttinen paine", "Absolute pressure")}</span>
-              </label>
-              <InfoHelp label={l("Paineviite", "Pressure reference")}>
+      <RefrigerantPicker value={id} onChange={selectId} />
+      {tool === "shsc" && (
+        <details className="cycle-unit-settings">
+          <summary
+            aria-label={
+              l("Yksiköt ja paineviite", "Units and pressure reference") +
+              " · " +
+              pressureUnit +
+              " · °" +
+              tempUnit
+            }
+          >
+            {pressureUnit} · °{tempUnit}
+          </summary>
+          <div className="form-grid shsc-unit-settings">
+            <label>
+              {l("Paineyksikkö", "Pressure unit")}
+              <select
+                value={pressureUnit.split("(")[0]}
+                onChange={(e) =>
+                  changePressureUnit(
+                    `${e.target.value}(${pressureUnit.endsWith("(a)") ? "a" : "g"})` as PressureUnit,
+                  )
+                }
+              >
+                {pressureUnits.map((unit) => (
+                  <option key={unit}>{unit}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {l("Lämpötilayksikkö", "Temperature unit")}
+              <select
+                value={tempUnit}
+                onChange={(e) =>
+                  changeTemperatureUnit(e.target.value as "C" | "F")
+                }
+              >
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+              </select>
+            </label>
+          </div>
+          <PressureReferenceSwitch
+            unit={pressureUnit}
+            onChange={changePressureUnit}
+          />
+          {pressureUnit.endsWith("(g)") && (
+            <label>
+              {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
+              <input
+                inputMode="decimal"
+                className="mono"
+                id="cycle-atmosphere"
+                value={atmosphere}
+                onChange={(e) => changeAtmosphere(e.target.value)}
+                required
+              />
+              <span className="caption">
                 {l(
-                  "Päällä: absoluuttinen paine. Pois: mittaripaine suhteessa ilmanpaineeseen. Vaihto muuntaa syötetyn paineen.",
-                  "On: absolute pressure. Off: gauge pressure relative to atmosphere. Switching converts the entered pressure.",
+                  "Oletus 1,01325 bar(a) on standardi-ilmakehä. Muuta tarvittaessa mitattuun paikalliseen paineeseen.",
+                  "The default 1.01325 bar(a) is standard atmosphere. Adjust to measured local pressure when needed.",
                 )}
-              </InfoHelp>
-            </div>
-            {pressureUnit.endsWith("(g)") && (
-              <label>
-                {l("Ilmanpaine, bar(a)", "Atmospheric pressure, bar(a)")}
-                <input
-                  inputMode="decimal"
-                  className="mono"
-                  id="cycle-atmosphere"
-                  value={atmosphere}
-                  onChange={(e) => changeAtmosphere(e.target.value)}
-                  required
-                />
-                <span className="caption">
-                  {l(
-                    "Oletus 1,01325 bar(a) on standardi-ilmakehä. Muuta tarvittaessa mitattuun paikalliseen paineeseen.",
-                    "The default 1.01325 bar(a) is standard atmosphere. Adjust to measured local pressure when needed.",
-                  )}
-                </span>
-              </label>
-            )}
-          </details>
-        )}
-      </div>
+              </span>
+            </label>
+          )}
+        </details>
+      )}
       <form
         className={`calculator-form${tool === "co2e" ? " co2e-form" : " cycle-form"}`}
         onSubmit={(e) => {
@@ -975,22 +957,12 @@ export function Calculator({
                     </label>
                     <SignedDecimalInput
                       id={fieldId}
-                      autoComplete="off"
                       className="mono"
                       value={high ? highInput : lowInput}
                       onValueChange={(next) => editEntry(high, next)}
-                      signLabel={
+                      signed={
                         inputMode === "temperature" ||
                         pressureUnit.endsWith("(g)")
-                          ? l(
-                              high
-                                ? "Vaihda HP-arvon etumerkki"
-                                : "Vaihda LP-arvon etumerkki",
-                              high
-                                ? "Change HP value sign"
-                                : "Change LP value sign",
-                            )
-                          : undefined
                       }
                     />
                     {source.kind !== inputMode && source.value.trim() && (
@@ -1067,11 +1039,6 @@ export function Calculator({
                 </label>
                 <SignedDecimalInput
                   id="shsc-suction"
-                  signLabel={l(
-                    "Vaihda imulämpötilan etumerkki",
-                    "Change suction temperature sign",
-                  )}
-                  autoComplete="off"
                   className="mono"
                   value={measured}
                   onValueChange={(next) => {
@@ -1091,11 +1058,6 @@ export function Calculator({
                 </label>
                 <SignedDecimalInput
                   id="shsc-hot-gas"
-                  signLabel={l(
-                    "Vaihda kuumakaasulämpötilan etumerkki",
-                    "Change hot-gas temperature sign",
-                  )}
-                  autoComplete="off"
                   className="mono"
                   value={hotGas}
                   onValueChange={(next) => {
@@ -1110,11 +1072,6 @@ export function Calculator({
                 </label>
                 <SignedDecimalInput
                   id="shsc-liquid"
-                  signLabel={l(
-                    "Vaihda nestelämpötilan etumerkki",
-                    "Change liquid temperature sign",
-                  )}
-                  autoComplete="off"
                   className="mono"
                   value={liquid}
                   onValueChange={(next) => {

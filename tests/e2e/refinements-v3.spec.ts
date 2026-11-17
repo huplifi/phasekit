@@ -28,7 +28,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   await expect
     .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(5.72, 1);
-  await page.getByLabel("Paineviite", { exact: true }).selectOption("g");
+  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
   await expect
     .poll(async () => Number((await p.inputValue()).replace(",", ".")))
     .toBeCloseTo(4.7, 1);

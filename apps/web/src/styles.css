@@ -151,7 +151,7 @@ strong.mono {
   max-width: 760px;
   min-height: 100dvh;
   margin: auto;
-  padding: 0 var(--page-gutter) 8rem;
+  padding: env(safe-area-inset-top, 0px) var(--page-gutter) 8rem;
 }
 .brand-header {
   display: flex;
@@ -1453,103 +1453,4 @@ pre.share-text {
   margin-bottom: 0;
   font-size: 0.8125rem;
   line-height: 1.6;
-}
-
-/* Keep version details available without displacing the field readings. */
-.compact-calculator-shell {
-  --calculator-safe-top: env(safe-area-inset-top, 0px);
-  padding-top: var(--calculator-safe-top);
-}
-.compact-calculator-shell::before {
-  content: "";
-  position: fixed;
-  inset: 0 0 auto;
-  height: var(--calculator-safe-top);
-  background: var(--background);
-  pointer-events: none;
-  z-index: 5;
-}
-.calculator-masthead {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0 8px;
-}
-.calculator-masthead .brand-header {
-  padding-block: 12px;
-  gap: 8px;
-}
-.calculator-masthead .beta-banner {
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  font-size: 0.75rem;
-}
-.calculator-masthead .beta-banner:has(details[open]) {
-  width: 100%;
-  padding-bottom: 8px;
-}
-.calculator-masthead .beta-banner summary {
-  cursor: pointer;
-  min-height: 44px;
-  padding: 10px 0;
-  font-weight: 600;
-}
-.compact-calculator-shell .back {
-  margin-bottom: 0;
-}
-.compact-calculator-shell .picker-compact-trigger {
-  min-height: 44px;
-  padding-block: 6px;
-}
-.compact-calculator-shell .picker-current {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-@media (max-width: 620px) {
-  .calculator-masthead .brand-header a {
-    gap: 6px;
-    font-size: 1.1rem;
-  }
-  .calculator-masthead .brand-header img {
-    width: 30px;
-    height: 30px;
-  }
-  .calculator-masthead .brand-header {
-    padding-block: 6px;
-    min-height: 48px;
-  }
-  .compact-calculator-shell main .back {
-    float: inline-end;
-    margin-inline-start: 8px;
-    font-size: 0.8125rem;
-    font-weight: 500;
-  }
-  .compact-calculator-shell .calculator-heading,
-  .compact-calculator-shell .pt-header h1 {
-    display: flow-root;
-    align-content: center;
-    min-height: 44px;
-    margin: 0 0 4px;
-  }
-  .compact-calculator-shell .refrigerant-picker {
-    clear: both;
-  }
-  .compact-calculator-shell .long-heading {
-    font-size: 1.5rem;
-  }
-}
-@media (max-height: 720px) and (max-width: 620px) {
-  .compact-calculator-shell .main-nav {
-    padding-block: 4px max(4px, env(safe-area-inset-bottom));
-  }
-  .compact-calculator-shell .main-nav a {
-    min-height: 48px;
-    padding-block: 4px 6px;
-    gap: 3px;
-  }
 }

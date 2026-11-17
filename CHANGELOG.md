@@ -4,6 +4,13 @@ Generated from [data/releases.json](data/releases.json). Edit that bilingual sou
 
 Dates describe versions, not the build time of each deployment. Beta releases do not update the stable site. The history starts with the recorded 0.1.0 stable baseline; earlier unversioned updates are not reconstructed.
 
+## 0.5.0-beta.10 — 2026-11-17 · Beta
+
+Signed values and familiar calculator controls
+
+- Use the standard keyboard to enter negative temperatures and gauge pressures. Absolute pressure still uses the decimal keypad.
+- Switch between gauge and absolute pressure in the pressure–temperature tool. Both calculators use the shared header, Back control and refrigerant picker again.
+
 ## 0.5.0-beta.9 — 2026-11-17 · Beta
 
 Dew and bubble points at the same pressure

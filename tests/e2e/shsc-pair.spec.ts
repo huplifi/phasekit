@@ -179,9 +179,9 @@ test("R452A cycle accepts measured dew temperatures and uses bubble for subcooli
     .getByRole("button", { name: "Kyllästyslämpötilat", exact: true })
     .click();
   const evaporation = page.locator("#cycle-evaporation");
-  await expect(evaporation).toHaveAttribute("inputmode", "decimal");
-  await evaporation.fill("10");
-  await page.getByRole("button", { name: "Vaihda LP-arvon etumerkki" }).click();
+  await expect(evaporation).toHaveAttribute("inputmode", "text");
+  await evaporation.focus();
+  await evaporation.pressSequentially("-10");
   await expect(evaporation).toHaveValue("-10");
   await expect(evaporation).toBeFocused();
   await page.locator("#cycle-condensation").fill("40");
@@ -196,10 +196,12 @@ test("R452A cycle accepts measured dew temperatures and uses bubble for subcooli
   ]);
   await expect(page.locator(".cycle-results")).toContainText("36,6");
   if (mobileWebKit) {
-    // Both Safari with its toolbars and the full-height app must show all five inputs and both results.
+    // The measurements and results can be read together after the shared page header.
     for (const viewport of [iphone.viewport, { width: 402, height: 874 }]) {
       await page.setViewportSize(viewport);
-      await page.evaluate(() => window.scrollTo(0, 0));
+      await page
+        .locator(".cycle-form")
+        .evaluate((form) => form.scrollIntoView({ block: "start" }));
       const card = (await page.locator(".cycle-readings").boundingBox())!;
       const nav = (await page.locator(".main-nav").boundingBox())!;
       expect(card.y + card.height).toBeLessThanOrEqual(nav.y);
