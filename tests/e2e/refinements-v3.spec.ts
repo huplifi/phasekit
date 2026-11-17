@@ -42,7 +42,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   await expect(t).toHaveValue("20");
   await page.getByLabel("Lämpötilayksikkö").selectOption("F");
   await expect(t).toHaveValue("68");
-  await expect(page.locator("#pt-side-bubble")).toHaveCount(
+  await expect(page.getByRole("switch", { name: "Höyry / Neste" })).toHaveCount(
     0,
   );
   await t.fill("-999");
@@ -53,7 +53,7 @@ test("P–T edits either value, converts units and reference, and rejects stale 
   await expect(t).toHaveValue("68");
   await expect(p).toHaveValue("");
   await expect(
-    page.locator("#pt-side-bubble"),
+    page.getByRole("switch", { name: "Höyry / Neste" }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Lisätietoa: Faasiraja" })

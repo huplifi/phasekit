@@ -10,6 +10,7 @@ Signed values and familiar calculator controls
 
 - Use the standard keyboard to enter negative temperatures and gauge pressures. Absolute pressure still uses the decimal keypad.
 - Switch between gauge and absolute pressure in the pressure–temperature tool. Both calculators use the shared header, Back control and refrigerant picker again.
+- Cycle pressures and saturation temperatures appear together. Enter the known value on each side. The Vapour/Liquid switch shows the other boundary temperature at the same pressure.
 
 ## 0.5.0-beta.9 — 2026-11-17 · Beta
 

@@ -10,11 +10,13 @@
     "changes": {
       "fi": [
         "Lämpötilan ja mittaripaineen voi kirjoittaa miinusmerkillä tavallisella näppäimistöllä. Absoluuttisen paineen syöttö avaa edelleen numeronäppäimistön.",
-        "Paine–lämpötila-työkalussa mittaripaineen ja absoluuttisen paineen välillä voi vaihtaa kytkimellä. Laskureissa on taas sovelluksen yhteinen yläpalkki, Takaisin-painike ja kylmäainevalitsin."
+        "Paine–lämpötila-työkalussa mittaripaineen ja absoluuttisen paineen välillä voi vaihtaa kytkimellä. Laskureissa on taas sovelluksen yhteinen yläpalkki, Takaisin-painike ja kylmäainevalitsin.",
+        "Paineet ja kyllästymislämpötilat näkyvät kylmäkierrossa rinnakkain. Syötä kummallekin puolelle tunnettu arvo. Höyry/Neste-kytkin näyttää toisen faasirajan lämpötilan samalla paineella."
       ],
       "en": [
         "Use the standard keyboard to enter negative temperatures and gauge pressures. Absolute pressure still uses the decimal keypad.",
-        "Switch between gauge and absolute pressure in the pressure–temperature tool. Both calculators use the shared header, Back control and refrigerant picker again."
+        "Switch between gauge and absolute pressure in the pressure–temperature tool. Both calculators use the shared header, Back control and refrigerant picker again.",
+        "Cycle pressures and saturation temperatures appear together. Enter the known value on each side. The Vapour/Liquid switch shows the other boundary temperature at the same pressure."
       ]
     }
   },

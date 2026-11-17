@@ -71,11 +71,10 @@ test("R410A heating case works and genuine bounds explain the data limit", async
     35.1,
     1,
   );
-  await page.locator("#pt-side-bubble").click();
-  await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await page.getByRole("switch", { name: "Höyry / Neste" }).uncheck();
+  await expect(
+    page.getByRole("switch", { name: "Höyry / Neste" }),
+  ).not.toBeChecked();
   await temperature.fill("80");
   await expect(pressure).toHaveValue("");
   await expect(page.getByRole("alert")).toContainText("tuettu alue");
@@ -142,16 +141,14 @@ test("P–T blend controls identify the selected phase boundary", async ({
   await choose(page, "R410A");
   await page.getByLabel("Paine", { exact: true }).fill("5");
 
-  await expect(page.locator("#pt-side-dew")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.getByRole("switch", { name: "Höyry / Neste" }),
+  ).toBeChecked();
   const before = await page.locator("#pt-temperature").inputValue();
-  await page.locator("#pt-side-bubble").click();
-  await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await page.getByRole("switch", { name: "Höyry / Neste" }).uncheck();
+  await expect(
+    page.getByRole("switch", { name: "Höyry / Neste" }),
+  ).not.toBeChecked();
   await expect(page.locator("#pt-pressure")).toHaveValue("5");
   await expect(page.locator("#pt-temperature")).not.toHaveValue(before);
 });
@@ -162,8 +159,7 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
   await page.goto("/#/pt/r452a");
   const pressure = page.locator("#pt-pressure");
   const temperature = page.locator("#pt-temperature");
-  const bubble = page.locator("#pt-side-bubble");
-  const dew = page.locator("#pt-side-dew");
+  const phase = page.getByRole("switch", { name: "Höyry / Neste" });
   await temperature.fill("40,0");
   await expect(pressure).toHaveValue("17,59");
   await expect(page.locator(".pt-reading h2")).toHaveText(
@@ -175,7 +171,7 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
   await expect(reading).toBeVisible();
   await expect(reading.getByRole("heading")).toHaveText("Mittaripaine");
   await expect(reading.locator(".pt-reading-value")).toHaveText("16,57 bar(g)");
-  await bubble.click();
+  await phase.uncheck();
   await expect(pressure).toHaveValue("16,57");
   await expect(temperature).toHaveValue("36,60");
   await expect(reading.getByRole("heading")).toHaveText("Kuplapiste");
@@ -184,13 +180,13 @@ test("R452A keeps the entered dew point and pressure when viewing bubble", async
     "Laskettu",
   );
   await expect(page.locator(".pt-source-note")).toContainText("40,0 °C");
-  await dew.click();
+  await phase.check();
   await expect(temperature).toHaveValue("40,0");
   await expect(page.locator("#pt-temperature-status")).toContainText(
     "Syötetty",
   );
 
-  await bubble.click();
+  await phase.uncheck();
   await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(

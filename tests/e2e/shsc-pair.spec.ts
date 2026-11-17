@@ -175,9 +175,7 @@ test("R452A cycle accepts measured dew temperatures and uses bubble for subcooli
   const mobileWebKit = info.project.name === "mobile-webkit";
   if (mobileWebKit) await page.setViewportSize(iphone.viewport);
   await page.goto("/#/ph/r452a");
-  await page
-    .getByRole("button", { name: "Kyllästyslämpötilat", exact: true })
-    .click();
+  await expect(page.locator("#shsc-hp")).toBeVisible();
   const evaporation = page.locator("#cycle-evaporation");
   await expect(evaporation).toHaveAttribute("inputmode", "text");
   await evaporation.focus();
@@ -199,9 +197,7 @@ test("R452A cycle accepts measured dew temperatures and uses bubble for subcooli
     // The measurements and results can be read together after the shared page header.
     for (const viewport of [iphone.viewport, { width: 402, height: 874 }]) {
       await page.setViewportSize(viewport);
-      await page
-        .locator(".cycle-form")
-        .evaluate((form) => form.scrollIntoView({ block: "start" }));
+      await expect(page.locator("#shsc-lp")).toBeInViewport({ ratio: 1 });
       const card = (await page.locator(".cycle-readings").boundingBox())!;
       const nav = (await page.locator(".main-nav").boundingBox())!;
       expect(card.y + card.height).toBeLessThanOrEqual(nav.y);
@@ -212,7 +208,20 @@ test("R452A cycle accepts measured dew temperatures and uses bubble for subcooli
   }
   await expect(page.locator(".ph-cycle")).toHaveCount(4);
 
-  await page.locator("#cycle-high-boundary").selectOption("bubble");
+  const hpPhase = page.getByRole("switch", {
+    name: "Lauhtuminen · Höyry / Neste",
+  });
+  await hpPhase.uncheck();
+  await expect(page.locator("#shsc-hp")).toHaveValue("17,59");
+  await expect(page.locator("#cycle-condensation")).toHaveValue("36,60");
+  await expect(page.locator(".calculator-number")).toHaveText([
+    "10 K",
+    "6,6 K",
+  ]);
+  await hpPhase.check();
+  await expect(page.locator("#cycle-condensation")).toHaveValue("40");
+  await hpPhase.uncheck();
+  await page.locator("#cycle-condensation").fill("40");
   await submit.click();
   await expect(page.locator(".calculator-number")).toHaveText(["10 K", "10 K"]);
 

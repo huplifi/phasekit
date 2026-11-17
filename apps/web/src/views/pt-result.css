@@ -7,51 +7,7 @@
   font-size: 0.8125rem;
 }
 .pt-phase-switch {
-  min-width: 0;
-  border: 0;
-  padding: 0;
-  margin: 14px 0 18px;
-}
-.pt-phase-switch legend {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-}
-.pt-phase-row,
-.pt-phase-options {
-  display: flex;
-  align-items: center;
-}
-.pt-phase-row {
-  position: relative;
-  gap: 4px;
-}
-.pt-phase-options {
-  flex: 1;
-  gap: 0;
-  border-bottom: 1px solid var(--divider);
-}
-.pt-phase-options button {
-  flex: 1;
-  min-width: 0;
-  min-height: 44px;
-  align-self: stretch;
-  border: 0;
-  border-radius: 0;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  padding: 6px;
-  background: transparent;
-  color: var(--text-secondary);
-  font: inherit;
-  font-size: 0.8125rem;
-}
-.pt-phase-options button[aria-pressed="true"] {
-  color: var(--text);
-  border-bottom-color: currentColor;
-  font-weight: 600;
+  margin-block: 16px;
 }
 .pt-calculator .pt-pair {
   gap: 4px 8px;
