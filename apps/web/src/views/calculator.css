@@ -300,3 +300,202 @@
 .calculator-form .temperature-heading .info-help-button {
   margin-block: 0;
 }
+
+/* Keep the five cycle readings and their two primary results together. */
+.compact-calculator-shell .calculator-heading {
+  margin: 2px 0 8px;
+}
+.cycle-toolbar {
+  clear: both;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 10px;
+}
+.cycle-toolbar > *,
+.cycle-boundary,
+.cycle-measured-field {
+  min-width: 0;
+}
+.cycle-unit-settings > summary {
+  min-height: 44px;
+  padding: 10px 6px;
+  color: var(--link);
+  font-size: 0.875rem;
+}
+.cycle-unit-settings[open] {
+  grid-column: 1 / -1;
+}
+.cycle-unit-settings .shsc-unit-settings {
+  margin-block: 6px 10px;
+}
+.cycle-toolbar .shsc-unit-settings label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+.cycle-toolbar .shsc-unit-settings select {
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+}
+.cycle-form {
+  margin-top: 8px;
+}
+.cycle-form .cycle-input-mode {
+  margin-block: 0;
+}
+.cycle-form .form-grid.cycle-boundaries {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  padding-top: 0;
+  margin-block: 6px 8px;
+}
+.cycle-form .cycle-boundaries,
+.cycle-form .shsc-temperatures {
+  align-items: stretch;
+  column-gap: 8px;
+}
+.cycle-boundary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.cycle-boundary > label:first-child {
+  flex: 1;
+}
+.cycle-input-unit {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  white-space: nowrap;
+}
+.cycle-form .shsc-fields input,
+.cycle-form .cycle-boundaries select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--control-border);
+  background: var(--background);
+  color: var(--text);
+  font-size: 1rem;
+}
+.cycle-form
+  .shsc-fields
+  .signed-decimal-input.has-sign-action:focus-within
+  input {
+  padding-inline-end: 3rem;
+}
+.cycle-form .temperature-heading {
+  flex-wrap: wrap;
+  margin-block: 4px;
+}
+.cycle-form .shsc-temperatures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 5.5rem), 1fr));
+}
+.cycle-measured-field {
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  row-gap: 4px;
+}
+.cycle-form .cycle-measured-field > label {
+  display: block;
+  align-self: start;
+  overflow-wrap: anywhere;
+  grid-row: auto;
+}
+.cycle-submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-top: 8px;
+}
+.cycle-form .cycle-submit .primary {
+  min-height: 44px;
+  margin: 0;
+}
+.cycle-resolved-pressures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin: 0;
+}
+.cycle-resolved-pressures span {
+  white-space: nowrap;
+}
+.cycle-results:not(:empty) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+.cycle-results > .notice {
+  grid-column: 1 / -1;
+}
+.cycle-results .result-card {
+  min-width: 0;
+  padding: 10px 12px;
+}
+.cycle-results .result-card + .result-card,
+.cycle-results .result-label,
+.cycle-results .caption {
+  margin: 0;
+}
+.cycle-results .calculator-number {
+  margin-block: 2px;
+  font-size: clamp(1.25rem, 6vw, 1.75rem);
+}
+.cycle-results .cycle-result-details > summary {
+  font-size: 0.75rem;
+  padding-block: 7px;
+}
+.cycle-form .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.cycle-toolbar .help-heading {
+  flex-wrap: wrap;
+}
+.cycle-results .result-label,
+.cycle-form .cycle-boundary,
+.cycle-form .temperature-heading,
+.cycle-unit-settings .switch-label {
+  overflow-wrap: anywhere;
+}
+.cycle-source-value {
+  margin: 3px 0;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+@media (max-height: 720px) and (max-width: 620px) {
+  .cycle-form .cycle-input-mode button,
+  .cycle-form .shsc-fields input,
+  .cycle-form .cycle-boundaries select,
+  .cycle-form .cycle-submit .primary {
+    height: auto;
+    min-height: 44px;
+    padding-block: 6px;
+  }
+  .cycle-form .cycle-boundaries select {
+    height: 44px;
+  }
+  .cycle-form .form-grid.cycle-boundaries {
+    margin-block: 3px;
+  }
+  .cycle-form .temperature-heading,
+  .cycle-form {
+    margin-block: 2px;
+  }
+}

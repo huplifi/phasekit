@@ -151,6 +151,7 @@ function PHChart({
   visibleKinds,
   chartId,
   highlightedGuideIndex,
+  selectedPoint,
 }: {
   diagram: PHDiagram;
   result?: PHCycleResult | null;
@@ -159,6 +160,7 @@ function PHChart({
   visibleKinds: Record<PHIsoline["kind"], boolean>;
   chartId: string;
   highlightedGuideIndex: number | null;
+  selectedPoint: (typeof pointLabels)[number];
 }) {
   const titleId = useId();
   const descriptionId = useId();
@@ -233,7 +235,7 @@ function PHChart({
         top: 24,
         bottom: 54,
         width: Math.max(300, containerWidth),
-        height: 360,
+        height: 330,
       }
     : { left: 74, right: 26, top: 30, bottom: 60, width: 720, height: 420 };
   const width = box.width - box.left - box.right;
@@ -289,17 +291,26 @@ function PHChart({
     maximumSignificantDigits: 3,
   });
   const kindSymbol = { temperature: "T", entropy: "s", volume: "v" };
+  const labelPosition = (point: (typeof points)[number]) => {
+    const px = x(point.h),
+      py = y(point.p);
+    let dx = point.label === "3" || point.label === "4" ? -16 : 16;
+    let dy = point.label === "1" || point.label === "4" ? 23 : -14;
+    if (px + dx < box.left + 12 || px + dx > box.left + width - 12) dx *= -1;
+    if (py + dy < box.top + 17 || py + dy > box.top + height - 5)
+      dy = dy > 0 ? -14 : 23;
+    return { x: px + dx, y: py + dy };
+  };
   const pointRects: ChartRect[] = points.flatMap((point) => {
     const px = x(point.h),
       py = y(point.p);
-    const labelX = px + (point.label === "3" || point.label === "4" ? -13 : 12);
-    const labelY = py + (point.label === "1" || point.label === "4" ? 19 : -11);
+    const { x: labelX, y: labelY } = labelPosition(point);
     return [
       { left: px - 8, top: py - 8, right: px + 8, bottom: py + 8 },
       {
-        left: labelX - (point.label === "3" || point.label === "4" ? 14 : 0),
+        left: labelX - 8,
         top: labelY - 16,
-        right: labelX + (point.label === "3" || point.label === "4" ? 0 : 14),
+        right: labelX + 8,
         bottom: labelY + 4,
       },
     ];
@@ -492,8 +503,41 @@ function PHChart({
               y2={y(pointByLabel[to].p)}
             />
           ))}
+        {result &&
+          connections.map(([from, to]) => {
+            const start = {
+              x: x(pointByLabel[from].h),
+              y: y(pointByLabel[from].p),
+            };
+            const end = { x: x(pointByLabel[to].h), y: y(pointByLabel[to].p) };
+            const angle = Math.atan2(end.y - start.y, end.x - start.x);
+            const mx = start.x + (end.x - start.x) * 0.54;
+            const my = start.y + (end.y - start.y) * 0.54;
+            return (
+              <path
+                key={`arrow-${from}`}
+                className="ph-cycle-arrow"
+                transform={`translate(${mx} ${my}) rotate(${(angle * 180) / Math.PI})`}
+                d="M -5 -4 L 4 0 L -5 4 Z"
+              />
+            );
+          })}
         {points.map((point) => (
-          <g key={point.label}>
+          <g
+            key={point.label}
+            className={
+              selectedPoint === point.label ? "ph-point-selected" : undefined
+            }
+            data-point={point.label}
+          >
+            {selectedPoint === point.label && (
+              <circle
+                className="ph-point-halo"
+                cx={x(point.h)}
+                cy={y(point.p)}
+                r="11"
+              />
+            )}
             <circle
               className="ph-point"
               cx={x(point.h)}
@@ -502,17 +546,9 @@ function PHChart({
             />
             <text
               className="ph-point-label"
-              x={
-                x(point.h) +
-                (point.label === "3" || point.label === "4" ? -13 : 12)
-              }
-              y={
-                y(point.p) +
-                (point.label === "1" || point.label === "4" ? 19 : -11)
-              }
-              textAnchor={
-                point.label === "3" || point.label === "4" ? "end" : "start"
-              }
+              x={labelPosition(point).x}
+              y={labelPosition(point).y}
+              textAnchor="middle"
             >
               {point.label}
             </text>
@@ -561,6 +597,8 @@ export function PHDiagramPanel({
 }) {
   const { fitCycle, visibleKinds } = view;
   const chartId = useId();
+  const [selectedPoint, setSelectedPoint] =
+    useState<(typeof pointLabels)[number]>("1");
   const [selectedGuide, setSelectedGuide] = useState<{
     diagramId: string;
     index: number;
@@ -605,6 +643,12 @@ export function PHDiagramPanel({
     new Intl.NumberFormat(fi ? "fi-FI" : "en-GB", {
       maximumFractionDigits: 2,
     }).format(Number(value));
+  const pointNames = {
+    "1": l("Imukaasu", "Suction gas"),
+    "2": l("Kuumakaasu", "Discharge gas"),
+    "3": l("Neste ennen paisuntaa", "Liquid before expansion"),
+    "4": l("Paisunnan jälkeen", "After expansion"),
+  };
   const phase = (value: string) =>
     value === "vapour"
       ? l("Höyry", "Vapour")
@@ -639,79 +683,34 @@ export function PHDiagramPanel({
           className="ph-diagram-section"
           aria-labelledby="ph-diagram-title"
         >
-          <h2 id="ph-diagram-title">
-            {l("log(p)–h-kaavio", "log(p)–h diagram")}
-          </h2>
-          <div className="ph-view-controls">
-            <label className="switch-label">
-              <input
-                type="checkbox"
-                role="switch"
-                checked={fitCycle && !!result}
-                disabled={!result}
-                aria-describedby={!result ? "ph-fit-unavailable" : undefined}
-                onChange={(event) =>
-                  onViewChange({ ...view, fitCycle: event.target.checked })
-                }
-              />
-              <span>{l("Sovita kiertoon", "Fit to cycle")}</span>
-            </label>
-            {!result && (
-              <p id="ph-fit-unavailable" className="caption secondary">
-                {l(
-                  "Laske kelvollinen kierto, jotta kaavio voidaan sovittaa siihen.",
-                  "Calculate a valid cycle to fit the chart to it.",
-                )}
-              </p>
-            )}
-          </div>
-          {diagram.isolines.length > 0 && (
-            <div
-              className="ph-isoline-controls"
-              role="group"
-              aria-label={l("Apukäyrät", "Guide curves")}
-            >
-              {(
-                [
-                  ["temperature", l("Lämpötila T", "Temperature T"), "°C"],
-                  ["entropy", l("Entropia s", "Entropy s"), "kJ/(kg·K)"],
-                  [
-                    "volume",
-                    l("Ominaistilavuus v", "Specific volume v"),
-                    "m³/kg",
-                  ],
-                ] as const
-              ).map(([kind, name, unit]) => {
-                const available = diagram.isolines.some(
-                  (line) => line.kind === kind,
-                );
-                return (
-                  <button
-                    type="button"
-                    key={kind}
-                    className={`ph-isoline-toggle ph-isoline-toggle-${kind}`}
-                    aria-pressed={visibleKinds[kind] && available}
-                    disabled={!available}
-                    onClick={() =>
-                      onViewChange({
-                        ...view,
-                        visibleKinds: {
-                          ...visibleKinds,
-                          [kind]: !visibleKinds[kind],
-                        },
-                      })
-                    }
-                  >
-                    <span
-                      className={`ph-isoline-key ph-isoline-key-${kind}`}
-                      aria-hidden="true"
-                    />
-                    {name} · {unit}
-                  </button>
-                );
-              })}
+          <div className="ph-chart-heading">
+            <h2 id="ph-diagram-title">
+              {l("log(p)–h-kaavio", "log(p)–h diagram")}
+            </h2>
+            <div className="ph-fit-settings">
+              <label className="switch-label ph-fit-control">
+                <input
+                  type="checkbox"
+                  role="switch"
+                  checked={fitCycle && !!result}
+                  disabled={!result}
+                  aria-describedby={!result ? "ph-fit-unavailable" : undefined}
+                  onChange={(event) =>
+                    onViewChange({ ...view, fitCycle: event.target.checked })
+                  }
+                />
+                <span>{l("Sovita kiertoon", "Fit to cycle")}</span>
+              </label>
+              {!result && (
+                <p id="ph-fit-unavailable" className="caption secondary">
+                  {l(
+                    "Laske kelvollinen kierto, jotta kaavio voidaan sovittaa siihen.",
+                    "Calculate a valid cycle to fit the chart to it.",
+                  )}
+                </p>
+              )}
             </div>
-          )}
+          </div>
           <figure className="ph-figure">
             <PHChart
               diagram={diagram}
@@ -721,210 +720,376 @@ export function PHDiagramPanel({
               visibleKinds={visibleKinds}
               chartId={chartId}
               highlightedGuideIndex={highlightedGuideIndex}
+              selectedPoint={selectedPoint}
             />
-            <figcaption className="caption secondary">
-              {l(
-                "Katkoviivaiset kylläisyysrajat ovat avoimia, koska malliaineisto kattaa vain rajatun painealueen.",
-                "Dashed saturation boundaries remain open because the model covers only a limited pressure range.",
-              )}{" "}
-              {result &&
-                l(
-                  "Suorat pisteiden välit kuvaavat kierron järjestystä kaavamaisesti, eivät laskettua prosessireittiä.",
-                  "Straight connections show cycle order schematically, not a calculated process path.",
-                )}
-              {diagram.isolines.length > 0 && " "}
-              {diagram.isolines.length > 0 &&
-                l(
-                  "Apukäyriä on vain muutamalla tasolla. Ne näyttävät CoolPropista lasketut, tarkistetut yksifaasisen alueen osat; puuttuvia alueita ei yhdistetä.",
-                  "Guide curves cover only a few levels. They show checked single-phase segments calculated from CoolProp; missing regions remain gaps.",
-                )}{" "}
-              {result
-                ? l(
-                    "Kaavio sovittuu näytön leveyteen; tarkat pistearvot näkyvät alla taulukossa.",
-                    "The chart fits the screen width; exact point values appear in the table below.",
-                  )
-                : l(
-                    "Kaavio sovittuu näytön leveyteen.",
-                    "The chart fits the screen width.",
+            <figcaption className="ph-legend caption">
+              <span className="ph-legend-bubble">
+                {l("Kuplapisteraja", "Bubble boundary")}
+              </span>
+              <span className="ph-legend-dew">
+                {l("Kastepisteraja", "Dew boundary")}
+              </span>
+              {result && (
+                <span className="ph-legend-cycle">
+                  {l(
+                    "Kiertosuunta 1 → 2 → 3 → 4 → 1",
+                    "Cycle direction 1 → 2 → 3 → 4 → 1",
                   )}
+                </span>
+              )}
             </figcaption>
           </figure>
-          {diagram.isolines.length > 0 &&
-            diagram.isolines.some((line) => visibleKinds[line.kind]) && (
-              <details className="ph-guide-list caption">
-                <summary>
-                  {l("Näytä apukäyrien arvot", "Show guide curve values")}
-                </summary>
-                <p className="secondary">
-                  {l(
-                    "Valitse arvo korostaaksesi sen käyrää. Myös kaaviosta pois jätetyt tunnisteet ovat tässä.",
-                    "Select a value to highlight its curve. Values without an inline chart label are listed here too.",
-                  )}
+          {result && (
+            <section
+              className="ph-results ph-result"
+              aria-labelledby="ph-result-title"
+            >
+              <h3
+                id="ph-result-title"
+                className="ph-point-inspection-title"
+                tabIndex={-1}
+              >
+                {l("Kierron pisteet", "Cycle state points")}
+              </h3>
+              <div
+                className="ph-point-picker"
+                role="group"
+                aria-label={l("Valitse kiertopiste", "Select cycle point")}
+              >
+                {pointLabels.map((label) => (
+                  <button
+                    key={label}
+                    type="button"
+                    className="ph-point-select"
+                    data-point={label}
+                    aria-pressed={selectedPoint === label}
+                    aria-controls={chartId}
+                    aria-label={`${label} · ${pointNames[label]}`}
+                    onClick={() => setSelectedPoint(label)}
+                    onFocus={() => setSelectedPoint(label)}
+                  >
+                    <span className="ph-point-number" aria-hidden="true">
+                      {label}
+                    </span>
+                    <span className="ph-point-name">{pointNames[label]}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="ph-active-point" aria-live="polite">
+                <p className="ph-active-point-title">
+                  <strong>
+                    {selectedPoint} · {pointNames[selectedPoint]}
+                  </strong>
+                  <span>{phase(result.points[selectedPoint].phase)}</span>
                 </p>
-                {(["temperature", "entropy", "volume"] as const)
-                  .filter(
-                    (kind) =>
-                      visibleKinds[kind] &&
-                      diagram.isolines.some((line) => line.kind === kind),
-                  )
-                  .map((kind) => {
-                    const lines = diagram.isolines
-                      .map((line, index) => ({ line, index }))
-                      .filter(({ line }) => line.kind === kind)
-                      .sort((a, b) => a.line.level - b.line.level);
-                    const name =
-                      kind === "temperature"
-                        ? l("Lämpötila T", "Temperature T")
-                        : kind === "entropy"
-                          ? l("Entropia s", "Entropy s")
-                          : l("Ominaistilavuus v", "Specific volume v");
-                    const unit =
-                      kind === "temperature"
-                        ? "°C"
-                        : kind === "entropy"
-                          ? "kJ/(kg·K)"
-                          : "m³/kg";
-                    const symbol =
-                      kind === "temperature"
-                        ? "T"
-                        : kind === "entropy"
-                          ? "s"
-                          : "v";
+                <dl className="ph-point-values ph-active-point-values">
+                  <div>
+                    <dt>p · bar(a)</dt>
+                    <dd className="mono">
+                      {formatted(
+                        result.points[selectedPoint].pressureBarAbsolute,
+                      )}
+                    </dd>
+                  </div>
+                  <div
+                    className={
+                      result.points[selectedPoint].temperatureC === null
+                        ? "ph-point-temperature-range"
+                        : undefined
+                    }
+                  >
+                    <dt>T · °C</dt>
+                    <dd className="mono">
+                      {result.points[selectedPoint].temperatureC === null ? (
+                        result.points[selectedPoint].temperatureBoundsC ? (
+                          <>
+                            {formatted(
+                              result.points[selectedPoint]
+                                .temperatureBoundsC![0],
+                            )}
+                            …
+                            {formatted(
+                              result.points[selectedPoint]
+                                .temperatureBoundsC![1],
+                            )}
+                            <span className="ph-value-note">
+                              {l("kupla…kaste", "bubble…dew")}
+                            </span>
+                          </>
+                        ) : (
+                          "—"
+                        )
+                      ) : (
+                        formatted(result.points[selectedPoint].temperatureC!)
+                      )}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>h · kJ/kg</dt>
+                    <dd className="mono">
+                      {formatted(result.points[selectedPoint].enthalpyKJkg)}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+              <p className="caption secondary ph-point-inspection-note">
+                {selectedPoint === "4"
+                  ? l(
+                      "Lämpötila on kupla- ja kastepisteen rajaus. h₄ = h₃ olettaa isentalpisen paisunnan.",
+                      "Temperature is bounded by bubble and dew values. h₄ = h₃ assumes isenthalpic expansion.",
+                    )
+                  : l(
+                      "Valitse piste nähdäksesi arvot ja sijainnin. Paineet ovat absoluuttisia.",
+                      "Select a point to see its values and position. Pressures are absolute.",
+                    )}
+              </p>
+              <details className="ph-all-points">
+                <summary>
+                  {l("Kaikki pistearvot", "All state-point values")}
+                </summary>
+                <ol className="ph-point-table ph-point-list">
+                  {pointLabels.map((label) => {
+                    const point = result.points[label];
                     return (
-                      <div className="ph-guide-group" key={kind}>
-                        <strong>
-                          {name} · {unit}:
-                        </strong>
-                        <div className="ph-guide-values">
-                          {lines.map(({ line, index }) => (
-                            <button
-                              key={index}
-                              type="button"
-                              className="ph-guide-value"
-                              data-guide-index={index}
-                              aria-controls={chartId}
-                              aria-pressed={highlightedGuideIndex === index}
-                              onFocus={() =>
-                                setSelectedGuide({ diagramId: id, index })
-                              }
-                              onClick={() =>
-                                setSelectedGuide({ diagramId: id, index })
-                              }
-                            >
-                              {symbol}=
-                              {new Intl.NumberFormat(fi ? "fi-FI" : "en-GB", {
-                                maximumSignificantDigits: 3,
-                              }).format(line.level)}{" "}
-                              {unit} ·{" "}
-                              {line.phase === "liquid"
-                                ? l("nestepuoli", "liquid side")
-                                : l("höyrypuoli", "vapour side")}
-                            </button>
-                          ))}
+                      <li
+                        key={label}
+                        className="ph-point-card"
+                        data-point={label}
+                        data-selected={selectedPoint === label}
+                      >
+                        <div className="ph-point-card-heading">
+                          <span className="ph-point-number" aria-hidden="true">
+                            {label}
+                          </span>
+                          <span className="ph-point-name">
+                            {pointNames[label]}
+                          </span>
+                          <span className="ph-point-phase">
+                            {phase(point.phase)}
+                          </span>
                         </div>
-                      </div>
+                        <dl className="ph-point-values">
+                          <div>
+                            <dt>p · bar(a)</dt>
+                            <dd className="mono">
+                              {formatted(point.pressureBarAbsolute)}
+                            </dd>
+                          </div>
+                          <div
+                            className={
+                              point.temperatureC === null
+                                ? "ph-point-temperature-range"
+                                : undefined
+                            }
+                          >
+                            <dt>T · °C</dt>
+                            <dd className="mono">
+                              {point.temperatureC === null ? (
+                                point.temperatureBoundsC ? (
+                                  <>
+                                    {formatted(point.temperatureBoundsC[0])}…
+                                    {formatted(point.temperatureBoundsC[1])}
+                                    <span className="ph-value-note">
+                                      {l("kupla…kaste", "bubble…dew")}
+                                    </span>
+                                  </>
+                                ) : (
+                                  "—"
+                                )
+                              ) : (
+                                formatted(point.temperatureC)
+                              )}
+                            </dd>
+                          </div>
+                          <div>
+                            <dt>h · kJ/kg</dt>
+                            <dd className="mono">
+                              {formatted(point.enthalpyKJkg)}
+                            </dd>
+                          </div>
+                        </dl>
+                      </li>
                     );
                   })}
-                {highlightedLine && (
-                  <p className="ph-guide-selection" role="status">
-                    {highlightedGuideVisible
-                      ? l(
-                          "Valittu käyrä on korostettu kaaviossa.",
-                          "Selected curve highlighted in the chart.",
-                        )
-                      : l(
-                          "Valittu käyrä on sovitetun näkymän ulkopuolella. Poista Sovita kiertoon käytöstä nähdäksesi sen.",
-                          "Selected curve is outside the fitted view. Turn off Fit to cycle to see it.",
-                        )}
-                  </p>
-                )}
+                </ol>
               </details>
-            )}
-          <div className="ph-legend caption">
-            <span className="ph-legend-bubble">
-              {l("Kuplapisteraja", "Bubble boundary")}
-            </span>
-            <span className="ph-legend-dew">
-              {l("Kastepisteraja", "Dew boundary")}
-            </span>
-            {result && (
-              <span className="ph-legend-cycle">
-                {l("Kiertopisteet", "Cycle points")}
-              </span>
-            )}
-          </div>
-        </section>
-      )}
-      {result && diagram && (
-        <section
-          className="ph-results ph-result"
-          aria-labelledby="ph-result-title"
-        >
-          <h2 id="ph-result-title" tabIndex={-1}>
-            {l("Laskettu kierto", "Calculated cycle")}
-          </h2>
-          <div
-            className="ph-table-scroll"
-            tabIndex={0}
-            role="region"
-            aria-label={l(
-              "Vieritettävä pistetaulukko",
-              "Scrollable state-point table",
-            )}
-          >
-            <table className="ph-point-table">
-              <caption>
-                {l(
-                  "Lasketut tilapisteet; paineet absoluuttisia",
-                  "Calculated state points; absolute pressures",
-                )}
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col">{l("Piste", "Point")}</th>
-                  <th scope="col">{l("Tila", "State")}</th>
-                  <th scope="col">p · bar(a)</th>
-                  <th scope="col">T · °C</th>
-                  <th scope="col">h · kJ/kg</th>
-                </tr>
-              </thead>
-              <tbody>
-                {pointLabels.map((label) => {
-                  const point = result.points[label];
+            </section>
+          )}
+          {diagram.isolines.length > 0 && (
+            <details className="ph-chart-options">
+              <summary>
+                {l("Apukäyrät ja niiden arvot", "Guide curves and values")}
+              </summary>
+              <div
+                className="ph-isoline-controls"
+                role="group"
+                aria-label={l("Apukäyrät", "Guide curves")}
+              >
+                {(
+                  [
+                    ["temperature", l("Lämpötila T", "Temperature T"), "°C"],
+                    ["entropy", l("Entropia s", "Entropy s"), "kJ/(kg·K)"],
+                    [
+                      "volume",
+                      l("Ominaistilavuus v", "Specific volume v"),
+                      "m³/kg",
+                    ],
+                  ] as const
+                ).map(([kind, name, unit]) => {
+                  const available = diagram.isolines.some(
+                    (line) => line.kind === kind,
+                  );
+                  if (!available) return null;
                   return (
-                    <tr key={label}>
-                      <th scope="row">{label}</th>
-                      <td>{phase(point.phase)}</td>
-                      <td className="mono">
-                        {formatted(point.pressureBarAbsolute)}
-                      </td>
-                      <td className="mono">
-                        {point.temperatureC === null
-                          ? point.temperatureBoundsC
-                            ? `${formatted(point.temperatureBoundsC[0])}–${formatted(point.temperatureBoundsC[1])} *`
-                            : "—"
-                          : formatted(point.temperatureC)}
-                      </td>
-                      <td className="mono">{formatted(point.enthalpyKJkg)}</td>
-                    </tr>
+                    <button
+                      type="button"
+                      key={kind}
+                      className={`ph-isoline-toggle ph-isoline-toggle-${kind}`}
+                      aria-pressed={visibleKinds[kind] && available}
+                      disabled={!available}
+                      onClick={() =>
+                        onViewChange({
+                          ...view,
+                          visibleKinds: {
+                            ...visibleKinds,
+                            [kind]: !visibleKinds[kind],
+                          },
+                        })
+                      }
+                    >
+                      <span
+                        className={`ph-isoline-key ph-isoline-key-${kind}`}
+                        aria-hidden="true"
+                      />
+                      {name} · {unit}
+                    </button>
                   );
                 })}
-              </tbody>
-            </table>
-          </div>
-          <p className="caption secondary">
-            *{" "}
-            {l(
-              "Pisteen 4 lämpötila on kupla- ja kastepisteen välinen rajaus, ei yksittäinen laskettu arvo. h₄ = h₃ on isentalpisen paisunnan oletus.",
-              "Point 4 temperature is bounded by bubble and dew values, not a single calculated value. h₄ = h₃ is the isenthalpic expansion assumption.",
-            )}
-          </p>
-          <p className="caption secondary">
-            {l(
-              "Entalpiat perustuvat CoolProp HEOS -malliin ja rajattuun offline-ruudukkoon. Tulokset ovat malliarvioita; vertaa niitä laite- ja mittaustietoihin.",
-              "Enthalpies come from the CoolProp HEOS model and a bounded offline grid. Results are model estimates; compare them with equipment and measurement data.",
-            )}
-          </p>
+              </div>
+              {diagram.isolines.some((line) => visibleKinds[line.kind]) && (
+                <details className="ph-guide-list caption">
+                  <summary>
+                    {l("Näytä apukäyrien arvot", "Show guide curve values")}
+                  </summary>
+                  <p className="secondary">
+                    {l(
+                      "Valitse arvo korostaaksesi sen käyrää. Myös kaaviosta pois jätetyt tunnisteet ovat tässä.",
+                      "Select a value to highlight its curve. Values without an inline chart label are listed here too.",
+                    )}
+                  </p>
+                  {(["temperature", "entropy", "volume"] as const)
+                    .filter(
+                      (kind) =>
+                        visibleKinds[kind] &&
+                        diagram.isolines.some((line) => line.kind === kind),
+                    )
+                    .map((kind) => {
+                      const lines = diagram.isolines
+                        .map((line, index) => ({ line, index }))
+                        .filter(({ line }) => line.kind === kind)
+                        .sort((a, b) => a.line.level - b.line.level);
+                      const name =
+                        kind === "temperature"
+                          ? l("Lämpötila T", "Temperature T")
+                          : kind === "entropy"
+                            ? l("Entropia s", "Entropy s")
+                            : l("Ominaistilavuus v", "Specific volume v");
+                      const unit =
+                        kind === "temperature"
+                          ? "°C"
+                          : kind === "entropy"
+                            ? "kJ/(kg·K)"
+                            : "m³/kg";
+                      const symbol =
+                        kind === "temperature"
+                          ? "T"
+                          : kind === "entropy"
+                            ? "s"
+                            : "v";
+                      return (
+                        <div className="ph-guide-group" key={kind}>
+                          <strong>
+                            {name} · {unit}:
+                          </strong>
+                          <div className="ph-guide-values">
+                            {lines.map(({ line, index }) => (
+                              <button
+                                key={index}
+                                type="button"
+                                className="ph-guide-value"
+                                data-guide-index={index}
+                                aria-controls={chartId}
+                                aria-pressed={highlightedGuideIndex === index}
+                                onFocus={() =>
+                                  setSelectedGuide({ diagramId: id, index })
+                                }
+                                onClick={() =>
+                                  setSelectedGuide({ diagramId: id, index })
+                                }
+                              >
+                                {symbol}=
+                                {new Intl.NumberFormat(fi ? "fi-FI" : "en-GB", {
+                                  maximumSignificantDigits: 3,
+                                }).format(line.level)}{" "}
+                                {unit} ·{" "}
+                                {line.phase === "liquid"
+                                  ? l("nestepuoli", "liquid side")
+                                  : l("höyrypuoli", "vapour side")}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  {highlightedLine && (
+                    <p className="ph-guide-selection" role="status">
+                      {highlightedGuideVisible
+                        ? l(
+                            "Valittu käyrä on korostettu kaaviossa.",
+                            "Selected curve highlighted in the chart.",
+                          )
+                        : l(
+                            "Valittu käyrä on sovitetun näkymän ulkopuolella. Poista Sovita kiertoon käytöstä nähdäksesi sen.",
+                            "Selected curve is outside the fitted view. Turn off Fit to cycle to see it.",
+                          )}
+                    </p>
+                  )}
+                </details>
+              )}
+            </details>
+          )}
+          <details className="ph-model-notes">
+            <summary>
+              {l(
+                "Kaavion tulkinta ja mallin rajat",
+                "Reading the chart and model limits",
+              )}
+            </summary>
+            <p className="caption secondary">
+              {l(
+                "Pystyakseli näyttää absoluuttisen paineen logaritmisella asteikolla; vaaka-akseli ominaisentalpian. Syötön mittaripaine muunnetaan absoluuttiseksi paineeksi ilmanpaineviitteen avulla.",
+                "The vertical axis uses logarithmic absolute pressure; the horizontal axis shows specific enthalpy. Gauge inputs are converted to absolute pressure using the atmospheric reference.",
+              )}
+            </p>
+            <p className="caption secondary">
+              {l(
+                "Nuolet ja suorat pisteiden välit kuvaavat kierron järjestystä kaavamaisesti, eivät laskettua prosessireittiä. Katkoviivainen 3 → 4 on isentalpisen paisunnan oletus.",
+                "Arrows and straight connections show cycle order schematically, not a calculated process path. Dashed 3 → 4 represents the isenthalpic expansion assumption.",
+              )}
+            </p>
+            <p className="caption secondary">
+              {l(
+                "Kylläisyysrajat ovat avoimia rajatun malliaineiston vuoksi. Apukäyrät näyttävät tarkistetut yksifaasisen alueen osat; puuttuvia alueita ei yhdistetä.",
+                "Saturation boundaries remain open because the model domain is limited. Guides show checked single-phase segments; missing regions remain gaps.",
+              )}
+            </p>
+            <p className="caption secondary">
+              {l(
+                "Entalpiat perustuvat CoolProp HEOS -malliin ja rajattuun offline-ruudukkoon. Tulokset ovat malliarvioita; vertaa niitä laite- ja mittaustietoihin.",
+                "Enthalpies come from the CoolProp HEOS model and a bounded offline grid. Results are model estimates; compare them with equipment and measurement data.",
+              )}
+            </p>
+          </details>
         </section>
       )}
       {sourceIds.length > 0 && <SourceNote ids={sourceIds} />}

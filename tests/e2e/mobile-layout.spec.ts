@@ -20,10 +20,12 @@ test("compact cycle keeps units aligned and pressures side by side", async ({
   expect(Math.abs(lp.y - hp.y)).toBeLessThan(1);
   expect(lp.x + lp.width).toBeLessThan(hp.x);
   if (info.project.name.startsWith("mobile")) {
+    await page.locator(".cycle-unit-settings > summary").click();
     const units = await page.locator(".shsc-unit-settings select").all();
     const a = (await units[0].boundingBox())!;
     const b = (await units[1].boundingBox())!;
     expect(Math.abs(a.x + a.width - b.x - b.width)).toBeLessThan(1);
+    await page.locator(".cycle-unit-settings > summary").click();
     const suction = (await page.locator("#shsc-suction").boundingBox())!;
     const liquid = (await page.locator("#shsc-liquid").boundingBox())!;
     expect(liquid.y - suction.y).toBeLessThan(150);
@@ -156,7 +158,7 @@ test("PT arrows share the input centre and redundant slider is gone", async ({
   ).toBeLessThan(1);
   await page.getByLabel("Paine", { exact: true }).fill("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).toHaveValue(
-    "15.8",
+    "15.76",
   );
   await noOverflow(page);
   await page.screenshot({

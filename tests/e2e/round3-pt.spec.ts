@@ -16,7 +16,7 @@ for (const input of [
   }) => {
     await page.goto(`/#/pt/${input.id}`);
     await page.getByLabel("Lämpötila", { exact: true }).fill("20");
-    await expect(page.locator(".pt-live-result")).toBeVisible();
+    await expect(page.locator("#pt-pressure")).not.toHaveValue("");
     await expect(page.getByRole("alert")).toHaveCount(0);
     await page.goto(`/#/ph/${input.id}`);
     await page.locator("#shsc-lp").fill(input.lp);
@@ -53,7 +53,7 @@ test("R410A heating case works and genuine bounds explain the data limit", async
   const temperature = page.getByLabel("Lämpötila", { exact: true });
   const pressure = page.getByLabel("Paine", { exact: true });
   await temperature.fill("56");
-  await expect(page.locator(".pt-live-result")).toContainText("R410A");
+  await expect(page.locator(".picker-compact-trigger")).toContainText("R410A");
   await expect(page.getByRole("alert")).toHaveCount(0);
   const provenance = page.locator(".calculation-details");
   await provenance.locator(":scope > summary").click();
@@ -68,10 +68,11 @@ test("R410A heating case works and genuine bounds explain the data limit", async
   ).toBeVisible();
   await expect(provenance.locator(".source-disclosure")).toHaveCount(0);
   expect(Number(await pressure.inputValue())).toBeCloseTo(35.1, 1);
-  await page
-    .getByLabel("Lämpötilapiste", { exact: true })
-    .selectOption("bubble");
-  await expect(page.locator(".pt-live-result")).toContainText("kuplapiste");
+  await page.locator("#pt-side-bubble").click();
+  await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await temperature.fill("80");
   await expect(pressure).toHaveValue("");
   await expect(page.getByRole("alert")).toContainText("tuettu alue");
@@ -103,7 +104,7 @@ async function choose(page: import("@playwright/test").Page, value: string) {
   ).toBeVisible();
 }
 
-test("P–T result card follows the last edited value and clears invalid results", async ({
+test("P–T input and result follow the last edited value and clears invalid results", async ({
   page,
 }) => {
   await page.goto("/#/pt/r134a");
@@ -111,41 +112,115 @@ test("P–T result card follows the last edited value and clears invalid results
   const temperature = page.getByLabel("Lämpötila", { exact: true });
 
   await pressure.fill("5");
-  const result = page.locator(".pt-live-result");
-  await expect(result).toContainText(
-    /Laskettu lämpötila|Calculated temperature/,
+  await expect(page.locator("#pt-temperature-status")).toContainText(
+    "Laskettu",
   );
-  await expect(result).toContainText("R134a");
-  await expect(result).toContainText(
-    /Syötetystä paineesta|Based on entered pressure/,
-  );
-  await expect(result).toContainText("5 bar(a)");
+  await expect(page.locator("#pt-pressure-status")).toContainText("Syötetty");
+  await expect(temperature).toHaveValue("15.76");
+  await expect(pressure).toHaveValue("5");
 
   await temperature.fill("20");
-  await expect(result).toContainText(/Laskettu paine|Calculated pressure/);
-  await expect(result).toContainText(
-    /Syötetystä lämpötilasta|Based on entered temperature/,
+  await expect(page.locator("#pt-pressure-status")).toContainText("Laskettu");
+  await expect(page.locator("#pt-temperature-status")).toContainText(
+    "Syötetty",
   );
-  await expect(result).toContainText("20 °C");
+  await expect(temperature).toHaveValue("20");
 
   await temperature.fill("-999");
   await expect(page.getByRole("alert")).toBeVisible();
-  await expect(page.locator(".pt-live-result")).toHaveCount(0);
+  await expect(pressure).toHaveValue("");
 });
 
-test("P–T blend result card identifies the selected phase boundary", async ({
+test("P–T blend controls identify the selected phase boundary", async ({
   page,
 }) => {
   await page.goto("/#/pt/r134a");
   await choose(page, "R410A");
   await page.getByLabel("Paine", { exact: true }).fill("5");
 
-  const result = page.locator(".pt-live-result");
-  await expect(result).toContainText(/Höyry · kastepiste|Vapour · dew point/);
-  await page
-    .getByLabel("Lämpötilapiste", { exact: true })
-    .selectOption("bubble");
-  await expect(result).toContainText(
-    /Neste · kuplapiste|Liquid · bubble point/,
+  await expect(page.locator("#pt-side-dew")).toHaveAttribute(
+    "aria-pressed",
+    "true",
   );
+  const before = await page.locator("#pt-temperature").inputValue();
+  await page.locator("#pt-side-bubble").click();
+  await expect(page.locator("#pt-side-bubble")).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.locator("#pt-pressure")).toHaveValue("5");
+  await expect(page.locator("#pt-temperature")).not.toHaveValue(before);
+});
+
+test("R452A keeps the entered dew point and pressure when viewing bubble", async ({
+  page,
+}) => {
+  await page.goto("/#/pt/r452a");
+  const pressure = page.locator("#pt-pressure");
+  const temperature = page.locator("#pt-temperature");
+  const bubble = page.locator("#pt-side-bubble");
+  const dew = page.locator("#pt-side-dew");
+  await temperature.fill("40,0");
+  await expect(pressure).toHaveValue("17.59");
+  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await expect(pressure).toHaveValue("16.57");
+  await expect(page.locator("#pt-pressure-status")).toContainText("bar(g)");
+  await bubble.click();
+  await expect(pressure).toHaveValue("16.57");
+  await expect(temperature).toHaveValue("36.60");
+  await expect(page.locator("#pt-temperature-status")).toContainText(
+    "Laskettu",
+  );
+  await expect(page.locator(".pt-source-note")).toContainText("40,0 °C");
+  await dew.click();
+  await expect(temperature).toHaveValue("40,0");
+  await expect(page.locator("#pt-temperature-status")).toContainText(
+    "Syötetty",
+  );
+
+  await bubble.click();
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Tallennettu", exact: true }),
+  ).toBeDisabled();
+  await page.goto("/#/reports");
+  const entry = page.locator(".report-entry");
+  await entry.click();
+  await expect(entry).toContainText("Kastepiste 40 °C → Kuplapiste");
+  await expect(entry).toContainText("36,603");
+});
+
+test("the numeric keypad sign control retains the number, caret and focus", async ({
+  page,
+}) => {
+  await page.goto("/#/pt/r452a");
+  const field = page.locator("#pt-temperature");
+  const sign = page.getByRole("button", {
+    name: "Vaihda lämpötilan etumerkki",
+  });
+  await expect(field).toHaveAttribute("inputmode", "decimal");
+  await field.focus();
+  await sign.click();
+  await expect(field).toBeFocused();
+  await expect(field).toHaveValue("-");
+  await field.pressSequentially("10,5");
+  await expect(field).toHaveValue("-10,5");
+  await sign.click();
+  await expect(field).toHaveValue("10,5");
+  await expect(field).toBeFocused();
+  await expect
+    .poll(() => field.evaluate((el: HTMLInputElement) => el.selectionStart))
+    .toBe(4);
+  const pressure = page.locator("#pt-pressure");
+  await pressure.focus();
+  await expect(
+    page.getByRole("button", { name: "Vaihda paineen etumerkki" }),
+  ).toHaveCount(0);
+  await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
+  await pressure.fill("0,1");
+  await page.getByRole("button", { name: "Vaihda paineen etumerkki" }).click();
+  await expect(pressure).toHaveValue("-0,1");
+  await expect(pressure).toBeFocused();
+  await expect(page.locator("#pt-temperature")).not.toHaveValue("");
 });

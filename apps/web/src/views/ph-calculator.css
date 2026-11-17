@@ -237,11 +237,6 @@
   min-width: 0;
 }
 
-.ph-table-scroll {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
 .ph-chart {
   display: block;
   width: 100%;
@@ -394,36 +389,6 @@
   border-top-style: dashed !important;
 }
 
-.ph-point-table {
-  border-collapse: collapse;
-  min-width: 550px;
-  width: min(100%, 780px);
-  text-align: left;
-}
-
-.ph-point-table caption {
-  text-align: left;
-  font-weight: 700;
-  margin-bottom: 10px;
-}
-
-.ph-point-table th,
-.ph-point-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--divider);
-  vertical-align: top;
-  font-variant-numeric: tabular-nums;
-}
-
-.ph-point-table th:first-child,
-.ph-point-table td:first-child {
-  padding-left: 0;
-}
-
-.ph-point-table thead th {
-  font-size: 0.82rem;
-}
-
 .ph-result > .caption {
   max-width: 68ch;
   margin: 12px 0;
@@ -467,4 +432,292 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+/* Keep the chart, its key and the corresponding measurements together. */
+.ph-chart-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.ph-chart-heading h2 {
+  margin: 0;
+}
+.ph-fit-control {
+  margin: 0;
+  font-size: 0.875rem;
+}
+.ph-chart-heading .switch-label {
+  min-height: 44px;
+}
+.ph-figure .ph-legend {
+  max-width: 780px;
+  margin: 12px 0 18px;
+  gap: 8px 16px;
+  font-size: 0.8rem;
+}
+.ph-cycle-line {
+  stroke-width: 3.2;
+}
+.ph-cycle-arrow {
+  fill: var(--text);
+}
+.ph-point-halo {
+  fill: var(--surface);
+  stroke: var(--text);
+  stroke-width: 1.2;
+}
+.ph-point-selected .ph-point {
+  fill: var(--text);
+}
+.ph-point-selected .ph-point-label {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ph-diagram-section .ph-results {
+  margin: 0 0 20px;
+  max-width: 780px;
+}
+.ph-point-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.ph-point-card {
+  min-width: 0;
+  border: 1px solid var(--divider);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.ph-point-card[data-selected="true"] {
+  border-color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text);
+}
+.ph-point-select {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  column-gap: 10px;
+  align-items: center;
+  width: 100%;
+  min-height: 58px;
+  text-align: left;
+  padding: 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.ph-point-select:hover {
+  background: var(--surface);
+}
+.ph-point-select:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -4px;
+}
+.ph-point-number {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+  font-family: var(--font-data);
+  font-weight: 700;
+}
+.ph-point-card[data-selected="true"] .ph-point-number {
+  background: var(--text);
+  color: var(--background);
+}
+.ph-point-name {
+  overflow-wrap: anywhere;
+  font-weight: 650;
+  font-size: 0.9rem;
+}
+.ph-point-phase {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.ph-point-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 12px 12px;
+  margin: 0;
+}
+.ph-point-values > div {
+  min-width: 0;
+  flex: 1 1 4.5rem;
+}
+.ph-point-values > .ph-point-temperature-range {
+  flex-basis: 7rem;
+}
+.ph-point-values dt {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+.ph-point-values dd {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.ph-value-note {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  line-height: 1.35;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.ph-chart-options,
+.ph-model-notes {
+  max-width: 780px;
+  border-top: 1px solid var(--divider);
+  padding: 12px 0;
+}
+.ph-chart-options > summary,
+.ph-model-notes > summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  min-height: 28px;
+}
+.ph-chart-options[open] > summary,
+.ph-model-notes[open] > summary {
+  margin-bottom: 12px;
+}
+.ph-model-notes p {
+  max-width: 68ch;
+}
+@media (max-width: 620px) {
+  .ph-point-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ph-point-name {
+    font-size: 0.95rem;
+  }
+}
+@media print {
+  .ph-chart-options,
+  .ph-model-notes {
+    display: none;
+  }
+  .ph-point-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ph-point-card {
+    break-inside: avoid;
+  }
+}
+.ph-fit-settings p {
+  margin: 5px 0 0;
+  max-width: 44ch;
+}
+.ph-fit-settings input:disabled {
+  opacity: 0.45;
+}
+.ph-point-inspection-title {
+  margin: 0 0 10px;
+  font-size: 1rem;
+}
+.ph-point-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.ph-point-picker .ph-point-select {
+  min-height: 48px;
+  border: 1px solid var(--divider);
+  border-radius: 7px;
+  padding: 8px 10px;
+}
+.ph-point-picker .ph-point-select[aria-pressed="true"] {
+  border-color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text);
+}
+.ph-point-picker .ph-point-select[aria-pressed="true"] .ph-point-number {
+  background: var(--text);
+  color: var(--background);
+}
+.ph-point-picker .ph-point-number {
+  grid-row: auto;
+}
+.ph-point-picker .ph-point-name {
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+.ph-active-point {
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  padding: 12px;
+}
+.ph-active-point-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 5px 14px;
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+}
+.ph-active-point-title > span {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.ph-active-point .ph-point-values {
+  padding: 0;
+}
+.ph-point-inspection-note {
+  margin: 9px 0 14px;
+  font-size: 0.75rem;
+}
+.ph-all-points > summary {
+  min-height: 36px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.ph-all-points[open] > summary {
+  margin-bottom: 8px;
+}
+.ph-point-card-heading {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: 10px;
+  padding: 12px;
+}
+.ph-point-card-heading .ph-point-number {
+  grid-row: span 2;
+}
+@media (max-width: 400px) {
+  .ph-point-picker .ph-point-select {
+    grid-template-columns: 1.5625rem minmax(0, 1fr);
+    column-gap: 7px;
+  }
+  .ph-point-picker .ph-point-number {
+    width: 1.5625rem;
+    height: 1.5625rem;
+  }
+  .ph-point-picker .ph-point-name {
+    font-size: 0.75rem;
+  }
+}
+@media print {
+  .ph-all-points > .ph-point-list {
+    display: grid;
+  }
 }

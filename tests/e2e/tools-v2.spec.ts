@@ -31,12 +31,12 @@ test("tools open without a refrigerant; P–T and SHSC retain measurements on fl
   await choose(page, "R134a");
   await page.getByLabel("Paine", { exact: true }).fill("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).toHaveValue(
-    "15.8",
+    "15.76",
   );
   await choose(page, "R32");
   await expect(page.getByLabel("Paine", { exact: true })).toHaveValue("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).not.toHaveValue(
-    "15.8",
+    "15.76",
   );
   await page.goto("/#/shsc/r134a");
   await page.locator("#shsc-lp").fill("5");
@@ -75,7 +75,7 @@ test("CO2e and new calculators work after offline reload", async ({
   await page.reload();
   await page.getByLabel("Paine", { exact: true }).fill("5");
   await expect(page.getByLabel("Lämpötila", { exact: true })).toHaveValue(
-    "15.8",
+    "15.76",
   );
 });
 
@@ -99,6 +99,7 @@ test("unit changes convert measurements and invalid PT remains blocked", async (
   await page.locator("#shsc-suction").fill("25");
   await page.locator("#shsc-hp").fill("10");
   await page.locator("#shsc-liquid").fill("25");
+  await page.locator(".cycle-unit-settings > summary").click();
   await page.getByLabel("Paineyksikkö").selectOption("psi");
   await expect
     .poll(async () =>
@@ -181,7 +182,7 @@ test("new tool forms work in English dark mode and enlarged text", async ({
   await page.goto("/#/pt/r134a");
   await page.getByLabel("Pressure", { exact: true }).fill("5");
   await expect(page.getByLabel("Temperature", { exact: true })).toHaveValue(
-    "15.8",
+    "15.76",
   );
   await page.screenshot({
     path: test.info().outputPath(`phasekit-v2-${testInfo.project.name}-pt-dark.png`),

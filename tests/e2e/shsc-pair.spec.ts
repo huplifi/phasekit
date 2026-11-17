@@ -4,6 +4,7 @@ test("the supplied R134a paper example plots with gauge pressures", async ({
   page,
 }, info) => {
   await page.goto("/#/ph/r134a");
+  await page.locator(".cycle-unit-settings > summary").click();
   await page.getByRole("switch", { name: "Absoluuttinen paine" }).uncheck();
   await page.locator("#shsc-lp").fill("1,91");
   await page.locator("#shsc-hp").fill("9,15");
@@ -43,13 +44,11 @@ test("the supplied R134a paper example plots with gauge pressures", async ({
   await fitCycle.uncheck();
   await expect(page.locator(".ph-bubble")).toHaveAttribute("d", fullBoundary!);
   await expect(page.locator(".calculator-number")).toHaveText(["10 K", "5 K"]);
-  await page
-    .locator(".ph-diagram-section")
-    .screenshot({
-      path: test
-        .info()
-        .outputPath(`phasekit-paper-example-${info.project.name}.png`),
-    });
+  await page.locator(".ph-diagram-section").screenshot({
+    path: test
+      .info()
+      .outputPath(`phasekit-paper-example-${info.project.name}.png`),
+  });
   await page.getByText("Tallenna tai tulosta", { exact: true }).click();
   await page.getByRole("button", { name: "Tallenna", exact: true }).click();
   await expect(
@@ -137,6 +136,7 @@ test("SH and SC use their own pressures and temperatures together", async ({
     path: test.info().outputPath(`phasekit-${info.project.name}-shsc-pair.png`),
     fullPage: true,
   });
+  await page.locator(".cycle-unit-settings > summary").click();
   await page.getByLabel("Lämpötilayksikkö").selectOption("F");
   await expect(page.locator("#shsc-suction")).toHaveValue("50");
   await expect(page.locator("#shsc-hot-gas")).toHaveValue("140");
@@ -166,4 +166,48 @@ test("SH and SC use their own pressures and temperatures together", async ({
   await expect(page.getByRole("alert")).toContainText(
     "HP-paineen on oltava LP-painetta suurempi",
   );
+});
+
+test("R452A cycle accepts measured dew temperatures and uses bubble for subcooling", async ({
+  page,
+}) => {
+  await page.goto("/#/ph/r452a");
+  await page
+    .getByRole("button", { name: "Kyllästyslämpötilat", exact: true })
+    .click();
+  const evaporation = page.locator("#cycle-evaporation");
+  await expect(evaporation).toHaveAttribute("inputmode", "decimal");
+  await evaporation.fill("10");
+  await page.getByRole("button", { name: "Vaihda LP-arvon etumerkki" }).click();
+  await expect(evaporation).toHaveValue("-10");
+  await expect(evaporation).toBeFocused();
+  await page.locator("#cycle-condensation").fill("40");
+  await page.locator("#shsc-suction").fill("0");
+  await page.locator("#shsc-hot-gas").fill("70");
+  await page.locator("#shsc-liquid").fill("30");
+  const submit = page.getByRole("button", { name: "Laske", exact: true });
+  await submit.click();
+  await expect(page.locator(".calculator-number")).toHaveText([
+    "10 K",
+    "6,6 K",
+  ]);
+  await expect(page.locator(".cycle-results")).toContainText("36,6");
+  await expect(page.locator(".ph-cycle")).toHaveCount(4);
+
+  await page.locator("#cycle-high-boundary").selectOption("bubble");
+  await submit.click();
+  await expect(page.locator(".calculator-number")).toHaveText(["10 K", "10 K"]);
+
+  await page.getByText("Tallenna tai tulosta", { exact: true }).click();
+  await page.getByRole("button", { name: "Tallenna", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Tallennettu", exact: true }),
+  ).toBeDisabled();
+  await page.goto("/#/reports");
+  const report = page.locator(".report-entry");
+  await report.click();
+  await expect(report).toContainText("Syötetty höyrystymislämpötila");
+  await expect(report).toContainText("Syötetty lauhtumislämpötila");
+  await expect(report).toContainText("Kuplapiste");
+  await expect(report).toContainText("Laskettu absoluuttinen paine");
 });
